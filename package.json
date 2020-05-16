@@ -12,5 +12,8 @@
   "devDependencies": {
     "express": "^4.17.1",
     "parcel-bundler": "^1.12.4"
+  },
+  "dependencies": {
+    "assert": "^2.0.0"
   }
 }
