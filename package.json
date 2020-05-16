@@ -6,10 +6,11 @@
   "author": "Random Ambersky <random@amberskynet.org>",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel ./src/index.html",
-    "build": "parcel build ./src/index.html"
+    "dev": "node build-client.js",
+    "build": "parcel build web/index.html"
   },
   "devDependencies": {
+    "express": "^4.17.1",
     "parcel-bundler": "^1.12.4"
   }
 }
