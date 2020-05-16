@@ -29,4 +29,18 @@ function loadProgram (gl, vs, fs) {
   return shaderProgram
 }
 
+function getContext (canvasName) {
+  const canvas = document.getElementById(canvasName)
+  if (!canvas) {
+    console.log('failed')
+    return false
+  }
+
+  canvas.width = 800
+  canvas.height = 600
+
+  return canvas.getContext('webgl', {antialias: false})
+}
+
 exports.loadProgram = loadProgram
+exports.getContext = getContext

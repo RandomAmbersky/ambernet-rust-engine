@@ -1,6 +1,5 @@
 import 'babel-polyfill'
-import app from './app'
-
+import './app'
 
 // const AmberSkyNet = await import('./amberskynet')
 //
@@ -17,7 +16,7 @@ import app from './app'
 //   void main() {
 //     gl_FragColor = vec4(1.0, 0.5, 0.0, 1.0);
 //   }`
-////
+//
 // async function webGLStart () {
 //   console.log(ambernet)
 //
