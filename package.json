@@ -4,5 +4,12 @@
   "main": "index.js",
   "repository": "https://github.com/RandomAmbersky/ambernet-rust-engine.git",
   "author": "Random Ambersky <random@amberskynet.org>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "dev": "parcel ./src/index.html",
+    "build": "parcel build ./src/index.html"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4"
+  }
 }
