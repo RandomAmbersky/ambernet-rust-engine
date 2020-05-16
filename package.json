@@ -1,0 +1,8 @@
+{
+  "name": "ambernet-rust-engine",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/RandomAmbersky/ambernet-rust-engine.git",
+  "author": "Random Ambersky <random@amberskynet.org>",
+  "license": "MIT"
+}
