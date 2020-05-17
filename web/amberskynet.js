@@ -28,10 +28,10 @@ class AmberSkyNet {
 
   async load () {
     const canvas = document.getElementById(this.__canvasName)
-    assert(canvas, 'canvas not found' + this.__canvasName)
+    assert(canvas, 'canvas not found ' + this.__canvasName)
 
-    const gl = canvas.getContext('webgl', {antialias: true})
-    assert(canvas, 'gl not supported ')
+    const gl = canvas.getContext('we-bgl', {antialias: true})
+    assert(gl, 'webgl not supported')
 
     this.__gl = gl
     this.__canvas = canvas
