@@ -1,7 +1,6 @@
 const assert = require('assert')
 const render = require('./render')
 
-
 const VSHADER_SOURCE = `
   void main() {
    gl_PointSize = 10.0;
@@ -11,7 +10,7 @@ const VSHADER_SOURCE = `
 const FSHADER_SOURCE = `
   precision mediump float;
   void main() {
-    gl_FragColor = vec4(1.0, 0.5, 0.0, 1.0);
+    gl_FragColor = vec4(1.0, 0.5, 1.0, 1.0);
   }`
 
 class AmberSkyNet {
@@ -24,11 +23,12 @@ class AmberSkyNet {
   async load () {
     const gl = render.getContext(this.__canvasName)
     const prog = render.loadProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE)
-    gl.useProgram(prog)
 
+    gl.useProgram(prog)
     gl.clearColor(0.5, 0.5, 0.5, 1.0)
     gl.clear(gl.COLOR_BUFFER_BIT)
     gl.drawArrays(gl.POINTS, 0, 1)
+
     return true
   }
 }
