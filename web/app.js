@@ -6,9 +6,11 @@ const config = {
 }
 
 async function load () {
-  const ambernet = new AmberSkyNet(config)
-  await ambernet.load()
+  const a = new AmberSkyNet(config)
+  await a.load()
   return true
 }
 
-load().then(res => console.log(res))
+load().then(
+  res => console.log(res)
+)
