@@ -1,7 +1,8 @@
 import AmberSkyNet from './amberskynet'
+import tileImageUrl from './images/tiles_many.png'
 
 const config = {
-  atlas: 'image.png',
+  atlas: tileImageUrl,
   canvasName: 'canvasGL'
 }
 

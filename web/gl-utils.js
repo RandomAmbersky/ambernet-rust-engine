@@ -29,7 +29,32 @@ function loadProgram (gl, vs, fs) {
   gl.attachShader(shaderProgram, VS)
   gl.attachShader(shaderProgram, FS)
   gl.linkProgram(shaderProgram)
+  gl.deleteShader(VS)
+  gl.deleteShader(FS)
   return shaderProgram
 }
 
+function loadImage (src) {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-undef
+    let img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = reject
+    img.src = src
+  })
+}
+
+function loadBuffer (gl, arr) {
+  const buf = gl.createBuffer()
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf)
+  gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array(arr),
+    gl.STATIC_DRAW)
+  gl.bindBuffer(gl.ARRAY_BUFFER, null)
+  return buf
+}
+
 exports.loadProgram = loadProgram
+exports.loadImage = loadImage
+exports.loadBuffer = loadBuffer

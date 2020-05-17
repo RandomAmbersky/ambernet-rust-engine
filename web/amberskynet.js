@@ -17,6 +17,7 @@ class AmberSkyNet {
     this.__canvasName = canvasName
     this.__initialTime = Date.now()
     this.__lastDrawTime = -1
+    this.__imageReady = false
   }
 
   async load () {
@@ -29,23 +30,40 @@ class AmberSkyNet {
     this.__gl = gl
     this.__canvas = canvas
 
-    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
     gl.clearColor(0.5, 0.5, 0.5, 1.0)
 
     this.__prog = utils.loadProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE)
 
-    this.__buffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.__buffer)
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([
-        -1.0, -1.0,
-        1.0, -1.0,
-        -1.0, 1.0,
-        -1.0, 1.0,
-        1.0, -1.0,
-        1.0, 1.0]),
-      gl.STATIC_DRAW)
+    const meshArray = [
+      -1.0, -1.0,
+      1.0, -1.0,
+      -1.0, 1.0,
+      -1.0, 1.0,
+      1.0, -1.0,
+      1.0, 1.0]
+
+    this.__mesh = utils.loadBuffer(gl, meshArray)
+
+    const texCoord = [
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+      0.0, 1.0,
+      1.0, 0.0,
+      1.0, 1.0]
+    this.__tex_coord = utils.loadBuffer(gl, texCoord)
+
+    const tileImage = await utils.loadImage(this.__atlas)
+
+    this.__texture = gl.createTexture()
+    gl.bindTexture(gl.TEXTURE_2D, this.__texture)
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, tileImage)
+    gl.bindTexture(gl.TEXTURE_2D, null)
 
     return true
   }
@@ -57,30 +75,38 @@ class AmberSkyNet {
     window.requestAnimationFrame(this.renderLoop.bind(this))
     const currTime = Date.now()
     if (currTime >= this.__lastDrawTime + FPS_THROTTLE) {
-      // console.log(currTime)
       this.__lastDrawTime = currTime
 
       if (window.innerHeight !== canvas.height || window.innerWidth !== canvas.width) {
         canvas.height = window.innerHeight
-        // canvas.style.height = window.innerHeight.toString()
+        canvas.style.height = window.innerHeight.toString()
 
         canvas.width = window.innerWidth
-        // canvas.style.width = window.innerWidth.toString()
+        canvas.style.width = window.innerWidth.toString()
         // canvas.requestFullscreen()
 
         const devicePixelRatio = window.devicePixelRatio || 1
         console.log(devicePixelRatio)
 
-        gl.viewport(window.innerWidth / 4, window.innerHeight / 4, window.innerWidth / 2, window.innerHeight / 2 )
+        gl.viewport(window.innerWidth / 4, window.innerHeight / 4, window.innerWidth / 2, window.innerHeight / 2)
+        // gl.viewport(0, 0, window.innerWidth, window.innerHeight)
       }
 
-      const positionLocation = gl.getAttribLocation(this.__prog, 'a_position')
-
-      gl.useProgram(this.__prog)
       gl.clear(gl.COLOR_BUFFER_BIT)
 
+      const positionLocation = gl.getAttribLocation(this.__prog, 'a_position')
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.__mesh)
       gl.enableVertexAttribArray(positionLocation)
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
+
+      const texCoordLocation = gl.getAttribLocation(this.__prog, 'a_texCoord')
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.__tex_coord)
+      gl.enableVertexAttribArray(texCoordLocation)
+      gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
+
+      gl.bindTexture(gl.TEXTURE_2D, this.__texture)
+
+      gl.useProgram(this.__prog)
       gl.drawArrays(gl.TRIANGLES, 0, 6)
     }
   }
