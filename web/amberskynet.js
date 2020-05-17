@@ -1,17 +1,10 @@
+import fs from 'fs'
+
+const VSHADER_SOURCE = fs.readFileSync(__dirname + '/shaders/shader.vs', 'utf8')
+const FSHADER_SOURCE = fs.readFileSync(__dirname + '/shaders/shader.fs', 'utf8')
+
 const assert = require('assert')
 const render = require('./render')
-
-const VSHADER_SOURCE = `
-  void main() {
-   gl_PointSize = 10.0;
-   gl_Position = vec4(0.0, 0.0, 0.0, 1.0);
-  }`
-
-const FSHADER_SOURCE = `
-  precision mediump float;
-  void main() {
-    gl_FragColor = vec4(1.0, 0.5, 1.0, 1.0);
-  }`
 
 const FPS_DEFAULT = 10.0
 const FPS_THROTTLE = 1000.0 / FPS_DEFAULT // milliseconds / frames
@@ -30,18 +23,13 @@ class AmberSkyNet {
     const canvas = document.getElementById(this.__canvasName)
     assert(canvas, 'canvas not found ' + this.__canvasName)
 
-    const gl = canvas.getContext('we-bgl', {antialias: true})
+    const gl = canvas.getContext('webgl', {antialias: true})
     assert(gl, 'webgl not supported')
 
     this.__gl = gl
     this.__canvas = canvas
 
     this.__prog = render.loadProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE)
-
-    // gl.useProgram(this.__prog)
-    // gl.clearColor(0.5, 0.5, 0.5, 1.0)
-    // gl.clear(gl.COLOR_BUFFER_BIT)
-    // gl.drawArrays(gl.POINTS, 0, 1)
 
     return true
   }
