@@ -44,6 +44,24 @@ function loadImage (src) {
   })
 }
 
+async function loadTexture (gl, src) {
+  const img = await loadImage(src)
+
+  const texture = gl.createTexture()
+
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
+  gl.bindTexture(gl.TEXTURE_2D, null)
+  img.src = null
+
+  return texture
+}
+
 function loadBuffer (gl, arr) {
   const buf = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buf)
@@ -56,5 +74,5 @@ function loadBuffer (gl, arr) {
 }
 
 exports.loadProgram = loadProgram
-exports.loadImage = loadImage
 exports.loadBuffer = loadBuffer
+exports.loadTexture = loadTexture
