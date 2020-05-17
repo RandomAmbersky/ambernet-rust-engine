@@ -13,7 +13,8 @@ const FSHADER_SOURCE = `
     gl_FragColor = vec4(1.0, 0.5, 1.0, 1.0);
   }`
 
-const FPS_THROTTLE = 1000.0 / 30.0 // milliseconds / frames
+const FPS_DEFAULT = 10.0
+const FPS_THROTTLE = 1000.0 / FPS_DEFAULT // milliseconds / frames
 
 class AmberSkyNet {
   constructor ({atlas, canvasName}) {
@@ -52,6 +53,7 @@ class AmberSkyNet {
     window.requestAnimationFrame(this.renderLoop.bind(this))
     const currTime = Date.now()
     if (currTime >= this.__lastDrawTime + FPS_THROTTLE) {
+      console.log(currTime)
       this.__lastDrawTime = currTime
 
       if (window.innerHeight !== canvas.height || window.innerWidth !== canvas.width) {
@@ -69,7 +71,6 @@ class AmberSkyNet {
       gl.clear(gl.COLOR_BUFFER_BIT)
       gl.drawArrays(gl.POINTS, 0, 1)
     }
-    console.log('Render loop')
   }
 }
 
