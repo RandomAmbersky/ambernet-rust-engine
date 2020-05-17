@@ -21,6 +21,8 @@ class AmberSkyNet {
   }
 
   async load () {
+    // тут надо еще сделать преобразование карты с тайлами в текстуру и биндинг её в WebGL как текстуру
+
     const canvas = document.getElementById(this.__canvasName)
     assert(canvas, 'canvas not found ' + this.__canvasName)
 
