@@ -8,6 +8,7 @@ const config = {
 async function load () {
   const a = new AmberSkyNet(config)
   await a.load()
+  a.renderLoop()
   return true
 }
 
