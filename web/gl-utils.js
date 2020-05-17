@@ -10,11 +10,14 @@ function getShader (gl, id, str) {
 
   gl.shaderSource(shader, str)
   gl.compileShader(shader)
+  const res = gl.getShaderInfoLog(shader)
+  console.log(res)
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     console.log(gl.getShaderInfoLog(shader))
     return null
   }
+
   return shader
 }
 
@@ -29,18 +32,4 @@ function loadProgram (gl, vs, fs) {
   return shaderProgram
 }
 
-function getContext (canvasName) {
-  const canvas = document.getElementById(canvasName)
-  if (!canvas) {
-    console.log('failed')
-    return false
-  }
-
-  canvas.width = 800
-  canvas.height = 600
-
-  return canvas.getContext('webgl', {antialias: false})
-}
-
 exports.loadProgram = loadProgram
-exports.getContext = getContext
