@@ -55,6 +55,15 @@ class AmberSkyNet {
 
     this.__texture = await utils.loadTexture(gl, this.__atlas)
 
+    const colorArray = [
+      0.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0,
+      1.0, 1.0, 0.0,
+      1.0, 1.0, 1.0]
+    this.__color_array = utils.loadBuffer(gl, colorArray)
+
     return true
   }
 
@@ -78,11 +87,16 @@ class AmberSkyNet {
         const devicePixelRatio = window.devicePixelRatio || 1
         console.log(devicePixelRatio)
 
-        gl.viewport(window.innerWidth / 4, window.innerHeight / 4, window.innerWidth / 2, window.innerHeight / 2)
-        // gl.viewport(0, 0, window.innerWidth, window.innerHeight)
+        // gl.viewport(window.innerWidth / 4, window.innerHeight / 4, window.innerWidth / 2, window.innerHeight / 2)
+        gl.viewport(0, 0, 256 * 3, 192 * 3)
       }
 
       gl.clear(gl.COLOR_BUFFER_BIT)
+
+      const colorLocation = gl.getAttribLocation(this.__prog, 'a_color')
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.__color_array)
+      gl.enableVertexAttribArray(colorLocation)
+      gl.vertexAttribPointer(colorLocation, 3, gl.FLOAT, false, 0, 0)
 
       const positionLocation = gl.getAttribLocation(this.__prog, 'a_position')
       gl.bindBuffer(gl.ARRAY_BUFFER, this.__mesh)
