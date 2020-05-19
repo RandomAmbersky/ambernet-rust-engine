@@ -10,11 +10,13 @@ const FPS_DEFAULT = 10.0
 const FPS_THROTTLE = 1000.0 / FPS_DEFAULT // milliseconds / frames
 
 class AmberSkyNet {
-  constructor ({atlas, canvasName}) {
+  constructor ({atlas, canvasName, mapName}) {
     assert(atlas, 'atlas not setup')
     assert(canvasName, 'canvasName not setup')
+    assert(mapName, 'mapName not setup')
     this.__atlas = atlas
     this.__canvasName = canvasName
+    this.__mapName = mapName
     this.__initialTime = Date.now()
     this.__lastDrawTime = -1
     this.__imageReady = false
@@ -22,6 +24,9 @@ class AmberSkyNet {
 
   async load () {
     // тут надо еще сделать преобразование карты с тайлами в текстуру и биндинг её в WebGL как текстуру
+    const rawMap = await utils.loadFile(this.__mapName)
+    const map = JSON.parse(rawMap.toString())
+    console.log(map)
 
     const canvas = document.getElementById(this.__canvasName)
     assert(canvas, 'canvas not found ' + this.__canvasName)

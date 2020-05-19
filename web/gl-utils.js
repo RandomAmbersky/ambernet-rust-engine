@@ -1,3 +1,5 @@
+import fetch from 'fetch'
+
 function getShader (gl, id, str) {
   let shader
   if (id === 'vs') {
@@ -10,8 +12,6 @@ function getShader (gl, id, str) {
 
   gl.shaderSource(shader, str)
   gl.compileShader(shader)
-  const res = gl.getShaderInfoLog(shader)
-  console.log(res)
 
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     console.log(gl.getShaderInfoLog(shader))
@@ -34,10 +34,24 @@ function loadProgram (gl, vs, fs) {
   return shaderProgram
 }
 
+async function loadFile (url, options) {
+  return new Promise((resolve, reject) => {
+    fetch.fetchUrl(url, options, (error, meta, body) => {
+      if (error) {
+        reject(error)
+      }
+      if (meta.status !== 200) {
+        reject(meta)
+      }
+      resolve(body)
+    })
+  })
+}
+
 function loadImage (src) {
   return new Promise((resolve, reject) => {
     // eslint-disable-next-line no-undef
-    let img = new Image()
+    const img = new Image()
     img.onload = () => resolve(img)
     img.onerror = reject
     img.src = src
@@ -76,3 +90,4 @@ function loadBuffer (gl, arr) {
 exports.loadProgram = loadProgram
 exports.loadBuffer = loadBuffer
 exports.loadTexture = loadTexture
+exports.loadFile = loadFile
