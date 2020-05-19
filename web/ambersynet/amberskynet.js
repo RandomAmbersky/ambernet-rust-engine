@@ -1,7 +1,5 @@
-import fs from 'fs'
-
-const VSHADER_SOURCE = fs.readFileSync(__dirname + '/shaders/vert.glsl', 'utf8')
-const FSHADER_SOURCE = fs.readFileSync(__dirname + '/shaders/frag.glsl', 'utf8')
+import VSHADER_SOURCE from './shaders/vert.glsl'
+import FSHADER_SOURCE from './shaders/frag.glsl'
 
 const assert = require('assert')
 const utils = require('./gl-utils')
