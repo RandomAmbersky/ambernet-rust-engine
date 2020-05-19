@@ -1,4 +1,4 @@
-import AmberSkyNet from './amberskynet'
+import AmberSkyNet from './ambersynet/amberskynet'
 import tileImageUrl from './map/tiles_many.png'
 
 const config = {
