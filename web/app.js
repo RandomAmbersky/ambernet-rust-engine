@@ -1,9 +1,10 @@
 import AmberSkyNet from './amberskynet'
-import tileImageUrl from './images/tiles_many.png'
+import tileImageUrl from './map/tiles_many.png'
 
 const config = {
   atlas: tileImageUrl,
-  canvasName: 'canvasGL'
+  canvasName: 'canvasGL',
+  mapName: document.baseURI + 'map/laboratory3.json'
 }
 
 async function load () {
