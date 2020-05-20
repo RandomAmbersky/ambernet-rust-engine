@@ -95,9 +95,7 @@ function createTexture (gl, arr, width, height) {
     gl.UNSIGNED_BYTE, // type
     arr // texture data
   )
-  gl.bindTexture(gl.TEXTURE_2D, null)
-  arr.src = null
-
+  // gl.bindTexture(gl.TEXTURE_2D, null)
   return texture
 }
 

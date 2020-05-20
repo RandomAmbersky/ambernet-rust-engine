@@ -34,10 +34,8 @@ class AmberSkyNet {
     const layer = tiled.layers[0]
     const layerArray = []
     for (let i = 0; i < layer.width * layer.height; i++) {
-      // const g = Math.floor(layer.data[i] / layer.height)
-      // const r = layer.data[i] - g * layer.width
-      const r = 0
-      const g = 0
+      const g = Math.floor(layer.data[i] / layer.height)
+      const r = layer.data[i] - g * layer.width
       const b = 0
       const a = 0
       layerArray.push(r)
@@ -76,7 +74,7 @@ class AmberSkyNet {
       1.0, 1.0]
     this.__tex_coord = utils.loadBuffer(gl, texCoord)
 
-    // this.__texture = await utils.loadTexture(gl, this.__atlas)
+    this.__texture = await utils.loadTexture(gl, this.__atlas)
     // console.log(this.__texture)
 
     const colorArray = [
@@ -117,25 +115,33 @@ class AmberSkyNet {
 
       gl.clear(gl.COLOR_BUFFER_BIT)
 
-      const colorLocation = gl.getAttribLocation(this.__prog, 'a_color')
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.__color_array)
-      gl.enableVertexAttribArray(colorLocation)
-      gl.vertexAttribPointer(colorLocation, 3, gl.FLOAT, false, 0, 0)
+      gl.useProgram(this.__prog)
+
+      // const colorLocation = gl.getAttribLocation(this.__prog, 'a_color')
+      // gl.bindBuffer(gl.ARRAY_BUFFER, this.__color_array)
+      // gl.enableVertexAttribArray(colorLocation)
+      // gl.vertexAttribPointer(colorLocation, 3, gl.FLOAT, false, 0, 0)
 
       const positionLocation = gl.getAttribLocation(this.__prog, 'a_position')
       gl.bindBuffer(gl.ARRAY_BUFFER, this.__mesh)
       gl.enableVertexAttribArray(positionLocation)
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
 
-      // const texCoordLocation = gl.getAttribLocation(this.__prog, 'a_texCoord')
-      // gl.bindBuffer(gl.ARRAY_BUFFER, this.__tex_coord)
-      // gl.enableVertexAttribArray(texCoordLocation)
-      // gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
+      const texCoordLocation = gl.getAttribLocation(this.__prog, 'a_texCoord')
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.__tex_coord)
+      gl.enableVertexAttribArray(texCoordLocation)
+      gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
 
+      const uImage0Location = gl.getUniformLocation(this.__prog, 'u_image0')
+      const uImage1Location = gl.getUniformLocation(this.__prog, 'u_image1')
+      gl.uniform1i(uImage0Location, 0)
+      gl.uniform1i(uImage1Location, 1)
+
+      gl.activeTexture(gl.TEXTURE0)
       gl.bindTexture(gl.TEXTURE_2D, this.__layerArray)
-      // gl.bindTexture(gl.TEXTURE_2D, this.__texture)
+      gl.activeTexture(gl.TEXTURE1)
+      gl.bindTexture(gl.TEXTURE_2D, this.__texture)
 
-      gl.useProgram(this.__prog)
       gl.drawArrays(gl.TRIANGLES, 0, 6)
     }
   }
