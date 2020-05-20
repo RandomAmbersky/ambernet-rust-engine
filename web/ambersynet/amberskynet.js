@@ -23,8 +23,7 @@ class AmberSkyNet {
   async load () {
     // тут надо еще сделать преобразование карты с тайлами в текстуру и биндинг её в WebGL как текстуру
     const rawMap = await utils.loadFile(this.__mapName)
-    const map = JSON.parse(rawMap.toString())
-    console.log(map)
+    const tiled = JSON.parse(rawMap.toString())
 
     const canvas = document.getElementById(this.__canvasName)
     assert(canvas, 'canvas not found ' + this.__canvasName)
@@ -32,8 +31,27 @@ class AmberSkyNet {
     const gl = canvas.getContext('webgl', {antialias: true})
     assert(gl, 'webgl not supported')
 
+    const layer = tiled.layers[0]
+    const layerArray = []
+    for (let i = 0; i < layer.width * layer.height; i++) {
+      // const g = Math.floor(layer.data[i] / layer.height)
+      // const r = layer.data[i] - g * layer.width
+      const r = 0
+      const g = 0
+      const b = 0
+      const a = 0
+      layerArray.push(r)
+      layerArray.push(g)
+      layerArray.push(b)
+      layerArray.push(a)
+    }
+
+    const uLayerArray = new Uint8Array(layerArray)
+
     this.__gl = gl
     this.__canvas = canvas
+
+    this.__layerArray = utils.createTexture(gl, uLayerArray, layer.width, layer.height)
 
     gl.clearColor(0.5, 0.5, 0.5, 1.0)
 
@@ -58,7 +76,8 @@ class AmberSkyNet {
       1.0, 1.0]
     this.__tex_coord = utils.loadBuffer(gl, texCoord)
 
-    this.__texture = await utils.loadTexture(gl, this.__atlas)
+    // this.__texture = await utils.loadTexture(gl, this.__atlas)
+    // console.log(this.__texture)
 
     const colorArray = [
       0.0, 0.0, 0.0,
@@ -108,12 +127,13 @@ class AmberSkyNet {
       gl.enableVertexAttribArray(positionLocation)
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
 
-      const texCoordLocation = gl.getAttribLocation(this.__prog, 'a_texCoord')
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.__tex_coord)
-      gl.enableVertexAttribArray(texCoordLocation)
-      gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
+      // const texCoordLocation = gl.getAttribLocation(this.__prog, 'a_texCoord')
+      // gl.bindBuffer(gl.ARRAY_BUFFER, this.__tex_coord)
+      // gl.enableVertexAttribArray(texCoordLocation)
+      // gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
 
-      gl.bindTexture(gl.TEXTURE_2D, this.__texture)
+      gl.bindTexture(gl.TEXTURE_2D, this.__layerArray)
+      // gl.bindTexture(gl.TEXTURE_2D, this.__texture)
 
       gl.useProgram(this.__prog)
       gl.drawArrays(gl.TRIANGLES, 0, 6)
