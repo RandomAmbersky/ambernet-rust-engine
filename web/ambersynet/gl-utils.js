@@ -76,6 +76,31 @@ async function loadTexture (gl, src) {
   return texture
 }
 
+function createTexture (gl, arr, width, height) {
+  const texture = gl.createTexture()
+
+  gl.bindTexture(gl.TEXTURE_2D, texture)
+
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST)
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
+  gl.texImage2D(
+    gl.TEXTURE_2D, // target
+    0, // mip level
+    gl.RGBA, // internal format
+    width, height, // width and height
+    0, // border
+    gl.RGBA, // format
+    gl.UNSIGNED_BYTE, // type
+    arr // texture data
+  )
+  gl.bindTexture(gl.TEXTURE_2D, null)
+  arr.src = null
+
+  return texture
+}
+
 function loadBuffer (gl, arr) {
   const buf = gl.createBuffer()
   gl.bindBuffer(gl.ARRAY_BUFFER, buf)
@@ -90,4 +115,5 @@ function loadBuffer (gl, arr) {
 exports.loadProgram = loadProgram
 exports.loadBuffer = loadBuffer
 exports.loadTexture = loadTexture
+exports.createTexture = createTexture
 exports.loadFile = loadFile
