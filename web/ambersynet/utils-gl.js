@@ -1,5 +1,3 @@
-import fetch from 'fetch'
-
 function getShader (gl, id, str) {
   let shader
   if (id === 'vs') {
@@ -32,20 +30,6 @@ function loadProgram (gl, vs, fs) {
   gl.deleteShader(VS)
   gl.deleteShader(FS)
   return shaderProgram
-}
-
-async function loadFile (url, options) {
-  return new Promise((resolve, reject) => {
-    fetch.fetchUrl(url, options, (error, meta, body) => {
-      if (error) {
-        reject(error)
-      }
-      if (meta.status !== 200) {
-        reject(meta)
-      }
-      resolve(body)
-    })
-  })
 }
 
 function loadImage (src) {
@@ -95,7 +79,7 @@ function createTexture (gl, arr, width, height) {
     gl.UNSIGNED_BYTE, // type
     arr // texture data
   )
-  // gl.bindTexture(gl.TEXTURE_2D, null)
+  gl.bindTexture(gl.TEXTURE_2D, null)
   return texture
 }
 
@@ -114,4 +98,3 @@ exports.loadProgram = loadProgram
 exports.loadBuffer = loadBuffer
 exports.loadTexture = loadTexture
 exports.createTexture = createTexture
-exports.loadFile = loadFile

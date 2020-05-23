@@ -1,8 +1,9 @@
 import VSHADER_SOURCE from './shaders/vert.glsl'
 import FSHADER_SOURCE from './shaders/frag.glsl'
 
-const assert = require('assert')
-const utils = require('./gl-utils')
+import assert from 'assert'
+import * as glUtils from './utils-gl'
+import * as utils from './utils'
 
 const FPS_DEFAULT = 10.0
 const FPS_THROTTLE = 1000.0 / FPS_DEFAULT // milliseconds / frames
@@ -49,11 +50,11 @@ class AmberSkyNet {
     this.__gl = gl
     this.__canvas = canvas
 
-    this.__layerArray = utils.createTexture(gl, uLayerArray, layer.width, layer.height)
+    this.__layerArray = glUtils.createTexture(gl, uLayerArray, layer.width, layer.height)
 
     gl.clearColor(0.5, 0.5, 0.5, 1.0)
 
-    this.__prog = utils.loadProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE)
+    this.__prog = glUtils.loadProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE)
 
     const meshArray = [
       -1.0, -1.0,
@@ -63,7 +64,7 @@ class AmberSkyNet {
       1.0, -1.0,
       1.0, 1.0]
 
-    this.__mesh = utils.loadBuffer(gl, meshArray)
+    this.__mesh = glUtils.loadBuffer(gl, meshArray)
 
     const texCoord = [
       0.0, 0.0,
@@ -72,9 +73,9 @@ class AmberSkyNet {
       0.0, 1.0,
       1.0, 0.0,
       1.0, 1.0]
-    this.__tex_coord = utils.loadBuffer(gl, texCoord)
+    this.__tex_coord = glUtils.loadBuffer(gl, texCoord)
 
-    this.__texture = await utils.loadTexture(gl, this.__atlas)
+    this.__texture = await glUtils.loadTexture(gl, this.__atlas)
     // console.log(this.__texture)
 
     const colorArray = [
@@ -84,7 +85,7 @@ class AmberSkyNet {
       0.0, 0.0, 1.0,
       1.0, 1.0, 0.0,
       1.0, 1.0, 1.0]
-    this.__color_array = utils.loadBuffer(gl, colorArray)
+    this.__color_array = glUtils.loadBuffer(gl, colorArray)
 
     return true
   }
