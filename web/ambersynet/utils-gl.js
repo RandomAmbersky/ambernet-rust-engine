@@ -48,7 +48,6 @@ async function loadTexture (gl, src) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img)
   gl.bindTexture(gl.TEXTURE_2D, null)
   img.src = null
-
   return texture
 }
 
