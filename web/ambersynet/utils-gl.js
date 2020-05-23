@@ -1,3 +1,5 @@
+import * as utils from './utils'
+
 function getShader (gl, id, str) {
   let shader
   if (id === 'vs') {
@@ -32,18 +34,8 @@ function loadProgram (gl, vs, fs) {
   return shaderProgram
 }
 
-function loadImage (src) {
-  return new Promise((resolve, reject) => {
-    // eslint-disable-next-line no-undef
-    const img = new Image()
-    img.onload = () => resolve(img)
-    img.onerror = reject
-    img.src = src
-  })
-}
-
 async function loadTexture (gl, src) {
-  const img = await loadImage(src)
+  const img = await utils.loadImage(src)
 
   const texture = gl.createTexture()
 

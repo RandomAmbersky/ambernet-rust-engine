@@ -14,4 +14,15 @@ async function loadFile (url, options) {
   })
 }
 
+function loadImage (src) {
+  return new Promise((resolve, reject) => {
+    // eslint-disable-next-line no-undef
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = reject
+    img.src = src
+  })
+}
+
+exports.loadImage = loadImage
 exports.loadFile = loadFile
