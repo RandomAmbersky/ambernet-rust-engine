@@ -20,12 +20,20 @@ class AmberSkyNet {
     this.__lastDrawTime = -1
     this.__imageReady = false
     this.__viewportSize = new Float32Array(2)
+    this.__mapSize = new Float32Array(2)
+    this.__tileSize = new Float32Array(2)
   }
 
   async load () {
     // тут надо еще сделать преобразование карты с тайлами в текстуру и биндинг её в WebGL как текстуру
     const rawMap = await utils.loadFile(this.__mapName)
     const tiled = JSON.parse(rawMap.toString())
+
+    this.__tileSize[0] = tiled.tilewidth
+    this.__tileSize[1] = tiled.tileheight
+
+    this.__mapSize[0] = tiled.width
+    this.__mapSize[1] = tiled.height
 
     const canvas = document.getElementById(this.__canvasName)
     assert(canvas, 'canvas not found ' + this.__canvasName)
@@ -130,6 +138,12 @@ class AmberSkyNet {
 
       const resolutionLocation = gl.getUniformLocation(this.__prog, 'u_resolution')
       gl.uniform2fv(resolutionLocation, this.__viewportSize)
+
+      const tileSizeLocation = gl.getUniformLocation(this.__prog, 'u_tile_size')
+      gl.uniform2fv(tileSizeLocation, this.__tileSize)
+
+      const mapSizeLocation = gl.getUniformLocation(this.__prog, 'u_map_size')
+      gl.uniform2fv(mapSizeLocation, this.__mapSize)
 
       const positionLocation = gl.getAttribLocation(this.__prog, 'a_position')
       gl.bindBuffer(gl.ARRAY_BUFFER, this.__mesh)
