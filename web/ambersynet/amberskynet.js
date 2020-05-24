@@ -19,6 +19,7 @@ class AmberSkyNet {
     this.__initialTime = Date.now()
     this.__lastDrawTime = -1
     this.__imageReady = false
+    this.__viewportSize = new Float32Array(2)
   }
 
   async load () {
@@ -105,13 +106,17 @@ class AmberSkyNet {
 
         canvas.width = window.innerWidth
         canvas.style.width = window.innerWidth.toString()
+
+        this.__viewportSize[0] = canvas.width
+        this.__viewportSize[1] = canvas.height
+
         // canvas.requestFullscreen()
-
-        const devicePixelRatio = window.devicePixelRatio || 1
-        console.log(devicePixelRatio)
-
+        // const devicePixelRatio = window.devicePixelRatio || 1
+        // console.log(devicePixelRatio)
+        // this.__ViewportSize =
         // gl.viewport(window.innerWidth / 4, window.innerHeight / 4, window.innerWidth / 2, window.innerHeight / 2)
-        gl.viewport(0, 0, 256 * 3, 192 * 3)
+        // gl.viewport(0, 0, 256 * 3, 192 * 3)
+        gl.viewport(0, 0, this.__viewportSize[0], this.__viewportSize[1])
       }
 
       gl.clear(gl.COLOR_BUFFER_BIT)
@@ -122,6 +127,9 @@ class AmberSkyNet {
       // gl.bindBuffer(gl.ARRAY_BUFFER, this.__color_array)
       // gl.enableVertexAttribArray(colorLocation)
       // gl.vertexAttribPointer(colorLocation, 3, gl.FLOAT, false, 0, 0)
+
+      const resolutionLocation = gl.getUniformLocation(this.__prog, 'u_resolution')
+      gl.uniform2fv(resolutionLocation, this.__viewportSize)
 
       const positionLocation = gl.getAttribLocation(this.__prog, 'a_position')
       gl.bindBuffer(gl.ARRAY_BUFFER, this.__mesh)
