@@ -9,7 +9,6 @@ uniform sampler2D u_image1;
 
 void main() {
 
-//    vec2 u_resolution = vec2(800.,600.);
     vec2 st = gl_FragCoord.xy/u_resolution.xy; // [0..1]
 
     vec2 cellCoordStart = floor(st*16.); // [0..16]
@@ -18,7 +17,7 @@ void main() {
 
     gl_FragColor = vec4(color,1.0);
 
-    //    vec4 color0 = texture2D(u_image0, v_texCoord);
+//    vec4 color0 = texture2D(u_image0, v_texCoord);
 
 //    vec4 tile = texture2D(u_image0, v_texCoord);
 //    vec2 tileCoord = floor(tile.xy) * 256.0;
