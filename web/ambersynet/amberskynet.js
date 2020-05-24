@@ -48,6 +48,7 @@ class AmberSkyNet {
       const r = layer.data[i] - g * layer.width
       const b = 0
       const a = 0
+      console.log(r/255,g/255,b)
       layerArray.push(r)
       layerArray.push(g)
       layerArray.push(b)
