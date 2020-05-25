@@ -13,7 +13,7 @@ uniform sampler2D u_image1;
 void main() {
 
     vec2 u_image_size = vec2( 256.,192.);
-    vec2 u_image_scale = u_image_size / u_tile_size;
+    vec2 u_image_scale = u_image_size / u_tile_size; // width x height in tiles
 
     vec2 st = gl_FragCoord.xy/u_resolution.xy; // [0..1]
     vec2 mulSt = st*u_map_size; // [0..map_size-1] float
@@ -22,19 +22,23 @@ void main() {
     vec2 textureOffset = mulSt - floorMulSt; // [0..1]
     textureOffset = textureOffset / u_image_scale;
 
-//    vec2 cellXY = mulSt / u_map_size; // [0..1]//
-    vec2 cellXYConst = vec2(0., 0.) / u_map_size;
-    vec2 cellXY = cellXYConst;
+    vec2 cellXY = mulSt / u_map_size; // [0..1]//
 
     vec4 cell = texture2D(u_image0, cellXY);
     vec2 textureCoord = vec2(cell.x, cell.y);
 
-// ------------
+//    textureCoord = vec2(0.058823529411764705, 0.0392156862745098);
+    textureCoord = ceil(textureCoord * 255.);
+
+    textureCoord =textureCoord / u_image_scale;
+    textureCoord = textureCoord + textureOffset;
+
+    // ------------
 // some test
-//    vec2 textureCoordConst = vec2(3., 11.) / u_image_scale;
-//    vec2 textureCoord = textureCoordConst;
+//    vec2 textureCoordConst = vec2(5., 5.) / u_image_scale;
+//    vec2 textureCoord = textureCoordConst + textureOffset;
 // ------------
 
-    vec4 textureColor = texture2D(u_image1, textureCoord + textureOffset);
+    vec4 textureColor = texture2D(u_image1, textureCoord);
     gl_FragColor = vec4(textureColor.rgb,1.0);
 }
