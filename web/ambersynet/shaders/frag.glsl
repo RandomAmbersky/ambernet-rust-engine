@@ -27,10 +27,9 @@ void main() {
     vec4 cell = texture2D(u_image0, cellXY);
     vec2 textureCoord = vec2(cell.x, cell.y);
 
-//    textureCoord = vec2(0.058823529411764705, 0.0392156862745098);
     textureCoord = ceil(textureCoord * 255.);
 
-    textureCoord =textureCoord / u_image_scale;
+    textureCoord = textureCoord / u_image_scale;
     textureCoord = textureCoord + textureOffset;
 
     // ------------
