@@ -1,8 +1,5 @@
 precision mediump float;
 
-varying vec2 v_texCoord;
-varying vec3 v_color;
-
 uniform vec2 u_resolution; // screen width x height in pixels
 uniform vec2 u_tile_size;  // one tile width x height in pixels
 uniform vec2 u_map_size; // map width x height in tiles
@@ -20,7 +17,7 @@ void main() {
     vec2 floorMulSt = floor(mulSt); // [0..map_size-1] int
 
     vec2 textureOffset = mulSt - floorMulSt; // [0..1]
-    textureOffset = textureOffset / u_image_scale;
+    textureOffset = textureOffset / u_image_scale - 0.00001;
 
     vec2 cellXY = mulSt / u_map_size; // [0..1]//
 
