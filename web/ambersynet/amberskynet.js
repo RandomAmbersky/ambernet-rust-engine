@@ -85,35 +85,35 @@ class AmberSkyNet {
     this.__prog = glUtils.loadProgram(gl, VSHADER_SOURCE, FSHADER_SOURCE)
 
     const meshArray = [
-      -1.0, -1.0,
-      1.0, -1.0,
       -1.0, 1.0,
+      1.0, -1.0,
+      -1.0, -1.0,
       -1.0, 1.0,
       1.0, -1.0,
       1.0, 1.0]
 
     this.__mesh = glUtils.loadBuffer(gl, meshArray)
 
-    const texCoord = [
-      0.0, 0.0,
-      1.0, 0.0,
-      0.0, 1.0,
-      0.0, 1.0,
-      1.0, 0.0,
-      1.0, 1.0]
-    this.__tex_coord = glUtils.loadBuffer(gl, texCoord)
+    // const texCoord = [
+    //   0.0, 0.0,
+    //   1.0, 0.0,
+    //   0.0, 1.0,
+    //   0.0, 1.0,
+    //   1.0, 0.0,
+    //   1.0, 1.0]
+    // this.__tex_coord = glUtils.loadBuffer(gl, texCoord)
 
     this.__texture = await glUtils.loadTexture(gl, this.__atlas)
     // console.log(this.__texture)
 
-    const colorArray = [
-      0.0, 0.0, 0.0,
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      0.0, 0.0, 1.0,
-      1.0, 1.0, 0.0,
-      1.0, 1.0, 1.0]
-    this.__color_array = glUtils.loadBuffer(gl, colorArray)
+    // const colorArray = [
+    //   0.0, 0.0, 0.0,
+    //   1.0, 0.0, 0.0,
+    //   0.0, 1.0, 0.0,
+    //   0.0, 0.0, 1.0,
+    //   1.0, 1.0, 0.0,
+    //   1.0, 1.0, 1.0]
+    // this.__color_array = glUtils.loadBuffer(gl, colorArray)
 
     return true
   }
@@ -169,10 +169,10 @@ class AmberSkyNet {
       gl.enableVertexAttribArray(positionLocation)
       gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0)
 
-      const texCoordLocation = gl.getAttribLocation(this.__prog, 'a_texCoord')
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.__tex_coord)
-      gl.enableVertexAttribArray(texCoordLocation)
-      gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
+      // const texCoordLocation = gl.getAttribLocation(this.__prog, 'a_texCoord')
+      // gl.bindBuffer(gl.ARRAY_BUFFER, this.__tex_coord)
+      // gl.enableVertexAttribArray(texCoordLocation)
+      // gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0)
 
       const uImage0Location = gl.getUniformLocation(this.__prog, 'u_image0')
       const uImage1Location = gl.getUniformLocation(this.__prog, 'u_image1')
