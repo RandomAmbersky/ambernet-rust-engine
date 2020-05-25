@@ -27,7 +27,8 @@ void main() {
     textureCoord = ceil(textureCoord * 255.);
 
     textureCoord = textureCoord / u_image_scale;
-    textureCoord = textureCoord + textureOffset;
+    textureCoord.x = textureCoord.x + textureOffset.x;
+    textureCoord.y = textureCoord.y + 1./u_image_scale.y  - textureOffset.y;
 
     // ------------
 // some test
