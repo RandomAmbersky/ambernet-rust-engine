@@ -41,13 +41,19 @@ class AmberSkyNet {
     const gl = canvas.getContext('webgl', {antialias: true})
     assert(gl, 'webgl not supported')
 
+    const tile = {
+      width: 16,
+      height: 16
+    }
+
     const layer = tiled.layers[0]
     const layerArray = []
     for (let i = 0; i < layer.width * layer.height; i++) {
-      const g = Math.floor(layer.data[i] / layer.height)
-      const r = layer.data[i] - g * layer.width
-      const b = 0
-      const a = 0
+      const cell = layer.data[i] - 1
+      const g = Math.floor(cell / tile.width)
+      const r = cell - g * tile.width
+      const b = 255
+      const a = 255
       layerArray.push(r)
       layerArray.push(g)
       layerArray.push(b)
@@ -55,6 +61,19 @@ class AmberSkyNet {
     }
 
     const uLayerArray = new Uint8Array(layerArray)
+    console.log(layer.data[0])
+    console.log(
+      uLayerArray[0],
+      uLayerArray[1],
+      uLayerArray[2],
+      uLayerArray[3]
+    )
+    console.log(
+      uLayerArray[0] / 255.0,
+      uLayerArray[1] / 255.0,
+      uLayerArray[2] / 255.0,
+      uLayerArray[3] / 255.0
+    )
 
     this.__gl = gl
     this.__canvas = canvas
