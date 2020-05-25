@@ -61,19 +61,19 @@ class AmberSkyNet {
     }
 
     const uLayerArray = new Uint8Array(layerArray)
-    console.log(layer.data[0])
-    console.log(
-      uLayerArray[0],
-      uLayerArray[1],
-      uLayerArray[2],
-      uLayerArray[3]
-    )
-    console.log(
-      uLayerArray[0] / 255.0,
-      uLayerArray[1] / 255.0,
-      uLayerArray[2] / 255.0,
-      uLayerArray[3] / 255.0
-    )
+    // console.log(layer.data[0])
+    // console.log(
+    //   uLayerArray[0],
+    //   uLayerArray[1],
+    //   uLayerArray[2],
+    //   uLayerArray[3]
+    // )
+    // console.log(
+    //   uLayerArray[0] / 255.0,
+    //   uLayerArray[1] / 255.0,
+    //   uLayerArray[2] / 255.0,
+    //   uLayerArray[3] / 255.0
+    // )
 
     this.__gl = gl
     this.__canvas = canvas
