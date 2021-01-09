@@ -1,4 +1,5 @@
 mod utils;
+mod amberskynet;
 
 extern crate wasm_bindgen;
 extern crate web_sys;
@@ -11,16 +12,21 @@ fn say_hello_from_rust() {
     log("Howdy!... from Rust =)")
 }
 
+#[wasm_bindgen]
+pub fn draw() {
+    log("draw");
+}
+
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
 pub fn run() -> Result<(), JsValue> {
     // If the `console_error_panic_hook` feature is enabled this will set a panic hook, otherwise
     // it will do nothing.
     set_panic_hook();
+
     say_hello_from_rust();
     log("AmberSkyNet forever...");
-    // Use `web_sys`'s global `window` function to get a handle on the global
-    // window object.
+
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
     let body = document.body().expect("document should have a body");
