@@ -2232,15 +2232,15 @@ etag@~1.8.1:
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
 
-events@^1.0.2:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/events/-/events-1.1.1.tgz#9ebdb7635ad099c70dcc4c2a1f5004288e8bd924"
-  integrity sha1-nr23Y1rQmccNzEwqH1AEKI6L2SQ=
-
 events@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.1.0.tgz#84279af1b34cb75aa88bf5ff291f6d0bd9b31a59"
   integrity sha512-Rv+u8MLHNOdMjTAFeT3nCjHn2aGlx435FP/sDHNaRhDEMwyI/aB22Kj2qIN8R0cw3z28psEQLYwxVKLsKrMgWg==
+
+events@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/events/-/events-3.2.0.tgz#93b87c18f8efcd4202a461aec4dfc0556b639379"
+  integrity sha512-/46HWwbfCX2xTawVfkKLGxMifJYQBWMwY1mjywRtb4c9x8l5NP3KoJtnIOiL1hfdRkIuYhETxQlo62IF8tcnlg==
 
 evp_bytestokey@^1.0.0, evp_bytestokey@^1.0.3:
   version "1.0.3"
@@ -2392,21 +2392,6 @@ fetch@^1.1.0:
   dependencies:
     biskviit "1.0.1"
     encoding "0.1.12"
-
-file-match@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/file-match/-/file-match-1.0.2.tgz#c9cad265d2c8adf3a81475b0df475859069faef7"
-  integrity sha1-ycrSZdLIrfOoFHWw30dYWQafrvc=
-  dependencies:
-    utils-extend "^1.0.6"
-
-file-system@2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/file-system/-/file-system-2.2.2.tgz#7d65833e3a2347dcd956a813c677153ed3edd987"
-  integrity sha1-fWWDPjojR9zZVqgTxncVPtPt2Yc=
-  dependencies:
-    file-match "^1.0.1"
-    utils-extend "^1.0.4"
 
 file-uri-to-path@1.0.0:
   version "1.0.0"
@@ -2663,13 +2648,13 @@ glslify-bundle@^5.1.1:
     murmurhash-js "^1.0.0"
     shallow-copy "0.0.1"
 
-glslify-deps@^1.3.1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/glslify-deps/-/glslify-deps-1.3.1.tgz#dfa6962322454a91ecc4de25b5e710415b0c89ad"
-  integrity sha512-Ogm179MCazwIRyEqs3g3EOY4Y3XIAa0yl8J5RE9rJC6QH1w8weVOp2RZu0mvnYy/2xIas1w166YR2eZdDkWQxg==
+glslify-deps@^1.3.2:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/glslify-deps/-/glslify-deps-1.3.2.tgz#c09ee945352bfc07ac2d8a1cc9e3de776328c72b"
+  integrity sha512-7S7IkHWygJRjcawveXQjRXLO2FTjijPDYC7QfZyAQanY+yGLCFHYnPtsGT9bdyHiwPTw/5a1m1M9hamT2aBpag==
   dependencies:
     "@choojs/findup" "^0.2.0"
-    events "^1.0.2"
+    events "^3.2.0"
     glsl-resolve "0.0.1"
     glsl-tokenizer "^2.0.0"
     graceful-fs "^4.1.2"
@@ -3977,12 +3962,11 @@ parcel-bundler@^1.12.4:
     v8-compile-cache "^2.0.0"
     ws "^5.1.1"
 
-parcel-plugin-static-files-copy@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/parcel-plugin-static-files-copy/-/parcel-plugin-static-files-copy-2.3.1.tgz#db7d1ffbc70f25a02091c5f5c29bfb36cbb4c74a"
-  integrity sha512-yqB1bhSK+hbfxSjc1y/gBc+Fm6bedNrofx75wgnI0sP+6oEBqjyN51tlJVLu6pZhBLi11ZFwAM2XubCUh2G0+A==
+parcel-plugin-static-files-copy@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/parcel-plugin-static-files-copy/-/parcel-plugin-static-files-copy-2.5.0.tgz#8ab26f331d163cd023d283fc0ef5fcd779fe5948"
+  integrity sha512-5rxOPw3iV+WXhePfByoIxsUlL4I0o95CgcF31gwgnhPuj2q6tVPuzEAJsag9bWJr5Vd/SXFPTNsUAGAg4jP07Q==
   dependencies:
-    file-system "2.2.2"
     minimatch "3.0.4"
     path "0.12.7"
 
@@ -5583,11 +5567,6 @@ util@^0.12.0:
     is-typed-array "^1.1.3"
     safe-buffer "^5.1.2"
     which-typed-array "^1.1.2"
-
-utils-extend@^1.0.4, utils-extend@^1.0.6:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/utils-extend/-/utils-extend-1.0.8.tgz#ccfd7b64540f8e90ee21eec57769d0651cab8a5f"
-  integrity sha1-zP17ZFQPjpDuIe7Fd2nQZRyril8=
 
 utils-merge@1.0.1:
   version "1.0.1"
