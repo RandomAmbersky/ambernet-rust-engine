@@ -1,4 +1,6 @@
-import { calculate_probability } from '../rust/main.rs'
+import module  from '../crate/Cargo.toml'
 
-import 'babel-polyfill'
-import './app'
+// import 'babel-polyfill'
+// import './app'
+
+module.run()
