@@ -1,12 +1,25 @@
-mod utils;
-mod amberskynet;
-
 extern crate wasm_bindgen;
 extern crate web_sys;
+
+mod utils;
+mod amberskynet;
 
 use wasm_bindgen::prelude::*;
 
 use crate::utils::*;
+use crate::amberskynet::AmberSkyNet;
+
+struct AmberNet {}
+
+impl amberskynet::AmberSkyNet for AmberNet {
+    fn init(&self) {
+        log("AmberSkyNet init")
+    }
+
+    fn draw(&self) {
+        log("AmberSkyNet draw")
+    }
+}
 
 fn say_hello_from_rust() {
     log("Howdy!... from Rust =)")
@@ -15,6 +28,7 @@ fn say_hello_from_rust() {
 #[wasm_bindgen]
 pub fn draw() {
     log("draw");
+
 }
 
 // Called by our JS entry point to run the example
@@ -36,6 +50,10 @@ pub fn run() -> Result<(), JsValue> {
     val.set_inner_html("Hello from Rust, WebAssembly, and Parcel!");
 
     body.append_child(&val)?;
+
+    let ambernet = AmberNet{};
+    ambernet.init();
+    ambernet.draw();
 
     Ok(())
 }

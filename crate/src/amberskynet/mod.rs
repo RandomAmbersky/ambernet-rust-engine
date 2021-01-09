@@ -1,4 +1,4 @@
-mod amberskynet;
-pub mod render;
-
-// pub use render::Render;
+pub trait AmberSkyNet {
+    fn init(&self);
+    fn draw(&self);
+}
