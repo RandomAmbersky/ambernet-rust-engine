@@ -9,7 +9,11 @@ use wasm_bindgen::prelude::*;
 use utils::set_panic_hook;
 
 use amberskynet::get_engine;
-use crate::amberskynet::api::{AmberNetApi, LoggerApi};
+use amberskynet::api::{
+    AmberNetApi,
+    LoggerApi,
+    RenderApi
+};
 
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
@@ -28,7 +32,9 @@ pub fn run() -> Result<(), JsValue> {
 
     let a = get_engine();
     let logger = a.get_log();
+    let render = a.get_render();
     logger.log("AmberSkyNet forever...");
+    render.draw();
 
     Ok(())
 }

@@ -1,11 +1,11 @@
 pub mod api;
 mod webgl;
 
-use webgl::engine::Engine as Engine;
+use webgl::engine::Engine as EngineWebGl;
 use api::{
     AmberNetApi,
 };
 
-pub fn get_engine () -> Engine{
-    Engine::new()
+pub fn get_engine () -> EngineWebGl{
+    EngineWebGl::new()
 }
