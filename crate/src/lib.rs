@@ -10,12 +10,11 @@ use utils::set_panic_hook;
 
 use amberskynet::get_engine;
 use amberskynet::EngineWebGl;
-use crate::amberskynet::api::{AmberNetApi, LoggerApi, RenderApi};
-// use amberskynet::api::{
-//     AmberNetApi,
-//     LoggerApi,
-//     RenderApi
-// };
+use crate::amberskynet::api::{
+    AmberNetApi,
+    LoggerApi,
+    RenderApi
+};
 
 #[wasm_bindgen]
 struct AmberSkyNet {
@@ -45,6 +44,6 @@ impl AmberSkyNet {
 
     pub fn render(&self) {
         self.engine.get_render().draw();
-        self.engine.get_log().log("render");
+        // self.engine.get_log().log("render");
     }
 }
