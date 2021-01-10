@@ -16,12 +16,7 @@ use amberskynet::{
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
 pub fn run() -> Result<(), JsValue> {
-    // If the `console_error_panic_hook` feature is enabled this will set a panic hook, otherwise
-    // it will do nothing.
     set_panic_hook();
-
-    // say_hello_from_rust();
-    // log("AmberSkyNet forever...");
 
     let window = web_sys::window().expect("no global `window` exists");
     let document = window.document().expect("should have a document on window");
@@ -36,7 +31,7 @@ pub fn run() -> Result<(), JsValue> {
     let app = app();
     let engine = app.get_engine();
     let logger = engine.get_log();
-    logger.log("hello logger");
+    logger.log("AmberSkyNet forever...");
 
     Ok(())
 }
