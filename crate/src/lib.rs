@@ -1,20 +1,21 @@
 extern crate wasm_bindgen;
 extern crate web_sys;
 
-mod logger;
 mod utils;
 mod amberskynet;
 
 use wasm_bindgen::prelude::*;
 
-use logger::{
-    Logger,
-    WASMLogger
-};
 use utils::set_panic_hook;
-use crate::amberskynet::{
-    AmberNetEmpty, AmberSkyNet};
 
+use amberskynet::{LoggerWebGl, LoggerApi};
+
+// use logger::{
+//     Logger,
+//     WASMLogger
+// };
+
+// use amberskynet::AmberSkyNet;
 
 // struct AmberNet {}
 //
@@ -33,9 +34,9 @@ use crate::amberskynet::{
 //     }
 // }
 
-fn say_hello_from_rust() {
-    WASMLogger::log("Howdy!... from Rust =)");
-}
+// fn say_hello_from_rust() {
+//     WASMLogger::log("Howdy!... from Rust =)");
+// }
 
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
@@ -44,7 +45,7 @@ pub fn run() -> Result<(), JsValue> {
     // it will do nothing.
     set_panic_hook();
 
-    say_hello_from_rust();
+    // say_hello_from_rust();
     // log("AmberSkyNet forever...");
 
     let window = web_sys::window().expect("no global `window` exists");
@@ -57,13 +58,24 @@ pub fn run() -> Result<(), JsValue> {
 
     body.append_child(&val)?;
 
-    WASMLogger::log("lol");
+    let logger = LoggerWebGl{};
+    logger.log("Hello!");
 
-    let a = AmberNetEmpty::new(
-        String::from("my cool engine")
-    );
-    a.render();
-    a.update(50.03);
+    // let app = AppWebGl::new();
+
+    // let engine = app.get_api();
+
+    // let log:&LoggerWebGl = engine.get_console();
+
+    // WASMLogger::log("lol");
+
+    // let a = AmberSkyNet::set_logger();
+
+    // let a = AmberNetEmpty::new(
+    //     String::from("my cool engine")
+    // );
+    // a.render();
+    // a.update(50.03);
 
     Ok(())
 }
