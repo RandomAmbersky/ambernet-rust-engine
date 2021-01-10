@@ -9,32 +9,42 @@ use wasm_bindgen::prelude::*;
 use utils::set_panic_hook;
 
 use amberskynet::get_engine;
-use amberskynet::api::{
-    AmberNetApi,
-    LoggerApi,
-    RenderApi
-};
+use amberskynet::EngineWebGl;
+use crate::amberskynet::api::{AmberNetApi, LoggerApi, RenderApi};
+// use amberskynet::api::{
+//     AmberNetApi,
+//     LoggerApi,
+//     RenderApi
+// };
 
-// Called by our JS entry point to run the example
 #[wasm_bindgen]
-pub fn run() -> Result<(), JsValue> {
-    set_panic_hook();
+struct AmberSkyNet {
+    engine: EngineWebGl
+}
 
-    let window = web_sys::window().expect("no global `window` exists");
-    let document = window.document().expect("should have a document on window");
-    let body = document.body().expect("document should have a body");
+#[wasm_bindgen]
+impl AmberSkyNet {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Self {
+        set_panic_hook();
+        Self {
+            engine: get_engine()
+        }
+    }
 
-    // Manufacture the element we're gonna append
-    let val = document.create_element("p")?;
-    val.set_inner_html("Hello from Rust, WebAssembly, and Parcel!");
+    pub fn update(&self, _time: f32) {
+        // let mess = format!("update {}", _time);
+        // self.engine.get_log().log(&mess)
+    }
 
-    body.append_child(&val)?;
+    pub fn resize(&self, _width: f32, _height: f32) {
+        self.engine.get_render().resize(_width, _height);
+        let mess = format!("resize {} x {}", _width, _height);
+        self.engine.get_log().log(&mess);
+    }
 
-    let a = get_engine();
-    let logger = a.get_log();
-    let render = a.get_render();
-    logger.log("AmberSkyNet forever...");
-    render.draw();
-
-    Ok(())
+    pub fn render(&self) {
+        self.engine.get_render().draw();
+        self.engine.get_log().log("render");
+    }
 }

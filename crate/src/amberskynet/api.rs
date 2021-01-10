@@ -4,6 +4,7 @@ pub trait LoggerApi {
 
 pub trait RenderApi {
     fn new() -> Self;
+    fn resize(&self, _width: f32, _height: f32);
     fn draw(&self);
 }
 
