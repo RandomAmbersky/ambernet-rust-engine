@@ -7,8 +7,8 @@ use api::{
     RenderApi
 };
 
-use webgl::Logger as LoggerWebGl;
-use webgl::Render as RenderWebGl;
+use webgl::logger::Logger as LoggerWebGl;
+use webgl::render::Render as RenderWebGl;
 
 pub struct AmberNet<LoggerType, RenderType> {
     logger: LoggerType,
