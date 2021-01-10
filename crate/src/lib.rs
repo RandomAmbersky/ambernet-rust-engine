@@ -7,38 +7,11 @@ mod amberskynet;
 use wasm_bindgen::prelude::*;
 
 use utils::set_panic_hook;
-
 use amberskynet::{
-    get_app
+    app,
+    AmberNetApi,
+    LoggerApi
 };
-
-// use logger::{
-//     Logger,
-//     WASMLogger
-// };
-
-// use amberskynet::AmberSkyNet;
-
-// struct AmberNet {}
-//
-// impl amberskynet::AmberSkyNet for AmberNet {
-//     fn new() -> Self {
-//         log("AmberSkyNet new");
-//         Self {}
-//     }
-//
-//     fn update(&self, time: f32) {
-//         log("AmberSkyNet update")
-//     }
-//
-//     fn render(&self) {
-//         log("AmberSkyNet render")
-//     }
-// }
-
-// fn say_hello_from_rust() {
-//     WASMLogger::log("Howdy!... from Rust =)");
-// }
 
 // Called by our JS entry point to run the example
 #[wasm_bindgen]
@@ -60,30 +33,10 @@ pub fn run() -> Result<(), JsValue> {
 
     body.append_child(&val)?;
 
-    // let logger = LoggerWebGl{};
-    // logger.log("Hello!");
-
-    let app = get_app();
-
+    let app = app();
     let engine = app.get_engine();
-
-    app.log("hello");
-    engine.log("engine hello");
-    // let app = AppWebGl::new();
-
-    // let engine = app.get_api();
-
-    // let log:&LoggerWebGl = engine.get_console();
-
-    // WASMLogger::log("lol");
-
-    // let a = AmberSkyNet::set_logger();
-
-    // let a = AmberNetEmpty::new(
-    //     String::from("my cool engine")
-    // );
-    // a.render();
-    // a.update(50.03);
+    let logger = engine.get_log();
+    logger.log("hello logger");
 
     Ok(())
 }

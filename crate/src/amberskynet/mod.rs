@@ -30,7 +30,6 @@ impl LoggerApi for LoggerWebGl {
 
 pub trait AmberNetApi<LoggerType> {
     fn new() -> Self;
-    fn log(&self, mess: &str);
     fn get_log(&self) -> &LoggerType;
 }
 
@@ -43,10 +42,6 @@ impl AmberNetApi<LoggerWebGl> for AmberNet<LoggerWebGl> {
         Self {
             logger: LoggerWebGl{}
         }
-    }
-
-    fn log(&self, mess: &str) {
-        &self.logger.log(mess);
     }
 
     fn get_log(&self) -> &LoggerWebGl {
@@ -68,20 +63,11 @@ impl AppWebGl {
     pub fn get_engine(&self) -> &AmberNet<LoggerWebGl> {
         &self.engine
     }
-    pub fn log(&self, mess: &str) {
-        &self.engine.logger.log(mess);
-    }
 }
 
-pub fn get_app() -> AppWebGl {
+pub fn app() -> AppWebGl {
     AppWebGl::new()
 }
-
-// impl AmberNetApi for AmberNetWebGL {
-//     fn log(mess: &str) {
-//         unimplemented!()
-//     }
-// }
 
 // trait AmberSkyNetInterface<LoggerType> {
 //     fn new(name: String) -> Self;
