@@ -28,41 +28,54 @@ impl LoggerApi for LoggerWebGl {
     }
 }
 
-// trait AmberNetApi<LoggerType> {
-//     fn new() -> Self;
-//     fn get_log(&self) -> &LoggerType;
-// }
-//
-// pub struct AmberNet<LoggerType> {
-//     logger: LoggerType
-// }
-//
-// impl AmberNetApi<LoggerWebGl> for AmberNet<LoggerWebGl> {
-//     fn new() -> Self {
-//         Self {
-//             logger: LoggerWebGl{}
-//         }
-//     }
-//     fn get_log(&self) -> &LoggerWebGl {
-//         &self.logger
-//     }
-// }
-//
-//
-// pub struct AppWebGl {
-//     engine: AmberNet<LoggerWebGl>
-// }
-//
-// impl AppWebGl {
-//     pub fn new() -> Self {
-//         Self {
-//             engine: AmberNet::new()
-//         }
-//     }
-//     pub fn get_api(&self) -> &AmberNet<LoggerWebGl> {
-//         &self.engine
-//     }
-// }
+pub trait AmberNetApi<LoggerType> {
+    fn new() -> Self;
+    fn log(&self, mess: &str);
+    fn get_log(&self) -> &LoggerType;
+}
+
+pub struct AmberNet<LoggerType> {
+    logger: LoggerType
+}
+
+impl AmberNetApi<LoggerWebGl> for AmberNet<LoggerWebGl> {
+    fn new() -> Self {
+        Self {
+            logger: LoggerWebGl{}
+        }
+    }
+
+    fn log(&self, mess: &str) {
+        &self.logger.log(mess);
+    }
+
+    fn get_log(&self) -> &LoggerWebGl {
+        &self.logger
+    }
+}
+
+
+pub struct AppWebGl {
+    engine: AmberNet<LoggerWebGl>
+}
+
+impl AppWebGl {
+    pub fn new() -> Self {
+        Self {
+            engine: AmberNet::new()
+        }
+    }
+    pub fn get_engine(&self) -> &AmberNet<LoggerWebGl> {
+        &self.engine
+    }
+    pub fn log(&self, mess: &str) {
+        &self.engine.logger.log(mess);
+    }
+}
+
+pub fn get_app() -> AppWebGl {
+    AppWebGl::new()
+}
 
 // impl AmberNetApi for AmberNetWebGL {
 //     fn log(mess: &str) {

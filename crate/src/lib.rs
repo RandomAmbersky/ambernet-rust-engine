@@ -8,7 +8,9 @@ use wasm_bindgen::prelude::*;
 
 use utils::set_panic_hook;
 
-use amberskynet::{LoggerWebGl, LoggerApi};
+use amberskynet::{
+    get_app
+};
 
 // use logger::{
 //     Logger,
@@ -58,9 +60,15 @@ pub fn run() -> Result<(), JsValue> {
 
     body.append_child(&val)?;
 
-    let logger = LoggerWebGl{};
-    logger.log("Hello!");
+    // let logger = LoggerWebGl{};
+    // logger.log("Hello!");
 
+    let app = get_app();
+
+    let engine = app.get_engine();
+
+    app.log("hello");
+    engine.log("engine hello");
     // let app = AppWebGl::new();
 
     // let engine = app.get_api();
