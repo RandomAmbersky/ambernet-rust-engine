@@ -6,5 +6,12 @@ impl api::RenderApi for Render {
     fn new() -> Self {
         Self {}
     }
-    fn draw(&self) {}
+
+    fn resize(&self, _width: f32, _height: f32) {
+
+    }
+
+    fn draw(&self) {
+
+    }
 }
