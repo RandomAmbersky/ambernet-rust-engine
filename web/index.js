@@ -19,6 +19,7 @@ const update = (currTime) => {
     engine.resize(canvas.width, canvas.height)
   }
   engine.update(elapsedTime)
+  engine.render()
 }
 
 function renderLoop() {
