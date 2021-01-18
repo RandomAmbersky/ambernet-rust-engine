@@ -5,15 +5,6 @@ pub use web_sys::WebGlRenderingContext as GL;
 
 pub fn get_webgl_context () -> Result<GL, JsValue> {
 
-    // let document = web_sys::window().unwrap().document().unwrap();
-    // let canvas = document.get_element_by_id("canvas").unwrap();
-    // let canvas: web_sys::HtmlCanvasElement = canvas.dyn_into::<web_sys::HtmlCanvasElement>()?;
-    //
-    // let gl = canvas
-    //     .get_context("webgl")?
-    //     .unwrap()
-    //     .dyn_into::<WebGlRenderingContext>()?;
-
     let window: web_sys::Window = match window() {
         None => return Err(JsValue::from("Window not found.")),
         Some(t) => t

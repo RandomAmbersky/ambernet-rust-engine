@@ -1,6 +1,6 @@
 use super::super::api as api;
 use super::logger::Logger as LoggerWebGl;
-use super::render::Render as RenderWebGl;
+use super::render::RenderWebGl;
 use crate::amberskynet::api::RenderApi;
 
 pub struct Engine {
@@ -10,8 +10,9 @@ pub struct Engine {
 
 impl api::AmberNetApi<LoggerWebGl, RenderWebGl> for Engine {
     fn new() -> Self {
+        let log = LoggerWebGl{};
         Self {
-            logger: LoggerWebGl{},
+            logger: log,
             render: RenderWebGl::new()
         }
     }

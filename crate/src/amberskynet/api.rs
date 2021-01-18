@@ -2,7 +2,7 @@ pub trait LoggerApi {
     fn log(&self, mess: &str);
 }
 
-pub trait RenderApi {
+pub trait RenderApi<LoggerType> {
     fn new() -> Self;
     fn resize(&self, _width: f32, _height: f32);
     fn draw(&self);
