@@ -3,6 +3,7 @@ extern crate web_sys;
 
 mod utils;
 mod amberskynet;
+mod ambernet;
 
 use wasm_bindgen::prelude::*;
 
@@ -15,10 +16,12 @@ use crate::amberskynet::api::{
     LoggerApi,
     RenderApi
 };
+use crate::ambernet::AmberNet;
 
 #[wasm_bindgen]
 struct AmberSkyNet {
-    engine: EngineWebGl
+    engine: EngineWebGl,
+    a: AmberNet
 }
 
 #[wasm_bindgen]
@@ -26,14 +29,17 @@ impl AmberSkyNet {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         set_panic_hook();
+        let mut a = AmberNet::new();
         Self {
-            engine: get_engine()
+            engine: get_engine(),
+            a
         }
     }
 
     pub fn update(&self, _time: f32) {
-        // let mess = format!("update {}", _time);
-        // self.engine.get_log().log(&mess)
+        self.a.update(_time);
+        let mess = format!("update {}", _time);
+        self.engine.get_log().log(&mess);
     }
 
     pub fn resize(&self, _width: f32, _height: f32) {

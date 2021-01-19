@@ -9,6 +9,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 console_error_panic_hook = "*"
+uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 
 [dependencies.wasm-bindgen]
 version = "*"
