@@ -18,8 +18,8 @@ use crate::amberskynet::api::{
 };
 
 use crate::ambernet::AmberNet;
-use crate::ambernet::render::SystemRender;
-use crate::ambernet::logger::SystemLog;
+use crate::ambernet::system::logger::SystemLog;
+use crate::ambernet::system::render::SystemRender;
 
 #[wasm_bindgen]
 pub struct AmberSkyNet {
@@ -35,7 +35,9 @@ impl AmberSkyNet {
         let log = Box::new(SystemLog::new());
         let r = Box::new(SystemRender::new());
         let mut a = AmberNet::new();
-        a.add_system_box(log).add_system_box(r);
+        a
+            .add_system_box(log)
+            .add_system_box(r);
         Self {
             engine: get_engine(),
             a
