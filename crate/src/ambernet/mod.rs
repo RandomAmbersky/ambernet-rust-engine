@@ -1,7 +1,6 @@
 pub mod api;
 pub mod system;
-
-mod core;
+pub mod core;
 
 use std::collections::HashMap;
 use uuid::Uuid;

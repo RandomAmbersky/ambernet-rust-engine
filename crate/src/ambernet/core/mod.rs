@@ -1,0 +1,4 @@
+struct Entity {}
+impl Entity {
+
+}
