@@ -16,10 +16,13 @@ use crate::amberskynet::api::{
     LoggerApi,
     RenderApi
 };
+
 use crate::ambernet::AmberNet;
+use crate::ambernet::render::SystemRender;
+use crate::ambernet::logger::SystemLog;
 
 #[wasm_bindgen]
-struct AmberSkyNet {
+pub struct AmberSkyNet {
     engine: EngineWebGl,
     a: AmberNet
 }
@@ -29,7 +32,10 @@ impl AmberSkyNet {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         set_panic_hook();
+        let log = Box::new(SystemLog::new());
+        let r = Box::new(SystemRender::new());
         let mut a = AmberNet::new();
+        a.add_system_box(log).add_system_box(r);
         Self {
             engine: get_engine(),
             a
