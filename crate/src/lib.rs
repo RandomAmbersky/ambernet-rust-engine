@@ -46,18 +46,16 @@ impl AmberSkyNet {
 
     pub fn update(&self, _time: f32) {
         self.a.update(_time);
-        let mess = format!("update {}", _time);
-        self.engine.get_log().log(&mess);
     }
 
     pub fn resize(&self, _width: f32, _height: f32) {
-        self.engine.get_render().resize(_width, _height);
+        // self.engine.get_render().resize(_width, _height);
         let mess = format!("resize {} x {}", _width, _height);
         self.engine.get_log().log(&mess);
     }
 
     pub fn render(&self) {
-        self.engine.get_render().draw();
+        // self.engine.get_render().draw();
         // self.engine.get_log().log("render");
     }
 }
