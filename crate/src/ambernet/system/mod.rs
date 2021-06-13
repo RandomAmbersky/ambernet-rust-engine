@@ -1,16 +1,12 @@
-use crate::ambernet::{SystemApi, Logger};
+mod renderer;
+mod sound;
 
-pub struct SystemRenderer {}
+use renderer::Renderer;
+use sound::Sound;
 
-impl SystemRenderer {
-    pub fn new() -> Self {
-        Self{}
-    }
+pub fn get_renderer() -> Renderer {
+    Renderer::new()
 }
-
-impl SystemApi for SystemRenderer {
-    fn process(&self) {
-        let mess = format!("SystemRenderer processed...");
-        Logger::log(&mess);
-    }
+pub fn get_sound() -> Sound {
+    Sound::new()
 }

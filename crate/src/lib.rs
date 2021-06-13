@@ -5,9 +5,9 @@ mod ambernet;
 mod utils;
 
 use ambernet::AmberNet;
-use ambernet::system::SystemRenderer;
 use wasm_bindgen::prelude::*;
 use crate::utils::set_panic_hook;
+use crate::ambernet::system as sys;
 
 #[wasm_bindgen]
 pub struct AmberSkyNet {
@@ -20,12 +20,11 @@ impl AmberSkyNet {
     pub fn new() -> Self {
         set_panic_hook();
         let mut a = AmberNet::new();
-        let render = SystemRenderer::new();
-        let render_box = Box::new(render);
+        let render_box = Box::new(sys::get_renderer());
+        let sound_box = Box::new(sys::get_sound());
         a.add_system_box(render_box);
-        Self {
-            a
-        }
+        a.add_system_box(sound_box);
+        Self { a }
     }
     pub fn update(&self, _time: f32) {
         self.a.update(_time);
