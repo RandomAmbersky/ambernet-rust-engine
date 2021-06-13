@@ -1,5 +1,5 @@
 pub trait LoggerApi {
-    fn log(mess: &str);
+    fn log(&self, mess: &str);
 }
 
 pub trait RenderApi {
