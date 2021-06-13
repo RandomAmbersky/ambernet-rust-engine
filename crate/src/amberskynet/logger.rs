@@ -9,13 +9,13 @@ mod utils {
     }
 }
 
-use super::super::api;
+use crate::amberskynet::api;
 use utils::log as webgl_log;
 
-pub struct Logger {}
+pub struct LoggerWebGl {}
 
-impl api::LoggerApi for Logger {
-    fn log(&self, mess: &str) {
+impl api::LoggerApi for LoggerWebGl {
+    fn log(mess: &str) {
         webgl_log(mess)
     }
 }

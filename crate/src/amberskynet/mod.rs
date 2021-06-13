@@ -1,10 +1,11 @@
-pub mod api;
-mod webgl;
+pub use engine::Engine as EngineWebGl;
 
-pub use webgl::engine::Engine as EngineWebGl;
-use api::{
-    AmberNetApi,
-};
+use crate::amberskynet::api::AmberNetApi;
+
+pub mod api;
+pub mod logger;
+pub mod render;
+pub mod engine;
 
 pub fn get_engine () -> EngineWebGl{
     EngineWebGl::new()

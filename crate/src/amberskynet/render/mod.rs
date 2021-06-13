@@ -1,14 +1,13 @@
 mod utils;
 
-use super::super::api;
-use super::logger::Logger;
+use crate::amberskynet::api;
 use utils::GL as GL;
 
 pub struct RenderWebGl {
     gl: GL
 }
 
-impl api::RenderApi<Logger> for RenderWebGl {
+impl api::RenderApi for RenderWebGl {
     fn new() -> Self {
         Self {
             gl: utils::get_webgl_context().unwrap()
