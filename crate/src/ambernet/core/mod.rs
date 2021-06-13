@@ -1,4 +1,0 @@
-struct Entity {}
-impl Entity {
-
-}

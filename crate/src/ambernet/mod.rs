@@ -1,14 +1,25 @@
-pub mod api;
 pub mod system;
-pub mod core;
 
 use std::collections::HashMap;
 use uuid::Uuid;
 
+pub trait SystemApi {
+    fn process(&self);
+}
+
+pub type UID = uuid::Uuid;
+pub type SystemBox = Box<dyn SystemApi>;
+
+pub struct Logger {}
+
+impl Logger {
+    fn log(s: &str) {
+        log(s);
+    }
+}
+
 extern crate wasm_bindgen;
 use wasm_bindgen::prelude::*;
-use crate::ambernet::api::{SystemType, SystemBox};
-
 #[wasm_bindgen]
 extern "C" {
     #[wasm_bindgen(js_namespace = console)]
@@ -16,12 +27,12 @@ extern "C" {
 }
 
 pub struct AmberNet {
-    sys: HashMap<SystemType, SystemBox>
+    sys: HashMap<UID, SystemBox>
 }
 
 impl AmberNet {
     pub fn new() -> Self {
-        AmberNet {
+        Self {
             sys: HashMap::new()
         }
     }
@@ -29,7 +40,7 @@ impl AmberNet {
     {
         let uuid = Uuid::new_v4();
         let mess = format!("add system: {}",  uuid);
-        log(&mess);
+        Logger::log(&mess);
         self.sys.insert(uuid, system);
         self
     }
