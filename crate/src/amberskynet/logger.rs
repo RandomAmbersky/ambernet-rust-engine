@@ -15,7 +15,7 @@ use utils::log as webgl_log;
 pub struct LoggerWebGl {}
 
 impl api::LoggerApi for LoggerWebGl {
-    fn log(mess: &str) {
+    fn log(&self, mess: &str) {
         webgl_log(mess)
     }
 }
