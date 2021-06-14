@@ -16,7 +16,8 @@ pub type RenderProgramBox = Box<dyn RenderProgram>;
 
 pub struct RenderWebGl {
     gl: GL,
-    programs: HashMap<Uuid, RenderProgramBox>
+    programs: HashMap<Uuid, RenderProgramBox>,
+    curr_program_id: Uuid
 }
 
 impl api::RenderApi for RenderWebGl {
@@ -29,6 +30,12 @@ impl api::RenderApi for RenderWebGl {
 
     fn draw(&self) {
         self.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT );
+        if self.curr_program_id.is_nil() {
+            return;
+        }
+        let prog = self.programs.get(&self.curr_program_id)
+            .unwrap();
+        prog.render(&self.gl);
     }
 }
 
@@ -36,19 +43,21 @@ impl RenderWebGl {
     pub fn new() -> Self {
         Self {
             programs: HashMap::new(),
-            gl: utils::get_webgl_context().unwrap()
+            gl: utils::get_webgl_context().unwrap(),
+            curr_program_id: Uuid::nil()
         }
+    }
+    pub fn upload_program(&mut self, prog: RenderProgramBox) -> Uuid {
+        let uuid = Uuid::new_v4();
+        self.programs.insert(uuid, prog);
+        self.curr_program_id = uuid;
+        uuid
     }
     pub fn compile_program(&self, vert: &str, frag: &str) -> WebGlProgram {
         utils::link_program(&self.gl, vert, frag)
             .unwrap()
     }
-    pub fn upload_program(&mut self, prog: RenderProgramBox) -> Uuid {
-        let uuid = Uuid::new_v4();
-        self.programs.insert(uuid, prog);
-        uuid
-    }
-    pub fn load_2d_program(
+    pub fn load_render_2d_program(
         &self,
         vert: &str,
         frag: &str,

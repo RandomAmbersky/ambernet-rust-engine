@@ -44,7 +44,7 @@ impl AmberSkyNetClient {
             -1.0, 1.0,
             1.0, -1.0,
             1.0, 1.0];
-        let prog = self.a.get_render().load_2d_program(vert, frag, &mesh_array);
+        let prog = self.a.get_render().load_render_2d_program(vert, frag, &mesh_array);
         let prog_box = Box::new(prog);
         self.a.upload_render_program(prog_box);
         Ok(())
