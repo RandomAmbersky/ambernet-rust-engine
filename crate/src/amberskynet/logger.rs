@@ -14,6 +14,12 @@ use utils::log as webgl_log;
 
 pub struct LoggerWebGl {}
 
+impl LoggerWebGl {
+    pub fn log(mess: &str) {
+        webgl_log(mess)
+    }
+}
+
 impl api::LoggerApi for LoggerWebGl {
     fn log(&self, mess: &str) {
         webgl_log(mess)
