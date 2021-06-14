@@ -24,4 +24,9 @@ impl api::RenderApi for RenderWebGl {
     fn draw(&self) {
         self.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT );
     }
+
+    fn compile_program(&self, vert: &str, frag: &str) {
+        utils::link_program(&self.gl, vert, frag)
+            .unwrap();
+    }
 }
