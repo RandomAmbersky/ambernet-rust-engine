@@ -1,11 +1,17 @@
 use crate::amberskynet::logger::LoggerWebGl;
-use crate::amberskynet::render::RenderWebGl;
+use crate::amberskynet::render::{RenderWebGl, RenderProgramBox};
 use crate::amberskynet::api;
 use crate::amberskynet::api::{LoggerApi};
 
 pub struct Engine {
     logger: LoggerWebGl,
     render: RenderWebGl
+}
+
+impl Engine {
+    pub(crate) fn upload_render_program (&mut self, prog: RenderProgramBox) {
+        self.render.upload_program(prog);
+    }
 }
 
 impl api::AmberNetApi<LoggerWebGl, RenderWebGl> for Engine {
