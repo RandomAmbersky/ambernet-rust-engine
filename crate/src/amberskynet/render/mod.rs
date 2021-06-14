@@ -1,13 +1,22 @@
 mod utils;
 mod programs;
 
+use std::collections::HashMap;
+use uuid::Uuid;
 use crate::amberskynet::api;
 use utils::GL as GL;
 use web_sys::WebGlProgram;
 use programs::test_2d::Test2D;
 
+pub trait RenderProgram {
+    fn render(&self, gl: &GL);
+}
+
+pub type RenderProgramBox = Box<dyn RenderProgram>;
+
 pub struct RenderWebGl {
-    gl: GL
+    gl: GL,
+    programs: HashMap<Uuid, RenderProgramBox>
 }
 
 impl api::RenderApi for RenderWebGl {
@@ -26,6 +35,7 @@ impl api::RenderApi for RenderWebGl {
 impl RenderWebGl {
     pub fn new() -> Self {
         Self {
+            programs: HashMap::new(),
             gl: utils::get_webgl_context().unwrap()
         }
     }
@@ -33,7 +43,12 @@ impl RenderWebGl {
         utils::link_program(&self.gl, vert, frag)
             .unwrap()
     }
-    pub fn init_program(
+    pub fn upload_program(&mut self, prog: RenderProgramBox) -> Uuid {
+        let uuid = Uuid::new_v4();
+        self.programs.insert(uuid, prog);
+        uuid
+    }
+    pub fn load_2d_program(
         &self,
         vert: &str,
         frag: &str,

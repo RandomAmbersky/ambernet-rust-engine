@@ -36,7 +36,7 @@ impl AmberSkyNetClient {
         Ok(())
     }
 
-    pub fn upload_program(&self, vert: &str, frag: &str) -> Result<(), JsValue> {
+    pub fn upload_render_program(&mut self, vert: &str, frag: &str) -> Result<(), JsValue> {
         let mesh_array = [
             -1.0, 1.0,
             1.0, -1.0,
@@ -44,7 +44,9 @@ impl AmberSkyNetClient {
             -1.0, 1.0,
             1.0, -1.0,
             1.0, 1.0];
-        self.a.get_render().init_program(vert, frag, &mesh_array);
+        let prog = self.a.get_render().load_2d_program(vert, frag, &mesh_array);
+        let prog_box = Box::new(prog);
+        self.a.upload_render_program(prog_box);
         Ok(())
     }
 }
