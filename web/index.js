@@ -6,6 +6,7 @@ const FPS_THROTTLE = 1000.0 / 30.0; // milliseconds / frames
 
 const canvas = document.getElementById('canvasGL');
 const engine = new module.AmberSkyNetClient()
+
 engine.upload_program(VSHADER_SOURCE, FSHADER_SOURCE)
 
 let lastDrawTime = Date.now();// In milliseconds
