@@ -6,6 +6,7 @@ pub mod api;
 pub mod logger;
 pub mod render;
 pub mod engine;
+mod store;
 
 pub fn get_engine () -> EngineWebGl{
     EngineWebGl::new()

@@ -37,9 +37,14 @@ impl AmberSkyNetClient {
     }
 
     pub fn upload_program(&self, vert: &str, frag: &str) -> Result<(), JsValue> {
-        self.a.get_render().compile_program(vert, frag);
-        self.a.get_log().log(vert);
-        self.a.get_log().log(frag);
+        let mesh_array = [
+            -1.0, 1.0,
+            1.0, -1.0,
+            -1.0, -1.0,
+            -1.0, 1.0,
+            1.0, -1.0,
+            1.0, 1.0];
+        self.a.get_render().init_program(vert, frag, &mesh_array);
         Ok(())
     }
 }

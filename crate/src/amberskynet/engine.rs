@@ -1,7 +1,7 @@
 use crate::amberskynet::logger::LoggerWebGl;
 use crate::amberskynet::render::RenderWebGl;
 use crate::amberskynet::api;
-use crate::amberskynet::api::{RenderApi, LoggerApi};
+use crate::amberskynet::api::{LoggerApi};
 
 pub struct Engine {
     logger: LoggerWebGl,
