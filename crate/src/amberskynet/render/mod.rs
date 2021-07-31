@@ -62,11 +62,14 @@ impl RenderWebGl {
         vert: &str,
         frag: &str,
         mesh: &[f64]) -> Test2D {
-        let prog = self.compile_program(vert, frag);
+        let program = self.compile_program(vert, frag);
         let buf = utils::load_buffer(&self.gl, mesh);
         Test2D {
-            program: prog,
-            buffer: buf
+            u_color: self.gl.get_uniform_location(&program, "uColor").unwrap(),
+            u_opacity: self.gl.get_uniform_location(&program, "uOpacity").unwrap(),
+            u_transform: self.gl.get_uniform_location(&program, "uTransform").unwrap(),
+            buffer: buf,
+            program,
         }
     }
 }
