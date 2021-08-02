@@ -6,7 +6,7 @@ mod amberskynet;
 use wasm_bindgen::prelude::*;
 use amberskynet::EngineWebGl;
 use amberskynet::api::AmberNetApi;
-use crate::amberskynet::api::{RenderApi, LoggerApi};
+use crate::amberskynet::api::{ RenderApi, LoggerApi };
 use crate::amberskynet::set_panic_hook;
 
 #[wasm_bindgen]
@@ -22,7 +22,7 @@ impl AmberSkyNetClient {
         let a = amberskynet::get_engine();
         Self { a }
     }
-    pub fn update(&self, _time: f32) -> Result<(), JsValue>{
+    pub fn update(&self, _time: f32) -> Result<(), JsValue> {
         let mess = format!("engine update: {}", _time);
         self.a.get_log().log(&mess);
         Ok(())
@@ -35,7 +35,6 @@ impl AmberSkyNetClient {
         self.a.get_render().draw();
         Ok(())
     }
-
     pub fn upload_render_program(&mut self, vert: &str, frag: &str) -> Result<(), JsValue> {
         let mesh_array = [
             -1.0, 1.0,
@@ -46,7 +45,9 @@ impl AmberSkyNetClient {
             1.0, 1.0];
         let prog = self.a.get_render().load_render_2d_program(vert, frag, &mesh_array);
         let prog_box = Box::new(prog);
-        self.a.upload_render_program(prog_box);
+        let mut render = self.a.get_render();
+        render.upload_program(prog_box);
+        // self.a.upload_render_program(prog_box);
         Ok(())
     }
 }
