@@ -1,75 +1,64 @@
 mod utils;
-mod programs;
+mod test_2d;
 
-use std::collections::HashMap;
+use crate::amberskynet::log;
+use web_sys::WebGlRenderingContext as GL;
+use test_2d::Test2D;
 use uuid::Uuid;
-use crate::amberskynet::api;
-use utils::GL as GL;
-use web_sys::WebGlProgram;
-use programs::test_2d::Test2D;
+use std::collections::HashMap;
 
 pub trait RenderProgram {
     fn render(&self, gl: &GL);
 }
-
 pub type RenderProgramBox = Box<dyn RenderProgram>;
 
-pub struct RenderWebGl {
+pub struct RenderContext {
     gl: GL,
     programs: HashMap<Uuid, RenderProgramBox>,
     curr_program_id: Uuid
 }
 
-impl api::RenderApi for RenderWebGl {
-    fn resize(&self, _width: f32, _height: f32) {
-        self.gl.enable(GL::BLEND);
-        self.gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
-        self.gl.clear_color(1.0, 0.0, 1.0, 1.0); //RGBA
-        self.gl.clear_depth(1.0);
-    }
-
-    fn draw(&self) {
-        self.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT );
-        if self.curr_program_id.is_nil() {
-            return;
-        }
-        let prog = self.programs.get(&self.curr_program_id)
-            .unwrap();
-        prog.render(&self.gl);
+pub fn render_ctx () -> RenderContext {
+    RenderContext {
+        gl: utils::get_webgl_context().unwrap(),
+        programs: HashMap::new(),
+        curr_program_id: Uuid::nil()
     }
 }
 
-impl RenderWebGl {
-    pub fn new() -> Self {
-        Self {
-            programs: HashMap::new(),
-            gl: utils::get_webgl_context().unwrap(),
-            curr_program_id: Uuid::nil()
-        }
+pub fn resize(ctx: &RenderContext, _width: f32, _height: f32) {
+    ctx.gl.enable(GL::BLEND);
+    ctx.gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
+    ctx.gl.clear_color(1.0, 0.0, 1.0, 1.0); //RGBA
+    ctx.gl.clear_depth(1.0);
+}
+
+pub fn draw(ctx: &RenderContext) {
+    ctx.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT );
+    if ctx.curr_program_id.is_nil() {
+        return;
     }
-    pub fn upload_program(&mut self, prog: RenderProgramBox) -> Uuid {
-        let uuid = Uuid::new_v4();
-        self.programs.insert(uuid, prog);
-        self.curr_program_id = uuid;
-        uuid
+    let prog = ctx.programs.get(&ctx.curr_program_id).unwrap();
+    let mess = format!("draw program: {}", &ctx.curr_program_id);
+    log(&mess);
+    prog.render(&ctx.gl);
+}
+
+pub fn load_render_2d_program(ctx: &RenderContext, vert: &str, frag: &str, mesh: &[f64]) -> Test2D {
+    let program = utils::link_program(&ctx.gl, vert, frag).unwrap();
+    let buf = utils::load_buffer(&ctx.gl, mesh);
+    Test2D {
+        u_color: ctx.gl.get_uniform_location(&program, "uColor").unwrap(),
+        u_opacity: ctx.gl.get_uniform_location(&program, "uOpacity").unwrap(),
+        u_transform: ctx.gl.get_uniform_location(&program, "uTransform").unwrap(),
+        buffer: buf,
+        program,
     }
-    pub fn compile_program(&self, vert: &str, frag: &str) -> WebGlProgram {
-        utils::link_program(&self.gl, vert, frag)
-            .unwrap()
-    }
-    pub fn load_render_2d_program(
-        &self,
-        vert: &str,
-        frag: &str,
-        mesh: &[f64]) -> Test2D {
-        let program = self.compile_program(vert, frag);
-        let buf = utils::load_buffer(&self.gl, mesh);
-        Test2D {
-            u_color: self.gl.get_uniform_location(&program, "uColor").unwrap(),
-            u_opacity: self.gl.get_uniform_location(&program, "uOpacity").unwrap(),
-            u_transform: self.gl.get_uniform_location(&program, "uTransform").unwrap(),
-            buffer: buf,
-            program,
-        }
-    }
+}
+
+pub fn upload_program(ctx: &mut RenderContext, prog: RenderProgramBox) -> Uuid {
+    let uuid = Uuid::new_v4();
+    ctx.programs.insert(uuid, prog);
+    ctx.curr_program_id = uuid;
+    uuid
 }

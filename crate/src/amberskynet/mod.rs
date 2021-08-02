@@ -1,24 +1,17 @@
-pub use engine::Engine as EngineWebGl;
+mod amber_net_engine;
+mod logger;
+pub(crate) mod render;
 
-use crate::amberskynet::api::AmberNetApi;
+pub use amber_net_engine::AmberNetEngine;
+pub use logger::Logger;
 
-pub mod api;
-pub mod logger;
-pub mod render;
-pub mod engine;
-mod store;
-
-pub fn get_engine () -> EngineWebGl{
-    EngineWebGl::new()
+pub fn get_engine() -> AmberNetEngine {
+    let a = AmberNetEngine::new();
+    let mess = format!("get_engine Ok");
+    logger::Logger::log(&mess);
+    a
 }
 
-pub fn set_panic_hook() {
-    // When the `console_error_panic_hook` feature is enabled, we can call the
-    // `set_panic_hook` function at least once during initialization, and then
-    // we will get better error messages if our code ever panics.
-    //
-    // For more details see
-    // https://github.com/rustwasm/console_error_panic_hook#readme
-    #[cfg(feature = "console_error_panic_hook")]
-        console_error_panic_hook::set_once();
+pub fn log(mess: &str) {
+    logger::Logger::log(&mess);
 }

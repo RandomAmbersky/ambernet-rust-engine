@@ -1,38 +1,37 @@
 extern crate wasm_bindgen;
 extern crate web_sys;
 
-mod amberskynet;
-
 use wasm_bindgen::prelude::*;
-use amberskynet::EngineWebGl;
-use amberskynet::api::AmberNetApi;
-use crate::amberskynet::api::{ RenderApi, LoggerApi };
-use crate::amberskynet::set_panic_hook;
+
+
+mod amberskynet;
+use amberskynet::render;
+use amberskynet::AmberNetEngine as A;
 
 #[wasm_bindgen]
-pub struct AmberSkyNetClient {
-    a: EngineWebGl
+pub struct AmberApi {
+    ctx: A
 }
 
 #[wasm_bindgen]
-impl AmberSkyNetClient {
+impl AmberApi {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        set_panic_hook();
-        let a = amberskynet::get_engine();
-        Self { a }
+        // set_panic_hook();
+        let ctx = amberskynet::get_engine();
+        Self { ctx }
     }
     pub fn update(&self, _time: f32) -> Result<(), JsValue> {
         let mess = format!("engine update: {}", _time);
-        self.a.get_log().log(&mess);
+        amberskynet::log(&mess);
         Ok(())
     }
     pub fn resize(&self, _width: f32, _height: f32) -> Result<(), JsValue> {
-        self.a.get_render().resize(_width, _height);
+        render::resize(&self.ctx.render_ctx, _width, _height);
         Ok(())
     }
     pub fn render(&self) -> Result<(), JsValue> {
-        self.a.get_render().draw();
+        render::draw(&self.ctx.render_ctx);
         Ok(())
     }
     pub fn upload_render_program(&mut self, vert: &str, frag: &str) -> Result<(), JsValue> {
@@ -43,11 +42,9 @@ impl AmberSkyNetClient {
             -1.0, 1.0,
             1.0, -1.0,
             1.0, 1.0];
-        let prog = self.a.get_render().load_render_2d_program(vert, frag, &mesh_array);
+        let prog = render::load_render_2d_program(&self.ctx.render_ctx, vert, frag, &mesh_array);
         let prog_box = Box::new(prog);
-        let mut render = self.a.get_render();
-        render.upload_program(prog_box);
-        // self.a.upload_render_program(prog_box);
+        render::upload_program(&mut self.ctx.render_ctx, prog_box);
         Ok(())
     }
 }

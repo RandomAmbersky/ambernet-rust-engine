@@ -5,7 +5,7 @@ import FSHADER_SOURCE from './amberskynet/shaders/test_2d/frag.glsl'
 const FPS_THROTTLE = 1000.0 / 30.0; // milliseconds / frames
 
 const canvas = document.getElementById('canvasGL');
-const engine = new module.AmberSkyNetClient()
+const engine = new module.AmberApi()
 
 engine.upload_render_program(VSHADER_SOURCE, FSHADER_SOURCE)
 
