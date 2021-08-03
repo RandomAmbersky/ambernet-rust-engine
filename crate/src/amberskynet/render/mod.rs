@@ -1,14 +1,13 @@
 mod utils;
 mod test_2d;
 
-use crate::amberskynet::log;
 use web_sys::WebGlRenderingContext as GL;
-use test_2d::Test2D;
+pub use test_2d::Test2D;
 use uuid::Uuid;
 use std::collections::HashMap;
 
 pub trait RenderProgram {
-    fn render(&self, gl: &GL);
+    fn render(&self, ctx: &RenderContext);
 }
 pub type RenderProgramBox = Box<dyn RenderProgram>;
 
@@ -18,7 +17,7 @@ pub struct RenderContext {
     curr_program_id: Uuid
 }
 
-pub fn render_ctx () -> RenderContext {
+pub fn get_render_ctx () -> RenderContext {
     RenderContext {
         gl: utils::get_webgl_context().unwrap(),
         programs: HashMap::new(),
@@ -26,23 +25,31 @@ pub fn render_ctx () -> RenderContext {
     }
 }
 
-pub fn resize(ctx: &RenderContext, _width: f32, _height: f32) {
+pub fn resize(ctx: &RenderContext, _width: i32, _height: i32) {
     ctx.gl.enable(GL::BLEND);
     ctx.gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
-    ctx.gl.clear_color(1.0, 0.0, 1.0, 1.0); //RGBA
+    ctx.gl.clear_color(0.0, 0.0, 0.0, 1.0); //RGBA
     ctx.gl.clear_depth(1.0);
+    ctx.gl.viewport(0, 0, _width, _height);
 }
 
-pub fn draw(ctx: &RenderContext) {
+pub fn clear(ctx: &RenderContext) {
     ctx.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT );
-    if ctx.curr_program_id.is_nil() {
-        return;
-    }
-    let prog = ctx.programs.get(&ctx.curr_program_id).unwrap();
-    let mess = format!("draw program: {}", &ctx.curr_program_id);
-    log(&mess);
+    // if ctx.curr_program_id.is_nil() {
+    //     return;
+    // }
+    // let prog = ctx.programs.get(&ctx.curr_program_id).unwrap();
+    // let mess = format!("draw program: {}", &ctx.curr_program_id);
+    // log(&mess);
+    // prog.render(&ctx.gl);
+}
+
+/*
+pub fn render_program(ctx: &RenderContext, prog_id: &Uuid) {
+    let prog = ctx.programs.get(prog_id).unwrap();
     prog.render(&ctx.gl);
 }
+*/
 
 pub fn load_render_2d_program(ctx: &RenderContext, vert: &str, frag: &str, mesh: &[f64]) -> Test2D {
     let program = utils::link_program(&ctx.gl, vert, frag).unwrap();
@@ -56,9 +63,11 @@ pub fn load_render_2d_program(ctx: &RenderContext, vert: &str, frag: &str, mesh:
     }
 }
 
+/*
 pub fn upload_program(ctx: &mut RenderContext, prog: RenderProgramBox) -> Uuid {
     let uuid = Uuid::new_v4();
     ctx.programs.insert(uuid, prog);
     ctx.curr_program_id = uuid;
     uuid
 }
+*/

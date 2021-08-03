@@ -1,8 +1,8 @@
 use web_sys::{WebGlProgram, WebGlBuffer, WebGlUniformLocation};
-use crate::amberskynet::render::{utils, RenderProgram};
+use crate::amberskynet::render::{utils, RenderProgram, RenderContext};
 use crate::amberskynet::render::utils::GL;
 
-use crate::amberskynet::log;
+// use crate::amberskynet::log;
 
 pub struct Test2D {
     pub program: WebGlProgram,
@@ -13,8 +13,8 @@ pub struct Test2D {
 }
 
 impl RenderProgram for Test2D {
-    fn render(&self, gl: &GL) {
-        gl.use_program(Some(&self.program));
+    fn render(&self, ctx: &RenderContext) {
+        ctx.gl.use_program(Some(&self.program));
 
         let bottom: f32 = 1.;
         let top: f32 = 1.;
@@ -23,11 +23,11 @@ impl RenderProgram for Test2D {
         let canvas_height: f32 = 1.;
         let canvas_width: f32 = 1.;
 
-        gl.bind_buffer(GL::ARRAY_BUFFER, Some(&self.buffer));
-        gl.vertex_attrib_pointer_with_i32(0, 2, GL::FLOAT, false, 0, 0);
-        gl.enable_vertex_attrib_array(0);
+        ctx.gl.bind_buffer(GL::ARRAY_BUFFER, Some(&self.buffer));
+        ctx.gl.vertex_attrib_pointer_with_i32(0, 2, GL::FLOAT, false, 0, 0);
+        ctx.gl.enable_vertex_attrib_array(0);
 
-        gl.uniform4f(
+        ctx.gl.uniform4f(
             Some(&self.u_color),
             0., //r
             0.5,//g
@@ -35,7 +35,7 @@ impl RenderProgram for Test2D {
             1.0,//a
         );
 
-        gl.uniform1f(Some(&self.u_opacity), 1.);
+        ctx.gl.uniform1f(Some(&self.u_opacity), 1.);
 
         let translation_mat = utils::translation_matrix(
             2. * left / canvas_width - 1.,
@@ -50,11 +50,11 @@ impl RenderProgram for Test2D {
         );
 
         let transform_mat = utils::mult_matrix_4(scale_mat, translation_mat);
-        gl.uniform_matrix4fv_with_f32_array(Some(&self.u_transform), false, &transform_mat);
+        ctx.gl.uniform_matrix4fv_with_f32_array(Some(&self.u_transform), false, &transform_mat);
 
         let rect_vertice_ary_length = 12;
-        gl.draw_arrays(GL::TRIANGLES, 0, (rect_vertice_ary_length / 2) as i32);
-        log("OK");
+        ctx.gl.draw_arrays(GL::TRIANGLES, 0, (rect_vertice_ary_length / 2) as i32);
+        // log("OK");
     }
 }
 
