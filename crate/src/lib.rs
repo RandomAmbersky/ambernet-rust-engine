@@ -53,6 +53,12 @@ impl AmberApi {
         Ok(())
     }
     pub fn upload_render_program(&mut self, vert: &str, frag: &str) -> Result<(), JsValue> {
+        let mess1 = format!("vert: {}", vert);
+        amberskynet::log(&mess1);
+
+        let mess2 = format!("frag: {}", frag);
+        amberskynet::log(&mess2);
+
         let mesh_array = [
             -1.0, 1.0,
             1.0, -1.0,
@@ -61,9 +67,6 @@ impl AmberApi {
             1.0, -1.0,
             1.0, 1.0];
         self.prog = Some(render::load_render_2d_program(&self.render_ctx, vert, frag, &mesh_array));
-        // let prog
-        // let prog_box = Box::new(prog);
-        // self.prog_id = render::upload_program(&mut self.render_ctx, prog_box);
         Ok(())
     }
 }
