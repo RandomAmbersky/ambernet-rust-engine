@@ -1,9 +1,6 @@
 use web_sys::{WebGlProgram, WebGlBuffer, WebGlUniformLocation};
-use crate::amberskynet::render::utils::GL;
-use crate::amberskynet::render::RenderProgram;
-use crate::amberskynet::logger::LoggerWebGl;
-
-use crate::amberskynet::render::utils;
+use crate::amberskynet::render::shader_system::{RenderProgram, utils};
+use web_sys::WebGlRenderingContext as GL;
 
 pub struct Test2D {
     pub program: WebGlProgram,
@@ -56,7 +53,7 @@ impl RenderProgram for Test2D {
         let rect_vertice_ary_length = 12;
         gl.draw_arrays(GL::TRIANGLES, 0, (rect_vertice_ary_length / 2) as i32);
 
-        LoggerWebGl::log(&"RenderProgram for Test2D".to_string());
+        // LoggerWebGl::log(&"RenderProgram for Test2D".to_string());
     }
 }
 

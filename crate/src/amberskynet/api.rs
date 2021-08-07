@@ -7,6 +7,7 @@ pub trait AmberNetApi<LoggerType, RenderType> {
     fn update(&self, _time: f32);
     fn get_log(&self) -> &LoggerType;
     fn get_render(&self) -> &RenderType;
+    fn render(&mut self) -> &RenderType;
 }
 
 pub trait RenderApi {
