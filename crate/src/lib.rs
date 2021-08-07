@@ -4,9 +4,10 @@ extern crate web_sys;
 use wasm_bindgen::prelude::*;
 
 mod amberskynet;
+
 use amberskynet::render;
 use amberskynet::AmberNetEngine;
-use crate::amberskynet::render::{RenderContext, RenderProgram};
+use crate::amberskynet::render::{RenderContext};
 use amberskynet::render::Test2D;
 
 struct Screen {
@@ -66,7 +67,7 @@ impl AmberApi {
             -1.0, 1.0,
             1.0, -1.0,
             1.0, 1.0];
-        self.prog = Some(render::load_render_2d_program(&self.render_ctx, vert, frag, &mesh_array));
+        self.prog = Some(render::load_2d_program(&self.render_ctx, vert, frag, &mesh_array));
         Ok(())
     }
 }

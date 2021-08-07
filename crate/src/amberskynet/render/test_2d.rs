@@ -1,8 +1,8 @@
 use web_sys::{WebGlProgram, WebGlBuffer, WebGlUniformLocation};
-use crate::amberskynet::render::{utils, RenderProgram, RenderContext};
-use crate::amberskynet::render::utils::GL;
+use web_sys::WebGlRenderingContext as GL;
 
-// use crate::amberskynet::log;
+use crate::amberskynet::math::matrix as M;
+use crate::amberskynet::render::RenderContext;
 
 pub struct Test2D {
     pub program: WebGlProgram,
@@ -12,8 +12,8 @@ pub struct Test2D {
     pub u_transform: WebGlUniformLocation,
 }
 
-impl RenderProgram for Test2D {
-    fn render(&self, ctx: &RenderContext) {
+impl Test2D {
+    pub fn render(&self, ctx: &RenderContext) {
         ctx.gl.use_program(Some(&self.program));
 
         let bottom: f32 = 1.;
@@ -37,19 +37,19 @@ impl RenderProgram for Test2D {
 
         ctx.gl.uniform1f(Some(&self.u_opacity), 1.);
 
-        let translation_mat = utils::translation_matrix(
+        let translation_mat = M::translation_matrix(
             2. * left / canvas_width - 1.,
             2. * bottom / canvas_height - 1.,
             0.,
         );
 
-        let scale_mat = utils::scaling_matrix(
+        let scale_mat = M::scaling_matrix(
             2. * (right - left) / canvas_width,
             2. * (top - bottom) / canvas_height,
             0.,
         );
 
-        let transform_mat = utils::mult_matrix_4(scale_mat, translation_mat);
+        let transform_mat = M::mult_matrix_4(scale_mat, translation_mat);
         ctx.gl.uniform_matrix4fv_with_f32_array(Some(&self.u_transform), false, &transform_mat);
 
         let rect_vertice_ary_length = 12;

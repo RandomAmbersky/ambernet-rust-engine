@@ -1,6 +1,7 @@
 mod amber_net_engine;
 mod logger;
 pub(crate) mod render;
+mod math;
 
 pub use amber_net_engine::AmberNetEngine;
 pub use logger::Logger;
