@@ -14,6 +14,7 @@ crate-type = ["cdylib"]
 console_error_panic_hook = "*"
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"
+glyph_brush = "*"
 
 [dependencies.wasm-bindgen]
 version = "*"
