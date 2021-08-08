@@ -5,6 +5,7 @@ use wasm_bindgen::prelude::*;
 
 mod amberskynet;
 
+use glyph_brush;
 use amberskynet::render;
 use amberskynet::AmberNetEngine;
 use crate::amberskynet::render::{RenderContext};
@@ -68,6 +69,12 @@ impl AmberApi {
             1.0, -1.0,
             1.0, 1.0];
         self.prog = Some(render::load_2d_program(&self.render_ctx, vert, frag, &mesh_array));
+        Ok(())
+    }
+    pub fn upload_font(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
+        let mess = format!("upload_font: {} bytes", data.len());
+        amberskynet::log(&mess);
+        let _font = glyph_brush::ab_glyph::FontArc::try_from_vec(data).unwrap();
         Ok(())
     }
 }
