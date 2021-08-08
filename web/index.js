@@ -9,6 +9,18 @@ const engine = new module.AmberApi()
 
 engine.upload_render_program(VSHADER_SOURCE, FSHADER_SOURCE)
 
+const binaryFontLoader = new XMLHttpRequest();
+binaryFontLoader.open("GET", myFont, true);
+binaryFontLoader.responseType = "arraybuffer";
+binaryFontLoader.send()
+binaryFontLoader.onload = function (oEvent) {
+  const arrayBuffer = binaryFontLoader.response;
+  if (arrayBuffer) {
+    const byteArray = new Uint8Array(arrayBuffer)
+    engine.upload_font(byteArray)
+  }
+}
+
 let lastDrawTime = Date.now();// In milliseconds
 
 const update = (currTime) => {
