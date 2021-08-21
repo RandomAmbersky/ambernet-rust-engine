@@ -2,6 +2,9 @@ import module  from '../crate/Cargo.toml'
 
 import VSHADER_SOURCE from './amberskynet/shaders/test_2d/vert.glsl'
 import FSHADER_SOURCE from './amberskynet/shaders/test_2d/frag.glsl'
+
+import myFont from './amberskynet/fonts/LiberationMono-Regular.ttf'
+
 const FPS_THROTTLE = 1000.0 / 30.0; // milliseconds / frames
 
 const canvas = document.getElementById('canvasGL');

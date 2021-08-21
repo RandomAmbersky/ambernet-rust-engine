@@ -5,7 +5,6 @@ use wasm_bindgen::prelude::*;
 
 mod amberskynet;
 
-use glyph_brush;
 use amberskynet::render;
 use amberskynet::AmberNetEngine;
 use crate::amberskynet::render::{RenderContext};
@@ -74,7 +73,10 @@ impl AmberApi {
     pub fn upload_font(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = format!("upload_font: {} bytes", data.len());
         amberskynet::log(&mess);
-        let _font = glyph_brush::ab_glyph::FontArc::try_from_vec(data).unwrap();
+        // let font = FontArc::try_from_vec(data).unwrap();
+        // GlyphBrushBuilder::using_font(font).build();
+        // let glyph_brush = GlyphBrushBuilder::using_font(&self.font.unwrap()).build();
+        // let text = graphics::Text::new(("Hello world!", &self.font, 48.0));
         Ok(())
     }
 }

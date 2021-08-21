@@ -10,7 +10,7 @@ pub struct RenderContext {
 
 pub fn get_render_ctx () -> RenderContext {
     RenderContext {
-        gl: utils::get_webgl_context().unwrap(),
+        gl: utils::get_webgl_context().unwrap()
     }
 }
 
