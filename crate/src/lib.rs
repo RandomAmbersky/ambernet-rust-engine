@@ -29,12 +29,13 @@ impl AmberApi {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         // set_panic_hook();
+        let scr = Screen { w: 0, h: 0};
         let ctx = amberskynet::get_engine();
         let render_ctx = render::get_render_ctx();
         Self {
             ctx,
             render_ctx,
-            scr: Screen { w: 0, h: 0},
+            scr,
             prog: None
         }
     }
