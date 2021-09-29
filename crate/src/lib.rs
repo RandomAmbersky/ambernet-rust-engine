@@ -1,11 +1,12 @@
 extern crate wasm_bindgen;
 extern crate web_sys;
+extern crate console_error_panic_hook;
 
 use wasm_bindgen::prelude::*;
 
 mod amberskynet;
 
-use glyph_brush;
+// use glyph_brush;
 use amberskynet::render;
 use amberskynet::AmberNetEngine;
 use crate::amberskynet::render::{RenderContext};
@@ -14,6 +15,11 @@ use amberskynet::render::Test2D;
 struct Screen {
     w: i32,
     h: i32
+}
+
+fn set_panic_hook() {
+#[cfg(feature = "console_error_panic_hook")]
+    console_error_panic_hook::set_once();
 }
 
 #[wasm_bindgen]
@@ -28,7 +34,7 @@ pub struct AmberApi {
 impl AmberApi {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        // set_panic_hook();
+        set_panic_hook();
         let scr = Screen { w: 0, h: 0};
         let ctx = amberskynet::get_engine();
         let render_ctx = render::get_render_ctx();
@@ -72,10 +78,11 @@ impl AmberApi {
         self.prog = Some(render::load_2d_program(&self.render_ctx, vert, frag, &mesh_array));
         Ok(())
     }
-    pub fn upload_font(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
-        let mess = format!("upload_font: {} bytes", data.len());
-        amberskynet::log(&mess);
-        let _font = glyph_brush::ab_glyph::FontArc::try_from_vec(data).unwrap();
-        Ok(())
+    pub fn upload_font(&mut self, _data: Vec<u8>) -> Result<(), JsValue> {
+        panic!("Implement me!");
+        // let mess = format!("upload_font: {} bytes", data.len());
+        // amberskynet::log(&mess);
+        // let _font = glyph_brush::ab_glyph::FontArc::try_from_vec(data).unwrap();
+        // Ok(())
     }
 }

@@ -4,14 +4,17 @@ version = "0.1.0"
 authors = ["Random Ambersky"]
 edition = "2018"
 
-[package.metadata.wasm-pack.profile.release]
-wasm-opt = false
+#[package.metadata.wasm-pack.profile.release]
+#wasm-opt = false
+
+[features]
+default = ["console_error_panic_hook"]
 
 [lib]
 crate-type = ["cdylib"]
 
 [dependencies]
-console_error_panic_hook = "*"
+console_error_panic_hook = { version = "*", optional = true }
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"
 glyph_brush = "*"
