@@ -57,5 +57,3 @@ impl Test2D {
         // log("OK");
     }
 }
-
-// glyph_brush -?

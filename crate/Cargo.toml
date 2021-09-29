@@ -17,7 +17,7 @@ crate-type = ["cdylib"]
 console_error_panic_hook = { version = "*", optional = true }
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"
-glyph_brush = "*"
+#glyph_brush = "*"
 
 [dependencies.wasm-bindgen]
 version = "*"
@@ -33,5 +33,6 @@ features = [
     'WebGlProgram',
     'WebGlShader',
     'WebGlBuffer',
+    'WebGlTexture',
     'WebGlUniformLocation'
 ]

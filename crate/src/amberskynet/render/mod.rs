@@ -1,8 +1,12 @@
 mod utils;
 mod test_2d;
+mod binary_font;
+mod texture;
 
 use web_sys::WebGlRenderingContext as GL;
 pub use test_2d::Test2D;
+pub use binary_font::BinaryFont;
+pub use texture::Texture;
 
 pub struct RenderContext {
     gl: GL,
@@ -42,5 +46,22 @@ pub fn load_2d_program(ctx: &RenderContext, vert: &str, frag: &str, mesh: &[f64]
         u_transform: ctx.gl.get_uniform_location(&program, "uTransform").unwrap(),
         buffer: buf,
         program,
+    }
+}
+
+pub fn upload_binary_font(_ctx: &RenderContext, _data: Vec<u8>) -> BinaryFont {
+    panic!("Implement me!");
+}
+
+pub fn upload_texture(ctx: &RenderContext, bytes: &[u8]) -> Texture {
+    let mut tex = match ctx.gl.create_texture() {
+        Some(t) => t,
+        None => {
+            panic!("create_texture error")
+        }
+    };
+    ctx.gl.bind_texture(GL::TEXTURE_2D, Some(tex.as_ref()));
+    Texture {
+        texture: tex
     }
 }

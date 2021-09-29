@@ -127,4 +127,3 @@ pub fn load_buffer(gl: &GL, buf: &[f64]) -> WebGlBuffer {
     );
     buffer
 }
-

@@ -9,8 +9,10 @@ mod amberskynet;
 // use glyph_brush;
 use amberskynet::render;
 use amberskynet::AmberNetEngine;
-use crate::amberskynet::render::{RenderContext};
+use amberskynet::render::RenderContext;
 use amberskynet::render::Test2D;
+use amberskynet::render::BinaryFont;
+use amberskynet::render::Texture;
 
 struct Screen {
     w: i32,
@@ -27,7 +29,9 @@ pub struct AmberApi {
     ctx: AmberNetEngine,
     render_ctx: RenderContext,
     scr: Screen,
-    prog: Option<Test2D>
+    prog: Option<Test2D>,
+    font: Option<BinaryFont>,
+    texture: Option<Texture>
 }
 
 #[wasm_bindgen]
@@ -42,7 +46,9 @@ impl AmberApi {
             ctx,
             render_ctx,
             scr,
-            prog: None
+            prog: None,
+            font: None,
+            texture: None
         }
     }
     pub fn update(&self, _time: f32) -> Result<(), JsValue> {
@@ -84,5 +90,13 @@ impl AmberApi {
         // amberskynet::log(&mess);
         // let _font = glyph_brush::ab_glyph::FontArc::try_from_vec(data).unwrap();
         // Ok(())
+    }
+    pub fn upload_binary_font(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
+        self.font = Some(render::upload_binary_font(&self.render_ctx, data));
+        Ok(())
+    }
+    pub fn upload_texture_raw(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
+        self.texture = Some(render::upload_texture(&self.render_ctx, &*data));
+        Ok(())
     }
 }
