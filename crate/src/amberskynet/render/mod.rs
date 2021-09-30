@@ -3,6 +3,7 @@ mod test_2d;
 mod binary_font;
 mod texture;
 
+use image::{GenericImageView, ImageResult};
 use web_sys::WebGlRenderingContext as GL;
 pub use test_2d::Test2D;
 pub use binary_font::BinaryFont;
@@ -54,6 +55,12 @@ pub fn upload_binary_font(_ctx: &RenderContext, _data: Vec<u8>) -> BinaryFont {
 }
 
 pub fn upload_texture(ctx: &RenderContext, bytes: &[u8]) -> Texture {
+    let img = match image::load_from_memory(bytes) {
+        Ok(t) => t,
+        Err(why) => {
+            panic!("image::load_from_memory error: {}", why)
+        }
+    };
     let mut tex = match ctx.gl.create_texture() {
         Some(t) => t,
         None => {
@@ -62,6 +69,8 @@ pub fn upload_texture(ctx: &RenderContext, bytes: &[u8]) -> Texture {
     };
     ctx.gl.bind_texture(GL::TEXTURE_2D, Some(tex.as_ref()));
     Texture {
-        texture: tex
+        texture: tex,
+        width: img.width(),
+        height: img.height()
     }
 }

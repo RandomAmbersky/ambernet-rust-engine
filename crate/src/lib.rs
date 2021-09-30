@@ -96,7 +96,14 @@ impl AmberApi {
         Ok(())
     }
     pub fn upload_texture_raw(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
-        self.texture = Some(render::upload_texture(&self.render_ctx, &*data));
+        let len_mess = format!("len: {}", data.len());
+        let capacity_mess = format!("capacity: {}", data.capacity());
+        amberskynet::log(&len_mess);
+        amberskynet::log(&capacity_mess);
+        let tex = render::upload_texture(&self.render_ctx, &*data);
+        let texture_mess = format!("render::upload_texture {} x {}", tex.width, tex.height);
+        amberskynet::log(&texture_mess);
+        self.texture = Some(tex);
         Ok(())
     }
 }
