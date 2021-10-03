@@ -1,37 +1,24 @@
+mod mycore;
+
 extern crate wasm_bindgen;
 extern crate web_sys;
 extern crate console_error_panic_hook;
 
 use wasm_bindgen::prelude::*;
 
-mod amberskynet;
-
-// use glyph_brush;
-use amberskynet::render;
-use amberskynet::AmberNetEngine;
-use amberskynet::render::RenderContext;
-use amberskynet::render::Test2D;
-use amberskynet::render::BinaryFont;
-use amberskynet::render::Texture;
-
-struct Screen {
-    w: i32,
-    h: i32
-}
+use mycore::Logger;
+use crate::mycore::LogLevel;
 
 fn set_panic_hook() {
 #[cfg(feature = "console_error_panic_hook")]
     console_error_panic_hook::set_once();
 }
 
+const DEFAULT_LOG_LEVEL: LogLevel = LogLevel::Info;
+
 #[wasm_bindgen]
 pub struct AmberApi {
-    ctx: AmberNetEngine,
-    render_ctx: RenderContext,
-    scr: Screen,
-    prog: Option<Test2D>,
-    font: Option<BinaryFont>,
-    texture: Option<Texture>
+    logger: Logger
 }
 
 #[wasm_bindgen]
@@ -39,71 +26,24 @@ impl AmberApi {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         set_panic_hook();
-        let scr = Screen { w: 0, h: 0};
-        let ctx = amberskynet::get_engine();
-        let render_ctx = render::get_render_ctx();
+        let logger = mycore::new_logger(DEFAULT_LOG_LEVEL);
         Self {
-            ctx,
-            render_ctx,
-            scr,
-            prog: None,
-            font: None,
-            texture: None
+            logger
         }
     }
-    pub fn update(&self, _time: f32) -> Result<(), JsValue> {
-        // let mess = format!("engine update: {}", _time);
-        // amberskynet::log(&mess);
+    pub fn update(&self, time: f32) -> Result<(), JsValue> {
+        let mess = format!("update: {}", time);
+        // self.logger.info(&mess);
         Ok(())
     }
-    pub fn resize(&mut self, _width: i32, _height: i32) -> Result<(), JsValue> {
-        self.scr.h = _height;
-        self.scr.w = _width;
-        render::resize(&self.render_ctx, self.scr.w, self.scr.h);
+    pub fn resize(&mut self, width: i32, height: i32) -> Result<(), JsValue> {
+        let mess = format!("resize {} x {} ", width, height);
+        self.logger.info(&mess);
         Ok(())
     }
     pub fn render(&self) -> Result<(), JsValue> {
-        render::clear(&self.render_ctx);
-        self.prog.as_ref().unwrap().render(&self.render_ctx);
-        Ok(())
-    }
-    pub fn upload_render_program(&mut self, vert: &str, frag: &str) -> Result<(), JsValue> {
-        let mess1 = format!("vert: {}", vert);
-        amberskynet::log(&mess1);
-
-        let mess2 = format!("frag: {}", frag);
-        amberskynet::log(&mess2);
-
-        let mesh_array = [
-            -1.0, 1.0,
-            1.0, -1.0,
-            -1.0, -1.0,
-            -1.0, 1.0,
-            1.0, -1.0,
-            1.0, 1.0];
-        self.prog = Some(render::load_2d_program(&self.render_ctx, vert, frag, &mesh_array));
-        Ok(())
-    }
-    pub fn upload_font(&mut self, _data: Vec<u8>) -> Result<(), JsValue> {
-        panic!("Implement me!");
-        // let mess = format!("upload_font: {} bytes", data.len());
-        // amberskynet::log(&mess);
-        // let _font = glyph_brush::ab_glyph::FontArc::try_from_vec(data).unwrap();
-        // Ok(())
-    }
-    pub fn upload_binary_font(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
-        self.font = Some(render::upload_binary_font(&self.render_ctx, data));
-        Ok(())
-    }
-    pub fn upload_texture_raw(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
-        let len_mess = format!("len: {}", data.len());
-        let capacity_mess = format!("capacity: {}", data.capacity());
-        amberskynet::log(&len_mess);
-        amberskynet::log(&capacity_mess);
-        let tex = render::upload_texture(&self.render_ctx, &*data);
-        let texture_mess = format!("render::upload_texture {} x {}", tex.width, tex.height);
-        amberskynet::log(&texture_mess);
-        self.texture = Some(tex);
+        let mess = format!("render...");
+        // self.logger.info(&mess);
         Ok(())
     }
 }

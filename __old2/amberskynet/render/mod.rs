@@ -8,16 +8,23 @@ use web_sys::WebGlRenderingContext as GL;
 pub use test_2d::Test2D;
 pub use binary_font::BinaryFont;
 pub use texture::Texture;
+use crate::amberskynet::Logger;
 
-pub struct RenderContext {
+pub struct RenderContext<'a> {
     gl: GL,
+    logger: &'a Logger
 }
 
-pub fn get_render_ctx () -> RenderContext {
-    RenderContext {
-        gl: utils::get_webgl_context().unwrap(),
-    }
+pub fn get_render_ctx () -> GL {
+    return utils::get_webgl_context().unwrap()
 }
+
+// pub fn get_render_ctx (logger: &Logger) -> RenderContext {
+//     RenderContext {
+//         gl:
+//         logger
+//     }
+// }
 
 pub fn resize(ctx: &RenderContext, _width: i32, _height: i32) {
     ctx.gl.enable(GL::BLEND);

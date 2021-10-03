@@ -1,38 +1,26 @@
-import module  from '../crate/Cargo.toml'
+import amber  from '../crate/src/lib.rs'
 
-import VSHADER_SOURCE from './amberskynet/shaders/test_2d/vert.glsl'
-import FSHADER_SOURCE from './amberskynet/shaders/test_2d/frag.glsl'
-const FPS_THROTTLE = 1000.0 / 30.0; // milliseconds / frames
+// import VSHADER_SOURCE from './amberskynet/shaders/test_2d/vert.glsl'
+// import FSHADER_SOURCE from './amberskynet/shaders/test_2d/frag.glsl'
+const FPS_THROTTLE = 1000.0 / 60.0; // milliseconds / frames
 
-import myBinaryFont from './amberskynet/fonts/Font57_revert.fnt'
-import myLogo from './amberskynet/textures/AmberSkyNet.png'
+// import myBinaryFont from './amberskynet/fonts/Font57_revert.fnt'
+// import myLogo from './amberskynet/textures/AmberSkyNet.png'
 
 const canvas = document.getElementById('canvasGL');
-const engine = new module.AmberApi()
+const engine = new amber.AmberApi()
 
-engine.upload_render_program(VSHADER_SOURCE, FSHADER_SOURCE)
-
-const binaryFontLoader = new XMLHttpRequest();
-binaryFontLoader.open("GET", myLogo, true);
-binaryFontLoader.responseType = "arraybuffer";
-binaryFontLoader.send()
-binaryFontLoader.onload = function (oEvent) {
-  const arrayBuffer = binaryFontLoader.response;
-  if (arrayBuffer) {
-    const byteArray = new Uint8Array(arrayBuffer)
-    engine.upload_texture_raw(byteArray)
-  }
-}
-
+// engine.upload_render_program(VSHADER_SOURCE, FSHADER_SOURCE)
+//
 // const binaryFontLoader = new XMLHttpRequest();
-// binaryFontLoader.open("GET", myFont, true);
+// binaryFontLoader.open("GET", myLogo, true);
 // binaryFontLoader.responseType = "arraybuffer";
 // binaryFontLoader.send()
 // binaryFontLoader.onload = function (oEvent) {
 //   const arrayBuffer = binaryFontLoader.response;
 //   if (arrayBuffer) {
 //     const byteArray = new Uint8Array(arrayBuffer)
-//     engine.upload_font(byteArray)
+//     engine.upload_texture_raw(byteArray)
 //   }
 // }
 
@@ -45,7 +33,6 @@ const update = (currTime) => {
   if (window.innerHeight !== canvas.height || window.innerWidth !== canvas.width) {
     canvas.height = window.innerHeight
     canvas.width = window.innerWidth
-    console.log(canvas.width, canvas.height)
     engine.resize(canvas.width, canvas.height)
   }
   engine.update(elapsedTime)
