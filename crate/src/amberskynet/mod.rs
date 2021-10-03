@@ -2,7 +2,7 @@ mod amber_net_engine;
 mod logger;
 pub(crate) mod render;
 mod math;
-mod font;
+pub(crate) mod font;
 
 pub use amber_net_engine::AmberNetEngine;
 pub use logger::Logger;

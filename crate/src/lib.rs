@@ -5,10 +5,12 @@ use wasm_bindgen::prelude::*;
 
 mod amberskynet;
 
-use amberskynet::render;
 use amberskynet::AmberNetEngine;
-use crate::amberskynet::render::{RenderContext};
+use amberskynet::render;
+use amberskynet::render::{RenderContext};
 use amberskynet::render::Test2D;
+use amberskynet::font;
+use amberskynet::font::Text;
 
 struct Screen {
     w: i32,
@@ -20,7 +22,8 @@ pub struct AmberApi {
     ctx: AmberNetEngine,
     render_ctx: RenderContext,
     scr: Screen,
-    prog: Option<Test2D>
+    prog: Option<Test2D>,
+    text: Option<Text>
 }
 
 #[wasm_bindgen]
@@ -34,7 +37,8 @@ impl AmberApi {
             ctx,
             render_ctx,
             scr: Screen { w: 0, h: 0},
-            prog: None
+            prog: None,
+            text: None
         }
     }
     pub fn update(&self, _time: f32) -> Result<(), JsValue> {
@@ -73,6 +77,9 @@ impl AmberApi {
     pub fn upload_font(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = format!("upload_font: {} bytes", data.len());
         amberskynet::log(&mess);
+        let font = font::upload(data);
+        let text = Text::new(&font);
+        self.text = Some(text);
         // let font = FontArc::try_from_vec(data).unwrap();
         // GlyphBrushBuilder::using_font(font).build();
         // let glyph_brush = GlyphBrushBuilder::using_font(&self.font.unwrap()).build();
