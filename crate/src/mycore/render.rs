@@ -12,7 +12,11 @@ pub fn new (logger: &Arc<Logger>) -> Render {
 }
 
 impl Render {
+	pub fn resize (&self, width: i32, height: i32){
+		let mess = format!("Render resize {} x {}", width, height);
+		self.logger.trace(&mess);
+	}
 	pub fn draw (&self){
-		self.logger.debug("Render draw...")
+		self.logger.trace("Render draw...")
 	}
 }

@@ -15,7 +15,7 @@ fn set_panic_hook() {
     console_error_panic_hook::set_once();
 }
 
-const DEFAULT_LOG_LEVEL: LogLevel = LogLevel::Info;
+const DEFAULT_LOG_LEVEL: LogLevel = LogLevel::Trace;
 
 #[wasm_bindgen]
 pub struct AmberApi {
@@ -43,6 +43,7 @@ impl AmberApi {
     pub fn resize(&mut self, width: i32, height: i32) -> Result<(), JsValue> {
         let mess = format!("resize {} x {} ", width, height);
         self.logger.trace(&mess);
+        self.render.resize(width, height);
         Ok(())
     }
     pub fn render(&self) -> Result<(), JsValue> {

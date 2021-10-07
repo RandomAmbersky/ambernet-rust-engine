@@ -12,12 +12,12 @@ mod utils {
 #[repr(u8)]
 #[allow(dead_code)]
 pub enum LogLevel {
-	Fatal = 0,
-	Error = 1,
-	Warn = 2,
-	Info = 3,
-	Debug = 4,
-	Trace = 5
+	Fatal = 1,
+	Error,
+	Warn,
+	Info,
+	Debug,
+	Trace
 }
 
 pub struct Logger {
