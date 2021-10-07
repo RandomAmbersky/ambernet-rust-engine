@@ -7,8 +7,8 @@ extern crate console_error_panic_hook;
 use std::sync::Arc;
 use wasm_bindgen::prelude::*;
 
-use mycore::Logger;
-use crate::mycore::{LogLevel, Render};
+use mycore::LogLevel;
+use mycore::{Logger, Render};
 
 fn set_panic_hook() {
 #[cfg(feature = "console_error_panic_hook")]
