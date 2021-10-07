@@ -10,6 +10,7 @@ mod utils {
 }
 
 #[repr(u8)]
+#[allow(dead_code)]
 pub enum LogLevel {
 	Fatal = 0,
 	Error = 1,
@@ -24,33 +25,39 @@ pub struct Logger {
 }
 
 impl Logger {
+	#[allow(dead_code)]
 	pub fn fatal(&self, mess: &str) {
 		utils::log(mess);
 	}
+	#[allow(dead_code)]
 	pub fn error(&self, mess: &str) {
 		if self.log_level < LogLevel::Error as u8{
 			return;
 		}
 		utils::log(mess)
 	}
+	#[allow(dead_code)]
 	pub fn warn(&self, mess: &str) {
 		if self.log_level < LogLevel::Warn as u8{
 			return;
 		}
 		utils::log(mess)
 	}
+	#[allow(dead_code)]
 	pub fn info(&self, mess: &str) {
 		if self.log_level < LogLevel::Info as u8 {
 			return;
 		}
 			utils::log(mess)
 	}
+	#[allow(dead_code)]
 	pub fn debug(&self, mess: &str) {
 		if self.log_level < LogLevel::Debug as u8{
 			return;
 		}
 		utils::log(mess)
 	}
+	#[allow(dead_code)]
 	pub fn trace(&self, mess: &str) {
 		if self.log_level < LogLevel::Trace as u8{
 			return;

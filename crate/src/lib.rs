@@ -37,17 +37,17 @@ impl AmberApi {
     }
     pub fn update(&self, time: f32) -> Result<(), JsValue> {
         let mess = format!("update: {}", time);
-        // self.logger.info(&mess);
+        self.logger.trace(&mess);
         Ok(())
     }
     pub fn resize(&mut self, width: i32, height: i32) -> Result<(), JsValue> {
         let mess = format!("resize {} x {} ", width, height);
-        self.logger.info(&mess);
+        self.logger.trace(&mess);
         Ok(())
     }
     pub fn render(&self) -> Result<(), JsValue> {
         let mess = format!("render...");
-        // self.logger.info(&mess);
+        self.logger.trace(&mess);
         self.render.draw();
         Ok(())
     }
