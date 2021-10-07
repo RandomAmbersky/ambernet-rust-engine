@@ -13,8 +13,10 @@ mod utils {
 pub enum LogLevel {
 	Fatal = 0,
 	Error = 1,
-	Debug = 2,
-	Info = 3
+	Warn = 2,
+	Info = 3,
+	Debug = 4,
+	Trace = 5
 }
 
 pub struct Logger {
@@ -22,6 +24,21 @@ pub struct Logger {
 }
 
 impl Logger {
+	pub fn fatal(&self, mess: &str) {
+		utils::log(mess);
+	}
+	pub fn error(&self, mess: &str) {
+		if self.log_level < LogLevel::Error as u8{
+			return;
+		}
+		utils::log(mess)
+	}
+	pub fn warn(&self, mess: &str) {
+		if self.log_level < LogLevel::Warn as u8{
+			return;
+		}
+		utils::log(mess)
+	}
 	pub fn info(&self, mess: &str) {
 		if self.log_level < LogLevel::Info as u8 {
 			return;
@@ -34,13 +51,10 @@ impl Logger {
 		}
 		utils::log(mess)
 	}
-	pub fn error(&self, mess: &str) {
-		if self.log_level < LogLevel::Error as u8{
+	pub fn trace(&self, mess: &str) {
+		if self.log_level < LogLevel::Trace as u8{
 			return;
 		}
-		utils::log(mess)
-	}
-	pub fn fatal(&self, mess: &str) {
 		utils::log(mess)
 	}
 }

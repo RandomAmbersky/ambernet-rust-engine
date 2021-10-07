@@ -10,3 +10,9 @@ pub fn new (logger: &Arc<Logger>) -> Render {
 		logger: Arc::clone(logger)
 	}
 }
+
+impl Render {
+	pub fn draw (&self){
+		self.logger.debug("Render draw...")
+	}
+}

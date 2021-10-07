@@ -48,6 +48,7 @@ impl AmberApi {
     pub fn render(&self) -> Result<(), JsValue> {
         let mess = format!("render...");
         // self.logger.info(&mess);
+        self.render.draw();
         Ok(())
     }
 }
