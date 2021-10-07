@@ -4,7 +4,7 @@ extern crate wasm_bindgen;
 extern crate web_sys;
 extern crate console_error_panic_hook;
 
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use wasm_bindgen::prelude::*;
 
 use mycore::LogLevel;
@@ -19,8 +19,8 @@ const DEFAULT_LOG_LEVEL: LogLevel = LogLevel::Trace;
 
 #[wasm_bindgen]
 pub struct AmberApi {
-    logger: Arc<Logger>,
-    render: Arc<Render>
+    logger: Arc<Mutex<Logger>>,
+    render: Arc<Mutex<Render>>
 }
 
 #[wasm_bindgen]
@@ -37,19 +37,19 @@ impl AmberApi {
     }
     pub fn update(&self, time: f32) -> Result<(), JsValue> {
         let mess = format!("update: {}", time);
-        self.logger.trace(&mess);
+        self.logger.lock().unwrap().trace(&mess);
         Ok(())
     }
     pub fn resize(&mut self, width: i32, height: i32) -> Result<(), JsValue> {
         let mess = format!("resize {} x {} ", width, height);
-        self.logger.trace(&mess);
-        self.render.resize(width, height);
+        self.logger.lock().unwrap().trace(&mess);
+        self.render.lock().unwrap().resize(width, height);
         Ok(())
     }
     pub fn render(&self) -> Result<(), JsValue> {
         let mess = format!("render...");
-        self.logger.trace(&mess);
-        self.render.draw();
+        self.logger.lock().unwrap().trace(&mess);
+        self.render.lock().unwrap().draw();
         Ok(())
     }
 }

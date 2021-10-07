@@ -1,11 +1,11 @@
-use std::sync::Arc;
+use std::sync::{Arc, Mutex};
 use crate::mycore::Logger;
 
 pub struct Render {
-	logger: Arc<Logger>
+	logger: Arc<Mutex<Logger>>
 }
 
-pub fn new (logger: &Arc<Logger>) -> Render {
+pub fn new (logger: &Arc<Mutex<Logger>>) -> Render {
 	Render {
 		logger: Arc::clone(logger)
 	}
@@ -14,9 +14,9 @@ pub fn new (logger: &Arc<Logger>) -> Render {
 impl Render {
 	pub fn resize (&self, width: i32, height: i32){
 		let mess = format!("Render resize {} x {}", width, height);
-		self.logger.trace(&mess);
+		self.logger.lock().unwrap().trace(&mess);
 	}
 	pub fn draw (&self){
-		self.logger.trace("Render draw...")
+		self.logger.lock().unwrap().trace("Render draw...")
 	}
 }
