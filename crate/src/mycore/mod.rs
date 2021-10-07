@@ -1,6 +1,8 @@
 mod logger;
 mod render;
 
+extern crate console_error_panic_hook;
+
 use std::sync::{Arc, Mutex};
 pub use logger::Logger as Logger;
 pub use logger::LogLevel;
@@ -15,4 +17,9 @@ pub fn new_logger (log_level: LogLevel) -> Arc<Mutex<Logger>> {
 pub fn new_render (logger: &Arc<Mutex<Logger>>) -> Arc<Mutex<Render>> {
 	let render = render::new(logger);
 	Arc::new(Mutex::new(render))
+}
+
+pub fn set_panic_hook() {
+	#[cfg(feature = "console_error_panic_hook")]
+		console_error_panic_hook::set_once();
 }
