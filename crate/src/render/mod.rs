@@ -5,12 +5,6 @@ pub struct Render {
 	logger: Arc<Mutex<Logger>>
 }
 
-pub fn new (logger: &Arc<Mutex<Logger>>) -> Render {
-	Render {
-		logger: Arc::clone(logger)
-	}
-}
-
 impl Render {
 	pub fn resize (&self, width: i32, height: i32){
 		let mess = format!("Render resize {} x {}", width, height);
@@ -19,4 +13,11 @@ impl Render {
 	pub fn draw (&self){
 		self.logger.lock().unwrap().trace("Render draw...")
 	}
+}
+
+pub fn new_render (logger: &Arc<Mutex<Logger>>) -> Arc<Mutex<Render>> {
+	let render = Render {
+		logger: logger.clone()
+	};
+	Arc::new(Mutex::new(render))
 }

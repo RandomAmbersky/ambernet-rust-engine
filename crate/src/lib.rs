@@ -1,13 +1,15 @@
-mod mycore;
-
-extern crate wasm_bindgen;
-extern crate web_sys;
-
 use std::sync::{Arc, Mutex};
 use wasm_bindgen::prelude::*;
 
+mod mycore;
+mod render;
+
+use mycore::{Logger};
 use mycore::LogLevel;
-use mycore::{Logger, Render};
+use render::Render;
+
+extern crate wasm_bindgen;
+extern crate web_sys;
 
 const DEFAULT_LOG_LEVEL: LogLevel = LogLevel::Trace;
 
@@ -23,7 +25,7 @@ impl AmberApi {
     pub fn new() -> Self {
         mycore::set_panic_hook();
         let logger = mycore::new_logger(DEFAULT_LOG_LEVEL);
-        let render = mycore::new_render(&logger);
+        let render = render::new_render(&logger);
         Self {
             logger,
             render
