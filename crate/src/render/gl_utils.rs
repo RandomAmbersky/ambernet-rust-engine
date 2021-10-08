@@ -95,7 +95,7 @@ pub fn link_program (
 }
 
 #[allow(dead_code)]
-pub fn compile_shader (
+fn compile_shader (
     gl: &GL,
     shader_type: u32,
     src: &str
