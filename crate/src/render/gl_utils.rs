@@ -5,7 +5,6 @@ use web_sys::*;
 pub use web_sys::WebGlRenderingContext as GL;
 use js_sys::WebAssembly;
 
-#[allow(dead_code)]
 pub fn get_webgl_context () -> Result<GL, JsValue> {
 
     let window: web_sys::Window = match window() {
@@ -42,6 +41,18 @@ pub fn get_webgl_context () -> Result<GL, JsValue> {
     };
 
     Ok(gl_context)
+}
+
+pub fn resize(gl: &GL, _width: i32, _height: i32) {
+    gl.enable(GL::BLEND);
+    gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
+    gl.clear_color(0.0, 0.0, 0.0, 1.0); //RGBA
+    gl.clear_depth(1.0);
+    gl.viewport(0, 0, _width, _height);
+}
+
+pub fn clear(gl: &GL) {
+    gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT);
 }
 
 #[allow(dead_code)]
