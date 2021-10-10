@@ -3,6 +3,7 @@ mod gl_utils;
 use std::sync::{Arc, Mutex};
 use crate::mycore::Logger;
 use gl_utils::GL;
+use web_sys::{WebGlProgram};
 
 pub struct Screen {
 	w: i32,
@@ -11,12 +12,15 @@ pub struct Screen {
 
 #[allow(dead_code)]
 pub struct Render {
-	logger: Arc<Mutex<Logger>>,
-	gl: GL,
+	pub logger: Arc <Mutex<Logger>>,
+	pub gl: GL,
 	scr: Screen
 }
 
 impl Render {
+	pub fn gl (&self) -> &GL {
+		&self.gl
+	}
 	pub fn resize (&mut self, width: i32, height: i32){
 		self.scr = Screen { w: width, h: height };
 		gl_utils::resize(&self.gl, width, height);
@@ -26,6 +30,9 @@ impl Render {
 	pub fn draw (&self){
 		gl_utils::clear(&self.gl);
 		self.logger.lock().unwrap().trace("Render draw...")
+	}
+	pub fn link_program (&self, vert: &str, frag: &str) -> WebGlProgram {
+		gl_utils::link_program(&self.gl, vert, frag).unwrap()
 	}
 }
 
