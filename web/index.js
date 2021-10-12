@@ -11,7 +11,6 @@ const canvas = document.getElementById('canvasGL');
 const engine = new amber.AmberApi()
 
 // engine.upload_render_program(VSHADER_SOURCE, FSHADER_SOURCE)
-//
 // const binaryFontLoader = new XMLHttpRequest();
 // binaryFontLoader.open("GET", myLogo, true);
 // binaryFontLoader.responseType = "arraybuffer";

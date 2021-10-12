@@ -3,7 +3,7 @@ mod gl_utils;
 use std::sync::{Arc, Mutex};
 use crate::mycore::Logger;
 use gl_utils::GL;
-use web_sys::{WebGlProgram};
+use web_sys::{WebGlProgram, WebGlBuffer};
 
 pub struct Screen {
 	w: i32,
@@ -33,6 +33,12 @@ impl Render {
 	}
 	pub fn link_program (&self, vert: &str, frag: &str) -> WebGlProgram {
 		gl_utils::link_program(&self.gl, vert, frag).unwrap()
+	}
+	pub fn load_vertex_buffer (&self, buf: &[f64]) -> WebGlBuffer {
+		gl_utils::load_vertex_buffer(&self.gl, buf)
+	}
+	pub fn load_index_buffer (&self, buf: &[u16]) -> WebGlBuffer {
+		gl_utils::load_index_buffer(&self.gl, buf)
 	}
 }
 

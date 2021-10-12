@@ -9,14 +9,16 @@ pub struct ColorQuad {
 
 impl ColorQuad {
 	pub fn new(render: &Render) -> Self {
-		let vertices: [f32; 12] = [
+		let vertices: [f64; 12] = [
 			-0.5, 0.5, 0.0,
 			-0.5, -0.5, 0.0,
 			0.5, -0.5, 0.0,
 			0.5, 0.5, 0.0,
 		];
+		let vertices_array = render.load_vertex_buffer(&vertices);
 
 		let indices: [u16; 6] = [3, 2, 1, 3, 1, 0];
+		let index_array = render.load_index_buffer(&indices);
 
 		let colors: [f32; 12] = [0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 1.0];
 
