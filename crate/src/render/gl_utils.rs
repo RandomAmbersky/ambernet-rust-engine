@@ -44,10 +44,10 @@ pub fn get_webgl_context () -> Result<GL, JsValue> {
 }
 
 pub fn resize(gl: &GL, _width: i32, _height: i32) {
-    gl.enable(GL::BLEND);
-    gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
-    gl.clear_color(0.0, 0.0, 0.0, 1.0); //RGBA
-    gl.clear_depth(1.0);
+    // gl.enable(GL::BLEND);
+    // gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
+    // gl.clear_color(0.0, 0.0, 0.0, 1.0); //RGBA
+    // gl.clear_depth(1.0);
     gl.viewport(0, 0, _width, _height);
 }
 

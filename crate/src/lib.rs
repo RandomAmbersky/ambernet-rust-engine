@@ -50,7 +50,7 @@ impl AmberApi {
     pub fn render(&self) -> Result<(), JsValue> {
         // self.render.lock().unwrap().draw();
         let render = &*self.render.lock().unwrap();
-        render.draw();
+        // render.draw();
         self.elem.draw(&render);
         let mess = format!("render...");
         self.logger.lock().unwrap().trace(&mess);
