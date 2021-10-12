@@ -119,7 +119,7 @@ fn compile_shader (
 }
 
 #[allow(dead_code)]
-pub fn load_vertex_buffer(gl: &GL, buf: &[f64]) -> WebGlBuffer {
+pub fn load_vertex_buffer(gl: &GL, buf: &[f32]) -> WebGlBuffer {
     let memory_buffer = wasm_bindgen::memory()
         .dyn_into::<WebAssembly::Memory>()
         .unwrap()

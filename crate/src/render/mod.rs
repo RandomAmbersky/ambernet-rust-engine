@@ -34,7 +34,7 @@ impl Render {
 	pub fn link_program (&self, vert: &str, frag: &str) -> WebGlProgram {
 		gl_utils::link_program(&self.gl, vert, frag).unwrap()
 	}
-	pub fn load_vertex_buffer (&self, buf: &[f64]) -> WebGlBuffer {
+	pub fn load_vertex_buffer (&self, buf: &[f32]) -> WebGlBuffer {
 		gl_utils::load_vertex_buffer(&self.gl, buf)
 	}
 	pub fn load_index_buffer (&self, buf: &[u16]) -> WebGlBuffer {
