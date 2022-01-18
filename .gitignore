@@ -5,3 +5,5 @@ node_modules/
 crate/target
 .DS_Store
 /src/target/
+/.parcel-cache/
+/yarn-error.log

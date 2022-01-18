@@ -1,28 +1,10 @@
 import module  from '../crate/Cargo.toml'
 
-import VSHADER_SOURCE from './amberskynet/shaders/test_2d/vert.glsl'
-import FSHADER_SOURCE from './amberskynet/shaders/test_2d/frag.glsl'
-
-import myFont from './amberskynet/fonts/LiberationMono-Regular.ttf'
-
 const FPS_THROTTLE = 1000.0 / 30.0; // milliseconds / frames
 
 const canvas = document.getElementById('canvasGL');
-const engine = new module.AmberSkyNetClient()
+// const engine = new module.AmberSkyNetClient()
 
-engine.upload_render_program(VSHADER_SOURCE, FSHADER_SOURCE)
-
-const binaryFontLoader = new XMLHttpRequest();
-binaryFontLoader.open("GET", myFont, true);
-binaryFontLoader.responseType = "arraybuffer";
-binaryFontLoader.send()
-binaryFontLoader.onload = function (oEvent) {
-  const arrayBuffer = binaryFontLoader.response; // Note: not oReq.responseText
-  if (arrayBuffer) {
-    const byteArray = new Uint8Array(arrayBuffer)
-    engine.upload_font(byteArray)
-  }
-}
 
 let lastDrawTime = Date.now();// In milliseconds
 

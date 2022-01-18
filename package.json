@@ -11,19 +11,7 @@
     "build": "parcel build web/index.html"
   },
   "devDependencies": {
-    "express": "^4.17.2"
-  },
-  "staticFiles": {
-    "staticPath": [
-      {
-        "staticPath": "web/map",
-        "staticOutDir": "map"
-      }
-    ]
-  },
-  "dependencies": {
-    "assert": "^2.0.0",
-    "babel-polyfill": "^6.26.0",
-    "fetch": "^1.1.0"
+    "@parcel/transformer-toml": "^2.2.1",
+    "parcel": "^2.2.1"
   }
 }
