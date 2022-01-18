@@ -1,7 +1,7 @@
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
-use mylogger::LoggerWeb;
+use amberskynet_logger_web::LoggerWeb;
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {

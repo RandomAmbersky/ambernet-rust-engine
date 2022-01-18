@@ -1,10 +1,10 @@
 [package]
-name = "mylogger"
+name = "amberskynet_logger_web"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "mylogger"
+name = "amberskynet_logger_web"
 path = "src/lib.rs"
 
 [dependencies]
