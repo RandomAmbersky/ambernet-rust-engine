@@ -4,3 +4,4 @@ node_modules/
 .cache/
 crate/target
 .DS_Store
+/src/target/
