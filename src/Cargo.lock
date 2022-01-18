@@ -8,14 +8,11 @@ version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
  "js-sys",
+ "mylogger",
  "uuid",
  "wasm-bindgen",
  "web-sys",
 ]
-
-[[package]]
-name = "amberskynet-logger-web-console"
-version = "0.1.0"
 
 [[package]]
 name = "bumpalo"
@@ -80,6 +77,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "51b9bbe6c47d51fc3e1a9b945965946b4c44142ab8792c50835a980d362c2710"
 dependencies = [
  "cfg-if",
+]
+
+[[package]]
+name = "mylogger"
+version = "0.1.0"
+dependencies = [
+ "wasm-bindgen",
 ]
 
 [[package]]

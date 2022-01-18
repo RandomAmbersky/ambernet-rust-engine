@@ -7,13 +7,13 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
+mylogger = { path="../mylogger" }
 console_error_panic_hook = "*"
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"
 
 [dependencies.wasm-bindgen]
 version = "*"
-
 [dependencies.web-sys]
 version = "*"
 features = [

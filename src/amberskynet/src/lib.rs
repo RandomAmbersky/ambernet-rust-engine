@@ -1,12 +1,11 @@
-extern crate wasm_bindgen;
-extern crate web_sys;
-
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
+use mylogger::LoggerWeb;
+
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
-
+    logger: LoggerWeb
 }
 
 fn set_panic_hook() {
@@ -22,7 +21,9 @@ fn set_panic_hook() {
 
 impl Default for AmberSkyNetClient {
     fn default() -> Self {
-        todo!()
+        Self {
+            logger: LoggerWeb {}
+        }
     }
 }
 
@@ -31,19 +32,22 @@ impl AmberSkyNetClient {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
         set_panic_hook();
-        Self {}
+        AmberSkyNetClient::default()
     }
     pub fn update(&self, _time: f32) -> Result<(), JsValue>{
-        // let _mess = format!("engine update: {}", _time);
-        // self.a.get_log().log(&mess);
+        let _mess = format!("engine update: {}", _time);
+        // self.logger.log(&_mess);
         Ok(())
     }
     pub fn resize(&mut self, _width: f32, _height: f32) -> Result<(), JsValue> {
-        // self.a.render().resize(_width, _height);
+        let _mess = format!("engine resize: {} x {}", _width, _height);
+        self.logger.log(&_mess);
         Ok(())
     }
+
     pub fn render(&mut self) -> Result<(), JsValue> {
-        // &self.a.render().draw();
+        let mess = "engine render".to_string();
+        // self.logger.log(&mess);
         Ok(())
     }
 }
