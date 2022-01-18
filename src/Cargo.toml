@@ -2,5 +2,5 @@
 
 members = [
     "amberskynet",
-    "mylogger"
+    "amberskynet_logger_web"
 ]

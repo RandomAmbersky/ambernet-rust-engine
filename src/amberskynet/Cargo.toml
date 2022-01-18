@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-mylogger = { path="../mylogger" }
+amberskynet_logger_web = { path="../amberskynet_logger_web" }
 console_error_panic_hook = "*"
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"
