@@ -46,8 +46,8 @@ impl AmberSkyNetClient {
     }
 
     pub fn render(&mut self) -> Result<(), JsValue> {
-        let mess = "engine render".to_string();
-        // self.logger.log(&mess);
+        let _mess = "engine render".to_string();
+        // self.logger.log(&_mess);
         Ok(())
     }
 }
