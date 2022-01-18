@@ -3,6 +3,24 @@ name = "amberskynet"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+console_error_panic_hook = "*"
+uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
+js-sys = "*"
+
+[dependencies.wasm-bindgen]
+version = "*"
+
+[dependencies.web-sys]
+version = "*"
+features = [
+    "Window",
+    'Document',
+    'Element',
+    'HtmlCanvasElement',
+    'WebGlRenderingContext',
+    'WebGlProgram',
+    'WebGlShader',
+    'WebGlBuffer',
+    'WebGlUniformLocation'
+]
