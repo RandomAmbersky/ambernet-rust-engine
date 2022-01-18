@@ -53,7 +53,7 @@ impl AmberSkyNetClient {
     }
     pub fn upload_font(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = format!("upload_font: {} bytes", data.len());
-        self.a.get_log().log(&mess);
+        // self.a.get_log().log(&mess);
         let _font = glyph_brush::ab_glyph::FontArc::try_from_vec(data).unwrap();
         // let font_id = GlyphBrush::add_font(font);
         // let font_id = glyph_brush.borrow_mut():add_font(font);
