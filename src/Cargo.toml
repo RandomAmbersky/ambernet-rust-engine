@@ -1,5 +1,6 @@
 [workspace]
 
 members = [
-    "amberskynet"
+    "amberskynet",
+    "amberskynet-logger-web-console"
 ]
