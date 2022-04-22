@@ -1,3 +1,5 @@
+mod utils;
+
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
@@ -6,17 +8,6 @@ use amberskynet_logger_web::LoggerWeb;
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
     logger: LoggerWeb
-}
-
-fn set_panic_hook() {
-    // When the `console_error_panic_hook` feature is enabled, we can call the
-    // `set_panic_hook` function at least once during initialization, and then
-    // we will get better error messages if our code ever panics.
-    //
-    // For more details see
-    // https://github.com/rustwasm/console_error_panic_hook#readme
-    #[cfg(feature = "console_error_panic_hook")]
-        console_error_panic_hook::set_once();
 }
 
 impl Default for AmberSkyNetClient {
@@ -31,7 +22,7 @@ impl Default for AmberSkyNetClient {
 impl AmberSkyNetClient {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
-        set_panic_hook();
+        utils::set_panic_hook();
         AmberSkyNetClient::default()
     }
     pub fn update(&self, _time: f32) -> Result<(), JsValue>{
