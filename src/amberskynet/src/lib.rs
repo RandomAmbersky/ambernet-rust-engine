@@ -25,11 +25,13 @@ impl AmberSkyNetClient {
         utils::set_panic_hook();
         AmberSkyNetClient::default()
     }
+
     pub fn update(&self, _time: f32) -> Result<(), JsValue>{
         let _mess = format!("engine update: {}", _time);
         // self.logger.log(&_mess);
         Ok(())
     }
+
     pub fn resize(&mut self, _width: f32, _height: f32) -> Result<(), JsValue> {
         let _mess = format!("engine resize: {} x {}", _width, _height);
         self.logger.log(&_mess);
