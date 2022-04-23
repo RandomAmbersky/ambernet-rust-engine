@@ -17,6 +17,7 @@ opt-level = 'z'
 [dependencies]
 amberskynet_logger_web = { path="../amberskynet_logger_web" }
 asn_render_webgl = { path="../asn_render_webgl" }
+asn_test_2d = { path="../asn_test_2d" }
 console_error_panic_hook = "*"
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"

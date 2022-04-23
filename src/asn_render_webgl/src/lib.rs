@@ -1,18 +1,18 @@
 mod utils;
-pub mod shaders;
-pub mod buffers;
+mod shaders;
+mod buffers;
 
 use web_sys::{WebGlBuffer, WebGlProgram};
 use utils::GL as GL;
 
 pub struct RenderContext {
-	gl: GL,
+	pub gl: GL,
 }
 
 pub fn resize(ctx: &RenderContext, _width: f32, _height: f32) {
 	ctx.gl.enable(GL::BLEND);
 	ctx.gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
-	ctx.gl.clear_color(1.0, 0.0, 1.0, 1.0); //RGBA
+	ctx.gl.clear_color(1.0, 1.0, 1.0, 1.0); //RGBA
 	ctx.gl.clear_depth(1.0);
 }
 
