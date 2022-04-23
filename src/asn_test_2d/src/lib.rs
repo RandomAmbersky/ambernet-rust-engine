@@ -35,12 +35,12 @@ pub fn render (ctx: &RenderContext, item: &Test2D) {
 
 	gl.use_program(Some(&item.program));
 
-	let bottom: f32 = 1.;
-	let top: f32 = 1.;
-	let left: f32 = 1.;
-	let right: f32 = 1.;
-	let canvas_height: f32 = 1.;
-	let canvas_width: f32 = 1.;
+	let bottom: f32 = 0.;
+	let top: f32 = 10.;
+	let left: f32 = 0.;
+	let right: f32 = 10.;
+	let canvas_height: f32 = 10.;
+	let canvas_width: f32 = 10.;
 
 	gl.bind_buffer(GL::ARRAY_BUFFER, Some(&item.buffer));
 	gl.vertex_attrib_pointer_with_i32(0, 2, GL::FLOAT, false, 0, 0);
