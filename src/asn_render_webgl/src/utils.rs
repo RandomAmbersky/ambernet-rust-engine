@@ -1,8 +1,5 @@
-use wasm_bindgen::JsValue;
-use wasm_bindgen::JsCast;
+use wasm_bindgen::{ JsValue, JsCast };
 use web_sys::window;
-// use js_sys::WebAssembly;
-// use web_sys::*;
 pub use web_sys::WebGlRenderingContext as GL;
 
 pub fn get_webgl_context () -> Result<GL, JsValue> {

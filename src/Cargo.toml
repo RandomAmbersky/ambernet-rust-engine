@@ -2,5 +2,6 @@
 
 members = [
     "amberskynet",
-    "amberskynet_logger_web"
+    "amberskynet_logger_web",
+    "asn_render_webgl"
 ]
