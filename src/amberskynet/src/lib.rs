@@ -26,21 +26,33 @@ impl AmberSkyNetClient {
         AmberSkyNetClient::default()
     }
 
-    pub fn update(&self, _time: f32) -> Result<(), JsValue>{
+    pub fn upload_tiles(&self, _data: Vec<u8>) -> Result<(), JsValue> {
+        let mess = "engine upload_tiles".to_owned();
+        self.logger.log(&mess);
+        Ok(())
+    }
+
+    pub fn upload_map(&self, _data: Vec<u8>) -> Result<(), JsValue> {
+        let mess = "engine upload_map".to_owned();
+        self.logger.log(&mess);
+        Ok(())
+    }
+
+    pub fn update(&self, _time: f32) -> Result<(), JsValue> {
         let _mess = format!("engine update: {}", _time);
         // self.logger.log(&_mess);
         Ok(())
     }
 
-    pub fn resize(&mut self, _width: f32, _height: f32) -> Result<(), JsValue> {
-        let _mess = format!("engine resize: {} x {}", _width, _height);
-        self.logger.log(&_mess);
+    pub fn resize(&self, _width: f32, _height: f32) -> Result<(), JsValue> {
+        let mess = format!("engine resize: {} x {}", _width, _height);
+        self.logger.log(&mess);
         Ok(())
     }
 
-    pub fn render(&mut self) -> Result<(), JsValue> {
+    pub fn render(&self) -> Result<(), JsValue> {
         let _mess = "engine render".to_string();
-        // self.logger.log(&_mess);
+        // self.logger.log(&mess);
         Ok(())
     }
 }
