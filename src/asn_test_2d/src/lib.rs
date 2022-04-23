@@ -15,7 +15,7 @@ pub fn new_item (
 	ctx: &RenderContext,
 	vert: &str,
 	frag: &str,
-	mesh: &[f64]
+	mesh: &[f32]
 ) -> Test2D {
 	let gl = &ctx.gl;
 		let program = link_program(ctx, vert, frag).unwrap();

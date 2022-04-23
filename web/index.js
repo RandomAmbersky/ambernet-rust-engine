@@ -58,7 +58,7 @@ const update = (currTime) => {
   if (window.innerHeight !== canvas.height || window.innerWidth !== canvas.width) {
     canvas.height = window.innerHeight
     canvas.width = window.innerWidth
-    console.log(canvas.width, canvas.height)
+    // console.log(canvas.width, canvas.height)
     engine.resize(canvas.width, canvas.height)
   }
   engine.update(elapsedTime)

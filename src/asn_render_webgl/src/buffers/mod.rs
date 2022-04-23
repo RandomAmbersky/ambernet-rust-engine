@@ -3,7 +3,7 @@ use wasm_bindgen::JsCast;
 use web_sys::WebGlBuffer;
 use crate::GL;
 
-pub fn load_buffer(gl: &GL, buf: &[f64]) -> WebGlBuffer {
+pub fn load_buffer(gl: &GL, buf: &[f32]) -> WebGlBuffer {
 	let memory_buffer = wasm_bindgen::memory()
 		.dyn_into::<WebAssembly::Memory>()
 		.unwrap()
