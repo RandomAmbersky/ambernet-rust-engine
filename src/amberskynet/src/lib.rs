@@ -4,16 +4,20 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
 use amberskynet_logger_web::LoggerWeb;
+use asn_render_webgl::RenderContext;
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
-    logger: LoggerWeb
+    logger: LoggerWeb,
+    ctx: RenderContext
 }
 
 impl Default for AmberSkyNetClient {
     fn default() -> Self {
+        let ctx = asn_render_webgl::init_context();
         Self {
-            logger: LoggerWeb {}
+            logger: LoggerWeb {},
+            ctx,
         }
     }
 }
@@ -47,12 +51,12 @@ impl AmberSkyNetClient {
     pub fn resize(&self, _width: f32, _height: f32) -> Result<(), JsValue> {
         let mess = format!("engine resize: {} x {}", _width, _height);
         self.logger.log(&mess);
+        asn_render_webgl::resize(&self.ctx, _width, _height);
         Ok(())
     }
 
     pub fn render(&self) -> Result<(), JsValue> {
-        let _mess = "engine render".to_string();
-        // self.logger.log(&mess);
+        asn_render_webgl::draw(&self.ctx);
         Ok(())
     }
 }
