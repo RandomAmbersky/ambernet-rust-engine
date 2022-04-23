@@ -26,21 +26,22 @@ fn make_test_item (ctx: &RenderContext) -> Test2D {
             gl_FragColor = vec4(uColor.r, uColor.g, uColor.b, uColor.a * uOpacity);
         }";
 
-    let vert = "
+    let vert = r#"
         attribute vec4 aPosition;
         uniform mat4 uTransform;
 
         void main() {
             gl_Position = uTransform * aPosition;
-        }";
+        }"#;
 
     let buf = [
-        -1.0, 1.0,
-        1.0, -1.0,
-        -1.0, -1.0,
-        -1.0, 1.0,
-        1.0, -1.0,
-        1.0, 1.0];
+        0., 1.,
+        0., 0.,
+        1., 1.,
+        1., 1.,
+        0., 0.,
+        1., 0.
+    ];
 
     new_item(ctx, vert, frag, &buf)
 }
@@ -84,10 +85,10 @@ impl AmberSkyNetClient {
         Ok(())
     }
 
-    pub fn resize(&self, _width: f32, _height: f32) -> Result<(), JsValue> {
-        let mess = format!("engine resize: {} x {}", _width, _height);
+    pub fn resize(&self, width: i32, height: i32) -> Result<(), JsValue> {
+        let mess = format!("engine resize: {} x {}", width, height);
         self.logger.log(&mess);
-        asn_render_webgl::resize(&self.ctx, _width, _height);
+        asn_render_webgl::resize(&self.ctx, width, height);
         Ok(())
     }
 
