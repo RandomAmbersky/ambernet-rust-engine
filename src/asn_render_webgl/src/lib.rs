@@ -1,5 +1,8 @@
 mod utils;
+pub mod shaders;
+pub mod buffers;
 
+use web_sys::{WebGlBuffer, WebGlProgram};
 use utils::GL as GL;
 
 pub struct RenderContext {
@@ -22,4 +25,12 @@ pub fn init_context() -> RenderContext {
 		RenderContext {
 			gl
 		}
+}
+
+pub fn link_program (ctx: &RenderContext, vert: &str, frag: &str) -> Result<WebGlProgram, String> {
+	shaders::link_program(&ctx.gl, vert, frag)
+}
+
+pub fn load_buffer(ctx: &RenderContext, buf: &[f64]) -> WebGlBuffer {
+	buffers::load_buffer(&ctx.gl, buf)
 }
