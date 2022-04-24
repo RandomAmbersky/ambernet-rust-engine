@@ -85,10 +85,10 @@ impl AmberSkyNetClient {
         Ok(())
     }
 
-    pub fn resize(&self, width: i32, height: i32) -> Result<(), JsValue> {
+    pub fn resize(&mut self, width: i32, height: i32) -> Result<(), JsValue> {
         let mess = format!("engine resize: {} x {}", width, height);
         self.logger.log(&mess);
-        asn_render_webgl::resize(&self.ctx, width, height);
+        asn_render_webgl::resize(&mut self.ctx, width, height);
         Ok(())
     }
 

@@ -7,9 +7,13 @@ use utils::GL as GL;
 
 pub struct RenderContext {
 	pub gl: GL,
+	pub width: i32,
+	pub height: i32
 }
 
-pub fn resize(ctx: &RenderContext, width: i32, height: i32) {
+pub fn resize(ctx: &mut RenderContext, width: i32, height: i32) {
+	ctx.width = width;
+	ctx.height= height;
 	ctx.gl.enable(GL::BLEND);
 	ctx.gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
 	ctx.gl.clear_color(0., 0., 0., 1.0); //RGBA
@@ -30,7 +34,9 @@ pub fn init_context() -> RenderContext {
 		gl.clear_depth(1.0);
 
 		RenderContext {
-			gl
+			gl,
+			width: 0,
+			height: 0
 		}
 }
 
