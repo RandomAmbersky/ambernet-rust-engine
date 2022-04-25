@@ -6,13 +6,14 @@ use wasm_bindgen::JsValue;
 
 use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::RenderContext;
-use asn_test_2d::{new_item, Test2D};
+use asn_test_2d::{new_item as new_test_2d, Test2D};
+use asn_view_2d::{new_item as new_view_2d, View2D};
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
     logger: LoggerWeb,
     ctx: RenderContext,
-    item: Test2D
+    item: View2D,
 }
 
 fn make_test_item (ctx: &RenderContext) -> Test2D {
@@ -43,14 +44,17 @@ fn make_test_item (ctx: &RenderContext) -> Test2D {
         1., 0.
     ];
 
-    new_item(ctx, vert, frag, &buf)
+    new_test_2d(ctx, vert, frag, &buf)
 }
 
+fn make_view_2d () -> View2D {
+    new_view_2d(10,10)
+}
 
 impl Default for AmberSkyNetClient {
     fn default() -> Self {
         let ctx = asn_render_webgl::init_context();
-        let item = make_test_item(&ctx);
+        let item = make_view_2d();
         Self {
             logger: LoggerWeb {},
             ctx,
@@ -94,7 +98,7 @@ impl AmberSkyNetClient {
 
     pub fn render(&self) -> Result<(), JsValue> {
         asn_render_webgl::draw(&self.ctx);
-        asn_test_2d::render(&self.ctx, &self.item);
+        asn_view_2d::draw(&self.ctx, &self.item);
         Ok(())
     }
 }
