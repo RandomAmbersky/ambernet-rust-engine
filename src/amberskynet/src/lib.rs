@@ -47,14 +47,14 @@ fn make_test_item (ctx: &RenderContext) -> Test2D {
     new_test_2d(ctx, vert, frag, &buf)
 }
 
-fn make_view_2d () -> View2D {
-    new_view_2d(10,10)
+fn make_view_2d (ctx: &RenderContext) -> View2D {
+    new_view_2d(ctx, 10,10)
 }
 
 impl Default for AmberSkyNetClient {
     fn default() -> Self {
         let ctx = asn_render_webgl::init_context();
-        let item = make_view_2d();
+        let item = make_view_2d(&ctx);
         Self {
             logger: LoggerWeb {},
             ctx,
