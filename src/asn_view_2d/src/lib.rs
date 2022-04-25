@@ -1,6 +1,7 @@
 mod shaders;
 mod buffer;
 
+use web_sys::WebGlRenderingContext as GL;
 use web_sys::{WebGlBuffer, WebGlProgram};
 use asn_render_webgl::RenderContext;
 
@@ -24,5 +25,5 @@ pub fn new_item (ctx: &RenderContext, w: i32, h: i32) -> View2D {
 pub fn draw (ctx: &RenderContext, item: &View2D) {
 	let gl = &ctx.gl;
 	gl.use_program(Some(&item.program));
-
+	gl.bind_buffer(GL::ARRAY_BUFFER, Some(&item.buffer));
 }
