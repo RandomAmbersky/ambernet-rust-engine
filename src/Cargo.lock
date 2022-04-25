@@ -9,6 +9,7 @@ dependencies = [
  "amberskynet_logger_web",
  "asn_render_webgl",
  "asn_test_2d",
+ "asn_view_2d",
  "console_error_panic_hook",
  "js-sys",
  "uuid",
@@ -37,6 +38,17 @@ dependencies = [
 
 [[package]]
 name = "asn_test_2d"
+version = "0.1.0"
+dependencies = [
+ "asn_math",
+ "asn_render_webgl",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
+name = "asn_view_2d"
 version = "0.1.0"
 dependencies = [
  "asn_math",
