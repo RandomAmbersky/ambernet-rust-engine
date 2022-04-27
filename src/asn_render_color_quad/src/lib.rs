@@ -18,8 +18,7 @@ pub fn new_item (
 
 	let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 
-	let indices: [u16; 6] = [3, 2, 1, 3, 1, 0];
-	let indices_buf = asn_render_webgl::load_index_buffer(ctx, &indices);
+	let indices_buf = asn_render_webgl::load_index_buffer(ctx, &utils::INDICES);
 
 	let colors_buf = asn_render_webgl::load_buffer(ctx, &utils::COLORS);
 
@@ -30,7 +29,7 @@ pub fn new_item (
 		vertices_buf,
 		indices_buf,
 		colors_buf,
-		indices_len: indices.len() as i32
+		indices_len: utils::INDICES.len() as i32
 	}
 }
 

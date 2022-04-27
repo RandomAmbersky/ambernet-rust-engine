@@ -5,6 +5,9 @@ pub const VERTICES: [f32; 12] = [
 0.5, 0.5, 0.0,
 ];
 
+pub const INDICES: [u16; 6] = [3, 2, 1, 3, 1, 0];
+
+
 pub const COLORS: [f32; 12] = [
 0.0, 0.0, 0.0,
 1.0, 0.0, 0.0,
