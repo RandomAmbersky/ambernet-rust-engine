@@ -24,7 +24,7 @@ pub fn resize(ctx: &mut RenderContext, width: i32, height: i32) {
 pub	fn draw(ctx: &RenderContext) {
 	ctx.gl.clear_color(0.0, 0.0, 0.0, 1.0);
 	// ctx.gl.clear(GL::COLOR_BUFFER_BIT);
-	ctx.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT );
+	// ctx.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT );
 	// ctx.gl.viewport(0, 0, ctx.width, ctx.height);
 	// ctx.gl.viewport(-1, -1, 1, 1);
 }
