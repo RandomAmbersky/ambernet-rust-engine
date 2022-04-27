@@ -19,6 +19,7 @@ amberskynet_logger_web = { path="../amberskynet_logger_web" }
 asn_render_webgl = { path="../asn_render_webgl" }
 asn_test_2d = { path="../asn_test_2d" }
 asn_view_2d = { path="../asn_view_2d" }
+asn_render_color_quad = { path="../asn_render_color_quad" }
 console_error_panic_hook = "*"
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"

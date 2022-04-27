@@ -51,3 +51,7 @@ pub fn link_program (ctx: &RenderContext, vert: &str, frag: &str) -> Result<WebG
 pub fn load_buffer(ctx: &RenderContext, buf: &[f32]) -> WebGlBuffer {
 	buffers::load_buffer(&ctx.gl, buf)
 }
+
+pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
+	buffers::load_index_buffer(&ctx.gl, buf)
+}
