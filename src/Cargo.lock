@@ -28,6 +28,17 @@ name = "asn_math"
 version = "0.1.0"
 
 [[package]]
+name = "asn_render_color_quad"
+version = "0.1.0"
+dependencies = [
+ "asn_math",
+ "asn_render_webgl",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
+
+[[package]]
 name = "asn_render_webgl"
 version = "0.1.0"
 dependencies = [
