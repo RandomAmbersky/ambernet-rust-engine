@@ -1,3 +1,5 @@
+mod utils;
+
 use web_sys::{WebGlBuffer, WebGlProgram};
 use asn_render_webgl::RenderContext;
 use web_sys::WebGlRenderingContext as GL;
@@ -14,40 +16,14 @@ pub fn new_item (
 	ctx: &RenderContext
 ) -> ColorQuad {
 
-	let vertices: [f32; 12] = [
-		-0.5, 0.5, 0.0,
-		-0.5, -0.5, 0.0,
-		0.5, -0.5, 0.0,
-		0.5, 0.5, 0.0,
-	];
-	let vertices_buf = asn_render_webgl::load_buffer(ctx, &vertices);
+	let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 
 	let indices: [u16; 6] = [3, 2, 1, 3, 1, 0];
 	let indices_buf = asn_render_webgl::load_index_buffer(ctx, &indices);
 
-	let colors: [f32; 12] = [
-		0.0, 0.0, 0.0,
-		1.0, 0.0, 0.0,
-		0.0, 1.0, 0.0,
-		0.0, 0.0, 1.0
-	];
-	let colors_buf = asn_render_webgl::load_buffer(ctx, &colors);
+	let colors_buf = asn_render_webgl::load_buffer(ctx, &utils::COLORS);
 
-	let vert_code = r#"attribute vec3 coordinates;
-attribute vec3 color;
-varying vec3 vColor;
-void main(void) {
-   gl_Position = vec4(coordinates, 1.0);
-   vColor = color;
-}
-"#;
-
-	let frag_code = r#"precision mediump float;
-varying vec3 vColor;
-void main(void) {
-    gl_FragColor = vec4(vColor, 1.);
-}"#;
-	let program = asn_render_webgl::link_program(ctx, vert_code, frag_code).unwrap();
+	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER).unwrap();
 
 	ColorQuad {
 		program,
