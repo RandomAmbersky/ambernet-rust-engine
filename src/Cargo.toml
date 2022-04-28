@@ -7,5 +7,6 @@ members = [
     "asn_math",
     "asn_test_2d",
     "asn_view_2d",
-    "asn_render_color_quad"
+    "asn_render_color_quad",
+    "./renders/test_triangle"
 ]

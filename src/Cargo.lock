@@ -13,6 +13,7 @@ dependencies = [
  "asn_view_2d",
  "console_error_panic_hook",
  "js-sys",
+ "test_triangle",
  "uuid",
  "wasm-bindgen",
 ]
@@ -162,6 +163,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-xid",
+]
+
+[[package]]
+name = "test_triangle"
+version = "0.1.0"
+dependencies = [
+ "asn_math",
+ "asn_render_webgl",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
