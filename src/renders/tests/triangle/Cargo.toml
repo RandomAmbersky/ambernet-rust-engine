@@ -1,18 +1,18 @@
 [package]
-name = "asn_render_color_quad"
+name = "triangle"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "asn_render_color_quad"
+name = "triangle"
 path = "src/lib.rs"
 
 [package.metadata.wasm-pack.profile.release]
 wasm-opt = false
 
 [dependencies]
-asn_render_webgl = { path="../asn_render_webgl" }
-asn_math= { path="../asn_math" }
+asn_render_webgl = { path="../../../asn_render_webgl" }
+asn_math= { path="../../../asn_math" }
 js-sys = "*"
 [dependencies.wasm-bindgen]
 version = "*"

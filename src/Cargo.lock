@@ -7,13 +7,13 @@ name = "amberskynet"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
- "asn_render_color_quad",
  "asn_render_webgl",
  "asn_test_2d",
  "asn_view_2d",
+ "color_quad",
  "console_error_panic_hook",
  "js-sys",
- "test_triangle",
+ "triangle",
  "uuid",
  "wasm-bindgen",
 ]
@@ -28,17 +28,6 @@ dependencies = [
 [[package]]
 name = "asn_math"
 version = "0.1.0"
-
-[[package]]
-name = "asn_render_color_quad"
-version = "0.1.0"
-dependencies = [
- "asn_math",
- "asn_render_webgl",
- "js-sys",
- "wasm-bindgen",
- "web-sys",
-]
 
 [[package]]
 name = "asn_render_webgl"
@@ -82,6 +71,17 @@ name = "cfg-if"
 version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
+
+[[package]]
+name = "color_quad"
+version = "0.1.0"
+dependencies = [
+ "asn_math",
+ "asn_render_webgl",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
+]
 
 [[package]]
 name = "console_error_panic_hook"
@@ -166,7 +166,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "test_triangle"
+name = "triangle"
 version = "0.1.0"
 dependencies = [
  "asn_math",

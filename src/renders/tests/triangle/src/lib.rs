@@ -4,7 +4,7 @@ use web_sys::{WebGlBuffer, WebGlProgram};
 use asn_render_webgl::RenderContext;
 use web_sys::WebGlRenderingContext as GL;
 
-pub struct ColorQuad {
+pub struct Triangle {
 	program: WebGlProgram,
 	vertices_buf: WebGlBuffer,
 	indices_buf: WebGlBuffer,
@@ -13,7 +13,7 @@ pub struct ColorQuad {
 
 pub fn new_item (
 	ctx: &RenderContext
-) -> ColorQuad {
+) -> Triangle {
 
 	let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 
@@ -21,7 +21,7 @@ pub fn new_item (
 
 	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER).unwrap();
 
-	ColorQuad {
+	Triangle {
 		program,
 		vertices_buf,
 		indices_buf,
@@ -29,7 +29,7 @@ pub fn new_item (
 	}
 }
 
-pub fn draw(ctx: &RenderContext, item: &ColorQuad) {
+pub fn draw(ctx: &RenderContext, item: &Triangle) {
 	// Bind vertex buffer object
 	ctx.gl.use_program(Some(&item.program));
 
