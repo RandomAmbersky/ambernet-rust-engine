@@ -8,5 +8,5 @@ members = [
     "asn_test_2d",
     "asn_view_2d",
     "asn_render_color_quad",
-    "./renders/test_triangle"
+    "./renders/tests/test_triangle"
 ]
