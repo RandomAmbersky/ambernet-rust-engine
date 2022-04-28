@@ -6,24 +6,28 @@ use wasm_bindgen::JsValue;
 use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::RenderContext;
 
-use triangle::{new_item as new_color_quad, Triangle};
+use color_quad::{new_item as new_color_quad, ColorQuad};
+use triangle::{new_item as new_triangle, Triangle};
 
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
     logger: LoggerWeb,
     ctx: RenderContext,
-    item: Triangle,
+    triangle: Triangle,
+    color_quad: ColorQuad
 }
 
 impl Default for AmberSkyNetClient {
     fn default() -> Self {
         let ctx = asn_render_webgl::init_context();
-        let item = new_color_quad(&ctx);
+        let triangle = new_triangle(&ctx);
+        let color_quad = new_color_quad(&ctx);
         Self {
             logger: LoggerWeb {},
             ctx,
-            item
+            triangle,
+            color_quad
         }
     }
 }
@@ -63,11 +67,11 @@ impl AmberSkyNetClient {
 
     pub fn render(&self) -> Result<(), JsValue> {
         asn_render_webgl::draw(&self.ctx);
-        triangle::draw(&self.ctx, &self.item);
+        triangle::draw(&self.ctx, &self.triangle);
+        color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())
     }
 }
-
 
 /*
 fn make_test_item (ctx: &RenderContext) -> Test2D {
