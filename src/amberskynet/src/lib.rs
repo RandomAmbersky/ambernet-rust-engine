@@ -1,6 +1,5 @@
 mod utils;
 
-use std::borrow::Borrow;
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
@@ -8,7 +7,9 @@ use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::RenderContext;
 // use asn_test_2d::{new_item as new_test_2d, Test2D};
 // use asn_view_2d::{new_item as new_view_2d, View2D};
-use asn_render_color_quad::{new_item as new_color_quad, ColorQuad};
+// use asn_render_color_quad::{new_item as new_color_quad, ColorQuad};
+
+use test_triangle::{new_item as new_color_quad, ColorQuad};
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
@@ -64,7 +65,7 @@ impl AmberSkyNetClient {
 
     pub fn render(&self) -> Result<(), JsValue> {
         asn_render_webgl::draw(&self.ctx);
-        asn_render_color_quad::draw(&self.ctx, &self.item);
+        test_triangle::draw(&self.ctx, &self.item);
         Ok(())
     }
 }
