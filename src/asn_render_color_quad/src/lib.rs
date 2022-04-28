@@ -56,15 +56,6 @@ pub fn draw(ctx: &RenderContext, item: &ColorQuad) {
 	// enable the color attribute
 	ctx.gl.enable_vertex_attrib_array(color);
 
-	// Clear the canvas
-	ctx.gl.clear_color(0.5, 0.5, 0.5, 1.0);
-
-	// Enable the depth test
-	ctx.gl.enable(GL::DEPTH_TEST);
-
-	// Clear the color buffer bit
-	ctx.gl.clear(GL::COLOR_BUFFER_BIT);
-
 	ctx.gl.draw_elements_with_i32(
 		GL::TRIANGLES,
 		item.indices_len,

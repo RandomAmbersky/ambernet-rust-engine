@@ -7,7 +7,6 @@ pub const VERTICES: [f32; 12] = [
 
 pub const INDICES: [u16; 6] = [3, 2, 1, 3, 1, 0];
 
-
 pub const COLORS: [f32; 12] = [
 0.0, 0.0, 0.0,
 1.0, 0.0, 0.0,
@@ -15,7 +14,8 @@ pub const COLORS: [f32; 12] = [
 0.0, 0.0, 1.0
 ];
 
-pub const VERTEX_SHADER: &str = r#"attribute vec3 coordinates;
+pub const VERTEX_SHADER: &str = r#"
+attribute vec3 coordinates;
 attribute vec3 color;
 varying vec3 vColor;
 void main(void) {
@@ -24,7 +24,8 @@ void main(void) {
 }
 "#;
 
-pub const FRAG_SHADER: &str = r#"precision mediump float;
+pub const FRAG_SHADER: &str = r#"
+precision mediump float;
 varying vec3 vColor;
 void main(void) {
     gl_FragColor = vec4(vColor, 1.);
