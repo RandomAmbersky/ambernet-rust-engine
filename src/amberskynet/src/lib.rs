@@ -6,6 +6,7 @@ use wasm_bindgen::JsValue;
 use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::RenderContext;
 
+use asn_utils_js::{say_hello};
 use color_quad::{new_item as new_color_quad, ColorQuad};
 use triangle::{new_item as new_triangle, Triangle};
 
@@ -47,6 +48,7 @@ impl AmberSkyNetClient {
     }
 
     pub fn upload_map(&self, _data: Vec<u8>) -> Result<(), JsValue> {
+        say_hello();
         let mess = "engine upload_map".to_owned();
         self.logger.log(&mess);
         Ok(())

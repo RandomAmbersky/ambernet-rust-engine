@@ -5,6 +5,7 @@ use web_sys::WebGlRenderingContext as GL;
 use web_sys::{WebGlBuffer, WebGlProgram};
 use asn_render_webgl::RenderContext;
 
+#[allow(dead_code)]
 pub struct View2D {
 	program: WebGlProgram,
 	buffer: WebGlBuffer,

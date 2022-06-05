@@ -1,6 +1,7 @@
 mod utils;
 mod shaders;
 mod buffers;
+mod texture;
 
 use web_sys::{WebGlBuffer, WebGlProgram};
 use utils::GL as GL;

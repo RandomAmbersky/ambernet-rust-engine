@@ -7,3 +7,4 @@ crate/target
 /src/target/
 /.parcel-cache/
 /yarn-error.log
+web_build/
