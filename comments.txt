@@ -1,0 +1,7 @@
+6.06.
+
+переделать сборку на make - в принципе да, только зачем
+
+делать асинхронную загрузку как в https://github.com/kettle11/LD46/blob/master/src/image.rs ,
+подключить вызовы https://github.com/kettle11/LD46/blob/master/src/helpers.js
+^^^ к сожалению без watcher parcel это лениво
