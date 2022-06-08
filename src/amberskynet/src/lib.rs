@@ -48,13 +48,13 @@ impl AmberSkyNetClient {
     }
 
     pub fn upload_map(&self, _data: Vec<u8>) -> Result<(), JsValue> {
-        say_hello();
         let mess = "engine upload_map".to_owned();
         self.logger.log(&mess);
         Ok(())
     }
 
     pub fn update(&self, _time: f32) -> Result<(), JsValue> {
+        say_hello();
         let _mess = format!("engine update: {}", _time);
         // self.logger.log(&_mess);
         Ok(())
