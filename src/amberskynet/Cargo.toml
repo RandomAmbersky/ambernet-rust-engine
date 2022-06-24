@@ -25,7 +25,4 @@ triangle = { path="../renders/tests/triangle" }
 console_error_panic_hook = "*"
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"
-
-[dependencies.wasm-bindgen]
-version = "*"
-
+wasm-bindgen="*"
