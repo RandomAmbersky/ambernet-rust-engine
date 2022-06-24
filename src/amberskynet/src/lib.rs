@@ -6,7 +6,6 @@ use wasm_bindgen::JsValue;
 use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::RenderContext;
 
-use asn_utils_js::{say_hello};
 use color_quad::{new_item as new_color_quad, ColorQuad};
 use triangle::{new_item as new_triangle, Triangle};
 
@@ -54,7 +53,6 @@ impl AmberSkyNetClient {
     }
 
     pub fn update(&self, _time: f32) -> Result<(), JsValue> {
-        say_hello();
         let _mess = format!("engine update: {}", _time);
         // self.logger.log(&_mess);
         Ok(())
