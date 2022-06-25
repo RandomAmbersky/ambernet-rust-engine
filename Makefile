@@ -1,6 +1,8 @@
-MANIFEST_PATH=./src/Cargo.toml
+MANIFEST_PATH=./src/amberskynet/Cargo.toml
 
 build: rust-build web-build
+
+clean: rust-clean
 
 rust-clean:
 	cargo clean --manifest-path $(MANIFEST_PATH)
