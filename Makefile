@@ -13,8 +13,6 @@ rust-clean:
 
 rust-build:
 	wasm-pack build $(AMBERSKYNET_LIB_PATH)
-#	cargo build --manifest-path $(MANIFEST_PATH) --target wasm32-unknown-unknown --release
-#	wasm-bindgen ./src/target/wasm32-unknown-unknown/release/amberskynet.wasm --out-dir web_build --out-name amberskynet --target web --no-typescript
 
 web-build:
 	parcel build web_build/index.html
