@@ -5,6 +5,9 @@ build: rust-build
 
 clean: rust-clean
 
+rust-watch:
+	cargo watch
+
 rust-clean:
 	cargo clean --manifest-path $(MANIFEST_PATH)
 
