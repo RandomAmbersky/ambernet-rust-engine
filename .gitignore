@@ -8,3 +8,5 @@ crate/target
 /.parcel-cache/
 /yarn-error.log
 web_build/
+/www/pkg/
+

@@ -1,4 +1,8 @@
-const CopyPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require("copy-webpack-plugin")
+const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
+
+const path = require('path')
+
 const copyPlugin = new CopyPlugin({
   patterns: [
     "index.html",
@@ -12,7 +16,9 @@ const copyPlugin = new CopyPlugin({
   },
 })
 
-const path = require('path');
+const wasmPackPlugin = new WasmPackPlugin({
+  crateDirectory: path.resolve(__dirname, '../src/amberskynet'),
+})
 
 module.exports = {
   entry: "./bootstrap.js",
@@ -31,6 +37,7 @@ module.exports = {
   // mode: "development",
   mode: 'production',
   plugins: [
-    copyPlugin
+    copyPlugin,
+    wasmPackPlugin
   ],
 };

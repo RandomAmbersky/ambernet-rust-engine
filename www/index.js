@@ -1,6 +1,6 @@
 import {loadBinary} from './utils'
 
-import {AmberSkyNetClient} from 'amberskynet'
+import { AmberSkyNetClient } from '../src/amberskynet/pkg'
 
 const FPS_THROTTLE = 1000.0 / 30.0 // milliseconds / frames
 

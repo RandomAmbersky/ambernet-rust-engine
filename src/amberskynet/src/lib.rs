@@ -9,7 +9,6 @@ use asn_render_webgl::RenderContext;
 use color_quad::{new_item as new_color_quad, ColorQuad};
 use triangle::{new_item as new_triangle, Triangle};
 
-
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
     logger: LoggerWeb,
