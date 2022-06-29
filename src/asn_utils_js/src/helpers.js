@@ -1,6 +1,5 @@
 export function sayHello () {
 	console.log('Hello from helpers')
-	// return Promise.resolve()
 }
 
 export async function loadImage(src) {

@@ -9,6 +9,7 @@ dependencies = [
  "amberskynet_logger_web",
  "asn_render_webgl",
  "asn_test_2d",
+ "asn_utils_js",
  "asn_view_2d",
  "color_quad",
  "console_error_panic_hook",

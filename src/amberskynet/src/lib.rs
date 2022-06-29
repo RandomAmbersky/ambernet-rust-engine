@@ -1,5 +1,7 @@
 mod utils;
 
+use asn_utils_js::say_hello;
+
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
@@ -53,6 +55,7 @@ impl AmberSkyNetClient {
 
     pub fn update(&self, _time: f32) -> Result<(), JsValue> {
         let _mess = format!("engine update: {}", _time);
+        say_hello();
         // self.logger.log(&_mess);
         Ok(())
     }
