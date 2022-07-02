@@ -41,7 +41,7 @@ pub fn draw(ctx: &RenderContext, item: &TexturedQuad) {
 	// Point an attribute to the currently bound VBO
 	ctx.gl.vertex_attrib_pointer_with_i32(coord, 3, GL::FLOAT, false, 0, 0);
 	// Enable the attribute
-	// ctx.gl.enable_vertex_attrib_array(coord);
+	ctx.gl.enable_vertex_attrib_array(coord);
 
 	// get the attribute location
 	// let color = ctx.gl.get_attrib_location(&item.program, "color") as u32;

@@ -72,10 +72,10 @@ impl AmberSkyNetClient {
     }
 
     pub fn render(&self) -> Result<(), JsValue> {
-        // asn_render_webgl::draw(&self.ctx);
+        asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
-        color_quad::draw(&self.ctx, &self.color_quad);
-        // textured_quad::draw(&self.ctx, &self.textured_quad);
+        // color_quad::draw(&self.ctx, &self.color_quad);
+        textured_quad::draw(&self.ctx, &self.textured_quad);
         Ok(())
     }
 }

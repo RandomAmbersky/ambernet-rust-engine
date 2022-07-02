@@ -19,12 +19,12 @@ pub fn resize(ctx: &mut RenderContext, width: i32, height: i32) {
 	ctx.gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
 	ctx.gl.clear_color(0., 0., 0., 1.0); //RGBA
 	ctx.gl.clear_depth(1.0);
-	ctx.gl.viewport(0, 0, width, height);
+	ctx.gl.enable(GL::DEPTH_TEST);
+	// ctx.gl.viewport(0, 0, width, height);
 }
 
 pub	fn draw(ctx: &RenderContext) {
 	ctx.gl.clear_color(0.5, 0.5, 0.5, 1.0);
-	ctx.gl.enable(GL::DEPTH_TEST);
 	ctx.gl.clear(GL::COLOR_BUFFER_BIT | GL::DEPTH_BUFFER_BIT );
 	ctx.gl.viewport(0, 0, ctx.width, ctx.height);
 }
@@ -32,10 +32,10 @@ pub	fn draw(ctx: &RenderContext) {
 pub fn init_context() -> RenderContext {
 		let gl = utils::get_webgl_context().unwrap();
 
-		gl.enable(GL::BLEND);
-		gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
-		gl.clear_color(0.0, 0.0, 0.0, 1.0);
-		gl.clear_depth(1.0);
+		// gl.enable(GL::BLEND);
+		// gl.blend_func(GL::SRC_ALPHA, GL::ONE_MINUS_SRC_ALPHA);
+		// gl.clear_color(0.0, 0.0, 0.0, 1.0);
+		// gl.clear_depth(1.0);
 
 		RenderContext {
 			gl,
