@@ -1,3 +1,5 @@
+pub const TEXTURE: &'static [u8] = include_bytes!("./AsnLogo.png");
+
 pub const VERTICES: [f32; 12] = [
 	-0.5, 0.5, 0.,
 	-0.5, -0.5, 0.,

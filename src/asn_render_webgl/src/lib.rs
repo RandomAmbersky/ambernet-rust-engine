@@ -1,9 +1,9 @@
 mod utils;
 mod shaders;
 mod buffers;
-mod texture;
+mod textures;
 
-use web_sys::{WebGlBuffer, WebGlProgram};
+use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture};
 use utils::GL as GL;
 
 pub struct RenderContext {
@@ -48,4 +48,8 @@ pub fn load_buffer(ctx: &RenderContext, buf: &[f32]) -> WebGlBuffer {
 
 pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
 	buffers::load_index_buffer(&ctx.gl, buf)
+}
+
+pub fn load_texture(ctx: &RenderContext, buf: &[u8]) -> WebGlTexture {
+	textures::upload_texture(&ctx.gl, buf)
 }

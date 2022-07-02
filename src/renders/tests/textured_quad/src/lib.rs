@@ -1,10 +1,11 @@
 mod utils;
 
-use web_sys::{WebGlBuffer, WebGlProgram};
+use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture};
 use asn_render_webgl::{ RenderContext };
 use web_sys::WebGlRenderingContext as GL;
 
 pub struct TexturedQuad {
+	texture: WebGlTexture,
 	program: WebGlProgram,
 	vertices_buf: WebGlBuffer,
 	indices_buf: WebGlBuffer,
@@ -21,10 +22,13 @@ pub fn new_item (
 
 	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER).unwrap();
 
+	let texture = asn_render_webgl::load_texture(ctx, utils::TEXTURE);
+
 	TexturedQuad {
 		program,
 		vertices_buf,
 		indices_buf,
+		texture,
 		indices_len: utils::INDICES.len() as i32
 	}
 }
