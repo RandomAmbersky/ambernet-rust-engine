@@ -1,7 +1,7 @@
 mod utils;
 
 use web_sys::{WebGlBuffer, WebGlProgram};
-use asn_render_webgl::RenderContext;
+use asn_render_webgl::{ RenderContext };
 use web_sys::WebGlRenderingContext as GL;
 
 pub struct TexturedQuad {
@@ -43,12 +43,6 @@ pub fn draw(ctx: &RenderContext, item: &TexturedQuad) {
 	// Enable the attribute
 	ctx.gl.enable_vertex_attrib_array(coord);
 
-	// get the attribute location
-	// let color = ctx.gl.get_attrib_location(&item.program, "color") as u32;
-	// point attribute to the volor buffer object
-	// ctx.gl.vertex_attrib_pointer_with_i32(color, 3, GL::FLOAT, false, 0, 0);
-	// enable the color attribute
-	// ctx.gl.enable_vertex_attrib_array(color);
 
 	ctx.gl.draw_elements_with_i32(
 		GL::TRIANGLES,

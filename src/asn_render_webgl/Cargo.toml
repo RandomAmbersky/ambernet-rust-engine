@@ -12,6 +12,7 @@ wasm-opt = false
 
 [dependencies]
 js-sys = "*"
+image="*"
 [dependencies.wasm-bindgen]
 version = "*"
 [dependencies.web-sys]
