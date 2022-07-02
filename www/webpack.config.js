@@ -18,6 +18,9 @@ const copyPlugin = new CopyPlugin({
 
 const wasmPackPlugin = new WasmPackPlugin({
   crateDirectory: path.resolve(__dirname, '../src/amberskynet'),
+  watchDirectories: [
+    path.resolve(__dirname, "../src/renders/tests/textured_quad")
+  ],
 })
 
 module.exports = {

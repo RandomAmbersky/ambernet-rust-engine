@@ -21,6 +21,7 @@ asn_test_2d = { path="../asn_test_2d" }
 asn_view_2d = { path="../asn_view_2d" }
 asn_utils_js = { path="../asn_utils_js" }
 color_quad = { path="../renders/tests/color_quad" }
+textured_quad = { path="../renders/tests/textured_quad" }
 triangle = { path="../renders/tests/triangle" }
 console_error_panic_hook = "*"
 uuid = { version="*", features = ['wasm-bindgen', 'v4'] }

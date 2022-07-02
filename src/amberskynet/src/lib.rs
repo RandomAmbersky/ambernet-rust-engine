@@ -9,6 +9,7 @@ use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::RenderContext;
 
 use color_quad::{new_item as new_color_quad, ColorQuad};
+use textured_quad::{new_item as new_textured_quad, TexturedQuad};
 use triangle::{new_item as new_triangle, Triangle};
 
 #[wasm_bindgen]
@@ -16,7 +17,8 @@ pub struct AmberSkyNetClient {
     logger: LoggerWeb,
     ctx: RenderContext,
     triangle: Triangle,
-    color_quad: ColorQuad
+    color_quad: ColorQuad,
+    textured_quad: TexturedQuad
 }
 
 impl Default for AmberSkyNetClient {
@@ -24,11 +26,13 @@ impl Default for AmberSkyNetClient {
         let ctx = asn_render_webgl::init_context();
         let triangle = new_triangle(&ctx);
         let color_quad = new_color_quad(&ctx);
+        let textured_quad = new_textured_quad(&ctx);
         Self {
             logger: LoggerWeb {},
             ctx,
             triangle,
-            color_quad
+            color_quad,
+            textured_quad
         }
     }
 }
@@ -55,7 +59,7 @@ impl AmberSkyNetClient {
 
     pub fn update(&self, _time: f32) -> Result<(), JsValue> {
         let _mess = format!("engine update: {}", _time);
-        say_hello();
+        // say_hello();
         // self.logger.log(&_mess);
         Ok(())
     }
@@ -68,9 +72,10 @@ impl AmberSkyNetClient {
     }
 
     pub fn render(&self) -> Result<(), JsValue> {
-        asn_render_webgl::draw(&self.ctx);
-        triangle::draw(&self.ctx, &self.triangle);
+        // asn_render_webgl::draw(&self.ctx);
+        // triangle::draw(&self.ctx, &self.triangle);
         color_quad::draw(&self.ctx, &self.color_quad);
+        // textured_quad::draw(&self.ctx, &self.textured_quad);
         Ok(())
     }
 }

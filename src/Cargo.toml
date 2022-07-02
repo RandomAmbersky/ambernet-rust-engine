@@ -9,5 +9,6 @@ members = [
     "asn_view_2d",
     "asn_utils_js",
     "./renders/tests/color_quad",
+    "./renders/tests/textured_quad",
     "./renders/tests/triangle"
 ]

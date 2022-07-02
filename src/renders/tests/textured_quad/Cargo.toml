@@ -1,0 +1,31 @@
+[package]
+name = "textured_quad"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "textured_quad"
+path = "src/lib.rs"
+
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
+[dependencies]
+asn_render_webgl = { path="../../../asn_render_webgl" }
+asn_math= { path="../../../asn_math" }
+js-sys = "*"
+[dependencies.wasm-bindgen]
+version = "*"
+[dependencies.web-sys]
+version = "*"
+features = [
+    "Window",
+    'Document',
+    'Element',
+    'HtmlCanvasElement',
+    'WebGlRenderingContext',
+    'WebGlProgram',
+    'WebGlShader',
+    'WebGlBuffer',
+    'WebGlUniformLocation'
+]

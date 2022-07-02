@@ -14,6 +14,7 @@ dependencies = [
  "color_quad",
  "console_error_panic_hook",
  "js-sys",
+ "textured_quad",
  "triangle",
  "uuid",
  "wasm-bindgen",
@@ -173,6 +174,17 @@ dependencies = [
  "proc-macro2",
  "quote",
  "unicode-ident",
+]
+
+[[package]]
+name = "textured_quad"
+version = "0.1.0"
+dependencies = [
+ "asn_math",
+ "asn_render_webgl",
+ "js-sys",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]
