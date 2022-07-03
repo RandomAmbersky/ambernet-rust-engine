@@ -1,12 +1,15 @@
 mod utils;
 
-use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture};
+use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_render_webgl::{ RenderContext };
 use web_sys::WebGlRenderingContext as GL;
 
 pub struct TexturedQuad {
 	texture: WebGlTexture,
 	program: WebGlProgram,
+	a_coordinates: u32,
+	a_texture_coord: u32,
+	u_sampler: WebGlUniformLocation,
 	vertices_buf: WebGlBuffer,
 	texture_coords_buf: WebGlBuffer,
 	indices_buf: WebGlBuffer,
@@ -26,8 +29,15 @@ pub fn new_item (
 
 	let texture = asn_render_webgl::load_texture(ctx, utils::TEXTURE);
 
+	let a_coordinates = ctx.gl.get_attrib_location(&program, "aCoordinates") as u32;
+	let a_texture_coord = ctx.gl.get_attrib_location(&program, "aTextureCoord") as u32;
+	let u_sampler =  ctx.gl.get_uniform_location(&program, "uSampler").unwrap();
+
 	TexturedQuad {
 		program,
+		a_coordinates,
+		a_texture_coord,
+		u_sampler,
 		vertices_buf,
 		indices_buf,
 		texture_coords_buf,
@@ -42,19 +52,16 @@ pub fn draw(ctx: &RenderContext, item: &TexturedQuad) {
 	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, Some(&item.indices_buf));
 
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, Some(&item.vertices_buf));
-	let a_coordinates = ctx.gl.get_attrib_location(&item.program, "aCoordinates") as u32;
-	ctx.gl.vertex_attrib_pointer_with_i32(a_coordinates, 3, GL::FLOAT, false, 0, 0);
-	ctx.gl.enable_vertex_attrib_array(a_coordinates);
+	ctx.gl.vertex_attrib_pointer_with_i32(item.a_coordinates, 3, GL::FLOAT, false, 0, 0);
+	ctx.gl.enable_vertex_attrib_array(item.a_coordinates);
 
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, Some(&item.texture_coords_buf));
-	let a_texture_coord = ctx.gl.get_attrib_location(&item.program, "aTextureCoord") as u32;
-	ctx.gl.vertex_attrib_pointer_with_i32(a_texture_coord, 2, GL::FLOAT, false, 0, 0);
-	ctx.gl.enable_vertex_attrib_array(a_texture_coord);
+	ctx.gl.vertex_attrib_pointer_with_i32(item.a_texture_coord, 2, GL::FLOAT, false, 0, 0);
+	ctx.gl.enable_vertex_attrib_array(item.a_texture_coord);
 
-	let u_sampler =  ctx.gl.get_uniform_location(&item.program, "uSampler").unwrap();
 	ctx.gl.active_texture(GL::TEXTURE0);
 	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.texture));
-	ctx.gl.uniform1i(Some(&u_sampler), 0);
+	ctx.gl.uniform1i(Some(&item.u_sampler), 0);
 
 	ctx.gl.draw_elements_with_i32(
 		GL::TRIANGLES,
