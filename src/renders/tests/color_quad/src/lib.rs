@@ -6,6 +6,8 @@ use web_sys::WebGlRenderingContext as GL;
 
 pub struct ColorQuad {
 	program: WebGlProgram,
+	a_coordinates: u32,
+	a_color: u32,
 	vertices_buf: WebGlBuffer,
 	indices_buf: WebGlBuffer,
 	colors_buf: WebGlBuffer,
@@ -23,9 +25,13 @@ pub fn new_item (
 	let colors_buf = asn_render_webgl::load_buffer(ctx, &utils::COLORS);
 
 	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER);
+	let a_coordinates = ctx.gl.get_attrib_location(&program, "aCoordinates") as u32;
+	let a_color = ctx.gl.get_attrib_location(&program, "aColor") as u32;
 
 	ColorQuad {
 		program,
+		a_coordinates,
+		a_color,
 		vertices_buf,
 		indices_buf,
 		colors_buf,
@@ -34,27 +40,19 @@ pub fn new_item (
 }
 
 pub fn draw(ctx: &RenderContext, item: &ColorQuad) {
-	// Bind vertex buffer object
 	ctx.gl.use_program(Some(&item.program));
 
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, Some(&item.vertices_buf));
-	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, Some(&item.indices_buf));
+	ctx.gl.vertex_attrib_pointer_with_i32(item.a_coordinates, 3, GL::FLOAT, false, 0, 0);
+	ctx.gl.enable_vertex_attrib_array(item.a_coordinates);
+	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, None);
 
-	// Get the attribute location
-	let coord = ctx.gl.get_attrib_location(&item.program, "coordinates") as u32;
-	// Point an attribute to the currently bound VBO
-	ctx.gl.vertex_attrib_pointer_with_i32(coord, 3, GL::FLOAT, false, 0, 0);
-	// Enable the attribute
-	ctx.gl.enable_vertex_attrib_array(coord);
-
-	// bind the color buffer
 	ctx.gl.bind_buffer(GL::ARRAY_BUFFER, Some(&item.colors_buf));
-	// get the attribute location
-	let color = ctx.gl.get_attrib_location(&item.program, "color") as u32;
-	// point attribute to the volor buffer object
-	ctx.gl.vertex_attrib_pointer_with_i32(color, 3, GL::FLOAT, false, 0, 0);
-	// enable the color attribute
-	ctx.gl.enable_vertex_attrib_array(color);
+	ctx.gl.vertex_attrib_pointer_with_i32(item.a_color, 3, GL::FLOAT, false, 0, 0);
+	ctx.gl.enable_vertex_attrib_array(item.a_color);
+	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, None);
+
+	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, Some(&item.indices_buf));
 
 	ctx.gl.draw_elements_with_i32(
 		GL::TRIANGLES,
@@ -62,4 +60,7 @@ pub fn draw(ctx: &RenderContext, item: &ColorQuad) {
 		GL::UNSIGNED_SHORT,
 		0,
 	);
+
+	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, None);
+	ctx.gl.use_program(None);
 }
