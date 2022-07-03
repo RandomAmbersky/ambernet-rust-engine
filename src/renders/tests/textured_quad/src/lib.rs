@@ -49,19 +49,21 @@ pub fn new_item (
 pub fn draw(ctx: &RenderContext, item: &TexturedQuad) {
 	ctx.gl.use_program(Some(&item.program));
 
-	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, Some(&item.indices_buf));
-
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, Some(&item.vertices_buf));
 	ctx.gl.vertex_attrib_pointer_with_i32(item.a_coordinates, 3, GL::FLOAT, false, 0, 0);
 	ctx.gl.enable_vertex_attrib_array(item.a_coordinates);
+	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, None);
 
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, Some(&item.texture_coords_buf));
 	ctx.gl.vertex_attrib_pointer_with_i32(item.a_texture_coord, 2, GL::FLOAT, false, 0, 0);
 	ctx.gl.enable_vertex_attrib_array(item.a_texture_coord);
+	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, None);
 
 	ctx.gl.active_texture(GL::TEXTURE0);
 	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.texture));
 	ctx.gl.uniform1i(Some(&item.u_sampler), 0);
+
+	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, Some(&item.indices_buf));
 
 	ctx.gl.draw_elements_with_i32(
 		GL::TRIANGLES,
@@ -69,4 +71,7 @@ pub fn draw(ctx: &RenderContext, item: &TexturedQuad) {
 		GL::UNSIGNED_SHORT,
 		0,
 	);
+
+	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, None);
+	ctx.gl.use_program(None);
 }
