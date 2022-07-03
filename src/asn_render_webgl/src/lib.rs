@@ -38,8 +38,13 @@ pub fn init_context() -> RenderContext {
 		}
 }
 
-pub fn link_program (ctx: &RenderContext, vert: &str, frag: &str) -> Result<WebGlProgram, String> {
-	shaders::link_program(&ctx.gl, vert, frag)
+pub fn link_program (ctx: &RenderContext, vert: &str, frag: &str) -> WebGlProgram {
+	match shaders::link_program(&ctx.gl, vert, frag) {
+		Ok(t) => t,
+		Err(why) => {
+			panic!("link_program error: {}", why)
+		},
+	}
 }
 
 pub fn load_buffer(ctx: &RenderContext, buf: &[f32]) -> WebGlBuffer {

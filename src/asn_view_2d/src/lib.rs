@@ -14,7 +14,7 @@ pub struct View2D {
 }
 
 pub fn new_item (ctx: &RenderContext, w_cells: i32, h_cells: i32) -> View2D {
-	let program = asn_render_webgl::link_program(ctx, shaders::VERT_SHADER, shaders::FRAG_SHADER).unwrap();
+	let program = asn_render_webgl::link_program(ctx, shaders::VERT_SHADER, shaders::FRAG_SHADER);
 	let buffer = asn_render_webgl::load_buffer(ctx, &buffer::SIMPLE_BUF);
 
 	View2D {

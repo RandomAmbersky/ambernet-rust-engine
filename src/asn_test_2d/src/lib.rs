@@ -18,7 +18,7 @@ pub fn new_item (
 	mesh: &[f32]
 ) -> Test2D {
 	let gl = &ctx.gl;
-		let program = link_program(ctx, vert, frag).unwrap();
+		let program = link_program(ctx, vert, frag);
 		let buf = load_buffer(ctx, mesh);
 		Test2D {
 			u_color: gl.get_uniform_location(&program, "uColor").unwrap(),

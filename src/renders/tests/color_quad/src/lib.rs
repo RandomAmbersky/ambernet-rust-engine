@@ -22,7 +22,7 @@ pub fn new_item (
 
 	let colors_buf = asn_render_webgl::load_buffer(ctx, &utils::COLORS);
 
-	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER).unwrap();
+	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER);
 
 	ColorQuad {
 		program,

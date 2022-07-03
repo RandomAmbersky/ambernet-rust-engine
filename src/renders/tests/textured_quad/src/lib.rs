@@ -25,7 +25,7 @@ pub fn new_item (
 
 	let indices_buf = asn_render_webgl::load_index_buffer(ctx, &utils::INDICES);
 
-	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER).unwrap();
+	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER);
 
 	let texture = asn_render_webgl::load_texture(ctx, utils::TEXTURE);
 
