@@ -17,13 +17,13 @@ pub const VERTICES: [f32; 12] = [
 pub const INDICES: [u16; 6] = [3, 2, 1, 3, 1, 0];
 
 pub const VERTEX_SHADER: &str = r#"
-attribute vec3 coordinates;
+attribute vec3 aCoordinates;
 attribute vec2 aTextureCoord;
 
 varying highp vec2 vTextureCoord;
 
 void main(void) {
-   gl_Position = vec4(coordinates, 1.0);
+   gl_Position = vec4(aCoordinates, 1.0);
    vTextureCoord = aTextureCoord;
 }
 "#;

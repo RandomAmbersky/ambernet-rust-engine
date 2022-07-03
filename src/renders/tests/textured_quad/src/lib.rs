@@ -42,14 +42,14 @@ pub fn draw(ctx: &RenderContext, item: &TexturedQuad) {
 	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, Some(&item.indices_buf));
 
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, Some(&item.vertices_buf));
-	let coord = ctx.gl.get_attrib_location(&item.program, "coordinates") as u32;
-	ctx.gl.vertex_attrib_pointer_with_i32(coord, 3, GL::FLOAT, false, 0, 0);
-	ctx.gl.enable_vertex_attrib_array(coord);
+	let a_coordinates = ctx.gl.get_attrib_location(&item.program, "aCoordinates") as u32;
+	ctx.gl.vertex_attrib_pointer_with_i32(a_coordinates, 3, GL::FLOAT, false, 0, 0);
+	ctx.gl.enable_vertex_attrib_array(a_coordinates);
 
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, Some(&item.texture_coords_buf));
-	let texture_coord = ctx.gl.get_attrib_location(&item.program, "aTextureCoord") as u32;
-	ctx.gl.vertex_attrib_pointer_with_i32(texture_coord, 2, GL::FLOAT, false, 0, 0);
-	ctx.gl.enable_vertex_attrib_array(texture_coord);
+	let a_texture_coord = ctx.gl.get_attrib_location(&item.program, "aTextureCoord") as u32;
+	ctx.gl.vertex_attrib_pointer_with_i32(a_texture_coord, 2, GL::FLOAT, false, 0, 0);
+	ctx.gl.enable_vertex_attrib_array(a_texture_coord);
 
 	let u_sampler =  ctx.gl.get_uniform_location(&item.program, "uSampler").unwrap();
 	ctx.gl.active_texture(GL::TEXTURE0);
