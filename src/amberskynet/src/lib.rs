@@ -79,39 +79,3 @@ impl AmberSkyNetClient {
         Ok(())
     }
 }
-
-/*
-fn make_test_item (ctx: &RenderContext) -> Test2D {
-    let frag = "
-        precision mediump float;
-
-        uniform vec4 uColor;
-        uniform float uOpacity;
-
-        void main() {
-            gl_FragColor = vec4(uColor.r, uColor.g, uColor.b, uColor.a * uOpacity);
-        }";
-
-    let vert = r#"
-        attribute vec4 aPosition;
-        uniform mat4 uTransform;
-
-        void main() {
-            gl_Position = uTransform * aPosition;
-        }"#;
-
-    let buf = [
-        0., 1.,
-        0., 0.,
-        1., 1.,
-        1., 1.,
-        0., 0.,
-        1., 0.
-    ];
-
-    new_test_2d(ctx, vert, frag, &buf)
-}
-fn make_view_2d (ctx: &RenderContext) -> View2D {
-    new_view_2d(ctx, 10,10)
-}
-*/
