@@ -1,5 +1,6 @@
 mod shaders;
 mod buffer;
+mod utils;
 
 use web_sys::WebGlRenderingContext as GL;
 use web_sys::{WebGlBuffer, WebGlProgram};
@@ -29,14 +30,14 @@ pub fn draw (ctx: &RenderContext, item: &View2D) {
 	gl.clear(GL::COLOR_BUFFER_BIT);
 	gl.use_program(Some(&item.program));
 
-	let a_position: u32 = ctx.gl.get_attrib_location(&item.program, "a_Position") as u32;
-	ctx.gl.vertex_attrib_pointer_with_i32(a_position, 3, GL::FLOAT, false, 0, 0);
-	ctx.gl.enable_vertex_attrib_array(3);
+	// let a_position: u32 = ctx.gl.get_attrib_location(&item.program, "a_Position") as u32;
+	// ctx.gl.vertex_attrib_pointer_with_i32(a_position, 3, GL::FLOAT, false, 0, 0);
+	// ctx.gl.enable_vertex_attrib_array(3);
 
 	// let min_size = gl.get_parameter(GL::ALIASED_POINT_SIZE_RANGE);
 	// let a_Position: u32 = gl.get_attrib_location(&item.program, "a_Position");
 	// gl.vertex_attrib_pointer_with_float_dimension(a_Position, 3., GL::FLOAT, false, 0, 0);
 
-	gl.bind_buffer(GL::ARRAY_BUFFER, Some(&item.buffer));
-	gl.draw_arrays(GL::TRIANGLES, 0, 6);
+	// gl.bind_buffer(GL::ARRAY_BUFFER, Some(&item.buffer));
+	// gl.draw_arrays(GL::TRIANGLES, 0, 6);
 }

@@ -20,7 +20,8 @@ const wasmPackPlugin = new WasmPackPlugin({
   crateDirectory: path.resolve(__dirname, '../src/amberskynet'),
   watchDirectories: [
     path.resolve(__dirname, "../src/renders/tests/textured_quad"),
-    path.resolve(__dirname, "../src/asn_render_webgl")
+    path.resolve(__dirname, "../src/asn_render_webgl"),
+    path.resolve(__dirname, "../src/asn_view_2d")
   ],
 })
 
