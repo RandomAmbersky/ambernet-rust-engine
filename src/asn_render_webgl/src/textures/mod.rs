@@ -3,14 +3,7 @@ use web_sys::WebGlTexture;
 use crate::GL;
 
 #[allow(dead_code)]
-pub fn upload_texture(gl: &GL, bytes: &[u8]) -> WebGlTexture {
-	let img = match image::load_from_memory(bytes) {
-		Ok(t) => t,
-		Err(why) => {
-			panic!("image::load_from_memory error: {}", why)
-		}
-	};
-	let decode_bytes = img.to_rgba8().into_raw();
+pub fn upload_raw_texture(gl: &GL, bytes: Vec<u8>, width: i32, height: i32) -> WebGlTexture {
 	let texture = match gl.create_texture() {
 		Some(t) => t,
 		None => {
@@ -37,12 +30,12 @@ pub fn upload_texture(gl: &GL, bytes: &[u8]) -> WebGlTexture {
 		GL::TEXTURE_2D,
 		level,
 		internal_format as i32,
-		img.width() as i32,
-		img.height() as i32,
+		width,
+		height,
 		border,
 		src_format,
 		src_type,
-		Some(&decode_bytes),
+		Some(&bytes),
 	) {
 		Ok(t) => t,
 		Err(why) => {
@@ -55,4 +48,16 @@ pub fn upload_texture(gl: &GL, bytes: &[u8]) -> WebGlTexture {
 	};
 
 	texture
+}
+
+#[allow(dead_code)]
+pub fn upload_texture(gl: &GL, bytes: &[u8]) -> WebGlTexture {
+	let img = match image::load_from_memory(bytes) {
+		Ok(t) => t,
+		Err(why) => {
+			panic!("image::load_from_memory error: {}", why)
+		}
+	};
+	let decode_bytes = img.to_rgba8().into_raw();
+	upload_raw_texture(gl, decode_bytes,img.width() as i32, img.height() as i32)
 }
