@@ -66,8 +66,8 @@ impl AmberSkyNetClient {
             Ok(v) => v,
             Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
         };
-        let mess = format!("uploaded map is: {}", s);
-        self.logger.log(&mess);
+        let _mess = format!("uploaded map is: {}", s);
+        // self.logger.log(&mess);
         Ok(())
     }
 
