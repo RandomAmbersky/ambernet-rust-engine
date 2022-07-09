@@ -1,3 +1,4 @@
+// const webpack = require("webpack")
 const CopyPlugin = require("copy-webpack-plugin")
 const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin')
 
@@ -25,6 +26,10 @@ const wasmPackPlugin = new WasmPackPlugin({
   ],
 })
 
+// const providePlugin = new webpack.ProvidePlugin({
+//   Buffer: ['buffer', 'Buffer'],
+// })
+
 module.exports = {
   entry: "./bootstrap.js",
   watchOptions: {
@@ -48,6 +53,7 @@ module.exports = {
   mode: 'production',
   plugins: [
     copyPlugin,
-    wasmPackPlugin
+    wasmPackPlugin,
+    // providePlugin
   ],
 };

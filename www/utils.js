@@ -1,6 +1,6 @@
 async function loadBinary (uri) {
-	const binary = await load(uri)
-	return new Uint8Array(binary.response)
+	const binary = await load(uri, 'arraybuffer')
+	return new Uint8Array(binary)
 }
 
 async function load (uri, responseType = "text") {

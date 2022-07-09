@@ -1,6 +1,6 @@
 mod utils;
 
-use asn_view_2d::{new_item as new_view_2d, View2D};
+use asn_view_2d::{new_item as new_view_2d, View2D, set_tiles};
 
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
@@ -52,14 +52,21 @@ impl AmberSkyNetClient {
         AmberSkyNetClient::default()
     }
 
-    pub fn upload_tiles(&self, _data: Vec<u8>) -> Result<(), JsValue> {
+    pub fn upload_tiles(&self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles".to_owned();
         self.logger.log(&mess);
+        set_tiles(&self.ctx, &self.view_2d, &data);
         Ok(())
     }
 
-    pub fn upload_map(&self, _data: Vec<u8>) -> Result<(), JsValue> {
+    pub fn upload_map(&self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_map".to_owned();
+        self.logger.log(&mess);
+        let s = match std::str::from_utf8(&data) {
+            Ok(v) => v,
+            Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
+        };
+        let mess = format!("uploaded map is: {}", s);
         self.logger.log(&mess);
         Ok(())
     }
@@ -81,7 +88,7 @@ impl AmberSkyNetClient {
     pub fn render(&self) -> Result<(), JsValue> {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
-        textured_quad::draw(&self.ctx, &self.textured_quad);
+        // textured_quad::draw(&self.ctx, &self.textured_quad);
         asn_view_2d::draw(&self.ctx, &self.view_2d);
         color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())

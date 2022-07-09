@@ -10,7 +10,6 @@ const engine = new AmberSkyNetClient()
 async function loadData () {
   const mapArray = await loadBinary('/map/laboratory3.json')
   const tilesArray = await loadBinary('/map/tiles_many.png')
-
   engine.upload_tiles(tilesArray)
   engine.upload_map(mapArray)
 }
@@ -20,7 +19,7 @@ loadData()
     renderLoop()
   })
   .catch(err => {
-    alert(err)
+    console.error(err)
   })
 
 let lastDrawTime = Date.now();// In milliseconds

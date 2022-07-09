@@ -50,6 +50,10 @@ pub fn new_item (
 	}
 }
 
+pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
+	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf);
+}
+
 pub fn draw(ctx: &RenderContext, item: &View2D) {
 	ctx.gl.use_program(Some(&item.program));
 
