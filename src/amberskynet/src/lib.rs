@@ -81,7 +81,7 @@ impl AmberSkyNetClient {
     pub fn render(&self) -> Result<(), JsValue> {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
-        // textured_quad::draw(&self.ctx, &self.textured_quad);
+        textured_quad::draw(&self.ctx, &self.textured_quad);
         asn_view_2d::draw(&self.ctx, &self.view_2d);
         color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())

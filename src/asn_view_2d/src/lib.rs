@@ -76,6 +76,8 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 		0,
 	);
 
-	ctx.gl.bind_buffer( GL::ELEMENT_ARRAY_BUFFER, None);
+	ctx.gl.bind_texture(GL::TEXTURE_2D, None);
+	// ctx.gl.delete_texture(Some(&item.texture));
+	ctx.gl.bind_buffer(GL::ELEMENT_ARRAY_BUFFER, None);
 	ctx.gl.use_program(None);
 }

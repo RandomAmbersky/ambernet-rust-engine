@@ -59,7 +59,12 @@ pub fn load_texture(ctx: &RenderContext, buf: &[u8]) -> WebGlTexture {
 	textures::upload_texture(&ctx.gl, buf)
 }
 
+pub fn load_raw_texture(ctx: &RenderContext, buf: &[u8]) -> WebGlTexture {
+	textures::upload_texture(&ctx.gl, buf)
+}
+
 pub fn load_empty_texture(ctx: &RenderContext) -> WebGlTexture {
+	// look at https://snoozetime.github.io/2019/12/19/webgl-texture.html
 	const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
 	textures::upload_raw_texture(&ctx.gl, ONE_BLUE_PIXEL.to_vec(), 1, 1)
 }
