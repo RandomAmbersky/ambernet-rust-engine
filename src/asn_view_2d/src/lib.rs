@@ -10,7 +10,8 @@ pub struct View2D {
 	texture: WebGlTexture,
 	program: WebGlProgram,
 	a_position: u32,
-	// u_image0: WebGlUniformLocation,
+	u_image0: WebGlUniformLocation,
+	u_image1: WebGlUniformLocation,
 	vertices_buf: WebGlBuffer,
 	// w_cells: i32,
 	// h_cells: i32
@@ -27,13 +28,15 @@ pub fn new_item (
 	let texture = asn_render_webgl::load_empty_texture(ctx);
 
 	let a_position = ctx.gl.get_attrib_location(&program, "aPosition") as u32;
-	// let u_image0 =  ctx.gl.get_uniform_location(&program, "uImage0").unwrap();
+	let u_image0 =  ctx.gl.get_uniform_location(&program, "u_image0").unwrap();
+	let u_image1 =  ctx.gl.get_uniform_location(&program, "u_image1").unwrap();
 
 	View2D {
 		program,
 		a_position,
 		texture,
-		// u_image0,
+		u_image0,
+		u_image1,
 		vertices_buf,
 		// w_cells,
 		// h_cells
@@ -52,9 +55,6 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 	ctx.gl.enable_vertex_attrib_array(item.a_position);
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, None);
 
-	// let u_color_location = ctx.gl.get_uniform_location(&item.program, "uColor").unwrap();
-	// ctx.gl.uniform2f(Some(&u_color_location), 0.0, 1.0);
-
 	let u_tile_size =  ctx.gl.get_uniform_location(&item.program, "uTileSize").unwrap();
 	ctx.gl.uniform2f(Some(&u_tile_size), 16., 16.);
 
@@ -64,16 +64,19 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 	let u_map_size =  ctx.gl.get_uniform_location(&item.program, "uMapSize").unwrap();
 	ctx.gl.uniform2f(Some(&u_map_size), 32., 32.);
 
-	let u_image0 =  ctx.gl.get_uniform_location(&item.program, "u_image0").unwrap();
-	let u_image1 =  ctx.gl.get_uniform_location(&item.program, "u_image1").unwrap();
-
 	ctx.gl.active_texture(GL::TEXTURE0);
 	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.texture));
-	ctx.gl.uniform1i(Some(&u_image0), 0);
+	ctx.gl.uniform1i(Some(&item.u_image0), 0);
 
-	ctx.gl.active_texture(GL::TEXTURE0);
+	ctx.gl.active_texture(GL::TEXTURE1);
 	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.texture));
-	ctx.gl.uniform1i(Some(&u_image1), 0);
+	ctx.gl.uniform1i(Some(&item.u_image1), 0);
 
 	ctx.gl.draw_arrays(GL::TRIANGLES, 0, 6);
+
+	ctx.gl.active_texture(GL::TEXTURE0);
+	ctx.gl.bind_texture(GL::TEXTURE_2D, None);
+
+	ctx.gl.active_texture(GL::TEXTURE1);
+	ctx.gl.bind_texture(GL::TEXTURE_2D, None);
 }

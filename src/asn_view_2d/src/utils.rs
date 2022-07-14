@@ -1,10 +1,10 @@
 pub const VERTICES: [f32; 12] = [
-	-0.5, 0.5,
-	0.5, -0.5,
-	-0.5, -0.5,
-	-0.5, 0.5,
-	0.5, -0.5,
-	0.5, 0.5
+	-1.0, 1.0,
+	1.0, -1.0,
+	-1.0, -1.0,
+	-1.0, 1.0,
+	1.0, -1.0,
+	1.0, 1.0
 ];
 
 pub const VERTEX_SHADER: &str = r#"
@@ -38,16 +38,16 @@ void main() {
     vec2 cellXY = mulSt / uMapSize; // [0..1]//
 
     vec4 cell = texture2D(u_image0, cellXY);
-    // vec2 textureCoord = vec2(cell.x, cell.y);
+    vec2 textureCoord = vec2(cell.x, cell.y);
 
-    // textureCoord = ceil(textureCoord * 255.);
+    textureCoord = ceil(textureCoord * 255.);
 
-    // textureCoord = textureCoord / u_image_scale;
-    // textureCoord.x = textureCoord.x + textureOffset.x;
-    // textureCoord.y = textureCoord.y + 1./u_image_scale.y  - textureOffset.y;
+    textureCoord = textureCoord / u_image_scale;
+    textureCoord.x = textureCoord.x + textureOffset.x;
+    textureCoord.y = textureCoord.y + 1./u_image_scale.y  - textureOffset.y;
 
-	  vec2 textureCoordConst = vec2(9., 9.) / u_image_scale;
-    vec2 textureCoord = textureCoordConst + textureOffset;
+	  // vec2 textureCoordConst = vec2(9., 9.) / u_image_scale;
+    // vec2 textureCoord = textureCoordConst + textureOffset;
 
     vec4 textureColor = texture2D(u_image1, textureCoord);
     gl_FragColor = vec4(textureColor.rgb,1.0);

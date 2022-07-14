@@ -95,6 +95,7 @@ pub fn upload_raw_texture(gl: &GL, bytes: Vec<u8>, width: i32, height: i32) -> W
 		}
 	};
 
+	gl.bind_texture(GL::TEXTURE_2D, None);
 	texture
 }
 
