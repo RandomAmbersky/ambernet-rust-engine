@@ -8,7 +8,7 @@ pub fn load_buffer(gl: &GL, buf: &[f32]) -> WebGlBuffer {
 		.dyn_into::<WebAssembly::Memory>()
 		.unwrap()
 		.buffer();
-	let vertices_location = buf.as_ptr() as u32 / 4;
+	let vertices_location = buf.as_ptr() as u32 / 4; // Float32Array -> 4
 	let vert_array = js_sys::Float32Array::new(&memory_buffer).subarray(
 		vertices_location,
 		vertices_location + buf.len() as u32,
@@ -33,7 +33,7 @@ pub fn load_index_buffer(gl: &GL, indices: &[u16]) -> WebGlBuffer {
 		.dyn_into::<WebAssembly::Memory>()
 		.unwrap()
 		.buffer();
-	let indices_location: u32 = indices.as_ptr() as u32 / 2;
+	let indices_location: u32 = indices.as_ptr() as u32 / 2; // Uint16Array -> 2
 	let indices_array = js_sys::Uint16Array::new(&memory_buffer).subarray(
 		indices_location,
 		indices_location + indices.len() as u32,
