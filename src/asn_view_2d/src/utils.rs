@@ -17,6 +17,7 @@ void main() {
 
 pub const FRAG_SHADER: &str = r#"
 precision mediump float;
+uniform vec2 uImageSize; // tiles image width x height in pixels
 uniform vec2 uTileSize; // one tile width x height in pixels
 uniform vec2 uResolution; // screen width x height in pixels
 uniform vec2 uMapSize; // map width x height in tiles
