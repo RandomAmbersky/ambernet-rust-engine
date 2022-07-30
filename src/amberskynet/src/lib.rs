@@ -1,6 +1,7 @@
 mod utils;
 
 use asn_view_2d::{new_item as new_view_2d, View2D, set_tiles};
+use asn_tiled::load_map;
 
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
@@ -67,6 +68,7 @@ impl AmberSkyNetClient {
             Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
         };
         let _mess = format!("uploaded map is: {}", s);
+        load_map();
         // self.logger.log(&mess);
         Ok(())
     }
