@@ -6,13 +6,8 @@ mod utils;
 
 fn load_layer(iter: &mut Tokenizer) {
 	LoggerWeb::log("Parse layer:");
-	loop {
-		let result = iter.next();
-		if result.is_none() {
-			LoggerWeb::log("End of parsed layer");
-			return;
-		}
-		let token = result.unwrap().unwrap();
+	while let Some(result) = iter.next() {
+		let token = result.unwrap();
 		let str = format!("Token: {:?}", token);
 		LoggerWeb::log(&str);
 	}
@@ -21,17 +16,13 @@ fn load_layer(iter: &mut Tokenizer) {
 fn load_map(iter: &mut Tokenizer) {
 	LoggerWeb::log("Parse map:");
 
-	loop {
-		let result = iter.next();
-		if result.is_none() {
-			LoggerWeb::log("End of parsed map");
-			return;
-		}
-		let token = result.unwrap().unwrap();
+	while let Some(result) = iter.next() {
+		let token = result.unwrap();
 		match token {
 			Token::ElementStart { local, .. } => {
 				if local.as_str() == "layer" {
 					load_layer(iter);
+					return; // only one layer
 				}
 			},
 			_ => {}
@@ -45,14 +36,8 @@ pub fn load_xml_map (_buf: &[u8]) {
 		Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
 	};
 	let mut iter = Tokenizer::from(map_str);
-	loop {
-		let result = iter.next();
-		if result.is_none() {
-			LoggerWeb::log("End of xml file");
-			return;
-		}
-
-		let token: Token = result.unwrap().unwrap();
+	while let Some(result) = iter.next() {
+		let token: Token = result.unwrap();
 		match token {
 			Token::Declaration {version, encoding, .. } => {
 				parse_declaration(&version, &encoding);
