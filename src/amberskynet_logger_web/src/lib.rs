@@ -12,7 +12,7 @@ mod utils {
 pub struct LoggerWeb {}
 
 impl LoggerWeb {
-    pub fn log(&self, mess: &str) {
+    pub fn log(mess: &str) {
         utils::log(mess);
     }
 }

@@ -1,7 +1,7 @@
 mod utils;
 
 use asn_view_2d::{new_item as new_view_2d, View2D, set_tiles};
-use asn_tiled::load_map;
+use asn_tiled::load_xml_map;
 
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
@@ -15,7 +15,7 @@ use triangle::{new_item as new_triangle, Triangle};
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
-    logger: LoggerWeb,
+    // logger: LoggerWeb,
     ctx: RenderContext,
     #[allow(dead_code)]
     triangle: Triangle,
@@ -35,7 +35,7 @@ impl Default for AmberSkyNetClient {
 
         let view_2d = new_view_2d(&ctx, 10, 10);
         Self {
-            logger: LoggerWeb {},
+            // logger: LoggerWeb {},
             ctx,
             triangle,
             color_quad,
@@ -55,20 +55,20 @@ impl AmberSkyNetClient {
 
     pub fn upload_tiles(&self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles".to_owned();
-        self.logger.log(&mess);
+        LoggerWeb::log(&mess);
         set_tiles(&self.ctx, &self.view_2d, &data);
         Ok(())
     }
 
     pub fn upload_map(&self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_map".to_owned();
-        self.logger.log(&mess);
+        LoggerWeb::log(&mess);
         let s = match std::str::from_utf8(&data) {
             Ok(v) => v,
             Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
         };
         let _mess = format!("uploaded map is: {}", s);
-        load_map();
+        load_xml_map(&data);
         // self.logger.log(&mess);
         Ok(())
     }
@@ -82,7 +82,7 @@ impl AmberSkyNetClient {
 
     pub fn resize(&mut self, width: i32, height: i32) -> Result<(), JsValue> {
         let mess = format!("engine resize: {} x {}", width, height);
-        self.logger.log(&mess);
+        LoggerWeb::log(&mess);
         asn_render_webgl::resize(&mut self.ctx, width, height);
         Ok(())
     }
