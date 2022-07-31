@@ -4,7 +4,21 @@ use xmlparser::{Token, Tokenizer};
 
 mod utils;
 
-fn parse_map (iter: &mut Tokenizer) {
+fn load_layer(iter: &mut Tokenizer) {
+	LoggerWeb::log("Parse layer:");
+	loop {
+		let result = iter.next();
+		if result.is_none() {
+			LoggerWeb::log("End of parsed layer");
+			return;
+		}
+		let token = result.unwrap().unwrap();
+		let str = format!("Token: {:?}", token);
+		LoggerWeb::log(&str);
+	}
+}
+
+fn load_map(iter: &mut Tokenizer) {
 	LoggerWeb::log("Parse map:");
 
 	loop {
@@ -13,10 +27,15 @@ fn parse_map (iter: &mut Tokenizer) {
 			LoggerWeb::log("End of parsed map");
 			return;
 		}
-
 		let token = result.unwrap().unwrap();
-		let str = format!("Token: {:?}", token);
-		LoggerWeb::log(&str);
+		match token {
+			Token::ElementStart { local, .. } => {
+				if local.as_str() == "layer" {
+					load_layer(iter);
+				}
+			},
+			_ => {}
+		}
 	}
 }
 
@@ -40,7 +59,7 @@ pub fn load_xml_map (_buf: &[u8]) {
 			},
 			Token::ElementStart { local, .. } => {
 				if local.as_str() == "map" {
-					parse_map(&mut iter);
+					load_map(&mut iter);
 				}
 			},
 			_ => {
