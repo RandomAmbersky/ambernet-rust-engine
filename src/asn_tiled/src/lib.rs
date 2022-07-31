@@ -1,37 +1,52 @@
-use std::any::Any;
 use amberskynet_logger_web::LoggerWeb;
-use crate::utils::{MAP_XML, parse_declaraion};
+use crate::utils::{MAP_XML, parse_declaration};
 use xmlparser::{Token, Tokenizer};
 
 mod utils;
+
+fn parse_map (iter: &mut Tokenizer) {
+	LoggerWeb::log("Parse map:");
+
+	loop {
+		let result = iter.next();
+		if result.is_none() {
+			LoggerWeb::log("End of parsed map");
+			return;
+		}
+
+		let token = result.unwrap().unwrap();
+		let str = format!("Token: {:?}", token);
+		LoggerWeb::log(&str);
+	}
+}
 
 pub fn load_xml_map (_buf: &[u8]) {
 	let map_str = match std::str::from_utf8(MAP_XML) {
 		Ok(v) => v,
 		Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
 	};
-	for raw_token in Tokenizer::from(map_str) {
-		let token: Token = raw_token.unwrap();
+	let mut iter = Tokenizer::from(map_str);
+	loop {
+		let result = iter.next();
+		if result.is_none() {
+			LoggerWeb::log("End of xml file");
+			return;
+		}
+
+		let token: Token = result.unwrap().unwrap();
 		match token {
-			Token::Declaration { version, encoding, .. } => {
-				parse_declaraion(version, encoding);
-			}
-			Token::ProcessingInstruction { .. } => {}
-			Token::Comment { .. } => {}
-			Token::DtdStart { .. } => {}
-			Token::EmptyDtd { .. } => {}
-			Token::EntityDeclaration { .. } => {}
-			Token::DtdEnd { .. } => {}
-			Token::ElementStart { prefix, local, span } => {
-				let str = format!("ElementStart: {} {} {}", prefix.as_str(), local.as_str(), span.as_str());
+			Token::Declaration {version, encoding, .. } => {
+				parse_declaration(&version, &encoding);
+			},
+			Token::ElementStart { local, .. } => {
+				if local.as_str() == "map" {
+					parse_map(&mut iter);
+				}
+			},
+			_ => {
+				let str = format!("Token: {:?}", token);
 				LoggerWeb::log(&str);
 			}
-			Token::Attribute { .. } => {}
-			Token::ElementEnd { .. } => {}
-			Token::Text { .. } => {}
-			Token::Cdata { .. } => {}
-		};
-		// let str = format!("{:?}", token);
-		// LoggerWeb::log(&str);
+		}
 	}
 }

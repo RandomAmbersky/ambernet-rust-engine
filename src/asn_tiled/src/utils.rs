@@ -4,7 +4,8 @@ use amberskynet_logger_web::LoggerWeb;
 pub const MAP_XML: &'static [u8] = include_bytes!("./laboratory3.tmx");
 pub const MAP_JSON: &'static [u8] = include_bytes!("./laboratory3.json");
 
-pub fn parse_declaraion (version: StrSpan, encoding: Option<StrSpan>) {
+pub fn parse_declaration(version: &StrSpan, encoding: &Option<StrSpan>) {
+	LoggerWeb::log("Parse declaration:");
 	let mut str = String::new();
 
 	let version = format!("Version: {:?}", version.as_str());
