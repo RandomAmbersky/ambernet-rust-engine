@@ -4,12 +4,42 @@ use xmlparser::{Token, Tokenizer};
 
 mod utils;
 
+struct LoadedMap {
+	width: Option<i32>,
+	height: Option<i32>
+}
+
+fn load_data(iter: &mut Tokenizer) {
+	for result in iter.by_ref() {
+		let str = format!("data: {:?}", result.unwrap());
+		LoggerWeb::log(&str);
+	}
+}
+
 fn load_layer(iter: &mut Tokenizer) {
 	LoggerWeb::log("Parse layer:");
+	let mut map = LoadedMap {
+		width: None,
+		height: None
+	};
 	while let Some(result) = iter.next() {
 		let token = result.unwrap();
-		let str = format!("Token: {:?}", token);
-		LoggerWeb::log(&str);
+		match token {
+			Token::ElementStart { local, .. } => {
+				if local.as_str() == "data" {
+					load_data(iter);
+				}
+			},
+			Token::Attribute { local, value, .. } => {
+				if local.as_str() == "width" {
+					map.width = Some(value.as_str().parse::<i32>().unwrap());
+				}
+				if local.as_str() == "height" {
+					map.height = Some(value.as_str().parse::<i32>().unwrap());
+				}
+			},
+			_ => {}
+		}
 	}
 }
 
