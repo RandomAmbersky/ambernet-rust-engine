@@ -9,7 +9,30 @@ struct LoadedMap {
 	width: Option<i32>,
 	height: Option<i32>,
 	tile_width: Option<i32>,
-	tile_height: Option<i32>
+	tile_height: Option<i32>,
+	map: Vec<i32>
+}
+
+#[derive(Default, Debug)]
+pub struct Map {
+	width: i32,
+	height: i32,
+	tile_width: i32,
+	tile_height: i32,
+	map: Vec<i32>
+}
+
+impl LoadedMap {
+	fn unwrap (&self) -> Map {
+		let map = Map {
+			width: self.width.unwrap(),
+			height: self.height.unwrap(),
+			tile_width: self.tile_width.unwrap(),
+			tile_height: self.tile_height.unwrap(),
+			map: self.map.to_vec()
+		};
+		map
+	}
 }
 
 pub struct TiledLoader<'a> {
@@ -17,13 +40,14 @@ pub struct TiledLoader<'a> {
 	loaded_map: LoadedMap
 }
 
-pub fn load_xml_map (_buf: &[u8]) {
+pub fn load_xml_map (_buf: &[u8]) -> Map {
 	let map_str = match std::str::from_utf8(MAP_XML) {
 		Ok(v) => v,
 		Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
 	};
 	let mut loader = TiledLoader::new(map_str);
-	loader.parse()
+	let map = loader.parse();
+	map
 }
 
 impl<'a> TiledLoader<'a> {
@@ -34,13 +58,12 @@ impl<'a> TiledLoader<'a> {
 		}
 	}
 
-	// pub fn next_token(&mut self) -> Option<Result<Token, Error>> {
-	// 	self.parser.next()
-	// }
-
 	fn parse_data_text(&mut self, map: &str) {
-		let str = format!("data text: {}", map);
-		LoggerWeb::log(&str);
+		self.loaded_map.map = Vec::new();
+		for x in map.replace('\n', "").split(',') {
+			let cell_num = x.parse::<i32>().unwrap();
+			self.loaded_map.map.push(cell_num);
+		};
 	}
 
 	fn parse_data(&mut self) {
@@ -68,10 +91,10 @@ impl<'a> TiledLoader<'a> {
 				LoggerWeb::log("layer end");
 				return;
 			}
-			else if let Token::Attribute { local, value,  .. } = token {
-				let mess = format!("layer Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
-				LoggerWeb::log(&mess);
-			}
+			// else if let Token::Attribute { local, value,  .. } = token {
+			// 	let mess = format!("layer Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
+			// 	LoggerWeb::log(&mess);
+			// }
 		}
 	}
 
@@ -86,7 +109,6 @@ impl<'a> TiledLoader<'a> {
 			if is_start(&token, "layer") {
 				self.parse_layer();
 			} else if let Token::Attribute { local, value,  .. } = token {
-				let mess = format!("map Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
 				if local.as_str() == "width" {
 					self.loaded_map.width = Some(value.as_str().parse::<i32>().unwrap());
 				}
@@ -99,12 +121,13 @@ impl<'a> TiledLoader<'a> {
 				else if local.as_str() == "tileheight" {
 					self.loaded_map.tile_height = Some(value.as_str().parse::<i32>().unwrap());
 				}
-				LoggerWeb::log(&mess);
+				// let mess = format!("map Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
+				// LoggerWeb::log(&mess);
 			}
 		}
 	}
 
-	pub fn parse(&mut self) {
+	pub fn parse(&mut self) -> Map {
 		while let Some(result) = self.parser.next() {
 			let token = result.unwrap();
 			if is_start(&token, "map") {
@@ -112,7 +135,8 @@ impl<'a> TiledLoader<'a> {
 			}
 		}
 		LoggerWeb::log("Parse ok");
-		let str = format!("Map is: {:?}", self.loaded_map);
-		LoggerWeb::log(&str);
+		// let str = format!("Map is: {:?}", self.loaded_map);
+		// LoggerWeb::log(&str);
+		self.loaded_map.unwrap()
 	}
 }

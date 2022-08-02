@@ -63,13 +63,16 @@ impl AmberSkyNetClient {
     pub fn upload_map(&self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_map".to_owned();
         LoggerWeb::log(&mess);
-        let s = match std::str::from_utf8(&data) {
-            Ok(v) => v,
-            Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
-        };
-        let _mess = format!("uploaded map is: {}", s);
-        load_xml_map(&data);
-        // self.logger.log(&mess);
+        // let s = match std::str::from_utf8(&data) {
+        //     Ok(v) => v,
+        //     Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
+        // };
+        // let mess = format!("uploaded map is: {}", s);
+        // LoggerWeb::log(&mess);
+        let map = load_xml_map(&data);
+
+        let mess = format!("parsed map is: {:?}", map);
+        LoggerWeb::log(&mess);
         Ok(())
     }
 
