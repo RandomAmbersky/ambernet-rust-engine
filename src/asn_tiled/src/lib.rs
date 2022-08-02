@@ -1,5 +1,5 @@
 use amberskynet_logger_web::LoggerWeb;
-use crate::utils::{MAP_XML, is_start, is_end};
+use crate::utils::{is_start, is_end};
 use xmlparser::{Token, Tokenizer};
 
 mod utils;
@@ -40,8 +40,8 @@ pub struct TiledLoader<'a> {
 	loaded_map: LoadedMap
 }
 
-pub fn load_xml_map (_buf: &[u8]) -> Map {
-	let map_str = match std::str::from_utf8(MAP_XML) {
+pub fn load_xml_map (buf: &[u8]) -> Map {
+	let map_str = match std::str::from_utf8(buf) {
 		Ok(v) => v,
 		Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
 	};
