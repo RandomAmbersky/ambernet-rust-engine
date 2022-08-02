@@ -1,63 +1,21 @@
 use amberskynet_logger_web::LoggerWeb;
-use crate::utils::{MAP_XML, parse_declaration};
+use crate::utils::{MAP_XML, is_start};
 use xmlparser::{Token, Tokenizer};
+use xmlparser::ElementEnd::Close;
 
 mod utils;
 
+#[derive(Default)]
 struct LoadedMap {
 	width: Option<i32>,
-	height: Option<i32>
+	height: Option<i32>,
+	tile_width: Option<i32>,
+	tile_height: Option<i32>
 }
 
-fn load_data(iter: &mut Tokenizer) {
-	for result in iter.by_ref() {
-		let str = format!("data: {:?}", result.unwrap());
-		LoggerWeb::log(&str);
-	}
-}
-
-fn load_layer(iter: &mut Tokenizer) {
-	LoggerWeb::log("Parse layer:");
-	let mut map = LoadedMap {
-		width: None,
-		height: None
-	};
-	while let Some(result) = iter.next() {
-		let token = result.unwrap();
-		match token {
-			Token::ElementStart { local, .. } => {
-				if local.as_str() == "data" {
-					load_data(iter);
-				}
-			},
-			Token::Attribute { local, value, .. } => {
-				if local.as_str() == "width" {
-					map.width = Some(value.as_str().parse::<i32>().unwrap());
-				}
-				if local.as_str() == "height" {
-					map.height = Some(value.as_str().parse::<i32>().unwrap());
-				}
-			},
-			_ => {}
-		}
-	}
-}
-
-fn load_map(iter: &mut Tokenizer) {
-	LoggerWeb::log("Parse map:");
-
-	while let Some(result) = iter.next() {
-		let token = result.unwrap();
-		match token {
-			Token::ElementStart { local, .. } => {
-				if local.as_str() == "layer" {
-					load_layer(iter);
-					return; // only one layer
-				}
-			},
-			_ => {}
-		}
-	}
+pub struct TiledLoader<'a> {
+	parser: Tokenizer<'a>,
+	loaded_map: LoadedMap
 }
 
 pub fn load_xml_map (_buf: &[u8]) {
@@ -65,21 +23,107 @@ pub fn load_xml_map (_buf: &[u8]) {
 		Ok(v) => v,
 		Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
 	};
-	let mut iter = Tokenizer::from(map_str);
-	while let Some(result) = iter.next() {
-		let token: Token = result.unwrap();
-		match token {
-			Token::Declaration {version, encoding, .. } => {
-				parse_declaration(&version, &encoding);
-			},
-			Token::ElementStart { local, .. } => {
-				if local.as_str() == "map" {
-					load_map(&mut iter);
+	let mut loader = TiledLoader::new(map_str);
+	loader.parse()
+}
+
+impl<'a> TiledLoader<'a> {
+	pub fn new (text: &str) -> TiledLoader {
+		TiledLoader {
+			parser: Tokenizer::from(text),
+			loaded_map: LoadedMap::default()
+		}
+	}
+
+	// pub fn next_token(&mut self) -> Option<Result<Token, Error>> {
+	// 	self.parser.next()
+	// }
+
+	fn parse_data_text(&mut self, map: &'a str) {
+		let str = format!("data text: {}", map);
+		LoggerWeb::log(&str);
+	}
+
+	fn parse_data(&mut self) {
+		LoggerWeb::log("data start");
+		while let Some(result) = self.parser.next() {
+			let token = result.unwrap();
+			match token {
+				Token::ElementEnd { end: Close(_, b), .. } => {
+					if b.as_str() == "data" {
+						LoggerWeb::log("data end");
+						return;
+					}
+				},
+				Token::Text { text } => {
+					self.parse_data_text( text.as_str() );
+				},
+				_ => {}
+			}
+		}
+	}
+
+	fn parse_layer(&mut self) {
+		LoggerWeb::log("layer start");
+		while let Some(result) = self.parser.next() {
+			let token = result.unwrap();
+			match token {
+				Token::ElementStart { local, .. } => {
+					if local.as_str() == "data" {
+						self.parse_data();
+					}
+				},
+				Token::Attribute { local, value,  .. } => {
+					let mess = format!("layer Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
+					LoggerWeb::log(&mess);
+				},
+				Token::ElementEnd { end: Close(_, b), .. } => {
+					if b.as_str() == "layer" {
+						LoggerWeb::log("layer end");
+						return;
+					}
+				},
+				_ => {}
+			}
+		}
+	}
+
+	fn parse_map(&mut self) {
+		LoggerWeb::log("map start");
+		while let Some(result) = self.parser.next() {
+			let token = result.unwrap();
+			if is_start(&token, "layer") {
+				self.parse_layer();
+			}
+			else {
+				match token {
+					Token::Attribute { local, value,  .. } => {
+						let mess = format!("map Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
+						if local.as_str() == "width" {
+							self.loaded_map.width = Some(value.as_str().parse::<i32>().unwrap());
+						}
+						else if local.as_str() == "height" {
+							self.loaded_map.height = Some(value.as_str().parse::<i32>().unwrap());
+						}
+						LoggerWeb::log(&mess);
+					},
+					Token::ElementEnd { end: Close(_, b), .. } => {
+						if b.as_str() == "map" {
+							LoggerWeb::log("map end");
+							return;
+						}
+					},
+					_ => {}
 				}
-			},
-			_ => {
-				let str = format!("Token: {:?}", token);
-				LoggerWeb::log(&str);
+			}
+		}
+	}
+
+	pub fn parse(&mut self) {
+		while let Some(result) = self.parser.next() {
+			let token = result.unwrap();
+			if is_start(&token, "map") {
+				self.parse_map();
 			}
 		}
 	}

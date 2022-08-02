@@ -1,20 +1,12 @@
-use xmlparser::StrSpan;
+use xmlparser::{StrSpan, Token};
 use amberskynet_logger_web::LoggerWeb;
 
 pub const MAP_XML: &'static [u8] = include_bytes!("./laboratory3.tmx");
 pub const MAP_JSON: &'static [u8] = include_bytes!("./laboratory3.json");
 
-pub fn parse_declaration(version: &StrSpan, encoding: &Option<StrSpan>) {
-	LoggerWeb::log("Parse declaration:");
-	let mut str = String::new();
-
-	let version = format!("Version: {:?}", version.as_str());
-	str.push_str(&version);
-
-	if encoding.is_some() {
-		let encoding = format!(", encoding: {:?}", encoding.unwrap().as_str());
-		str.push_str(&encoding);
+pub fn is_start(token: &Token, tag: &str) -> bool {
+	if let Token::ElementStart { local, .. } = token {
+		return local.as_str() == tag
 	}
-
-	LoggerWeb::log(&str);
+	false
 }
