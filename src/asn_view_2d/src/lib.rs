@@ -64,12 +64,12 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, _width: u32, _height: u3
 
 	for cell in new_map.cells {
 		map_texture.push(cell);
-		map_texture.push(255);
+		map_texture.push(cell);
 		map_texture.push(255);
 		map_texture.push(255);
 	}
 
-	asn_render_webgl::upload_raw_texture(&ctx, new_map.width, new_map.height, &map_texture);
+	asn_render_webgl::update_raw_texture(ctx, Some(&item.map_texture), new_map.width, new_map.height, &map_texture);
 
 	move | new_map | item.map = new_map ;
 
@@ -99,7 +99,7 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 	ctx.gl.uniform2f(Some(&u_resolution), ctx.width as f32, ctx.height as f32);
 
 	let u_map_size =  ctx.gl.get_uniform_location(&item.program, "uMapSize").unwrap();
-	ctx.gl.uniform2f(Some(&u_map_size), 32., 32.);
+	ctx.gl.uniform2f(Some(&u_map_size), item.map.width as f32,  item.map.height as f32);
 
 	ctx.gl.active_texture(GL::TEXTURE0);
 	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.texture));

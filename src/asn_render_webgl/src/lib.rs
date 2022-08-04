@@ -66,7 +66,7 @@ pub fn update_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, buf: 
 }
 
 pub fn update_raw_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, width: i32, height: i32, buf: &[u8]) {
-	textures::update_texture(&ctx.gl, texture, buf)
+	textures::update_raw_texture(&ctx.gl, texture, buf, width, height);
 }
 
 pub fn upload_raw_texture(ctx: &RenderContext, width: i32, height: i32, buf: &[u8]) -> WebGlTexture {
