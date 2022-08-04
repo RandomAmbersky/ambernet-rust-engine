@@ -1,18 +1,22 @@
 extern crate core;
 
 mod utils;
+mod map;
 
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_render_webgl::{ RenderContext };
 use web_sys::WebGlRenderingContext as GL;
+use map::Map;
 
 pub struct View2D {
 	texture: WebGlTexture,
+	map_texture: WebGlTexture,
 	program: WebGlProgram,
 	a_position: u32,
 	u_image0: WebGlUniformLocation,
 	u_image1: WebGlUniformLocation,
 	vertices_buf: WebGlBuffer,
+	map: Map
 	// w_cells: i32,
 	// h_cells: i32
 }
@@ -26,6 +30,7 @@ pub fn new_item (
 	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER);
 
 	let texture = asn_render_webgl::load_empty_texture(ctx);
+	let map_texture = asn_render_webgl::load_empty_texture(ctx);
 
 	let a_position = ctx.gl.get_attrib_location(&program, "aPosition") as u32;
 	let u_image0 =  ctx.gl.get_uniform_location(&program, "u_image0").unwrap();
@@ -35,16 +40,48 @@ pub fn new_item (
 		program,
 		a_position,
 		texture,
+		map_texture,
 		u_image0,
 		u_image1,
 		vertices_buf,
-		// w_cells,
-		// h_cells
+		map: Map::default()
 	}
 }
 
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
 	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf);
+}
+
+pub fn set_map (ctx: &RenderContext, item: &mut View2D, _width: u32, _height: u32, _buf: &[u8]) {
+	let new_map = Map::default();
+	let cells_num: usize = (new_map.width * new_map.height) as usize;
+
+	if cells_num != new_map.cells.len() {
+		panic!("Errors!")
+	}
+
+	let mut map_texture: Vec<u8> = Vec::new();
+
+	for cell in new_map.cells {
+		map_texture.push(cell);
+		map_texture.push(255);
+		map_texture.push(255);
+		map_texture.push(255);
+	}
+
+	// asn_render_webgl::load_raw_texture(ctx, Some(&item.map_texture), &map_texture);
+
+	move | new_map | item.map = new_map ;
+
+	// const cell = layer.data[i] - 1
+	// const g = Math.floor(cell / tile.width)
+	// const r = cell - g * tile.width
+	// const b = 255
+	// const a = 255
+	// layerArray.push(r)
+	// layerArray.push(g)
+	// layerArray.push(b)
+	// layerArray.push(a)
 }
 
 pub fn draw(ctx: &RenderContext, item: &View2D) {
@@ -69,7 +106,7 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 	ctx.gl.uniform1i(Some(&item.u_image0), 0);
 
 	ctx.gl.active_texture(GL::TEXTURE1);
-	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.texture));
+	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.map_texture));
 	ctx.gl.uniform1i(Some(&item.u_image1), 0);
 
 	ctx.gl.draw_arrays(GL::TRIANGLES, 0, 6);
