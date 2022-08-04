@@ -86,6 +86,7 @@ dependencies = [
 name = "asn_view_2d"
 version = "0.1.0"
 dependencies = [
+ "amberskynet_logger_web",
  "asn_math",
  "asn_render_webgl",
  "js-sys",

@@ -10,28 +10,27 @@ struct LoadedMap {
 	height: Option<i32>,
 	tile_width: Option<i32>,
 	tile_height: Option<i32>,
-	map: Vec<i32>
+	map: Vec<u8>
 }
 
 #[derive(Default, Debug)]
 pub struct Map {
-	width: i32,
-	height: i32,
-	tile_width: i32,
-	tile_height: i32,
-	map: Vec<i32>
+	pub width: i32,
+	pub height: i32,
+	pub tile_width: i32,
+	pub tile_height: i32,
+	pub map: Vec<u8>
 }
 
 impl LoadedMap {
 	fn unwrap (&self) -> Map {
-		let map = Map {
+		Map {
 			width: self.width.unwrap(),
 			height: self.height.unwrap(),
 			tile_width: self.tile_width.unwrap(),
 			tile_height: self.tile_height.unwrap(),
 			map: self.map.to_vec()
-		};
-		map
+		}
 	}
 }
 
@@ -61,7 +60,7 @@ impl<'a> TiledLoader<'a> {
 	fn parse_data_text(&mut self, map: &str) {
 		self.loaded_map.map = Vec::new();
 		for x in map.replace('\n', "").split(',') {
-			let cell_num = x.parse::<i32>().unwrap();
+			let cell_num = x.parse::<u8>().unwrap();
 			self.loaded_map.map.push(cell_num);
 		};
 	}

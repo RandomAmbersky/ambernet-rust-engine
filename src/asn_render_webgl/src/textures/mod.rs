@@ -17,7 +17,6 @@ pub fn update_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8]) {
 #[allow(dead_code)]
 pub fn update_raw_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8], width: i32, height: i32) {
 	gl.bind_texture(GL::TEXTURE_2D, texture);
-	// gl.pixel_storei(GL::UNPACK_FLIP_Y_WEBGL, 1);
 
 	gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_S, GL::CLAMP_TO_EDGE as i32);
 	gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_T, GL::CLAMP_TO_EDGE as i32);

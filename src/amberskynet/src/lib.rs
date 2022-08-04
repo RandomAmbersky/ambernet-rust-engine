@@ -67,8 +67,8 @@ impl AmberSkyNetClient {
         let mess = format!("parsed map is: {:?}", map);
         LoggerWeb::log(&mess);
 
-        let buf:[u8;1] = [0];
-        asn_view_2d::set_map(&self.ctx, &mut self.view_2d, 10, 10, &buf);
+        // let buf: &[u8] = map.map;
+        asn_view_2d::set_map(&self.ctx, &mut self.view_2d, map.width as u32, map.height as u32, &map.map);
         Ok(())
     }
 

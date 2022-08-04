@@ -25,3 +25,9 @@ impl Default for Map {
         }
     }
 }
+
+impl Map {
+    pub fn get_ingex (&self, width: i32, height: i32) -> i32 {
+        self.height * height + width 
+    }
+}

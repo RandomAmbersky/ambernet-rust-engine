@@ -3,6 +3,7 @@ extern crate core;
 mod utils;
 mod map;
 
+use amberskynet_logger_web::LoggerWeb;
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_render_webgl::{ RenderContext };
 use web_sys::WebGlRenderingContext as GL;
@@ -52,26 +53,31 @@ pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
 	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf);
 }
 
-pub fn set_map (ctx: &RenderContext, item: &mut View2D, _width: u32, _height: u32, _buf: &[u8]) {
-	let new_map = Map::default();
-	let cells_num: usize = (new_map.width * new_map.height) as usize;
-
-	if cells_num != new_map.cells.len() {
-		panic!("Errors!")
-	}
+pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
 
 	let mut map_texture: Vec<u8> = Vec::new();
 
-	for cell in new_map.cells {
-		map_texture.push(cell);
-		map_texture.push(cell);
+	for cell in buf {
+		let index = *cell - 1;
+		let g = index / 16;
+		let r = index - g * 16;
+
+		let index_check = g * 16 + r;
+
+		let mess = format!("cell {:?} [{:?}, {:?}] {:?}", cell, g, r, index_check);
+		LoggerWeb::log(&mess);
+		map_texture.push(r);
+		map_texture.push(g);
 		map_texture.push(255);
 		map_texture.push(255);
 	}
 
-	asn_render_webgl::update_raw_texture(ctx, Some(&item.map_texture), new_map.width, new_map.height, &map_texture);
+	asn_render_webgl::update_raw_texture(ctx, Some(&item.map_texture), width as i32, height as i32, &map_texture);
 
-	move | new_map | item.map = new_map ;
+	item.map.width = width as i32;
+	item.map.height = height as i32;
+
+	// move | new_map | item.map = new_map ;
 
 	// const cell = layer.data[i] - 1
 	// const g = Math.floor(cell / tile.width)
@@ -102,12 +108,12 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 	ctx.gl.uniform2f(Some(&u_map_size), item.map.width as f32,  item.map.height as f32);
 
 	ctx.gl.active_texture(GL::TEXTURE0);
-	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.texture));
+	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.map_texture));
 	ctx.gl.uniform1i(Some(&item.u_image0), 0);
 
 	ctx.gl.active_texture(GL::TEXTURE1);
-	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.map_texture));
-	ctx.gl.uniform1i(Some(&item.u_image1), 0);
+	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.texture));
+	ctx.gl.uniform1i(Some(&item.u_image1), 1);
 
 	ctx.gl.draw_arrays(GL::TRIANGLES, 0, 6);
 

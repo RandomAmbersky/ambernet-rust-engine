@@ -33,7 +33,7 @@ void main() {
     vec2 mulSt = st * uMapSize; // [0..map_size-1] float
     vec2 floorMulSt = floor(mulSt); // [0..map_size-1] int
 
-		vec2 textureOffset = mulSt - floorMulSt; // [0..1]
+	vec2 textureOffset = mulSt - floorMulSt; // [0..1]
     textureOffset = textureOffset / u_image_scale - 0.00001;
 
     vec2 cellXY = mulSt / uMapSize; // [0..1]//
@@ -47,8 +47,8 @@ void main() {
     textureCoord.x = textureCoord.x + textureOffset.x;
     textureCoord.y = textureCoord.y + 1./u_image_scale.y  - textureOffset.y;
 
-	  // vec2 textureCoordConst = vec2(9., 9.) / u_image_scale;
-    // vec2 textureCoord = textureCoordConst + textureOffset;
+	// vec2 textureCoordConst = vec2(9., 9.) / u_image_scale;
+    // textureCoord = textureCoordConst + textureOffset;
 
     vec4 textureColor = texture2D(u_image1, textureCoord);
     gl_FragColor = vec4(textureColor.rgb,1.0);
