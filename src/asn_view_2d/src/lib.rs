@@ -69,7 +69,7 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, _width: u32, _height: u3
 		map_texture.push(255);
 	}
 
-	// asn_render_webgl::load_raw_texture(ctx, Some(&item.map_texture), &map_texture);
+	asn_render_webgl::upload_raw_texture(&ctx, new_map.width, new_map.height, &map_texture);
 
 	move | new_map | item.map = new_map ;
 

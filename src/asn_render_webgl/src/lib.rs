@@ -62,14 +62,18 @@ pub fn load_texture(ctx: &RenderContext, buf: &[u8]) -> WebGlTexture {
 }
 
 pub fn update_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, buf: &[u8]) {
-	textures::update_texture(&ctx.gl, texture, &buf)
+	textures::update_texture(&ctx.gl, texture, buf)
 }
 
-pub fn load_raw_texture(ctx: &RenderContext, buf: &[u8]) -> WebGlTexture {
-	textures::upload_texture(&ctx.gl, buf)
+pub fn update_raw_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, width: i32, height: i32, buf: &[u8]) {
+	textures::update_texture(&ctx.gl, texture, buf)
+}
+
+pub fn upload_raw_texture(ctx: &RenderContext, width: i32, height: i32, buf: &[u8]) -> WebGlTexture {
+	textures::upload_raw_texture(&ctx.gl, &buf.to_vec(), width, height)
 }
 
 pub fn load_empty_texture(ctx: &RenderContext) -> WebGlTexture {
 	// look at https://snoozetime.github.io/2019/12/19/webgl-texture.html
-	textures::upload_raw_texture(&ctx.gl, ONE_BLUE_PIXEL.to_vec(), 1, 1)
+	textures::upload_raw_texture(&ctx.gl, &ONE_BLUE_PIXEL.to_vec(), 1, 1)
 }

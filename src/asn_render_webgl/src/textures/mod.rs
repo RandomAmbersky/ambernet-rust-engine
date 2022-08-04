@@ -11,7 +11,11 @@ pub fn update_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8]) {
 		}
 	};
 	let decode_bytes = img.to_rgba8().into_raw();
+	update_raw_texture(gl, texture, &decode_bytes, img.width() as i32, img.height() as i32);
+}
 
+#[allow(dead_code)]
+pub fn update_raw_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8], width: i32, height: i32) {
 	gl.bind_texture(GL::TEXTURE_2D, texture);
 	gl.pixel_storei(GL::UNPACK_FLIP_Y_WEBGL, 1);
 
@@ -32,12 +36,12 @@ pub fn update_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8]) {
 		GL::TEXTURE_2D,
 		level,
 		internal_format as i32,
-		img.width() as i32,
-		img.height() as i32,
+		width,
+		height,
 		border,
 		src_format,
 		src_type,
-		Some(&decode_bytes),
+		Some(buf),
 	) {
 		Ok(t) => t,
 		Err(why) => {
@@ -48,10 +52,11 @@ pub fn update_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8]) {
 			panic!("gl.tex_image_2d error: {}", &err_str);
 		}
 	};
+	gl.bind_texture(GL::TEXTURE_2D, None);
 }
 
 #[allow(dead_code)]
-pub fn upload_raw_texture(gl: &GL, bytes: Vec<u8>, width: i32, height: i32) -> WebGlTexture {
+pub fn upload_raw_texture(gl: &GL, bytes: &Vec<u8>, width: i32, height: i32) -> WebGlTexture {
 	let texture = match gl.create_texture() {
 		Some(t) => t,
 		None => {
@@ -108,5 +113,5 @@ pub fn upload_texture(gl: &GL, bytes: &[u8]) -> WebGlTexture {
 		}
 	};
 	let decode_bytes = img.to_rgba8().into_raw();
-	upload_raw_texture(gl, decode_bytes,img.width() as i32, img.height() as i32)
+	upload_raw_texture(gl, &decode_bytes,img.width() as i32, img.height() as i32)
 }
