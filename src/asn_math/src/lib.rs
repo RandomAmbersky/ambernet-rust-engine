@@ -1,3 +1,9 @@
+pub const IDENTITY_MATRIX: [f32;16] = [
+1., 0., 0., 0.,
+0., 1., 0., 0.,
+0., 0., 1., 0.,
+0., 0., 0., 1.
+];
 
 pub fn translation_matrix(tx: f32, ty: f32, tz: f32) -> [f32; 16] {
 	let mut return_var = [0.; 16];

@@ -14,12 +14,12 @@ pub struct View2D {
 	map_texture: WebGlTexture,
 	program: WebGlProgram,
 	a_position: u32,
+	u_transform: WebGlUniformLocation,
+	transform_matrix: [f32;16],
 	u_image0: WebGlUniformLocation,
 	u_image1: WebGlUniformLocation,
 	vertices_buf: WebGlBuffer,
 	map: Map
-	// w_cells: i32,
-	// h_cells: i32
 }
 
 pub fn new_item (
@@ -34,6 +34,10 @@ pub fn new_item (
 	let map_texture = asn_render_webgl::load_empty_texture(ctx);
 
 	let a_position = ctx.gl.get_attrib_location(&program, "aPosition") as u32;
+
+	let u_transform =  ctx.gl.get_uniform_location(&program, "uTransform").unwrap();
+	let transform_matrix = asn_math::IDENTITY_MATRIX;
+
 	let u_image0 =  ctx.gl.get_uniform_location(&program, "u_image0").unwrap();
 	let u_image1 =  ctx.gl.get_uniform_location(&program, "u_image1").unwrap();
 
@@ -42,6 +46,8 @@ pub fn new_item (
 		a_position,
 		texture,
 		map_texture,
+		u_transform,
+		transform_matrix,
 		u_image0,
 		u_image1,
 		vertices_buf,
@@ -57,8 +63,8 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 
 	let mut map_texture: Vec<u8> = Vec::new();
 
-	for cell in buf {
-		let index = *cell - 1;
+	for cell in buf.into_iter() {
+		let index = cell - 1;
 		let g = index / 16;
 		let r = index - g * 16;
 
@@ -92,6 +98,8 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 
 pub fn draw(ctx: &RenderContext, item: &View2D) {
 	ctx.gl.use_program(Some(&item.program));
+
+	ctx.gl.uniform_matrix4fv_with_f32_array(Some(&item.u_transform), false, &item.transform_matrix);
 
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, Some(&item.vertices_buf));
 	ctx.gl.vertex_attrib_pointer_with_i32(item.a_position, 2, GL::FLOAT, false, 0, 0);
