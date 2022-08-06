@@ -36,7 +36,7 @@ pub fn new_item (
 	let a_position = ctx.gl.get_attrib_location(&program, "aPosition") as u32;
 
 	let u_transform =  ctx.gl.get_uniform_location(&program, "uTransform").unwrap();
-	let transform_matrix = asn_math::IDENTITY_MATRIX;
+	let transform_matrix = asn_math::invert_matrix(asn_math::IDENTITY_MATRIX);
 
 	let u_image0 =  ctx.gl.get_uniform_location(&program, "u_image0").unwrap();
 	let u_image1 =  ctx.gl.get_uniform_location(&program, "u_image1").unwrap();
