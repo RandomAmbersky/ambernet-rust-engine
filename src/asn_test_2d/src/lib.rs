@@ -16,17 +16,18 @@ pub fn new_item (
 	vert: &str,
 	frag: &str,
 	mesh: &[f32]
-) -> Test2D {
+) -> Result<Test2D, String> {
 	let gl = &ctx.gl;
-		let program = link_program(ctx, vert, frag);
+		let program = link_program(ctx, vert, frag)?;
 		let buf = load_buffer(ctx, mesh);
-		Test2D {
+		let test_2d = Test2D {
 			u_color: gl.get_uniform_location(&program, "uColor").unwrap(),
 			u_opacity: gl.get_uniform_location(&program, "uOpacity").unwrap(),
 			u_transform: gl.get_uniform_location(&program, "uTransform").unwrap(),
 			buffer: buf,
 			program,
-		}
+		};
+	Ok(test_2d)
 }
 
 pub fn render (ctx: &RenderContext, item: &Test2D) {

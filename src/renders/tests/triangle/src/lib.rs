@@ -14,22 +14,23 @@ pub struct Triangle {
 
 pub fn new_item (
 	ctx: &RenderContext
-) -> Triangle {
+) -> Result<Triangle, String> {
 
 	let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 
 	let indices_buf = asn_render_webgl::load_index_buffer(ctx, &utils::INDICES);
 
-	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER);
+	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER)?;
 	let a_coordinates = ctx.gl.get_attrib_location(&program, "aCoordinates") as u32;
 
-	Triangle {
+	let triangle = Triangle {
 		program,
 		a_coordinates,
 		vertices_buf,
 		indices_buf,
 		indices_len: utils::INDICES.len() as i32
-	}
+	};
+	Ok(triangle)
 }
 
 pub fn draw(ctx: &RenderContext, item: &Triangle) {

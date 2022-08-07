@@ -17,29 +17,57 @@ use triangle::{new_item as new_triangle, Triangle};
 pub struct AmberSkyNetClient {
     // logger: LoggerWeb,
     ctx: RenderContext,
-    #[allow(dead_code)]
-    triangle: Triangle,
-    #[allow(dead_code)]
-    color_quad: ColorQuad,
-    #[allow(dead_code)]
-    textured_quad: TexturedQuad,
+    // #[allow(dead_code)]
+    // triangle: Triangle,
+    // #[allow(dead_code)]
+    // color_quad: ColorQuad,
+    // #[allow(dead_code)]
+    // textured_quad: TexturedQuad,
     view_2d: View2D
 }
 
 impl Default for AmberSkyNetClient {
     fn default() -> Self {
         let ctx = asn_render_webgl::init_context();
-        let triangle = new_triangle(&ctx);
-        let color_quad = new_color_quad(&ctx);
-        let textured_quad = new_textured_quad(&ctx);
 
-        let view_2d = new_view_2d(&ctx, 10, 10);
+        let triangle = match new_triangle(&ctx) {
+            Ok(t) => t,
+            Err(err) => {
+                LoggerWeb::log(&err);
+                panic!()
+            }
+        };
+
+        let color_quad = match new_color_quad(&ctx) {
+            Ok(t) => t,
+            Err(err) => {
+                LoggerWeb::log(&err);
+                panic!()
+            }
+        };
+
+        let textured_quad = match new_textured_quad(&ctx) {
+            Ok(t) => t,
+            Err(err) => {
+                LoggerWeb::log(&err);
+                panic!()
+            }
+        };
+
+        let view_2d = match new_view_2d(&ctx, 10, 10) {
+            Ok(t) => t,
+            Err(err) => {
+                LoggerWeb::log(&err);
+                panic!()
+            }
+        };
+
         Self {
             // logger: LoggerWeb {},
             ctx,
-            triangle,
-            color_quad,
-            textured_quad,
+            // triangle,
+            // color_quad,
+            // textured_quad,
             view_2d
         }
     }

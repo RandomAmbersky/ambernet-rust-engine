@@ -11,6 +11,7 @@ path = "src/lib.rs"
 wasm-opt = false
 
 [dependencies]
+amberskynet_logger_web = { path="../amberskynet_logger_web" }
 js-sys = "*"
 image="*"
 [dependencies.wasm-bindgen]

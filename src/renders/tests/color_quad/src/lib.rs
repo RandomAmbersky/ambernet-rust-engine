@@ -16,7 +16,7 @@ pub struct ColorQuad {
 
 pub fn new_item (
 	ctx: &RenderContext
-) -> ColorQuad {
+) -> Result<ColorQuad, String> {
 
 	let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 
@@ -24,11 +24,11 @@ pub fn new_item (
 
 	let colors_buf = asn_render_webgl::load_buffer(ctx, &utils::COLORS);
 
-	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER);
+	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER)?;
 	let a_coordinates = ctx.gl.get_attrib_location(&program, "aCoordinates") as u32;
 	let a_color = ctx.gl.get_attrib_location(&program, "aColor") as u32;
 
-	ColorQuad {
+	let color_quad = ColorQuad {
 		program,
 		a_coordinates,
 		a_color,
@@ -36,7 +36,8 @@ pub fn new_item (
 		indices_buf,
 		colors_buf,
 		indices_len: utils::INDICES.len() as i32
-	}
+	};
+	Ok(color_quad)
 }
 
 pub fn draw(ctx: &RenderContext, item: &ColorQuad) {

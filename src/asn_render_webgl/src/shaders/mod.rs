@@ -12,13 +12,11 @@ pub fn link_program (
     let vert_shader = compile_shader(
         &gl,
         GL::VERTEX_SHADER,
-        vert)
-        .unwrap();
+        vert)?;
     let frag_shader = compile_shader(
         &gl,
         GL::FRAGMENT_SHADER,
-        frag)
-        .unwrap();
+        frag)?;
     gl.attach_shader(&prog, &vert_shader);
     gl.attach_shader(&prog, &frag_shader);
     gl.link_program(&prog);

@@ -18,14 +18,14 @@ pub struct TexturedQuad {
 
 pub fn new_item (
 	ctx: &RenderContext
-) -> TexturedQuad {
+) -> Result<TexturedQuad, String> {
 
 	let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 	let texture_coords_buf = asn_render_webgl::load_buffer(ctx, &utils::TEXTURE_COORDINATES);
 
 	let indices_buf = asn_render_webgl::load_index_buffer(ctx, &utils::INDICES);
 
-	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER);
+	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER)?;
 
 	let texture = asn_render_webgl::load_texture(ctx, utils::TEXTURE);
 
@@ -33,7 +33,7 @@ pub fn new_item (
 	let a_texture_coord = ctx.gl.get_attrib_location(&program, "aTextureCoord") as u32;
 	let u_sampler =  ctx.gl.get_uniform_location(&program, "uSampler").unwrap();
 
-	TexturedQuad {
+	let texture_quad = TexturedQuad {
 		program,
 		a_coordinates,
 		a_texture_coord,
@@ -43,7 +43,8 @@ pub fn new_item (
 		texture_coords_buf,
 		texture,
 		indices_len: utils::INDICES.len() as i32
-	}
+	};
+	Ok(texture_quad)
 }
 
 pub fn draw(ctx: &RenderContext, item: &TexturedQuad) {

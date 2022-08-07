@@ -3,7 +3,8 @@ mod shaders;
 mod buffers;
 mod textures;
 
-use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture};
+use amberskynet_logger_web::LoggerWeb;
+use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use utils::GL as GL;
 
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
@@ -40,13 +41,8 @@ pub fn init_context() -> RenderContext {
 		}
 }
 
-pub fn link_program (ctx: &RenderContext, vert: &str, frag: &str) -> WebGlProgram {
-	match shaders::link_program(&ctx.gl, vert, frag) {
-		Ok(t) => t,
-		Err(why) => {
-			panic!("link_program error: {}", why)
-		},
-	}
+pub fn link_program (ctx: &RenderContext, vert: &str, frag: &str) -> Result<WebGlProgram, String> {
+	shaders::link_program(&ctx.gl, vert, frag)
 }
 
 pub fn load_buffer(ctx: &RenderContext, buf: &[f32]) -> WebGlBuffer {

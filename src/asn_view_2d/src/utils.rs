@@ -9,7 +9,7 @@ pub const VERTICES: [f32; 12] = [
 
 pub const VERTEX_SHADER: &str = r#"
 attribute vec2 aPosition;
-uniform mat4 uTransform;
+uniform mat4   uTransform;
 
 varying vec4 worldCoord;
 void main() {
@@ -19,38 +19,20 @@ void main() {
 "#;
 
 pub const FRAG_SHADER: &str = r#"
-precision mediump float;
-uniform vec2 uImageSize; // tiles image width x height in pixels
-uniform vec2 uTileSize; // one tile width x height in pixels
-uniform vec2 uResolution; // screen width x height in pixels
-uniform vec2 uMapSize; // map width x height in tiles
-
-uniform sampler2D u_image0;
-uniform sampler2D u_image1;
-
+precision highp float;
+uniform sampler2D uTileMap;
+uniform sampler2D uTileSheet;
+varying vec4 worldCoord;
 void main() {
-    vec2 u_image_size = vec2( 256.,192.);
-    vec2 u_image_scale = u_image_size / uTileSize; // width x height in tiles
+		vec2 mapSize   = vec2(32, 32);
+		vec2 sheetSize = vec2(256, 192);
+		vec2 tileSize  = vec2(16, 16);
 
-    vec2 st = gl_FragCoord.xy / uResolution.xy; // [0..1]
-    vec2 mulSt = st * uMapSize; // [0..map_size-1] float
-    vec2 floorMulSt = floor(mulSt); // [0..map_size-1] int
-
-		vec2 textureOffset = mulSt - floorMulSt; // [0..1]
-    textureOffset = textureOffset / u_image_scale - 0.00001;
-
-    vec2 cellXY = mulSt / uMapSize; // [0..1]//
-
-    vec4 cell = texture2D(u_image0, cellXY);
-    vec2 textureCoord = vec2(cell.x, cell.y);
-
-    textureCoord = ceil(textureCoord * 255.);
-
-    textureCoord = textureCoord / u_image_scale;
-    textureCoord.x = textureCoord.x + textureOffset.x;
-    textureCoord.y = textureCoord.y + 1./u_image_scale.y  - textureOffset.y;
-
-    vec4 textureColor = texture2D(u_image1, textureCoord);
-    gl_FragColor = vec4(textureColor.rgb,1.0);
+		vec2 uv = worldCoord.xy / worldCoord.z;
+		vec2 mapCoord = floor(uv);
+		vec2 tileOffset = fract(uv);
+		vec2 tileId = floor(255.0 * texture2D(uTileMap, mapCoord / mapSize).ra);
+    vec2 sheetCoord = (tileId + tileOffset) * (tileSize / sheetSize);
+    gl_FragColor = texture2D(uTileSheet, sheetCoord);
 }
 "#;
