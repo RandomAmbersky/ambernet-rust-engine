@@ -28,21 +28,34 @@ pub fn new_item (
 
 	let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 
-	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER)?;
+	let program = match asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER) {
+		Ok(t) => t,
+		Err(str) => {
+			return Err(str)
+		}
+	};
 
-	let texture = asn_render_webgl::load_empty_texture(ctx);
-	let map_texture = asn_render_webgl::load_empty_texture(ctx);
+	let texture = asn_render_webgl::load_empty_texture(ctx)?;
+	let map_texture = asn_render_webgl::load_empty_texture(ctx)?;
 
 	let a_position = ctx.gl.get_attrib_location(&program, "aPosition") as u32;
 
 	let u_transform =  ctx.gl.get_uniform_location(&program, "uTransform").unwrap();
-	let mut transform_matrix = asn_math::mult_matrix_4(
-		asn_math::IDENTITY_MATRIX,
-		asn_math::translation_matrix(-0.5, -0.5, 0.)
-	);
+	let mut transform_matrix = asn_math::invert_matrix(asn_math::IDENTITY_MATRIX);
 
-	let u_image0 =  ctx.gl.get_uniform_location(&program, "uTileMap").unwrap();
-	let u_image1 =  ctx.gl.get_uniform_location(&program, "uTileSheet").unwrap();
+	let u_image0 = match ctx.gl.get_uniform_location(&program, "uTileMap") {
+		Some(t) => t,
+		None => {
+			return Err(String::from("uTileMap not found"))
+		}
+	};
+
+	let u_image1 =  match ctx.gl.get_uniform_location(&program, "uTileSheet") {
+		Some(t) => t,
+		None => {
+			return Err(String::from("uTileSheet not found"))
+		}
+	};
 
 	let view2d = View2D {
 		program,
@@ -61,7 +74,7 @@ pub fn new_item (
 }
 
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
-	// asn_render_webgl::update_texture(ctx, Some(&item.texture), buf);
+	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf);
 }
 
 pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {

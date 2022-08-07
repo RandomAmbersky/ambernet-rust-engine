@@ -53,7 +53,7 @@ pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
 	buffers::load_index_buffer(&ctx.gl, buf)
 }
 
-pub fn load_texture(ctx: &RenderContext, buf: &[u8]) -> WebGlTexture {
+pub fn load_texture(ctx: &RenderContext, buf: &[u8]) -> Result<WebGlTexture, String> {
 	textures::upload_texture(&ctx.gl, buf)
 }
 
@@ -65,11 +65,16 @@ pub fn update_raw_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, w
 	textures::update_raw_texture(&ctx.gl, texture, buf, width, height);
 }
 
-pub fn upload_raw_texture(ctx: &RenderContext, width: i32, height: i32, buf: &[u8]) -> WebGlTexture {
+pub fn upload_raw_texture(ctx: &RenderContext, width: i32, height: i32, buf: &[u8]) -> Result<WebGlTexture, String> {
 	textures::upload_raw_texture(&ctx.gl, &buf.to_vec(), width, height)
 }
 
-pub fn load_empty_texture(ctx: &RenderContext) -> WebGlTexture {
+pub fn load_empty_texture(ctx: &RenderContext) -> Result<WebGlTexture, String> {
 	// look at https://snoozetime.github.io/2019/12/19/webgl-texture.html
 	textures::upload_raw_texture(&ctx.gl, &ONE_BLUE_PIXEL.to_vec(), 1, 1)
 }
+
+// pub fn get_uniform_location(ctx: &RenderContext, &program, name: &str) -> Result<WebGlUniformLocation, String> {
+//
+// }
+

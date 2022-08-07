@@ -58,23 +58,24 @@ pub fn update_raw_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8], 
 }
 
 #[allow(dead_code)]
-pub fn upload_raw_texture(gl: &GL, bytes: &Vec<u8>, width: i32, height: i32) -> WebGlTexture {
+pub fn upload_raw_texture(gl: &GL, bytes: &Vec<u8>, width: i32, height: i32) -> Result<WebGlTexture, String> {
 	let texture = match gl.create_texture() {
 		Some(t) => t,
 		None => {
-			panic!("create_texture error")
+			return Err(String::from("create_texture error"))
 		}
 	};
 	update_raw_texture(gl, Some(&texture), bytes, width, height);
-	texture
+	Ok(texture)
 }
 
 #[allow(dead_code)]
-pub fn upload_texture(gl: &GL, bytes: &[u8]) -> WebGlTexture {
+pub fn upload_texture(gl: &GL, bytes: &[u8]) -> Result<WebGlTexture, String> {
 	let img = match image::load_from_memory(bytes) {
 		Ok(t) => t,
 		Err(why) => {
-			panic!("image::load_from_memory error: {}", why)
+			let err = format!("image::load_from_memory error: {}", why.to_string());
+			return Err(err);
 		}
 	};
 	let decode_bytes = img.to_rgba8().into_raw();
