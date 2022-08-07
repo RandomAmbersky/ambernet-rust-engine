@@ -17,12 +17,12 @@ use triangle::{new_item as new_triangle, Triangle};
 pub struct AmberSkyNetClient {
     // logger: LoggerWeb,
     ctx: RenderContext,
-    // #[allow(dead_code)]
-    // triangle: Triangle,
-    // #[allow(dead_code)]
-    // color_quad: ColorQuad,
-    // #[allow(dead_code)]
-    // textured_quad: TexturedQuad,
+    #[allow(dead_code)]
+    triangle: Triangle,
+    #[allow(dead_code)]
+    color_quad: ColorQuad,
+    #[allow(dead_code)]
+    textured_quad: TexturedQuad,
     view_2d: View2D
 }
 
@@ -65,9 +65,9 @@ impl Default for AmberSkyNetClient {
         Self {
             // logger: LoggerWeb {},
             ctx,
-            // triangle,
-            // color_quad,
-            // textured_quad,
+            triangle,
+            color_quad,
+            textured_quad,
             view_2d
         }
     }
@@ -117,9 +117,9 @@ impl AmberSkyNetClient {
     pub fn render(&self) -> Result<(), JsValue> {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
-        // textured_quad::draw(&self.ctx, &self.textured_quad);
+        textured_quad::draw(&self.ctx, &self.textured_quad);
         asn_view_2d::draw(&self.ctx, &self.view_2d);
-        // color_quad::draw(&self.ctx, &self.color_quad);
+        color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())
     }
 }
