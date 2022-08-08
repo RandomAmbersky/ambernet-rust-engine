@@ -1,5 +1,6 @@
 use image;
 use web_sys::WebGlTexture;
+use amberskynet_logger_web::LoggerWeb;
 use crate::GL;
 
 #[allow(dead_code)]
@@ -11,6 +12,8 @@ pub fn update_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8]) {
 		}
 	};
 	let decode_bytes = img.to_rgba8().into_raw();
+	let mess = format!("Texture decoded as {} x {}", img.width(), img.height());
+	LoggerWeb::log(&mess);
 	update_raw_texture(gl, texture, &decode_bytes, img.width() as i32, img.height() as i32);
 }
 
@@ -19,6 +22,9 @@ pub fn update_raw_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8], 
 	gl.bind_texture(GL::TEXTURE_2D, texture);
 
 	// gl.pixel_storei(GL::UNPACK_FLIP_Y_WEBGL, 1);
+
+	// CLAMP_TO_EDGE - from 0 to 1
+
 	gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_S, GL::CLAMP_TO_EDGE as i32);
 	gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_T, GL::CLAMP_TO_EDGE as i32);
 	// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_S, GL::REPEAT as i32);

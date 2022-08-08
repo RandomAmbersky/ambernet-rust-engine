@@ -41,7 +41,7 @@ pub fn new_item (
 	let a_position = ctx.gl.get_attrib_location(&program, "aPosition") as u32;
 
 	let u_transform =  ctx.gl.get_uniform_location(&program, "uTransform").unwrap();
-	let mut transform_matrix = asn_math::invert_matrix(asn_math::IDENTITY_MATRIX);
+	let mut transform_matrix = asn_math::IDENTITY_MATRIX;
 
 	let u_image0 = match ctx.gl.get_uniform_location(&program, "uTileMap") {
 		Some(t) => t,
@@ -82,8 +82,8 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 
 	for cell in buf.into_iter() {
 		let index = cell - 1;
-		let g = index / 16;
-		let r = index - g * 16;
+		let r = index / 16;
+		let g = index - r * 16;
 
 		let index_check = g * 16 + r;
 

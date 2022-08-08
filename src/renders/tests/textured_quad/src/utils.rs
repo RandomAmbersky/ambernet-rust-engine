@@ -1,4 +1,4 @@
-pub const TEXTURE: &'static [u8] = include_bytes!("./AsnLogo.png");
+pub const TEXTURE: &'static [u8] = include_bytes!("./textures.png");
 
 pub const TEXTURE_COORDINATES: [f32; 8] = [
 	0., 1.,
