@@ -16,13 +16,19 @@ void main() {
 
     vec2 mapCoord = floor(uv * mapSize) / mapSize;// 0...mapSize => 0...1 разделенные на n частей
 
-    vec2 tileOffset = fract( tex_coord * 32.0 );
+    vec2 tileOffset = fract(tex_coord * mapSize);
+    tileOffset.y = tileOffset.y * 256.0 / 192.0;
 
+//    tileOffset.x = floor( 32.0 * tileOffset.x ) / 32.0;
+//    tileOffset.y = floor( 32.0 * tileOffset.y ) / 32.0;
     // if( mapCoord.x > 0.5 ) {
     // 	isOk = 1.0;
     // }
 
-    vec2 tileXY = texture2D(uTileMap, mapCoord).xy;
+
+    vec2 tileXY = floor( 256.0 * texture2D(uTileMap, mapCoord).xy ) / 256.0;
+
+//    tileXY = vec2(3., 11.) / 256.0;
     tileXY = tileXY * 256.0;
 
     // проверили что по координатам 0,0 действительно находятся данные [11,9]
@@ -37,14 +43,14 @@ void main() {
 //     	isOk = 1.0;
 //     }
 
-    vec2 sheetCoord = tileXY * 16.0 / vec2(256.0, 192.0) + tileOffset / 16.0;
+    vec2 sheetCoord = tileXY * tileSize / sheetSize + tileOffset / tileSize;
 
-    // if (sheetCoord.x > 1.0) {
-    // 	isOk = 1.0;
-    // }
-    // if (sheetCoord.y > 1.0) {
-    // 	isOk = 1.0;
-    // }
+//    if (sheetCoord.x > 1.0) {
+//        isOk = 1.0;
+//    }
+//    if (sheetCoord.y > 1.0) {
+//     	isOk = 1.0;
+//    }
 
     vec4 textureColor = texture2D(uTileSheet, sheetCoord.xy) * 1. + vec4(isOk, 0, 0, 1) * 1.;
     gl_FragColor = vec4(textureColor.rgb, 1.0);
