@@ -17,7 +17,7 @@ void main() {
     vec2 mapCoord = floor(uv * mapSize) / mapSize;// 0...mapSize => 0...1 разделенные на n частей
 
     vec2 tileOffset = tex_coord;
-    tileOffset.y = tileOffset.y / 192.0 * 255.0;
+    tileOffset.y = tileOffset.y / 192.0 * 256.0;
 
     // if( mapCoord.x > 0.5 ) {
     // 	isOk = 1.0;
@@ -38,7 +38,7 @@ void main() {
     // 	isOk = 1.0;
     // }
 
-    vec2 sheetCoord = vec2(1., 0.) * 16.0 / 255.0 + tileOffset / 16.0;
+    vec2 sheetCoord = vec2(1., 0.) * 16.0 / 256.0 + tileOffset / 16.0;
 
     // if (sheetCoord.x > 1.0) {
     // 	isOk = 1.0;
