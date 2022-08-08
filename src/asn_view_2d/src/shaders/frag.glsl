@@ -9,7 +9,7 @@ void main() {
     float isOk = 0.;
 
     vec2 tex_coord = worldCoord.xy;// 0..1
-    // tex_coord = gl_PointCoord;
+//    tex_coord = gl_PointCoord;
     tex_coord.y = 1.0 - tex_coord.y;
 
     vec2 uv = tex_coord;// 0..1
@@ -19,8 +19,6 @@ void main() {
     vec2 tileOffset = fract(tex_coord * mapSize);
     tileOffset.y = tileOffset.y * 256.0 / 192.0;
 
-//    tileOffset.x = floor( 32.0 * tileOffset.x ) / 32.0;
-//    tileOffset.y = floor( 32.0 * tileOffset.y ) / 32.0;
     // if( mapCoord.x > 0.5 ) {
     // 	isOk = 1.0;
     // }
