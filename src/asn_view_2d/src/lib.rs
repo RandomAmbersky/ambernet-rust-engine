@@ -82,15 +82,17 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 
 	for cell in buf.into_iter() {
 		let index = cell - 1;
-		let r = index / 16;
-		let g = index - r * 16;
+		let y = index / 16;
+		let x = index - y * 16;
 
-		let index_check = g * 16 + r;
+		let index_check = y * 16 + x + 1;
 
-		let mess = format!("cell {:?} [{:?}, {:?}] {:?}", cell, g, r, index_check);
+		// assert_eq!(index, index_check);
+
+		let mess = format!("cell {:?} [{:?}, {:?}] {:?}", cell, y, x, index_check);
 		LoggerWeb::log(&mess);
-		map_texture.push(r);
-		map_texture.push(g);
+		map_texture.push(x);
+		map_texture.push(y);
 		map_texture.push(255);
 		map_texture.push(255);
 	}
