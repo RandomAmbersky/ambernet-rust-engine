@@ -3,6 +3,6 @@ uniform mat4   uTransform;
 varying vec4 worldCoord;
 
 void main() {
-    gl_Position = vec4(aPosition.x, aPosition.y, 0, 1);
-    worldCoord = uTransform * gl_Position;
+    gl_Position = uTransform * vec4(aPosition.x, aPosition.y, 0, 1);
+    worldCoord =  gl_Position;
 }

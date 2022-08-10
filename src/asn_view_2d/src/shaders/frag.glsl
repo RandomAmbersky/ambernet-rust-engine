@@ -26,7 +26,7 @@ void main() {
 
     vec2 tileXY = floor( 256.0 * texture2D(uTileMap, mapCoord).xy ) / 256.0;
 
-//    tileXY = vec2(3., 11.) / 256.0;
+//    tileXY = vec2(0., 0.) / 256.0;
     tileXY = tileXY * 256.0;
 
     // проверили что по координатам 0,0 действительно находятся данные [11,9]
@@ -40,6 +40,8 @@ void main() {
 //     if (tileOffset.x > 0.5) {
 //     	isOk = 1.0;
 //     }
+    tileOffset.x = floor( tileOffset.x * 255.0 ) / 255.0;
+    tileOffset.y = floor( tileOffset.y * 255.0 ) / 255.0;
 
     vec2 sheetCoord = tileXY * tileSize / sheetSize + tileOffset / tileSize;
 
