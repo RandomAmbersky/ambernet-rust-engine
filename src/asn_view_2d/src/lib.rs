@@ -54,7 +54,7 @@ pub fn new_item (
 		0.
 	);
 
-	transform_matrix = asn_math::mult_matrix_4(trans_matrix, scale_matrix);
+	transform_matrix = asn_math::mult_matrix_4(scale_matrix, trans_matrix);
 
 	let u_image0 = match ctx.gl.get_uniform_location(&program, "uTileMap") {
 		Some(t) => t,

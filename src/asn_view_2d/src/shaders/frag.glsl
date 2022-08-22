@@ -8,7 +8,7 @@ void main() {
     vec2 tileSize  = vec2(16., 16.);
     float isOk = 0.;
 
-    vec2 tex_coord = worldCoord.xy;// 0..1
+    vec2 tex_coord = worldCoord.xy / 2.0;// 0..1
 //    tex_coord = gl_PointCoord;
     tex_coord.y = 1.0 - tex_coord.y;
 
