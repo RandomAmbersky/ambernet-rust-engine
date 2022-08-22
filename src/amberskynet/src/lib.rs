@@ -110,7 +110,6 @@ impl AmberSkyNetClient {
         let mess = format!("engine resize: {} x {}", width, height);
         LoggerWeb::log(&mess);
         asn_render_webgl::resize(&mut self.ctx, width, height);
-        // asn_view_2d::resize(&mut self.view_2d, 0., 0., 100., 100., width as f32, height as f32);
         Ok(())
     }
 

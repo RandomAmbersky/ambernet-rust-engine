@@ -86,31 +86,6 @@ pub fn new_item (
 	Ok(view2d)
 }
 
-pub fn resize (
-	item: &mut View2D,
-	bottom: f32,
-	top: f32,
-	left: f32,
-	right: f32,
-	screen_width: f32,
-	screen_height: f32
-) {
-	let translation_matrix = asn_math::translation_matrix(
-		2. * left / screen_width - 1.,
-		2. * left / screen_width - 1.,
-		0.
-	);
-	let scale_matrix = asn_math::scaling_matrix(
-		2. * (right - left) / screen_width,
-		2. * (top - bottom) / screen_height,
-		0.
-	);
-
-	let transform_matrix = asn_math::mult_matrix_4(scale_matrix, translation_matrix);
-
-	item.transform_matrix = transform_matrix;
-}
-
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
 	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf, false);
 }
