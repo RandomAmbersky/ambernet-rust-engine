@@ -112,7 +112,7 @@ pub fn resize (
 }
 
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
-	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf, true);
+	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf, false);
 }
 
 pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {

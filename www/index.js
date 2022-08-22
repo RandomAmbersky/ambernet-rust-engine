@@ -8,8 +8,10 @@ const canvas = document.getElementById('canvasGL')
 const engine = new AmberSkyNetClient()
 
 async function loadData () {
-  const mapArray = await loadBinary('/map/laboratory3.tmx')
-  const tilesArray = await loadBinary('/map/tiles_many.png')
+  // const mapArray = await loadBinary('/map/laboratory3.tmx')
+  // const tilesArray = await loadBinary('/map/tiles_many.png')
+  const mapArray = await loadBinary('/map/cell.tmx')
+  const tilesArray = await loadBinary('/map/tiles.png')
   engine.upload_tiles(tilesArray)
   engine.upload_map(mapArray)
 }

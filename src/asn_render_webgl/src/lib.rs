@@ -29,9 +29,6 @@ pub fn resize(ctx: &mut RenderContext, width: i32, height: i32) {
 	let margin_top = 10;
 	let margin_bottom = 10;
 
-	// let width = 320;
-	// let height = 240;
-
 	ctx.gl.viewport(margin_left, margin_bottom, width - margin_right - margin_left, height - margin_top - margin_bottom);
 }
 
