@@ -43,6 +43,19 @@ pub fn new_item (
 	let u_transform =  ctx.gl.get_uniform_location(&program, "uTransform").unwrap();
 	let mut transform_matrix = asn_math::IDENTITY_MATRIX;
 
+	let scale_matrix = asn_math::scaling_matrix(
+		2.,
+		2.,
+		1.
+	);
+	let trans_matrix = asn_math::translation_matrix(
+		-1.,
+		-1.,
+		0.
+	);
+
+	transform_matrix = asn_math::mult_matrix_4(trans_matrix, scale_matrix);
+
 	let u_image0 = match ctx.gl.get_uniform_location(&program, "uTileMap") {
 		Some(t) => t,
 		None => {
@@ -73,8 +86,33 @@ pub fn new_item (
 	Ok(view2d)
 }
 
+pub fn resize (
+	item: &mut View2D,
+	bottom: f32,
+	top: f32,
+	left: f32,
+	right: f32,
+	screen_width: f32,
+	screen_height: f32
+) {
+	let translation_matrix = asn_math::translation_matrix(
+		2. * left / screen_width - 1.,
+		2. * left / screen_width - 1.,
+		0.
+	);
+	let scale_matrix = asn_math::scaling_matrix(
+		2. * (right - left) / screen_width,
+		2. * (top - bottom) / screen_height,
+		0.
+	);
+
+	let transform_matrix = asn_math::mult_matrix_4(scale_matrix, translation_matrix);
+
+	item.transform_matrix = transform_matrix;
+}
+
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
-	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf);
+	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf, true);
 }
 
 pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
@@ -97,7 +135,7 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 		map_texture.push(255);
 	}
 
-	asn_render_webgl::update_raw_texture(ctx, Some(&item.map_texture), width as i32, height as i32, &map_texture);
+	asn_render_webgl::update_raw_texture(ctx, Some(&item.map_texture), width as i32, height as i32, &map_texture, false);
 
 	item.map.width = width as i32;
 	item.map.height = height as i32;
@@ -127,10 +165,10 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 
 	// let u_tile_size =  ctx.gl.get_uniform_location(&item.program, "uTileSize").unwrap();
 	// ctx.gl.uniform2f(Some(&u_tile_size), 16., 16.);
-
+	//
 	// let u_resolution =  ctx.gl.get_uniform_location(&item.program, "uResolution").unwrap();
 	// ctx.gl.uniform2f(Some(&u_resolution), ctx.width as f32, ctx.height as f32);
-
+	//
 	// let u_map_size =  ctx.gl.get_uniform_location(&item.program, "uMapSize").unwrap();
 	// ctx.gl.uniform2f(Some(&u_map_size), item.map.width as f32,  item.map.height as f32);
 

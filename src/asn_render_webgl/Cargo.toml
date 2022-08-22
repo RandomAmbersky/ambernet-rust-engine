@@ -12,6 +12,7 @@ wasm-opt = false
 
 [dependencies]
 amberskynet_logger_web = { path="../amberskynet_logger_web" }
+asn_math = { path="../asn_math" }
 js-sys = "*"
 image="*"
 [dependencies.wasm-bindgen]

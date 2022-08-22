@@ -6,6 +6,7 @@ mod textures;
 use amberskynet_logger_web::LoggerWeb;
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use utils::GL as GL;
+use asn_math::IDENTITY_MATRIX;
 
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
 
@@ -23,7 +24,15 @@ pub fn resize(ctx: &mut RenderContext, width: i32, height: i32) {
 	ctx.gl.clear_color(0., 0., 0., 1.0); //RGBA
 	ctx.gl.clear_depth(1.0);
 	ctx.gl.enable(GL::DEPTH_TEST);
-	ctx.gl.viewport(0, 0, width, height);
+	let margin_left = 10;
+	let margin_right = 10;
+	let margin_top = 10;
+	let margin_bottom = 10;
+
+	// let width = 320;
+	// let height = 240;
+
+	ctx.gl.viewport(margin_left, margin_bottom, width - margin_right - margin_left, height - margin_top - margin_bottom);
 }
 
 pub	fn draw(ctx: &RenderContext) {
@@ -53,25 +62,25 @@ pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
 	buffers::load_index_buffer(&ctx.gl, buf)
 }
 
-pub fn load_texture(ctx: &RenderContext, buf: &[u8]) -> Result<WebGlTexture, String> {
-	textures::upload_texture(&ctx.gl, buf)
+pub fn load_texture(ctx: &RenderContext, buf: &[u8], is_linear: bool) -> Result<WebGlTexture, String> {
+	textures::upload_texture(&ctx.gl, buf, is_linear)
 }
 
-pub fn update_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, buf: &[u8]) {
-	textures::update_texture(&ctx.gl, texture, buf)
+pub fn update_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, buf: &[u8], is_linear: bool) {
+	textures::update_texture(&ctx.gl, texture, buf, is_linear)
 }
 
-pub fn update_raw_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, width: i32, height: i32, buf: &[u8]) {
-	textures::update_raw_texture(&ctx.gl, texture, buf, width, height);
+pub fn update_raw_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, width: i32, height: i32, buf: &[u8], is_linear: bool) {
+	textures::update_raw_texture(&ctx.gl, texture, buf, width, height, is_linear);
 }
 
-pub fn upload_raw_texture(ctx: &RenderContext, width: i32, height: i32, buf: &[u8]) -> Result<WebGlTexture, String> {
-	textures::upload_raw_texture(&ctx.gl, &buf.to_vec(), width, height)
+pub fn upload_raw_texture(ctx: &RenderContext, width: i32, height: i32, buf: &[u8], is_linear: bool) -> Result<WebGlTexture, String> {
+	textures::upload_raw_texture(&ctx.gl, &buf.to_vec(), width, height, is_linear)
 }
 
 pub fn load_empty_texture(ctx: &RenderContext) -> Result<WebGlTexture, String> {
 	// look at https://snoozetime.github.io/2019/12/19/webgl-texture.html
-	textures::upload_raw_texture(&ctx.gl, &ONE_BLUE_PIXEL.to_vec(), 1, 1)
+	textures::upload_raw_texture(&ctx.gl, &ONE_BLUE_PIXEL.to_vec(), 1, 1, false)
 }
 
 // pub fn get_uniform_location(ctx: &RenderContext, &program, name: &str) -> Result<WebGlUniformLocation, String> {

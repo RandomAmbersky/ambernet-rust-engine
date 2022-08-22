@@ -4,7 +4,12 @@ use amberskynet_logger_web::LoggerWeb;
 use crate::GL;
 
 #[allow(dead_code)]
-pub fn update_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8]) {
+pub fn update_texture (
+	gl: &GL,
+	texture: Option<&WebGlTexture>,
+	buf: &[u8],
+	is_linear: bool
+) {
 	let img = match image::load_from_memory(buf) {
 		Ok(t) => t,
 		Err(why) => {
@@ -14,25 +19,40 @@ pub fn update_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8]) {
 	let decode_bytes = img.to_rgba8().into_raw();
 	let mess = format!("Texture decoded as {} x {}", img.width(), img.height());
 	LoggerWeb::log(&mess);
-	update_raw_texture(gl, texture, &decode_bytes, img.width() as i32, img.height() as i32);
+	update_raw_texture(gl, texture, &decode_bytes, img.width() as i32, img.height() as i32, is_linear);
 }
 
 #[allow(dead_code)]
-pub fn update_raw_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8], width: i32, height: i32) {
+pub fn update_raw_texture (
+	gl: &GL,
+	texture: Option<&WebGlTexture>,
+	buf: &[u8],
+	width: i32,
+	height: i32,
+	is_linear: bool
+) {
+
 	gl.bind_texture(GL::TEXTURE_2D, texture);
 
 	// gl.pixel_storei(GL::UNPACK_FLIP_Y_WEBGL, 1);
 
 	// CLAMP_TO_EDGE - from 0 to 1
 
-	gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_S, GL::CLAMP_TO_EDGE as i32);
-	gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_T, GL::CLAMP_TO_EDGE as i32);
+	// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_S, GL::CLAMP_TO_EDGE as i32);
+	// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_T, GL::CLAMP_TO_EDGE as i32);
 	// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_S, GL::REPEAT as i32);
 	// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_T, GL::REPEAT as i32);
-	// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MIN_FILTER, GL::LINEAR as i32);
-	// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MAG_FILTER, GL::LINEAR as i32);
-	gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MIN_FILTER, GL::NEAREST as i32);
-	gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MAG_FILTER, GL::NEAREST as i32);
+	if is_linear {
+		// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_S, GL::REPEAT as i32);
+		// gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_T, GL::REPEAT as i32);
+		gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MIN_FILTER, GL::LINEAR as i32);
+		gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MAG_FILTER, GL::LINEAR as i32);
+	} else {
+		gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_S, GL::CLAMP_TO_EDGE as i32);
+		gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_WRAP_T, GL::CLAMP_TO_EDGE as i32);
+		gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MIN_FILTER, GL::NEAREST as i32);
+		gl.tex_parameteri(GL::TEXTURE_2D, GL::TEXTURE_MAG_FILTER, GL::NEAREST as i32);
+	}
 
 	let level = 0;
 	let internal_format = GL::RGBA;
@@ -64,19 +84,29 @@ pub fn update_raw_texture (gl: &GL, texture: Option<&WebGlTexture>, buf: &[u8], 
 }
 
 #[allow(dead_code)]
-pub fn upload_raw_texture(gl: &GL, bytes: &Vec<u8>, width: i32, height: i32) -> Result<WebGlTexture, String> {
+pub fn upload_raw_texture(
+	gl: &GL,
+	bytes: &Vec<u8>,
+	width: i32,
+	height: i32,
+	is_linear: bool
+) -> Result<WebGlTexture, String> {
 	let texture = match gl.create_texture() {
 		Some(t) => t,
 		None => {
 			return Err(String::from("create_texture error"))
 		}
 	};
-	update_raw_texture(gl, Some(&texture), bytes, width, height);
+	update_raw_texture(gl, Some(&texture), bytes, width, height, is_linear);
 	Ok(texture)
 }
 
 #[allow(dead_code)]
-pub fn upload_texture(gl: &GL, bytes: &[u8]) -> Result<WebGlTexture, String> {
+pub fn upload_texture(
+	gl: &GL,
+	bytes: &[u8],
+	is_linear: bool
+) -> Result<WebGlTexture, String> {
 	let img = match image::load_from_memory(bytes) {
 		Ok(t) => t,
 		Err(why) => {
@@ -85,5 +115,5 @@ pub fn upload_texture(gl: &GL, bytes: &[u8]) -> Result<WebGlTexture, String> {
 		}
 	};
 	let decode_bytes = img.to_rgba8().into_raw();
-	upload_raw_texture(gl, &decode_bytes,img.width() as i32, img.height() as i32)
+	upload_raw_texture(gl, &decode_bytes,img.width() as i32, img.height() as i32, is_linear)
 }

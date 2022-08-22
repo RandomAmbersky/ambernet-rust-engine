@@ -49,6 +49,7 @@ name = "asn_render_webgl"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
+ "asn_math",
  "image",
  "js-sys",
  "wasm-bindgen",
