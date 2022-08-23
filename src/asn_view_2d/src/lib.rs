@@ -19,7 +19,8 @@ pub struct View2D {
 	u_image0: WebGlUniformLocation,
 	u_image1: WebGlUniformLocation,
 	vertices_buf: WebGlBuffer,
-	map: Map
+	map: Map,
+	u_map_size: WebGlUniformLocation
 }
 
 pub fn new_item (
@@ -70,6 +71,13 @@ pub fn new_item (
 		}
 	};
 
+	let u_map_size = match ctx.gl.get_uniform_location(&program, "uMapSize") {
+		None => {
+			return Err(String::from("uMapSize not found"))
+		},
+		Some(t) => t
+	};
+
 	let view2d = View2D {
 		program,
 		a_position,
@@ -80,9 +88,9 @@ pub fn new_item (
 		u_image0,
 		u_image1,
 		vertices_buf,
-		map: Map::default()
+		map: Map::default(),
+		u_map_size
 	};
-
 	Ok(view2d)
 }
 
@@ -111,6 +119,8 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 	}
 
 	asn_render_webgl::update_raw_texture(ctx, Some(&item.map_texture), width as i32, height as i32, &map_texture, false);
+
+	ctx.gl.uniform2f(Some(&item.u_map_size), width as f32, height as f32);
 
 	item.map.width = width as i32;
 	item.map.height = height as i32;
@@ -144,8 +154,8 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 	// let u_resolution =  ctx.gl.get_uniform_location(&item.program, "uResolution").unwrap();
 	// ctx.gl.uniform2f(Some(&u_resolution), ctx.width as f32, ctx.height as f32);
 	//
-	// let u_map_size =  ctx.gl.get_uniform_location(&item.program, "uMapSize").unwrap();
-	// ctx.gl.uniform2f(Some(&u_map_size), item.map.width as f32,  item.map.height as f32);
+	let u_map_size =  ctx.gl.get_uniform_location(&item.program, "uMapSize").unwrap();
+	ctx.gl.uniform2f(Some(&u_map_size), item.map.width as f32,  item.map.height as f32);
 
 	ctx.gl.active_texture(GL::TEXTURE0);
 	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.map_texture));

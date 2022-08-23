@@ -7,16 +7,34 @@ const FPS_THROTTLE = 1000.0 / 30.0 // milliseconds / frames
 const canvas = document.getElementById('canvasGL')
 const engine = new AmberSkyNetClient()
 
-async function loadData () {
-  // const mapArray = await loadBinary('/map/laboratory3.tmx')
-  // const tilesArray = await loadBinary('/map/tiles_many.png')
-  const mapArray = await loadBinary('/map/cell.tmx')
-  const tilesArray = await loadBinary('/map/tiles_mod.png')
+// const mapArray = await loadBinary('/map/laboratory3.tmx')
+// const tilesArray = await loadBinary('/map/tiles_many.png')
+
+const data1 = {
+  map: {
+    cellSizeX: 32,
+    cellSizeY: 32
+  },
+  sheet: {
+    pixelSizeX: 256,
+    pixelSizeY: 192
+  },
+  tiles: {
+    pixelSizeX: 16,
+    pixelSizeY: 16
+  },
+  mapName: '/map/cell.tmx',
+  tileName: '/map/tiles_mod.png'
+}
+
+async function loadData (data) {
+  const mapArray = await loadBinary(data.mapName)
+  const tilesArray = await loadBinary(data.tileName)
   engine.upload_tiles(tilesArray)
   engine.upload_map(mapArray)
 }
 
-loadData()
+loadData(data1)
   .then( _ => {
     renderLoop()
   })

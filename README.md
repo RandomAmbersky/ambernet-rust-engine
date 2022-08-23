@@ -17,3 +17,7 @@ cd www
 yarn install
 yarn dev
 ```bash
+
+shaders
+
+https://thebookofshaders.com/glossary/?search=fract

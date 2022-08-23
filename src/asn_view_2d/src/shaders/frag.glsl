@@ -1,9 +1,9 @@
 precision highp float;
+uniform vec2 uMapSize;
 uniform sampler2D uTileMap;
 uniform sampler2D uTileSheet;
 varying vec4 worldCoord;
 void main() {
-    vec2 mapSize   = vec2(32., 32.);  // in cells
     vec2 sheetSize = vec2(256., 192.); // in pixels
     vec2 tileSize  = vec2(16., 16.); // in pixels
     float MAX_COLOR_VALUE_256 = 256.0; //  color 0..1 * 256.0 => 0..256
@@ -21,12 +21,12 @@ void main() {
 
     tex_coord.y = 1.0 - tex_coord.y;
 
-    vec2 mapCoord = floor(tex_coord * mapSize) / mapSize;// 0...1 разделенные на mapSize частей
+    vec2 mapCoord = floor(tex_coord * uMapSize) / uMapSize;// 0...1 разделенные на uMapSize частей
 //     if( mapCoord.x > 0.5 ) {
 //     	isOk = 1.0;
 //     }
 
-//    mapCoord = vec2 (0., 0.) / mapSize;
+//    mapCoord = vec2 (0., 0.) / uMapSize;
 //    vec2 check_tileXY = texture2D(uTileMap, mapCoord).xy;
 //    if( check_tileXY.x > 0.05 ) {
 //        isOk = 1.0;
@@ -46,7 +46,7 @@ void main() {
     tileXY = tileXY * tileSize; // x and y on tile map in pixels
     tileXY = tileXY / sheetSize; // 0..1 normalize
 
-    vec2 tileOffset = fract(tex_coord * mapSize); // 0..1 повторяемые mapSize раз
+    vec2 tileOffset = fract(tex_coord * uMapSize); // 0..1 повторяемые uMapSize раз
     tileOffset.y = tileOffset.y * sheetSize.x / sheetSize.y;
 
     tileOffset.x = floor( tileOffset.x * 255.0 ) / 255.0;
