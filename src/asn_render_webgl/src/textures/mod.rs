@@ -1,36 +1,16 @@
-use image;
+use image::EncodableLayout;
 use web_sys::WebGlTexture;
 use amberskynet_logger_web::LoggerWeb;
-use crate::GL;
+pub use web_sys::WebGlRenderingContext as GL;
+use crate::images::DecodedTexture;
 
 #[allow(dead_code)]
-pub fn update_texture (
+pub fn update (
 	gl: &GL,
 	texture: Option<&WebGlTexture>,
-	buf: &[u8],
+	tex: DecodedTexture,
 	is_linear: bool
-) {
-	let img = match image::load_from_memory(buf) {
-		Ok(t) => t,
-		Err(why) => {
-			panic!("image::load_from_memory error: {}", why)
-		}
-	};
-	let decode_bytes = img.to_rgba8().into_raw();
-	let mess = format!("Texture decoded as {} x {}", img.width(), img.height());
-	LoggerWeb::log(&mess);
-	update_raw_texture(gl, texture, &decode_bytes, img.width() as i32, img.height() as i32, is_linear);
-}
-
-#[allow(dead_code)]
-pub fn update_raw_texture (
-	gl: &GL,
-	texture: Option<&WebGlTexture>,
-	buf: &[u8],
-	width: i32,
-	height: i32,
-	is_linear: bool
-) {
+) -> Result<(), String>{
 
 	gl.bind_texture(GL::TEXTURE_2D, texture);
 
@@ -64,31 +44,30 @@ pub fn update_raw_texture (
 		GL::TEXTURE_2D,
 		level,
 		internal_format as i32,
-		width,
-		height,
+		tex.width,
+		tex.height,
 		border,
 		src_format,
 		src_type,
-		Some(buf),
+		Some(tex.bytes.as_bytes()),
 	) {
 		Ok(t) => t,
 		Err(why) => {
 			let err_str = match why.as_string() {
 				Some(t) => t,
-				None => panic!("gl.tex_image_2d as_string error")
+				None => return Err(String::from("gl.tex_image_2d as_string error"))
 			};
-			panic!("gl.tex_image_2d error: {}", &err_str);
+			let err = format!("gl.tex_image_2d error: {}", err_str);
+			return Err(err)
 		}
 	};
 	gl.bind_texture(GL::TEXTURE_2D, None);
+	Ok(())
 }
 
-#[allow(dead_code)]
-pub fn upload_raw_texture(
+pub fn upload(
 	gl: &GL,
-	bytes: &Vec<u8>,
-	width: i32,
-	height: i32,
+	tex: DecodedTexture,
 	is_linear: bool
 ) -> Result<WebGlTexture, String> {
 	let texture = match gl.create_texture() {
@@ -97,23 +76,6 @@ pub fn upload_raw_texture(
 			return Err(String::from("create_texture error"))
 		}
 	};
-	update_raw_texture(gl, Some(&texture), bytes, width, height, is_linear);
+	update(gl, Some(&texture),  tex, is_linear)?;
 	Ok(texture)
-}
-
-#[allow(dead_code)]
-pub fn upload_texture(
-	gl: &GL,
-	bytes: &[u8],
-	is_linear: bool
-) -> Result<WebGlTexture, String> {
-	let img = match image::load_from_memory(bytes) {
-		Ok(t) => t,
-		Err(why) => {
-			let err = format!("image::load_from_memory error: {}", why.to_string());
-			return Err(err);
-		}
-	};
-	let decode_bytes = img.to_rgba8().into_raw();
-	upload_raw_texture(gl, &decode_bytes,img.width() as i32, img.height() as i32, is_linear)
 }

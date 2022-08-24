@@ -2,11 +2,11 @@ mod utils;
 mod shaders;
 mod buffers;
 mod textures;
+mod images;
 
-use amberskynet_logger_web::LoggerWeb;
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use utils::GL as GL;
-use asn_math::IDENTITY_MATRIX;
+use images::DecodedTexture;
 
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
 
@@ -39,7 +39,6 @@ pub	fn draw(ctx: &RenderContext) {
 
 pub fn init_context() -> RenderContext {
 		let gl = utils::get_webgl_context().unwrap();
-
 		RenderContext {
 			gl,
 			width: 0,
@@ -59,28 +58,24 @@ pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
 	buffers::load_index_buffer(&ctx.gl, buf)
 }
 
-pub fn load_texture(ctx: &RenderContext, buf: &[u8], is_linear: bool) -> Result<WebGlTexture, String> {
-	textures::upload_texture(&ctx.gl, buf, is_linear)
+pub fn decode_texture(buf: &[u8]) -> Result<DecodedTexture, String> {
+	images::decode_texture(buf)
 }
 
-pub fn update_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, buf: &[u8], is_linear: bool) {
-	textures::update_texture(&ctx.gl, texture, buf, is_linear)
+pub fn update_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, tex: DecodedTexture, is_linear: bool) -> Result<(), String> {
+	textures::update(&ctx.gl, texture, tex, is_linear)
 }
 
-pub fn update_raw_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, width: i32, height: i32, buf: &[u8], is_linear: bool) {
-	textures::update_raw_texture(&ctx.gl, texture, buf, width, height, is_linear);
-}
-
-pub fn upload_raw_texture(ctx: &RenderContext, width: i32, height: i32, buf: &[u8], is_linear: bool) -> Result<WebGlTexture, String> {
-	textures::upload_raw_texture(&ctx.gl, &buf.to_vec(), width, height, is_linear)
+pub fn upload_texture(ctx: &RenderContext, tex: DecodedTexture, is_linear: bool) -> Result<WebGlTexture, String> {
+	textures::upload(&ctx.gl, tex, is_linear)
 }
 
 pub fn load_empty_texture(ctx: &RenderContext) -> Result<WebGlTexture, String> {
 	// look at https://snoozetime.github.io/2019/12/19/webgl-texture.html
-	textures::upload_raw_texture(&ctx.gl, &ONE_BLUE_PIXEL.to_vec(), 1, 1, false)
+	let tex = DecodedTexture {
+		width: 1,
+		height: 1,
+		bytes: ONE_BLUE_PIXEL.to_vec()
+	};
+	textures::upload(&ctx.gl, tex, false)
 }
-
-// pub fn get_uniform_location(ctx: &RenderContext, &program, name: &str) -> Result<WebGlUniformLocation, String> {
-//
-// }
-
