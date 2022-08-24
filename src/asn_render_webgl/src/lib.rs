@@ -6,7 +6,7 @@ pub mod images;
 
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use utils::GL as GL;
-use images::DecodedTexture;
+use lib::DecodedTexture;
 
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
 
@@ -59,7 +59,7 @@ pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
 }
 
 pub fn decode_texture(buf: &[u8]) -> Result<DecodedTexture, String> {
-	images::decode_texture(buf)
+	lib::decode_texture(buf)
 }
 
 pub fn update_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, tex: DecodedTexture, is_linear: bool) -> Result<(), String> {

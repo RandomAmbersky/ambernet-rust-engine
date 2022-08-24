@@ -2,7 +2,7 @@ use image::EncodableLayout;
 use web_sys::WebGlTexture;
 use amberskynet_logger_web::LoggerWeb;
 pub use web_sys::WebGlRenderingContext as GL;
-use crate::images::DecodedTexture;
+use crate::lib::DecodedTexture;
 
 #[allow(dead_code)]
 pub fn update (

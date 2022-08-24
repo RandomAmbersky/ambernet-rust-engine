@@ -4,7 +4,7 @@ mod map;
 use amberskynet_logger_web::LoggerWeb;
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_render_webgl::{ RenderContext };
-use asn_render_webgl::images::DecodedTexture;
+use asn_render_webgl::lib::DecodedTexture;
 
 use web_sys::WebGlRenderingContext as GL;
 use map::Map;
