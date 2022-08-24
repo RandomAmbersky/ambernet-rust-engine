@@ -27,7 +27,8 @@ pub fn new_item (
 
 	let program = asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER)?;
 
-	let texture = asn_render_webgl::load_texture(ctx, utils::TEXTURE, true)?;
+	let tex = asn_render_webgl::decode_texture(utils::TEXTURE)?;
+	let texture = asn_render_webgl::upload_texture(ctx, tex, true)?;
 
 	let a_coordinates = ctx.gl.get_attrib_location(&program, "aCoordinates") as u32;
 	let a_texture_coord = ctx.gl.get_attrib_location(&program, "aTextureCoord") as u32;

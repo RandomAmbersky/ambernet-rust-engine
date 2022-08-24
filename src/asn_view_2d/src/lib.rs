@@ -1,11 +1,11 @@
-extern crate core;
-
 mod utils;
 mod map;
 
 use amberskynet_logger_web::LoggerWeb;
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_render_webgl::{ RenderContext };
+use asn_render_webgl::images::DecodedTexture;
+
 use web_sys::WebGlRenderingContext as GL;
 use map::Map;
 
@@ -95,7 +95,8 @@ pub fn new_item (
 }
 
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
-	asn_render_webgl::update_texture(ctx, Some(&item.texture), buf, false);
+	let tex = asn_render_webgl::decode_texture(buf).expect("decode texture panic!");
+	asn_render_webgl::update_texture(ctx, Some(&item.texture), tex, false).expect("update_texture panic!");
 }
 
 pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
@@ -118,7 +119,13 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 		map_texture.push(255);
 	}
 
-	asn_render_webgl::update_raw_texture(ctx, Some(&item.map_texture), width as i32, height as i32, &map_texture, false);
+	let tex: DecodedTexture = DecodedTexture {
+		width: width as i32,
+		height: height as i32,
+		bytes: map_texture
+	};
+
+	asn_render_webgl::update_texture(ctx, Some(&item.map_texture), tex, false).expect("update_texture panic!");
 
 	ctx.gl.uniform2f(Some(&item.u_map_size), width as f32, height as f32);
 
