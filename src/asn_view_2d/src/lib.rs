@@ -102,10 +102,6 @@ pub fn new_item (
 	Ok(view2d)
 }
 
-fn update_texture(ctx: &RenderContext, texture: &WebGlTexture, tex: &DecodedTexture, is_linear: bool) -> Result<(), String> {
-	asn_render_webgl::update_texture(ctx, &item.texture, &tex, false)
-}
-
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
 	let tex = decode_texture(buf).expect("decode texture panic!");
 
