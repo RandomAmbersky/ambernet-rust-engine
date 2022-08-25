@@ -66,7 +66,7 @@ pub fn update (
 
 pub fn upload(
 	gl: &GL,
-	tex: DecodedTexture,
+	tex: &DecodedTexture,
 	is_linear: bool
 ) -> Result<WebGlTexture, String> {
 	let texture = match gl.create_texture() {

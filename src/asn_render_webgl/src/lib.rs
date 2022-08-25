@@ -61,7 +61,7 @@ pub fn update_texture(ctx: &RenderContext, texture: &WebGlTexture, tex: &Decoded
 	textures::update(&ctx.gl, texture, tex, is_linear)
 }
 
-pub fn upload_texture(ctx: &RenderContext, tex: DecodedTexture, is_linear: bool) -> Result<WebGlTexture, String> {
+pub fn upload_texture(ctx: &RenderContext, tex: &DecodedTexture, is_linear: bool) -> Result<WebGlTexture, String> {
 	textures::upload(&ctx.gl, tex, is_linear)
 }
 
@@ -72,5 +72,5 @@ pub fn load_empty_texture(ctx: &RenderContext) -> Result<WebGlTexture, String> {
 		height: 1,
 		bytes: ONE_BLUE_PIXEL.to_vec()
 	};
-	textures::upload(&ctx.gl, tex, false)
+	textures::upload(&ctx.gl, &tex, false)
 }
