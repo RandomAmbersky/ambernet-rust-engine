@@ -22,6 +22,7 @@ pub struct View2D {
 	map: Map,
 	u_map_size: WebGlUniformLocation,
 	u_sheet_size: WebGlUniformLocation,
+	u_tile_size: WebGlUniformLocation,
 }
 
 pub fn new_item (
@@ -85,6 +86,13 @@ pub fn new_item (
 		Some(t) => t
 	};
 
+	let u_tile_size = match ctx.gl.get_uniform_location(&program, "utileSize") {
+		None => {
+			return Err(String::from("uSheetSize not found"))
+		},
+		Some(t) => t
+	};
+
 	let view2d = View2D {
 		program,
 		a_position,
@@ -97,7 +105,8 @@ pub fn new_item (
 		vertices_buf,
 		map: Map::default(),
 		u_map_size,
-		u_sheet_size
+		u_sheet_size,
+		u_tile_size
 	};
 	Ok(view2d)
 }
@@ -109,6 +118,12 @@ pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
 
 	ctx.gl.use_program(Some(&item.program));
 	ctx.gl.uniform2f(Some(&item.u_sheet_size), tex.width as f32, tex.height as f32);
+	ctx.gl.use_program(None);
+}
+
+pub fn set_tile_size (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32) {
+	ctx.gl.use_program(Some(&item.program));
+	ctx.gl.uniform2f(Some(&item.u_tile_size), width as f32, height as f32);
 	ctx.gl.use_program(None);
 }
 

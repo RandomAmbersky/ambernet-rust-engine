@@ -1,14 +1,14 @@
 precision highp float;
 uniform vec2 uMapSize;
 uniform vec2 uSheetSize;
+uniform vec2 utileSize;
+
 uniform sampler2D uTileMap;
 uniform sampler2D uTileSheet;
 
 varying vec4 worldCoord;
 
 void main() {
-//    vec2 uSheetSize = vec2(256., 192.); // in pixels
-    vec2 tileSize  = vec2(16., 16.); // in pixels
     float MAX_COLOR_VALUE_256 = 256.0; //  color 0..1 * 256.0 => 0..256
 
     float isOk = 0.;
@@ -40,13 +40,13 @@ void main() {
 
 //     проверили что по координатам 0,0 действительно находятся данные [11,9]
 //     vec2 tileXY_checking = tileXY;
-//     if (tileXY_checking.y * uSheetSize.x / tileSize.x + tileXY_checking.x == 155.0) {
+//     if (tileXY_checking.y * uSheetSize.x / utileSize.x + tileXY_checking.x == 155.0) {
 //     	isOk = 1.0;
 //     } else {
 //     	isOk = 0.;
 //     };
 
-    tileXY = tileXY * tileSize; // x and y on tile map in pixels
+    tileXY = tileXY * utileSize; // x and y on tile map in pixels
     tileXY = tileXY / uSheetSize; // 0..1 normalize
 
     vec2 tileOffset = fract(tex_coord * uMapSize); // 0..1 повторяемые uMapSize раз
@@ -58,7 +58,7 @@ void main() {
 //        isOk = 1.0;
 //    }
 
-    vec2 sheetCoord = tileXY + tileOffset / tileSize;
+    vec2 sheetCoord = tileXY + tileOffset / utileSize;
 
 //    if (sheetCoord.x > 1.0) {
 //        isOk = 1.0;

@@ -82,20 +82,22 @@ impl AmberSkyNetClient {
     }
 
     pub fn upload_tiles(&self, data: Vec<u8>) -> Result<(), JsValue> {
-        let mess = "engine upload_tiles".to_owned();
-        LoggerWeb::log(&mess);
+        let mess = "engine upload_tiles";
+        LoggerWeb::log(mess);
         set_tiles(&self.ctx, &self.view_2d, &data);
         Ok(())
     }
 
     pub fn upload_map(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
-        let mess = "engine upload_map".to_owned();
-        LoggerWeb::log(&mess);
-        let map = load_xml_map(&data);
+        let mess = "engine upload_map";
+        LoggerWeb::log(mess);
+
+        let map = load_xml_map(&data)?;
         let mess = format!("parsed map is: {:?}", map);
         LoggerWeb::log(&mess);
 
         asn_view_2d::set_map(&self.ctx, &mut self.view_2d, map.width as u32, map.height as u32, &map.map);
+        asn_view_2d::set_tile_size(&self.ctx, &mut self.view_2d, map.tile_width as u32, map.tile_height as u32);
         Ok(())
     }
 
