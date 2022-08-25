@@ -161,8 +161,8 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 	ctx.gl.uniform2f(Some(&item.u_map_size), width as f32, height as f32);
 	ctx.gl.use_program(None);
 
-	item.map.width = width as i32;
-	item.map.height = height as i32;
+	item.map.width = width;
+	item.map.height = height;
 
 	// move | new_map | item.map = new_map ;
 }
@@ -195,4 +195,8 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 
 	ctx.gl.active_texture(GL::TEXTURE1);
 	ctx.gl.bind_texture(GL::TEXTURE_2D, None);
+}
+
+pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), String> {
+	item.map.set_cell(x, y, cell as u8)
 }
