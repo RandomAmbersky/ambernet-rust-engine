@@ -57,7 +57,7 @@ pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
 	buffers::load_index_buffer(&ctx.gl, buf)
 }
 
-pub fn update_texture(ctx: &RenderContext, texture: Option<&WebGlTexture>, tex: DecodedTexture, is_linear: bool) -> Result<(), String> {
+pub fn update_texture(ctx: &RenderContext, texture: &WebGlTexture, tex: &DecodedTexture, is_linear: bool) -> Result<(), String> {
 	textures::update(&ctx.gl, texture, tex, is_linear)
 }
 

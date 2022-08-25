@@ -20,7 +20,8 @@ pub struct View2D {
 	u_image1: WebGlUniformLocation,
 	vertices_buf: WebGlBuffer,
 	map: Map,
-	u_map_size: WebGlUniformLocation
+	u_map_size: WebGlUniformLocation,
+	u_sheet_size: WebGlUniformLocation,
 }
 
 pub fn new_item (
@@ -77,6 +78,13 @@ pub fn new_item (
 		Some(t) => t
 	};
 
+	let u_sheet_size = match ctx.gl.get_uniform_location(&program, "uSheetSize") {
+		None => {
+			return Err(String::from("uSheetSize not found"))
+		},
+		Some(t) => t
+	};
+
 	let view2d = View2D {
 		program,
 		a_position,
@@ -88,14 +96,24 @@ pub fn new_item (
 		u_image1,
 		vertices_buf,
 		map: Map::default(),
-		u_map_size
+		u_map_size,
+		u_sheet_size
 	};
 	Ok(view2d)
 }
 
+fn update_texture(ctx: &RenderContext, texture: &WebGlTexture, tex: &DecodedTexture, is_linear: bool) -> Result<(), String> {
+	asn_render_webgl::update_texture(ctx, &item.texture, &tex, false)
+}
+
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
 	let tex = decode_texture(buf).expect("decode texture panic!");
-	asn_render_webgl::update_texture(ctx, Some(&item.texture), tex, false).expect("update_texture panic!");
+
+	asn_render_webgl::update_texture(ctx, &item.texture, &tex, false).expect("update_texture panic!");
+
+	ctx.gl.use_program(Some(&item.program));
+	ctx.gl.uniform2f(Some(&item.u_sheet_size), tex.width as f32, tex.height as f32);
+	ctx.gl.use_program(None);
 }
 
 pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
@@ -124,7 +142,7 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 		bytes: map_texture
 	};
 
-	asn_render_webgl::update_texture(ctx, Some(&item.map_texture), tex, false).expect("update_texture panic!");
+	asn_render_webgl::update_texture(ctx, &item.map_texture, &tex, false).expect("update_texture panic!");
 
 	ctx.gl.use_program(Some(&item.program));
 	ctx.gl.uniform2f(Some(&item.u_map_size), width as f32, height as f32);
@@ -134,16 +152,6 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 	item.map.height = height as i32;
 
 	// move | new_map | item.map = new_map ;
-
-	// const cell = layer.data[i] - 1
-	// const g = Math.floor(cell / tile.width)
-	// const r = cell - g * tile.width
-	// const b = 255
-	// const a = 255
-	// layerArray.push(r)
-	// layerArray.push(g)
-	// layerArray.push(b)
-	// layerArray.push(a)
 }
 
 pub fn draw(ctx: &RenderContext, item: &View2D) {

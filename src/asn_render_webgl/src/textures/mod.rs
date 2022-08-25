@@ -6,12 +6,12 @@ use asn_images::DecodedTexture;
 #[allow(dead_code)]
 pub fn update (
 	gl: &GL,
-	texture: Option<&WebGlTexture>,
-	tex: DecodedTexture,
+	texture: &WebGlTexture,
+	tex: &DecodedTexture,
 	is_linear: bool
 ) -> Result<(), String>{
 
-	gl.bind_texture(GL::TEXTURE_2D, texture);
+	gl.bind_texture(GL::TEXTURE_2D, Some(texture));
 
 	// gl.pixel_storei(GL::UNPACK_FLIP_Y_WEBGL, 1);
 
@@ -75,6 +75,6 @@ pub fn upload(
 			return Err(String::from("create_texture error"))
 		}
 	};
-	update(gl, Some(&texture),  tex, is_linear)?;
+	update(gl, &texture,  &tex, is_linear)?;
 	Ok(texture)
 }
