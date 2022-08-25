@@ -84,7 +84,7 @@ impl AmberSkyNetClient {
     pub fn upload_tiles(&self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
-        set_tiles(&self.ctx, &self.view_2d, &data);
+        set_tiles(&self.ctx, &self.view_2d, &data)?;
         Ok(())
     }
 

@@ -111,14 +111,16 @@ pub fn new_item (
 	Ok(view2d)
 }
 
-pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
-	let tex = decode_texture(buf).expect("decode texture panic!");
+pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) -> Result<(), String>{
+	let tex = decode_texture(buf)?;
 
-	asn_render_webgl::update_texture(ctx, &item.texture, &tex, false).expect("update_texture panic!");
+	asn_render_webgl::update_texture(ctx, &item.texture, &tex, false)?;
 
 	ctx.gl.use_program(Some(&item.program));
 	ctx.gl.uniform2f(Some(&item.u_sheet_size), tex.width as f32, tex.height as f32);
 	ctx.gl.use_program(None);
+
+	Ok(())
 }
 
 pub fn set_tile_size (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32) {
@@ -175,9 +177,6 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 	ctx.gl.enable_vertex_attrib_array(item.a_position);
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, None);
 
-	// let u_tile_size =  ctx.gl.get_uniform_location(&item.program, "uTileSize").unwrap();
-	// ctx.gl.uniform2f(Some(&u_tile_size), 16., 16.);
-	//
 	// let u_resolution =  ctx.gl.get_uniform_location(&item.program, "uResolution").unwrap();
 	// ctx.gl.uniform2f(Some(&u_resolution), ctx.width as f32, ctx.height as f32);
 
