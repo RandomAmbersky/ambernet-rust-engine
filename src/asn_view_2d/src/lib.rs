@@ -4,7 +4,7 @@ mod map;
 use amberskynet_logger_web::LoggerWeb;
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_render_webgl::{ RenderContext };
-use asn_render_webgl::lib::DecodedTexture;
+use asn_images::{decode_texture, DecodedTexture};
 
 use web_sys::WebGlRenderingContext as GL;
 use map::Map;
@@ -42,7 +42,6 @@ pub fn new_item (
 	let a_position = ctx.gl.get_attrib_location(&program, "aPosition") as u32;
 
 	let u_transform =  ctx.gl.get_uniform_location(&program, "uTransform").unwrap();
-	let mut transform_matrix = asn_math::IDENTITY_MATRIX;
 
 	let scale_matrix = asn_math::scaling_matrix(
 		2.,
@@ -55,7 +54,7 @@ pub fn new_item (
 		0.
 	);
 
-	transform_matrix = asn_math::mult_matrix_4(scale_matrix, trans_matrix);
+	let transform_matrix = asn_math::mult_matrix_4(scale_matrix, trans_matrix);
 
 	let u_image0 = match ctx.gl.get_uniform_location(&program, "uTileMap") {
 		Some(t) => t,
@@ -95,14 +94,14 @@ pub fn new_item (
 }
 
 pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) {
-	let tex = asn_render_webgl::decode_texture(buf).expect("decode texture panic!");
+	let tex = decode_texture(buf).expect("decode texture panic!");
 	asn_render_webgl::update_texture(ctx, Some(&item.texture), tex, false).expect("update_texture panic!");
 }
 
 pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
 	let mut map_texture: Vec<u8> = Vec::new();
 
-	for cell in buf.into_iter() {
+	for cell in buf.iter() {
 		let index = cell - 1;
 		let y = index / 16;
 		let x = index - y * 16;

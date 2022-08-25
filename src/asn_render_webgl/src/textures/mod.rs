@@ -1,8 +1,7 @@
-use image::EncodableLayout;
 use web_sys::WebGlTexture;
 use amberskynet_logger_web::LoggerWeb;
 pub use web_sys::WebGlRenderingContext as GL;
-use crate::lib::DecodedTexture;
+use asn_images::DecodedTexture;
 
 #[allow(dead_code)]
 pub fn update (
@@ -49,7 +48,7 @@ pub fn update (
 		border,
 		src_format,
 		src_type,
-		Some(tex.bytes.as_bytes()),
+		Some(tex.bytes.as_slice()),
 	) {
 		Ok(t) => t,
 		Err(why) => {
