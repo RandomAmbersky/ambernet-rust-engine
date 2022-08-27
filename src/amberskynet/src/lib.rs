@@ -1,4 +1,5 @@
 mod utils;
+mod cell_game;
 
 use asn_view_2d::{new_item as new_view_2d, View2D, set_tiles};
 use asn_tiled::load_xml_map;
@@ -12,6 +13,7 @@ use asn_render_webgl::RenderContext;
 use color_quad::{new_item as new_color_quad, ColorQuad};
 use textured_quad::{new_item as new_textured_quad, TexturedQuad};
 use triangle::{new_item as new_triangle, Triangle};
+use crate::cell_game::CellGame;
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
@@ -23,7 +25,8 @@ pub struct AmberSkyNetClient {
     color_quad: ColorQuad,
     #[allow(dead_code)]
     textured_quad: TexturedQuad,
-    view_2d: View2D
+    cell_game: CellGame
+    // view_2d: View2D
 }
 
 impl Default for AmberSkyNetClient {
@@ -54,13 +57,15 @@ impl Default for AmberSkyNetClient {
             }
         };
 
-        let view_2d = match new_view_2d(&ctx, 10, 10) {
-            Ok(t) => t,
-            Err(err) => {
-                LoggerWeb::log(&err);
-                panic!()
-            }
-        };
+        // let view_2d = match new_view_2d(&ctx, 10, 10) {
+        //     Ok(t) => t,
+        //     Err(err) => {
+        //         LoggerWeb::log(&err);
+        //         panic!()
+        //     }
+        // };
+
+        let cell_game = CellGame::default();
 
         Self {
             // logger: LoggerWeb {},
@@ -68,7 +73,8 @@ impl Default for AmberSkyNetClient {
             triangle,
             color_quad,
             textured_quad,
-            view_2d
+            // view_2d,
+            cell_game
         }
     }
 }
@@ -84,7 +90,7 @@ impl AmberSkyNetClient {
     pub fn upload_tiles(&self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
-        set_tiles(&self.ctx, &self.view_2d, &data)?;
+        // set_tiles(&self.ctx, &self.view_2d, &data)?;
         Ok(())
     }
 
@@ -96,15 +102,23 @@ impl AmberSkyNetClient {
         let mess = format!("parsed map is: {:?}", map);
         LoggerWeb::log(&mess);
 
-        asn_view_2d::set_map(&self.ctx, &mut self.view_2d, map.width as u32, map.height as u32, &map.map);
-        asn_view_2d::set_tile_size(&self.ctx, &mut self.view_2d, map.tile_width as u32, map.tile_height as u32);
+        // asn_view_2d::set_map(&self.ctx, &mut self.view_2d, map.width as u32, map.height as u32, &map.map);
+        // asn_view_2d::set_tile_size(&self.ctx, &mut self.view_2d, map.tile_width as u32, map.tile_height as u32);
         Ok(())
     }
 
-    pub fn update(&self, _time: f32) -> Result<(), JsValue> {
-        let _mess = format!("engine update: {}", _time);
+    pub fn update(&mut self, _time: f32) -> Result<(), JsValue> {
+        let rnd: u8 = rand::random::<u8>();
+        // match asn_view_2d::set_cell(&mut self.view_2d, 10, 10, rnd as u32) {
+        //     Ok(()) => {},
+        //     Err(e) => {
+        //         LoggerWeb::log(&e);
+        //     }
+        // };
+
+        let mess = format!("engine update: {} {}", _time, rnd);
         // say_hello();
-        // self.logger.log(&_mess);
+        LoggerWeb::log(&mess);
         Ok(())
     }
 
@@ -119,7 +133,7 @@ impl AmberSkyNetClient {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
         // textured_quad::draw(&self.ctx, &self.textured_quad);
-        asn_view_2d::draw(&self.ctx, &self.view_2d);
+        // asn_view_2d::draw(&self.ctx, &self.view_2d);
         // color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())
     }

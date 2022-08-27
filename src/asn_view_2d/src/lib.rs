@@ -164,6 +164,8 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 	item.map.width = width;
 	item.map.height = height;
 
+	let mess = format!("Map set on {}, {}, {}, {}", width, height, item.map.width, item.map.height);
+	LoggerWeb::log(&mess);
 	// move | new_map | item.map = new_map ;
 }
 

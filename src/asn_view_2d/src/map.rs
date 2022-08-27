@@ -1,3 +1,5 @@
+use amberskynet_logger_web::LoggerWeb;
+
 pub struct Map {
     pub width: u32,
     pub height: u32,
@@ -27,7 +29,7 @@ impl Default for Map {
 }
 
 impl Map {
-    pub fn set_cell (&self,  x: u32, y: u32, cell: u8) -> Result<(), String> {
+    pub fn set_cell (&mut self,  x: u32, y: u32, cell: u8) -> Result<(), String> {
         if x > self.width {
             let mess = format!("Invalid width {}", x);
             return Err(mess);
@@ -36,11 +38,19 @@ impl Map {
             let mess = format!("Invalid height {}", y);
             return Err(mess);
         }
-        let index = self.get_ingex(x, y);
-        self.cells[index] = cell as u8;
+        let index = self.get_ingex(x, y)?;
+        let mess = format!("{} {} {} {} index is {} of {}", self.width, self.height, x, y, index, self.cells.len());
+        LoggerWeb::log(&mess);
+        // self.cells[index as usize] = 10;
         Ok(())
     }
-    pub fn get_ingex (&self, x: u32, y: u32) -> usize {
-        (self.height * y + x) as usize
+
+    pub fn get_ingex (&self, x: u32, y: u32) -> Result<usize, String> {
+        let index: usize = (self.height * y + x) as usize;
+        if self.cells.len() > index {
+            return Ok(index as usize);
+        }
+        let mess = format!("Invalid index {} on map [{},{}]", index, x, y);
+        Err(mess)
     }
 }

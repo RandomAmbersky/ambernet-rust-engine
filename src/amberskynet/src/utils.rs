@@ -1,6 +1,4 @@
-use asn_utils_js;
-
-pub(crate) fn set_panic_hook() {
+pub fn set_panic_hook() {
 	asn_utils_js::say_hello();
 	// When the `console_error_panic_hook` feature is enabled, we can call the
 	// `set_panic_hook` function at least once during initialization, and then
