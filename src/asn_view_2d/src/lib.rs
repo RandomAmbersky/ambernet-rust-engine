@@ -127,7 +127,7 @@ pub fn set_tile_size (ctx: &RenderContext, item: &mut View2D, width: u32, height
 	Ok(())
 }
 
-pub fn set_view (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
+pub fn set_view (item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
 	item.view.bytes = Vec::new();
 
 	for cell in buf.iter() {
@@ -147,17 +147,20 @@ pub fn set_view (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32
 		item.view.bytes.push(255);
 	}
 
-	asn_render_webgl::update_texture(ctx, &item.map_texture, &item.view, false).expect("update_texture panic!");
-
-	ctx.gl.use_program(Some(&item.program));
-	ctx.gl.uniform2f(Some(&item.u_map_size), width as f32, height as f32);
-	ctx.gl.use_program(None);
-
 	item.view.width = width;
 	item.view.height = height;
 
 	let mess = format!("Map set on {}, {}, {}, {}", width, height, item.view.width, item.view.height);
 	LoggerWeb::log(&mess);
+}
+
+pub fn update_view (ctx: &RenderContext, item: &mut View2D) {
+	asn_render_webgl::update_texture(ctx, &item.map_texture, &item.view, false).expect("update_texture panic!");
+
+	ctx.gl.use_program(Some(&item.program));
+	ctx.gl.uniform2f(Some(&item.u_map_size), item.view.width as f32, item.view.height as f32);
+	ctx.gl.use_program(None);
+
 }
 
 pub fn draw(ctx: &RenderContext, item: &View2D) {
@@ -188,5 +191,20 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 }
 
 pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), String> {
-	item.view.set_cell(x, y, cell as u8)
+	let cell_y = cell / 16;
+	let cell_x = cell - y * 16;
+
+	let index = ((item.view.width * y + x) * 4) as usize;
+
+	if index >= item.view.bytes.len() {
+		let mess = format!("Invalid index {} on map [{},{}]", index, x, y);
+		return Err(mess)
+	}
+
+	item.view.bytes[index] = cell_x as u8;
+	item.view.bytes[index+1] = cell_y as u8;
+	item.view.bytes[index+2] = 255;
+	item.view.bytes[index+3] = 255;
+
+	Ok(())
 }
