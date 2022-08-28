@@ -19,6 +19,7 @@ name = "amberskynet"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
+ "asn_map",
  "asn_render_webgl",
  "asn_test_2d",
  "asn_tiled",
@@ -46,6 +47,13 @@ name = "asn_images"
 version = "0.1.0"
 dependencies = [
  "image",
+]
+
+[[package]]
+name = "asn_map"
+version = "0.1.0"
+dependencies = [
+ "amberskynet_logger_web",
 ]
 
 [[package]]

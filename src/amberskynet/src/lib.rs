@@ -1,5 +1,6 @@
 mod utils;
 mod cell_game;
+mod game_utils;
 
 use asn_view_2d::{new_item as new_view_2d, View2D, set_tiles};
 use asn_tiled::load_xml_map;
@@ -25,8 +26,9 @@ pub struct AmberSkyNetClient {
     color_quad: ColorQuad,
     #[allow(dead_code)]
     textured_quad: TexturedQuad,
-    cell_game: CellGame
-    // view_2d: View2D
+    #[allow(dead_code)]
+    cell_game: CellGame,
+    view_2d: View2D
 }
 
 impl Default for AmberSkyNetClient {
@@ -57,13 +59,13 @@ impl Default for AmberSkyNetClient {
             }
         };
 
-        // let view_2d = match new_view_2d(&ctx, 10, 10) {
-        //     Ok(t) => t,
-        //     Err(err) => {
-        //         LoggerWeb::log(&err);
-        //         panic!()
-        //     }
-        // };
+        let view_2d = match new_view_2d(&ctx) {
+            Ok(t) => t,
+            Err(err) => {
+                LoggerWeb::log(&err);
+                panic!()
+            }
+        };
 
         let cell_game = CellGame::default();
 
@@ -73,8 +75,8 @@ impl Default for AmberSkyNetClient {
             triangle,
             color_quad,
             textured_quad,
-            // view_2d,
-            cell_game
+            cell_game,
+            view_2d
         }
     }
 }
@@ -87,10 +89,10 @@ impl AmberSkyNetClient {
         AmberSkyNetClient::default()
     }
 
-    pub fn upload_tiles(&self, data: Vec<u8>) -> Result<(), JsValue> {
+    pub fn upload_tiles(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
-        // set_tiles(&self.ctx, &self.view_2d, &data)?;
+        game_utils::set_tiles(&self.ctx, &mut self.view_2d, 16, 16, &data)?;
         Ok(())
     }
 
@@ -98,11 +100,7 @@ impl AmberSkyNetClient {
         let mess = "engine upload_map";
         LoggerWeb::log(mess);
 
-        let map = load_xml_map(&data)?;
-        let mess = format!("parsed map is: {:?}", map);
-        LoggerWeb::log(&mess);
-
-        // asn_view_2d::set_map(&self.ctx, &mut self.view_2d, map.width as u32, map.height as u32, &map.map);
+        game_utils::set_map(&mut self.cell_game, &data)?;
         // asn_view_2d::set_tile_size(&self.ctx, &mut self.view_2d, map.tile_width as u32, map.tile_height as u32);
         Ok(())
     }

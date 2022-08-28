@@ -11,5 +11,5 @@ path = "src/lib.rs"
 #wasm-opt = false
 
 [dependencies]
-amberskynet_logger_web = { path="../amberskynet_logger_web" }
+amberskynet_logger_web = { path= "../../amberskynet_logger_web" }
 xmlparser = "*"

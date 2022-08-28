@@ -14,7 +14,7 @@ wasm-opt = false
 asn_render_webgl = { path="../asn_render_webgl" }
 asn_images = { path="../asn_images" }
 amberskynet_logger_web = { path="../amberskynet_logger_web" }
-asn_math= { path="../asn_math" }
+asn_math= { path="../core/asn_math" }
 js-sys = "*"
 [dependencies.wasm-bindgen]
 version = "*"

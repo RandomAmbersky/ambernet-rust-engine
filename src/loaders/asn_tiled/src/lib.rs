@@ -1,11 +1,11 @@
 mod utils;
 mod loader;
-mod map;
+mod decoded_map;
 
-use map::Map;
+use decoded_map::DecodedMap;
 use amberskynet_logger_web::LoggerWeb;
 
-pub fn load_xml_map (buf: &[u8]) -> Result<Map, String> {
+pub fn load_xml_map (buf: &[u8]) -> Result<DecodedMap, String> {
 	let map_str = match std::str::from_utf8(buf) {
 		Ok(v) => v,
 		Err(err) => {

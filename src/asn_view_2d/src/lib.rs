@@ -25,9 +25,7 @@ pub struct View2D {
 	u_tile_size: WebGlUniformLocation,
 }
 
-pub fn new_item (
-	ctx: &RenderContext, _w_cells: i32, _h_cells: i32
-) -> Result<View2D, String> {
+pub fn new_item (ctx: &RenderContext) -> Result<View2D, String> {
 
 	let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 
@@ -123,10 +121,11 @@ pub fn set_tiles (ctx: &RenderContext, item: &View2D, buf: &[u8]) -> Result<(), 
 	Ok(())
 }
 
-pub fn set_tile_size (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32) {
+pub fn set_tile_size (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32) -> Result<(), String> {
 	ctx.gl.use_program(Some(&item.program));
 	ctx.gl.uniform2f(Some(&item.u_tile_size), width as f32, height as f32);
 	ctx.gl.use_program(None);
+	Ok(())
 }
 
 pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {

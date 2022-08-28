@@ -1,0 +1,11 @@
+[package]
+name = "asn_map"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+amberskynet_logger_web = { path="../../amberskynet_logger_web" }
+
+[lib]
+name = "asn_map"
+path = "src/lib.rs"

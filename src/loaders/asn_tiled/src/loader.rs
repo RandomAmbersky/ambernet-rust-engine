@@ -1,10 +1,10 @@
 use xmlparser::{Token, Tokenizer};
 use amberskynet_logger_web::LoggerWeb;
-use crate::Map;
+use crate::{DecodedMap};
 use crate::utils::{is_end, is_start};
 
-pub fn parse(text: &str) -> Result<Map, String> {
-    let mut map = Map::default();
+pub fn parse(text: &str) -> Result<DecodedMap, String> {
+    let mut map = DecodedMap::default();
 
     let mut parser = Tokenizer::from(text);
     while let Some(result) = parser.next() {
@@ -17,7 +17,7 @@ pub fn parse(text: &str) -> Result<Map, String> {
     Ok(map)
 }
 
-fn parse_map(parser: &mut Tokenizer, map: &mut Map) {
+fn parse_map(parser: &mut Tokenizer, map: &mut DecodedMap) {
     LoggerWeb::log("map start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
@@ -29,16 +29,16 @@ fn parse_map(parser: &mut Tokenizer, map: &mut Map) {
             parse_layer(parser, map);
         } else if let Token::Attribute { local, value,  .. } = token {
             if local.as_str() == "width" {
-                map.width = value.as_str().parse::<i32>().unwrap();
+                map.width = value.as_str().parse::<u32>().unwrap();
             }
             else if local.as_str() == "height" {
-                map.height = value.as_str().parse::<i32>().unwrap();
+                map.height = value.as_str().parse::<u32>().unwrap();
             }
             else if local.as_str() == "tilewidth" {
-                map.tile_width = value.as_str().parse::<i32>().unwrap()
+                map.tile_width = value.as_str().parse::<u32>().unwrap()
             }
             else if local.as_str() == "tileheight" {
-                map.tile_height = value.as_str().parse::<i32>().unwrap();
+                map.tile_height = value.as_str().parse::<u32>().unwrap();
             }
             // let mess = format!("map Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
             // LoggerWeb::log(&mess);
@@ -46,7 +46,7 @@ fn parse_map(parser: &mut Tokenizer, map: &mut Map) {
     }
 }
 
-fn parse_layer(parser: &mut Tokenizer, map: &mut Map) {
+fn parse_layer(parser: &mut Tokenizer, map: &mut DecodedMap) {
     LoggerWeb::log("layer start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
@@ -64,7 +64,7 @@ fn parse_layer(parser: &mut Tokenizer, map: &mut Map) {
     }
 }
 
-fn parse_data(parser: &mut Tokenizer, map: &mut Map) {
+fn parse_data(parser: &mut Tokenizer, map: &mut DecodedMap) {
     LoggerWeb::log("data start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
@@ -78,7 +78,7 @@ fn parse_data(parser: &mut Tokenizer, map: &mut Map) {
     }
 }
 
-fn parse_data_text(map: &mut Map, map_txt: &str) {
+fn parse_data_text(map: &mut DecodedMap, map_txt: &str) {
         map.map = Vec::new();
         for x in map_txt.replace('\n', "").split(',') {
             let cell_num = x.parse::<u8>().unwrap();
