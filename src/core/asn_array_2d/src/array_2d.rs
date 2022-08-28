@@ -1,13 +1,13 @@
 use amberskynet_logger_web::LoggerWeb;
 
 #[derive(Default, Debug)]
-pub struct Map {
+pub struct Array2D {
     pub width: u32,
     pub height: u32,
-    pub cells: Vec<u8>
+    pub bytes: Vec<u8>
 }
 
-impl Map {
+impl Array2D {
     pub fn set_cell (&mut self,  x: u32, y: u32, cell: u8) -> Result<(), String> {
         if x > self.width {
             let mess = format!("Invalid width {}", x);
@@ -18,15 +18,15 @@ impl Map {
             return Err(mess);
         }
         let index = self.get_ingex(x, y)?;
-        let mess = format!("{} {} {} {} index is {} of {}", self.width, self.height, x, y, index, self.cells.len());
+        let mess = format!("{} {} {} {} index is {} of {}", self.width, self.height, x, y, index, self.bytes.len());
         LoggerWeb::log(&mess);
-        self.cells[index as usize] = cell;
+        self.bytes[index as usize] = cell;
         Ok(())
     }
 
     pub fn get_ingex (&self, x: u32, y: u32) -> Result<usize, String> {
         let index: usize = (self.height * y + x) as usize;
-        if self.cells.len() > index {
+        if self.bytes.len() > index {
             return Ok(index as usize);
         }
         let mess = format!("Invalid index {} on map [{},{}]", index, x, y);

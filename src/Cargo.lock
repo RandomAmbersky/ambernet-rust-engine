@@ -19,7 +19,7 @@ name = "amberskynet"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
- "asn_map",
+ "asn_array_2d",
  "asn_render_webgl",
  "asn_test_2d",
  "asn_tiled",
@@ -43,17 +43,18 @@ dependencies = [
 ]
 
 [[package]]
-name = "asn_images"
-version = "0.1.0"
-dependencies = [
- "image",
-]
-
-[[package]]
-name = "asn_map"
+name = "asn_array_2d"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
+]
+
+[[package]]
+name = "asn_images"
+version = "0.1.0"
+dependencies = [
+ "asn_array_2d",
+ "image",
 ]
 
 [[package]]
@@ -65,6 +66,7 @@ name = "asn_render_webgl"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
+ "asn_array_2d",
  "asn_images",
  "asn_math",
  "js-sys",
@@ -105,6 +107,7 @@ name = "asn_view_2d"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
+ "asn_array_2d",
  "asn_images",
  "asn_math",
  "asn_render_webgl",

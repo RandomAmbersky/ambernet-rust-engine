@@ -1,13 +1,13 @@
 use web_sys::WebGlTexture;
 use amberskynet_logger_web::LoggerWeb;
 pub use web_sys::WebGlRenderingContext as GL;
-use asn_images::DecodedTexture;
+use asn_array_2d::Array2D;
 
 #[allow(dead_code)]
 pub fn update (
 	gl: &GL,
 	texture: &WebGlTexture,
-	tex: &DecodedTexture,
+	tex: &Array2D,
 	is_linear: bool
 ) -> Result<(), String>{
 
@@ -43,8 +43,8 @@ pub fn update (
 		GL::TEXTURE_2D,
 		level,
 		internal_format as i32,
-		tex.width,
-		tex.height,
+		tex.width as i32,
+		tex.height as i32,
 		border,
 		src_format,
 		src_type,
@@ -66,7 +66,7 @@ pub fn update (
 
 pub fn upload(
 	gl: &GL,
-	tex: &DecodedTexture,
+	tex: &Array2D,
 	is_linear: bool
 ) -> Result<WebGlTexture, String> {
 	let texture = match gl.create_texture() {

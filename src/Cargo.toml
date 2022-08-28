@@ -5,7 +5,7 @@ members = [
     "amberskynet_logger_web",
     "asn_render_webgl",
     "./core/asn_math",
-    "./core/asn_map",
+    "./core/asn_array_2d",
     "asn_images",
     "loaders/asn_tiled",
     "asn_test_2d",

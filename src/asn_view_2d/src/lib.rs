@@ -1,13 +1,12 @@
 mod utils;
-mod map;
 
 use amberskynet_logger_web::LoggerWeb;
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_render_webgl::{ RenderContext };
-use asn_images::{decode_texture, DecodedTexture};
+use asn_images::{decode_texture};
 
 use web_sys::WebGlRenderingContext as GL;
-use map::Map;
+use asn_array_2d::Array2D;
 
 pub struct View2D {
 	texture: WebGlTexture,
@@ -19,7 +18,7 @@ pub struct View2D {
 	u_image0: WebGlUniformLocation,
 	u_image1: WebGlUniformLocation,
 	vertices_buf: WebGlBuffer,
-	map: Map,
+	view: Array2D,
 	u_map_size: WebGlUniformLocation,
 	u_sheet_size: WebGlUniformLocation,
 	u_tile_size: WebGlUniformLocation,
@@ -101,7 +100,7 @@ pub fn new_item (ctx: &RenderContext) -> Result<View2D, String> {
 		u_image0,
 		u_image1,
 		vertices_buf,
-		map: Map::default(),
+		view: Array2D::default(),
 		u_map_size,
 		u_sheet_size,
 		u_tile_size
@@ -128,8 +127,8 @@ pub fn set_tile_size (ctx: &RenderContext, item: &mut View2D, width: u32, height
 	Ok(())
 }
 
-pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
-	let mut map_texture: Vec<u8> = Vec::new();
+pub fn set_view (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
+	item.view.bytes = Vec::new();
 
 	for cell in buf.iter() {
 		let index = cell - 1;
@@ -142,30 +141,23 @@ pub fn set_map (ctx: &RenderContext, item: &mut View2D, width: u32, height: u32,
 
 		let mess = format!("cell {:?} [{:?}, {:?}] {:?}", cell, y, x, index_check);
 		LoggerWeb::log(&mess);
-		map_texture.push(x);
-		map_texture.push(y);
-		map_texture.push(255);
-		map_texture.push(255);
+		item.view.bytes.push(x);
+		item.view.bytes.push(y);
+		item.view.bytes.push(255);
+		item.view.bytes.push(255);
 	}
 
-	let tex: DecodedTexture = DecodedTexture {
-		width: width as i32,
-		height: height as i32,
-		bytes: map_texture
-	};
-
-	asn_render_webgl::update_texture(ctx, &item.map_texture, &tex, false).expect("update_texture panic!");
+	asn_render_webgl::update_texture(ctx, &item.map_texture, &item.view, false).expect("update_texture panic!");
 
 	ctx.gl.use_program(Some(&item.program));
 	ctx.gl.uniform2f(Some(&item.u_map_size), width as f32, height as f32);
 	ctx.gl.use_program(None);
 
-	item.map.width = width;
-	item.map.height = height;
+	item.view.width = width;
+	item.view.height = height;
 
-	let mess = format!("Map set on {}, {}, {}, {}", width, height, item.map.width, item.map.height);
+	let mess = format!("Map set on {}, {}, {}, {}", width, height, item.view.width, item.view.height);
 	LoggerWeb::log(&mess);
-	// move | new_map | item.map = new_map ;
 }
 
 pub fn draw(ctx: &RenderContext, item: &View2D) {
@@ -177,9 +169,6 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 	ctx.gl.vertex_attrib_pointer_with_i32(item.a_position, 2, GL::FLOAT, false, 0, 0);
 	ctx.gl.enable_vertex_attrib_array(item.a_position);
 	ctx.gl.bind_buffer( GL::ARRAY_BUFFER, None);
-
-	// let u_resolution =  ctx.gl.get_uniform_location(&item.program, "uResolution").unwrap();
-	// ctx.gl.uniform2f(Some(&u_resolution), ctx.width as f32, ctx.height as f32);
 
 	ctx.gl.active_texture(GL::TEXTURE0);
 	ctx.gl.bind_texture(GL::TEXTURE_2D, Some(&item.map_texture));
@@ -199,5 +188,5 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 }
 
 pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), String> {
-	item.map.set_cell(x, y, cell as u8)
+	item.view.set_cell(x, y, cell as u8)
 }

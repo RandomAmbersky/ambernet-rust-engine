@@ -8,4 +8,6 @@ name = "asn_images"
 path = "src/lib.rs"
 
 [dependencies]
+asn_array_2d = { path= "../core/asn_array_2d" }
 image="*"
+

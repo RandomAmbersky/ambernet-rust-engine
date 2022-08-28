@@ -4,7 +4,7 @@ mod buffers;
 mod textures;
 
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
-use asn_images::DecodedTexture;
+use asn_array_2d::Array2D;
 use utils::GL as GL;
 
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
@@ -57,17 +57,17 @@ pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
 	buffers::load_index_buffer(&ctx.gl, buf)
 }
 
-pub fn update_texture(ctx: &RenderContext, texture: &WebGlTexture, tex: &DecodedTexture, is_linear: bool) -> Result<(), String> {
+pub fn update_texture(ctx: &RenderContext, texture: &WebGlTexture, tex: &Array2D, is_linear: bool) -> Result<(), String> {
 	textures::update(&ctx.gl, texture, tex, is_linear)
 }
 
-pub fn upload_texture(ctx: &RenderContext, tex: &DecodedTexture, is_linear: bool) -> Result<WebGlTexture, String> {
+pub fn upload_texture(ctx: &RenderContext, tex: &Array2D, is_linear: bool) -> Result<WebGlTexture, String> {
 	textures::upload(&ctx.gl, tex, is_linear)
 }
 
 pub fn load_empty_texture(ctx: &RenderContext) -> Result<WebGlTexture, String> {
 	// look at https://snoozetime.github.io/2019/12/19/webgl-texture.html
-	let tex = DecodedTexture {
+	let tex = Array2D {
 		width: 1,
 		height: 1,
 		bytes: ONE_BLUE_PIXEL.to_vec()

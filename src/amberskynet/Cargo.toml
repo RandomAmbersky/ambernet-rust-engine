@@ -25,7 +25,7 @@ asn_test_2d = { path="../asn_test_2d" }
 asn_view_2d = { path="../asn_view_2d" }
 asn_utils_js = { path="../asn_utils_js" }
 asn_tiled = { path= "../loaders/asn_tiled" }
-asn_map = { path= "../core/asn_map" }
+asn_array_2d = { path= "../core/asn_array_2d" }
 color_quad = { path="../renders/tests/color_quad" }
 textured_quad = { path="../renders/tests/textured_quad" }
 triangle = { path="../renders/tests/triangle" }

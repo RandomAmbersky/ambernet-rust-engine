@@ -2,8 +2,7 @@ mod utils;
 mod cell_game;
 mod game_utils;
 
-use asn_view_2d::{new_item as new_view_2d, View2D, set_tiles};
-use asn_tiled::load_xml_map;
+use asn_view_2d::{new_item as new_view_2d, View2D};
 
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
@@ -14,7 +13,7 @@ use asn_render_webgl::RenderContext;
 use color_quad::{new_item as new_color_quad, ColorQuad};
 use textured_quad::{new_item as new_textured_quad, TexturedQuad};
 use triangle::{new_item as new_triangle, Triangle};
-use crate::cell_game::CellGame;
+use cell_game::CellGame;
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
@@ -70,7 +69,6 @@ impl Default for AmberSkyNetClient {
         let cell_game = CellGame::default();
 
         Self {
-            // logger: LoggerWeb {},
             ctx,
             triangle,
             color_quad,
@@ -101,7 +99,6 @@ impl AmberSkyNetClient {
         LoggerWeb::log(mess);
 
         game_utils::set_map(&mut self.cell_game, &data)?;
-        // asn_view_2d::set_tile_size(&self.ctx, &mut self.view_2d, map.tile_width as u32, map.tile_height as u32);
         Ok(())
     }
 

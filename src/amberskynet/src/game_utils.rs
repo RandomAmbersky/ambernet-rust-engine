@@ -1,5 +1,5 @@
 use amberskynet_logger_web::LoggerWeb;
-use asn_map::Map;
+use asn_array_2d::Array2D;
 use asn_render_webgl::RenderContext;
 use asn_tiled::load_xml_map;
 use asn_view_2d::View2D;
@@ -11,14 +11,13 @@ pub fn set_map(game: &mut CellGame, data: &Vec<u8>) -> Result<(), String> {
 	let mess = format!("parsed map is: {:?}", decoded_map);
 	LoggerWeb::log(&mess);
 
-	let map = Map {
+	let map = Array2D {
 		width: decoded_map.width,
 		height: decoded_map.height,
-		cells: decoded_map.map
+		bytes: decoded_map.map,
 	};
 
 	game.set_map(map)?;
-
 	Ok(())
 }
 

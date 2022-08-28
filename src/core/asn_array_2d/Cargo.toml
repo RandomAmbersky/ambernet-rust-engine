@@ -1,5 +1,5 @@
 [package]
-name = "asn_map"
+name = "asn_array_2d"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,5 +7,5 @@ edition = "2021"
 amberskynet_logger_web = { path="../../amberskynet_logger_web" }
 
 [lib]
-name = "asn_map"
+name = "asn_array_2d"
 path = "src/lib.rs"
