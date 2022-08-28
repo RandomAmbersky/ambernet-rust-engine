@@ -194,7 +194,7 @@ pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), Str
 	let cell_y = cell / 16;
 	let cell_x = cell - y * 16;
 
-	let index = ((item.view.width * y + x) * 4) as usize;
+	let index = (item.view.width * y * 4 + x * 4) as usize;
 
 	if index >= item.view.bytes.len() {
 		let mess = format!("Invalid index {} on map [{},{}]", index, x, y);

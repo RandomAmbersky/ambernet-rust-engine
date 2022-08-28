@@ -27,6 +27,23 @@ const data1 = {
   tileName: '/map/tiles_mod.png'
 }
 
+const data2 = {
+  map: {
+    cellSizeX: 32,
+    cellSizeY: 32
+  },
+  sheet: {
+    pixelSizeX: 256,
+    pixelSizeY: 192
+  },
+  tiles: {
+    pixelSizeX: 16,
+    pixelSizeY: 16
+  },
+  mapName: '/map/laboratory3.tmx',
+  tileName: '/map/tiles_many.png'
+}
+
 async function loadData (data) {
   const mapArray = await loadBinary(data.mapName)
   const tilesArray = await loadBinary(data.tileName)
@@ -34,7 +51,7 @@ async function loadData (data) {
   engine.upload_map(mapArray)
 }
 
-loadData(data1)
+loadData(data2)
   .then( _ => {
     renderLoop()
   })

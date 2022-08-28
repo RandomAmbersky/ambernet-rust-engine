@@ -98,22 +98,18 @@ impl AmberSkyNetClient {
         let mess = "engine upload_map";
         LoggerWeb::log(mess);
 
-        game_utils::set_map(&mut self.cell_game, &data)?;
+        game_utils::set_map(&mut self.cell_game, &mut self.view_2d, &data)?;
         Ok(())
     }
 
-    pub fn update(&mut self, _time: f32) -> Result<(), JsValue> {
-        let rnd: u8 = rand::random::<u8>();
-        // match asn_view_2d::set_cell(&mut self.view_2d, 10, 10, rnd as u32) {
-        //     Ok(()) => {},
-        //     Err(e) => {
-        //         LoggerWeb::log(&e);
-        //     }
-        // };
+    pub fn update(&mut self, time: f32) -> Result<(), JsValue> {
+        for _ in 0..100 {
+            game_utils::update(&mut self.view_2d, time)?;
+        }
 
-        let mess = format!("engine update: {} {}", _time, rnd);
+        // let mess = format!("engine update: {} {}", _time, rnd);
         // say_hello();
-        LoggerWeb::log(&mess);
+        // LoggerWeb::log(&mess);
         Ok(())
     }
 
@@ -124,11 +120,12 @@ impl AmberSkyNetClient {
         Ok(())
     }
 
-    pub fn render(&self) -> Result<(), JsValue> {
+    pub fn render(&mut self) -> Result<(), JsValue> {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
         // textured_quad::draw(&self.ctx, &self.textured_quad);
-        // asn_view_2d::draw(&self.ctx, &self.view_2d);
+        asn_view_2d::update_view(&self.ctx, &mut self.view_2d);
+        asn_view_2d::draw(&self.ctx, &self.view_2d);
         // color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())
     }
