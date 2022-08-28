@@ -13,7 +13,7 @@ wasm-opt = false
 [dependencies]
 asn_render_webgl = { path="../../../asn_render_webgl" }
 asn_math= { path="../../../core/asn_math" }
-asn_images= { path="../../../asn_images" }
+asn_images= { path= "../../../loaders/asn_images" }
 js-sys = "*"
 [dependencies.wasm-bindgen]
 version = "*"
