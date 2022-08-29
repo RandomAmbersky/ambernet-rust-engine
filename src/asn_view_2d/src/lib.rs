@@ -194,12 +194,7 @@ pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), Str
 	let cell_y = cell / 16;
 	let cell_x = cell - y * 16;
 
-	let index = (item.view.width * y * 4 + x * 4) as usize;
-
-	if index >= item.view.bytes.len() {
-		let mess = format!("Invalid index {} on map [{},{}]", index, x, y);
-		return Err(mess)
-	}
+	let index = get_index(item, x, y)?;
 
 	item.view.bytes[index] = cell_x as u8;
 	item.view.bytes[index+1] = cell_y as u8;
@@ -207,4 +202,15 @@ pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), Str
 	item.view.bytes[index+3] = 255;
 
 	Ok(())
+}
+
+pub fn get_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, String> {
+	let index = (item.view.width * y * 4 + x * 4) as usize;
+
+	if index >= item.view.bytes.len() {
+		let mess = format!("Invalid index {} on map [{},{}]", index, x, y);
+		return Err(mess)
+	};
+
+	Ok(index)
 }
