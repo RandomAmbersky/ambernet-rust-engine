@@ -104,7 +104,7 @@ impl AmberSkyNetClient {
 
     pub fn update(&mut self, time: f32) -> Result<(), JsValue> {
         for _ in 0..100 {
-            game_utils::update(&mut self.view_2d, time)?;
+            game_utils::update(&self.cell_game.map, &mut self.view_2d, time)?;
         }
 
         // let mess = format!("engine update: {} {}", _time, rnd);

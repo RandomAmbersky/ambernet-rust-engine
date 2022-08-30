@@ -35,17 +35,23 @@ pub fn set_tiles(
 }
 
 pub fn update(
+	map: &Array2D,
 	view: &mut View2D,
 	time: f32
 ) -> Result<(), String> {
 	let mut rng = rand::thread_rng();
-	let x = rng.gen_range(0..32);
-	let y = rng.gen_range(0..32);
+	let x = rng.gen_range(0..map.width);
+	let y = rng.gen_range(0..map.height);
+
 	let rnd = rng.gen_range(0..254);
 
-	// let mess = format!("engine update: {} {}", time, rnd);
-	//
-	match asn_view_2d::set_cell(view, x, y, rnd) {
+	// let mut cell = map.get_cell(x, y)?;
+	// cell += 1;
+	// if cell > 255 {
+	// 	cell = 0;
+	// }
+
+	match asn_view_2d::set_cell(view, x, y, rnd as u32) {
 	    Ok(()) => {},
 	    Err(e) => {
 	        LoggerWeb::log(&e);

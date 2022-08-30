@@ -32,4 +32,17 @@ impl Array2D {
         let mess = format!("Invalid index {} on map [{},{}]", index, x, y);
         Err(mess)
     }
+
+    pub fn get_cell(&self, x: u32, y: u32) -> Result<u8, String> {
+        if x > self.width {
+            let mess = format!("Invalid width {}", x);
+            return Err(mess);
+        }
+        if y > self.height {
+            let mess = format!("Invalid height {}", y);
+            return Err(mess);
+        }
+        let index = self.get_ingex(x, y)?;
+        Ok(self.bytes[index as usize])
+    }
 }

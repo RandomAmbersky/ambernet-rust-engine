@@ -4,7 +4,7 @@ use asn_view_2d::View2D;
 
 #[derive(Default, Debug)]
 pub struct CellGame {
-	map: Array2D
+	pub map: Array2D
 }
 
 impl CellGame {
