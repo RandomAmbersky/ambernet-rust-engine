@@ -160,7 +160,6 @@ pub fn update_view (ctx: &RenderContext, item: &mut View2D) {
 	ctx.gl.use_program(Some(&item.program));
 	ctx.gl.uniform2f(Some(&item.u_map_size), item.view.width as f32, item.view.height as f32);
 	ctx.gl.use_program(None);
-
 }
 
 pub fn draw(ctx: &RenderContext, item: &View2D) {

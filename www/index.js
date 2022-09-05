@@ -51,7 +51,7 @@ async function loadData (data) {
   engine.upload_map(mapArray)
 }
 
-loadData(data2)
+loadData(data1)
   .then( _ => {
     renderLoop()
   })

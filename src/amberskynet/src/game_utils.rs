@@ -19,6 +19,7 @@ pub fn set_map(game: &mut CellGame, view: &mut View2D, data: &Vec<u8>) -> Result
 	};
 
 	asn_view_2d::set_view(view, decoded_map.width, decoded_map.height, &map.bytes);
+	game.set_map(map)?;
 	Ok(())
 }
 
@@ -40,6 +41,11 @@ pub fn update(
 	time: f32
 ) -> Result<(), String> {
 	let mut rng = rand::thread_rng();
+	if map.width == 0 || map.height == 0 {
+		let mess = format!("map {} x {}", map.width, map.height);
+		LoggerWeb::log(&mess);
+		return Ok(());
+	};
 	let x = rng.gen_range(0..map.width);
 	let y = rng.gen_range(0..map.height);
 
