@@ -1,10 +1,11 @@
 use asn_array_2d;
 use asn_array_2d::Array2D;
-use asn_view_2d::View2D;
+use asn_core::Point2D;
 
 #[derive(Default, Debug)]
 pub struct CellGame {
-	pub map: Array2D
+	pub map: Array2D,
+	pub pos: Point2D
 }
 
 impl CellGame {
@@ -13,9 +14,3 @@ impl CellGame {
 		Ok(())
 	}
 }
-
-// impl Default for CellGame {
-//     fn default() -> Self {
-//         CellGame{}
-//     }
-// }
