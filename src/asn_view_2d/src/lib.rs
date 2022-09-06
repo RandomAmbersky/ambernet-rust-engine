@@ -7,6 +7,7 @@ use asn_images::{decode_texture};
 
 use web_sys::WebGlRenderingContext as GL;
 use asn_array_2d::Array2D;
+use asn_core::Rect2D;
 
 pub struct View2D {
 	texture: WebGlTexture,
@@ -127,10 +128,12 @@ pub fn set_tile_size (ctx: &RenderContext, item: &mut View2D, width: u32, height
 	Ok(())
 }
 
-pub fn set_view (item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
-	item.view.bytes = Vec::new();
+pub fn set_view (item: &mut View2D, window: Rect2D, map: &[u8]) {
+	item.view.width = window.width;
+	item.view.height = window.height;
+	let mut bytes = Vec::new();
 
-	for cell in buf.iter() {
+	for cell in map.iter() {
 		let index = cell - 1;
 		let y = index / 16;
 		let x = index - y * 16;
@@ -141,16 +144,15 @@ pub fn set_view (item: &mut View2D, width: u32, height: u32, buf: &[u8]) {
 
 		let mess = format!("cell {:?} [{:?}, {:?}] {:?}", cell, y, x, index_check);
 		LoggerWeb::log(&mess);
-		item.view.bytes.push(x);
-		item.view.bytes.push(y);
-		item.view.bytes.push(255);
-		item.view.bytes.push(255);
+		bytes.push(x);
+		bytes.push(y);
+		bytes.push(255);
+		bytes.push(255);
 	}
 
-	item.view.width = width;
-	item.view.height = height;
+	item.view.bytes = bytes;
 
-	let mess = format!("Map set on {}, {}, {}, {}", width, height, item.view.width, item.view.height);
+	let mess = format!("Map set on {}, {}", item.view.width, item.view.height);
 	LoggerWeb::log(&mess);
 }
 

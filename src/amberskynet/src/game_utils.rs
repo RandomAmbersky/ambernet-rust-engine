@@ -1,6 +1,7 @@
 use rand::Rng;
 use amberskynet_logger_web::LoggerWeb;
 use asn_array_2d::Array2D;
+use asn_core::Rect2D;
 use asn_render_webgl::RenderContext;
 use asn_tiled::load_xml_map;
 use asn_view_2d::View2D;
@@ -18,7 +19,12 @@ pub fn set_map(game: &mut CellGame, view: &mut View2D, data: &Vec<u8>) -> Result
 		bytes: decoded_map.map,
 	};
 
-	asn_view_2d::set_view(view, decoded_map.width, decoded_map.height, &map.bytes);
+	let rect = Rect2D {
+		width: decoded_map.width,
+		height: decoded_map.height
+	};
+
+	asn_view_2d::set_view(view, rect, &map.bytes);
 	game.set_map(map)?;
 	Ok(())
 }
@@ -38,7 +44,7 @@ pub fn set_tiles(
 pub fn update(
 	map: &Array2D,
 	view: &mut View2D,
-	time: f32
+	_time: f32
 ) -> Result<(), String> {
 	let mut rng = rand::thread_rng();
 	if map.width == 0 || map.height == 0 {
