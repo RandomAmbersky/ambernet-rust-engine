@@ -26,8 +26,7 @@ pub struct AmberSkyNetClient {
     #[allow(dead_code)]
     textured_quad: TexturedQuad,
     #[allow(dead_code)]
-    cell_game: CellGame,
-    view_2d: View2D
+    game: CellGame
 }
 
 impl Default for AmberSkyNetClient {
@@ -58,7 +57,7 @@ impl Default for AmberSkyNetClient {
             }
         };
 
-        let view_2d = match new_view_2d(&ctx) {
+        let game = match CellGame::new(&ctx) {
             Ok(t) => t,
             Err(err) => {
                 LoggerWeb::log(&err);
@@ -66,15 +65,12 @@ impl Default for AmberSkyNetClient {
             }
         };
 
-        let cell_game = CellGame::default();
-
         Self {
             ctx,
             triangle,
             color_quad,
             textured_quad,
-            cell_game,
-            view_2d
+            game
         }
     }
 }
@@ -90,21 +86,21 @@ impl AmberSkyNetClient {
     pub fn upload_tiles(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
-        game_utils::set_tiles(&self.ctx, &mut self.view_2d, &data)?;
+        game_utils::set_tiles(&self.ctx, &mut self.game.view, &data)?;
         Ok(())
     }
 
     pub fn upload_map(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_map";
         LoggerWeb::log(mess);
-        game_utils::set_map(&mut self.cell_game, &data)?;
+        game_utils::set_map(&mut self.game, &data)?;
         Ok(())
     }
 
     pub fn update(&mut self, time: f32) -> Result<(), JsValue> {
         // let mess = format!("update times: {} ", time);
         // LoggerWeb::log(&mess);
-        game_utils::update(&mut self.cell_game, &mut self.view_2d, time)?;
+        game_utils::update(&mut self.game, time)?;
         Ok(())
     }
 
@@ -119,7 +115,7 @@ impl AmberSkyNetClient {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
         // textured_quad::draw(&self.ctx, &self.textured_quad);
-        self.view_2d.draw(&self.ctx)?;
+        self.game.view.draw(&self.ctx)?;
         // color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())
     }
