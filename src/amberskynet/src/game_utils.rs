@@ -18,19 +18,13 @@ const WINDOW_SIZE: Size2D = Size2D {
 	height: 32
 };
 
-pub fn set_map(game: &mut CellGame, data: &Vec<u8>) -> Result<(), String> {
+pub fn set_map(game: &mut CellGame, data: &[u8]) -> Result<(), String> {
 	let decoded_map = load_xml_map(&data)?;
 
 	let mess = format!("parsed map is: {:?}", decoded_map);
 	LoggerWeb::log(&mess);
 
-	let map = Array2D {
-		width: decoded_map.width,
-		height: decoded_map.height,
-		bytes: decoded_map.map,
-	};
-
-	game.set_map(map)?;
+	game.set_map(decoded_map)?;
 	Ok(())
 }
 
