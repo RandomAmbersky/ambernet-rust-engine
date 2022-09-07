@@ -1,6 +1,7 @@
 mod utils;
 mod texture_data;
 mod render_data;
+mod view_utils;
 
 use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::{ RenderContext };
@@ -9,6 +10,7 @@ use web_sys::WebGlRenderingContext as GL;
 use asn_core::{Array2D, Point2D, Size2D};
 
 use render_data::RenderData;
+use crate::view_utils::set_view_from;
 
 pub struct View2D {
 	view: Array2D,
@@ -68,7 +70,7 @@ impl View2D {
 			x: 0,
 			y: 0
 		};
-		self.view.set_view_from(&pos, window, map)?;
+		set_view_from(map, &pos, window, &mut self.view)?;
 		self.is_need_update_texture_view = true;
 		Ok(())
 	}

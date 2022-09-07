@@ -1,4 +1,3 @@
-use std::slice::Windows;
 use asn_core::Array2D;
 use asn_core::{Point2D, Size2D};
 use asn_render_webgl::RenderContext;

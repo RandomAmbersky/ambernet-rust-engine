@@ -31,9 +31,9 @@ pub fn set_tiles( ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Resul
 pub fn update(game: &mut CellGame, time: f32) -> Result<(), String> {
 	game.update(time)?;
 
-	for _ in 0..1000 {
-		some(&mut game.map)?;
-	}
+	// for _ in 0..1000 {
+	// 	some(&mut game.map)?;
+	// }
 
 	Ok(())
 }
