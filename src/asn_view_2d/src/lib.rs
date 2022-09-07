@@ -160,7 +160,6 @@ pub fn set_view (item: &mut View2D, window: Rect2D, map: &[u8]) {
 
 pub fn update_view (ctx: &RenderContext, item: &mut View2D) {
 	asn_render_webgl::update_texture(ctx, &item.map_texture, &item.texture_data, false).expect("update_texture panic!");
-
 	ctx.gl.use_program(Some(&item.program));
 	ctx.gl.uniform2f(Some(&item.u_map_size), item.texture_data.width as f32, item.texture_data.height as f32);
 	ctx.gl.use_program(None);
@@ -196,10 +195,15 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), String> {
 	let index = get_index(item, x, y)?;
 
-	item.view.bytes[index] = cell as u8;
+	let cell_u8 = cell as u8;
 
-	let cell_y = cell / 16;
-	let cell_x = cell - y * 16;
+	item.view.bytes[index] = cell_u8;
+
+	let cell_y = cell_u8 / 16;
+	let cell_x = cell_u8 - cell_y * 16;
+
+	// let mess = format!("set_cell on {}, {}", cell_y, cell_x);
+	// LoggerWeb::log(&mess);
 
 	let texture_index = get_texture_index(item, x, y)?;
 

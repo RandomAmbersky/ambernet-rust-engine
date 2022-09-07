@@ -42,7 +42,7 @@ pub fn set_tiles(
 }
 
 pub fn update(
-	map: &Array2D,
+	map: &mut Array2D,
 	view: &mut View2D,
 	_time: f32
 ) -> Result<(), String> {
@@ -55,15 +55,16 @@ pub fn update(
 	let x = rng.gen_range(0..map.width);
 	let y = rng.gen_range(0..map.height);
 
-	let rnd = rng.gen_range(0..16);
+	// let rnd = rng.gen_range(0..16);
 
-	// let mut cell = map.get_cell(x, y)?;
-	// cell += 1;
-	// if cell > 16 {
+	let mut cell = map.get_cell(x, y)?;
+	cell += 1;
+	// if cell > 14 {
 	// 	cell = 0;
 	// }
 
-	match asn_view_2d::set_cell(view, x, y, rnd as u32) {
+	map.set_cell(x, y, cell)?;
+	match asn_view_2d::set_cell(view, x, y, cell as u32) {
 	    Ok(()) => {},
 	    Err(e) => {
 	        LoggerWeb::log(&e);

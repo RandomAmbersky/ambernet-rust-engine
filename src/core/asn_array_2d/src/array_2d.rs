@@ -18,8 +18,8 @@ impl Array2D {
             return Err(mess);
         }
         let index = self.get_ingex(x, y)?;
-        let mess = format!("{} {} {} {} index is {} of {}", self.width, self.height, x, y, index, self.bytes.len());
-        LoggerWeb::log(&mess);
+        // let mess = format!("{} {} {} {} index is {} of {}", self.width, self.height, x, y, index, self.bytes.len());
+        // LoggerWeb::log(&mess);
         self.bytes[index as usize] = cell;
         Ok(())
     }
