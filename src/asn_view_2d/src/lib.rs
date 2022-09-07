@@ -14,7 +14,7 @@ use render_data::RenderData;
 
 pub struct View2D {
 	view: Array2D,
-	pub texture_data: Array2D,
+	texture_data: Array2D,
 	render_data: RenderData,
 }
 
