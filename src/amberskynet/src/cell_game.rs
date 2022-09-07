@@ -33,10 +33,12 @@ impl CellGame {
 
 	pub fn set_map(&mut self, map: Array2D) -> Result<(), String> {
 		self.map = map;
+		self.view.set_view(&self.window_size, &self.map)?;
 		Ok(())
 	}
+
 	pub fn update(&mut self, time: f32) -> Result<(), String> {
-		self.view.set_view(&self.window_size, &self.map);
+		self.view.set_view(&self.window_size, &self.map)?;
 		self.view.update(time)?;
 		Ok(())
 	}

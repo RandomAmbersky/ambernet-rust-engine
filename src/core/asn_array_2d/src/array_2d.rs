@@ -1,5 +1,5 @@
-use std::fmt::format;
 use amberskynet_logger_web::LoggerWeb;
+use asn_core::{Point2D, Size2D};
 
 #[derive(Default, Debug)]
 pub struct Array2D {
@@ -44,5 +44,25 @@ impl Array2D {
         }
         let index = self.get_ingex(x, y)?;
         Ok(self.bytes[index as usize])
+    }
+
+    pub fn set_view_from(&mut self, pos: &Point2D, window: &Size2D, map: &Array2D) -> Result<(), String> {
+
+        let mut bytes: Vec<u8> = Vec::new();
+
+        let mut index = map.get_ingex(pos.x, pos.y)?;
+
+        for _ in 0..window.height{
+            for c_x in index..index + window.width as usize {
+                bytes.push(map.bytes[c_x]);
+            }
+            index += window.width as usize;
+        }
+
+        self.width = window.width;
+        self.height = window.height;
+        self.bytes = bytes;
+
+        Ok(())
     }
 }

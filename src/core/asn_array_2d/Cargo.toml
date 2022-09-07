@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+asn_core = { path= "../../core" }
 amberskynet_logger_web = { path="../../amberskynet_logger_web" }
 
 [lib]
