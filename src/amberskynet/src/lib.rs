@@ -103,10 +103,10 @@ impl AmberSkyNetClient {
     }
 
     pub fn update(&mut self, time: f32) -> Result<(), JsValue> {
-        // for _ in 0..100 {
-        //     game_utils::update(&self.cell_game.map, &mut self.view_2d, time)?;
-        // }
-
+        for _ in 0..100 {
+            game_utils::update(&self.cell_game.map, &mut self.view_2d, time)?;
+        }
+        asn_view_2d::update_view(&self.ctx, &mut self.view_2d);
         // let mess = format!("engine update: {} {}", _time, rnd);
         // say_hello();
         // LoggerWeb::log(&mess);
@@ -124,7 +124,6 @@ impl AmberSkyNetClient {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
         // textured_quad::draw(&self.ctx, &self.textured_quad);
-        asn_view_2d::update_view(&self.ctx, &mut self.view_2d);
         asn_view_2d::draw(&self.ctx, &self.view_2d);
         // color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())

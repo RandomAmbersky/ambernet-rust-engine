@@ -194,7 +194,6 @@ pub fn draw(ctx: &RenderContext, item: &View2D) {
 }
 
 pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), String> {
-
 	let index = get_index(item, x, y)?;
 
 	item.view.bytes[index] = cell as u8;
@@ -224,9 +223,9 @@ pub fn get_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, String> {
 }
 
 pub fn get_texture_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, String> {
-	let index = (item.view.width * y * 4 + x * 4) as usize;
+	let index = (item.texture_data.width * y * 4 + x * 4) as usize;
 
-	if index >= item.view.bytes.len() {
+	if index >= item.texture_data.bytes.len() {
 		let mess = format!("Invalid index {} on map [{},{}]", index, x, y);
 		return Err(mess)
 	};

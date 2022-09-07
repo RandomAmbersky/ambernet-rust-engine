@@ -55,20 +55,20 @@ pub fn update(
 	let x = rng.gen_range(0..map.width);
 	let y = rng.gen_range(0..map.height);
 
-	let rnd = rng.gen_range(0..254);
+	let rnd = rng.gen_range(0..16);
 
 	// let mut cell = map.get_cell(x, y)?;
 	// cell += 1;
-	// if cell > 255 {
+	// if cell > 16 {
 	// 	cell = 0;
 	// }
 
-	// match asn_view_2d::set_cell(view, x, y, rnd as u32) {
-	//     Ok(()) => {},
-	//     Err(e) => {
-	//         LoggerWeb::log(&e);
-	//     }
-	// };
+	match asn_view_2d::set_cell(view, x, y, rnd as u32) {
+	    Ok(()) => {},
+	    Err(e) => {
+	        LoggerWeb::log(&e);
+	    }
+	};
 
 	// LoggerWeb::log(&mess);
 	Ok(())
