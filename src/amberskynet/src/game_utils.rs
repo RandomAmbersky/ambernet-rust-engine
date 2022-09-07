@@ -21,16 +21,17 @@ const WINDOW_SIZE: Size2D = Size2D {
 pub fn set_map(game: &mut CellGame, data: &[u8]) -> Result<(), String> {
 	let decoded_map = load_xml_map(&data)?;
 
-	let mess = format!("parsed map is: {:?}", decoded_map);
-	LoggerWeb::log(&mess);
+	// let mess = format!("parsed map is: {:?}", decoded_map);
+	// LoggerWeb::log(&mess);
 
 	game.set_map(decoded_map)?;
 	Ok(())
 }
 
-pub fn set_tiles( ctx: &RenderContext, view: &mut View2D, image: &Vec<u8>) -> Result<(), String>
+pub fn set_tiles( ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Result<(), String>
 {
 	let tex = decode_texture(image)?;
+
 	view.set_tiles(ctx, &TILE_SIZE, &tex)?;
 	Ok(())
 }
