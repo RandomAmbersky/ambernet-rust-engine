@@ -63,12 +63,12 @@ pub fn update(
 	// 	cell = 0;
 	// }
 
-	match asn_view_2d::set_cell(view, x, y, rnd as u32) {
-	    Ok(()) => {},
-	    Err(e) => {
-	        LoggerWeb::log(&e);
-	    }
-	};
+	// match asn_view_2d::set_cell(view, x, y, rnd as u32) {
+	//     Ok(()) => {},
+	//     Err(e) => {
+	//         LoggerWeb::log(&e);
+	//     }
+	// };
 
 	// LoggerWeb::log(&mess);
 	Ok(())
