@@ -2,6 +2,7 @@ use rand::Rng;
 use amberskynet_logger_web::LoggerWeb;
 use asn_array_2d::Array2D;
 use asn_core::Rect2D;
+use asn_images::decode_texture;
 use asn_render_webgl::RenderContext;
 use asn_tiled::load_xml_map;
 use asn_view_2d::View2D;
@@ -35,9 +36,10 @@ pub fn set_tiles(
 	tile_width: u32,
 	tile_height: u32,
 	data: &Vec<u8>) -> Result<(), String> {
-	asn_view_2d::set_tiles(ctx, view, data)?;
-	asn_view_2d::set_tile_size(ctx, view, tile_width, tile_height)?;
-	asn_view_2d::update_view(ctx, view);
+	let tex = decode_texture(data)?;
+	view.render_data.update_tiles(ctx, &tex)?;
+	view.render_data.set_tile_size(ctx, tile_width, tile_height)?;
+	view.render_data.update_view(ctx, &view.texture_data)?;
 	Ok(())
 }
 
