@@ -3,15 +3,27 @@ use asn_core::{Array2D, Point2D, Size2D};
 
 pub fn set_view_from(src: &Array2D, pos: &Point2D, window: &Size2D, dst: &mut Array2D) -> Result<(), String> {
 
+    // let mess = format!("src {:?} x {:?}", src.width, src.height);
+    // LoggerWeb::log(&mess);
+
+    if window.is_zero() {
+        return Err(String::from("window size is zero"))
+    }
+
     let mut bytes: Vec<u8> = Vec::new();
 
-    let mut index = src.get_ingex(pos.x, pos.y)?;
+    let mut index = src.get_ingex(pos)?;
 
-    for _ in 0..window.height{
-        for c_x in index..index + window.width as usize {
+    for _ in 0..window.height {
+        let max_index = index + window.width as usize;
+        // let mess = format!("set_view_from {:?} {:?} {:?}", window, index, max_index);
+        // LoggerWeb::log(&mess);
+        for c_x in index..max_index {
             bytes.push(src.bytes[c_x]);
+            // let mess = format!("index {:?} {:?}", c_x, src.get_pos(c_x)?);
+            // LoggerWeb::log(&mess);
         }
-        index += window.width as usize;
+        index += src.width as usize;
     }
 
     dst.width = window.width;
@@ -23,8 +35,8 @@ pub fn set_view_from(src: &Array2D, pos: &Point2D, window: &Size2D, dst: &mut Ar
 
 pub fn look_at(src: &Array2D, pos: &Point2D, window: &Size2D, dst: &mut Array2D) -> Result<(), String> {
 
-    let mess = format!("look_at: {:?} {:?}", pos, window);
-    LoggerWeb::log(&mess);
+    // let mess = format!("look_at: {:?} {:?}", pos, window);
+    // LoggerWeb::log(&mess);
 
     let half_width = window.width / 2;
     let half_height = window.height / 2;
@@ -54,8 +66,8 @@ pub fn look_at(src: &Array2D, pos: &Point2D, window: &Size2D, dst: &mut Array2D)
         n_pos.x = map_width_minus_width;
     }
 
-    let mess = format!("n_pos: {:?}", n_pos);
-    LoggerWeb::log(&mess);
+    // let mess = format!("n_pos: {:?}", n_pos);
+    // LoggerWeb::log(&mess);
 
     set_view_from(src, &n_pos, window, dst)
 }

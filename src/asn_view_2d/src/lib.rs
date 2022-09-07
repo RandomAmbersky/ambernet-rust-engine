@@ -67,6 +67,10 @@ pub fn get_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, String> {
 
 impl View2D {
 	pub fn set_view (&mut self, window: &Size2D, map: &Array2D) -> Result<(), String> {
+		if window.is_zero() {
+			return Err(String::from("window size is zero"))
+		}
+
 		let pos: Point2D = Point2D {
 			x: 0,
 			y: 0
@@ -75,17 +79,20 @@ impl View2D {
 		self.is_need_update_texture_view = true;
 		Ok(())
 	}
+
 	pub fn look_at (&mut self, pos: &Point2D, window: &Size2D, map: &Array2D) -> Result<(), String> {
 		look_at(map, pos, window, &mut self.view)?;
 		self.is_need_update_texture_view = true;
 		Ok(())
 	}
+
 	pub fn set_tiles(&self, ctx: &RenderContext, tile_size: &Size2D, tex: &Array2D) -> Result<(), String>
 	{
 		self.render_data.update_tiles(ctx, tex)?;
 		self.render_data.set_tile_size(ctx, tile_size)?;
 		Ok(())
 	}
+
 	pub fn draw(&mut self, ctx: &RenderContext) -> Result<(), String> {
 		if self.is_need_update_texture_view {
 			self.update_texture_view(ctx)?;

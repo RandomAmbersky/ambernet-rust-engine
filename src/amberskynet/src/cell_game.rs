@@ -5,8 +5,8 @@ use asn_view_2d::View2D;
 use crate::new_view_2d;
 
 const WINDOW_SIZE: Size2D = Size2D {
-	width: 32,
-	height: 32
+	width: 10,
+	height: 10
 };
 
 pub struct CellGame {
@@ -35,9 +35,9 @@ impl CellGame {
 		Ok(())
 	}
 
-	pub fn update(&mut self, time: f32) -> Result<(), String> {
-		self.view.set_view(&self.window_size, &self.map)?;
-		self.view.update(time)?;
+	pub fn update(&mut self, _time: f32) -> Result<(), String> {
+		// self.view.set_view(&self.window_size, &self.map)?;
+		// self.view.update(time)?;
 		Ok(())
 	}
 

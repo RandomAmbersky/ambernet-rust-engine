@@ -16,7 +16,6 @@ pub fn set_map(game: &mut CellGame, data: &[u8]) -> Result<(), String> {
 	let decoded_map = load_xml_map(&data)?;
 	// let mess = format!("parsed map is: {:?}", decoded_map);
 	// LoggerWeb::log(&mess);
-
 	game.set_map(decoded_map)?;
 	Ok(())
 }
@@ -37,30 +36,11 @@ pub fn update(game: &mut CellGame, time: f32) -> Result<(), String> {
 		y: rng.gen_range(0..game.map.height)
 	};
 
-	game.look_at(&pos)?;
+	let rnd = rng.gen_range(0..100);
 
-	Ok(())
-}
-
-fn some (map: &mut Array2D) -> Result<(), String> {
-	let mut rng = rand::thread_rng();
-
-	if map.width == 0 || map.height == 0 {
-		let mess = format!("map {} x {}", map.width, map.height);
-		LoggerWeb::log(&mess);
-		return Ok(());
-	};
-	let x = rng.gen_range(0..map.width);
-	let y = rng.gen_range(0..map.height);
-
-	// let rnd = rng.gen_range(0..16);
-
-	let mut cell = map.get_cell(x, y)?;
-	cell += 1;
-	if cell > 192 {
-		cell = 0;
+	if rnd > 10 {
+		game.look_at(&pos)?;
 	}
 
-	map.set_cell(x, y, cell)?;
 	Ok(())
 }
