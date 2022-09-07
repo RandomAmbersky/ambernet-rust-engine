@@ -5,7 +5,6 @@ mod render_data;
 use amberskynet_logger_web::LoggerWeb;
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_render_webgl::{ RenderContext };
-use asn_images::{decode_texture};
 
 use web_sys::WebGlRenderingContext as GL;
 use asn_array_2d::Array2D;
