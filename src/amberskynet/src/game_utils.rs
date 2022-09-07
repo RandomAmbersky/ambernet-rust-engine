@@ -1,6 +1,6 @@
 use rand::Rng;
 use amberskynet_logger_web::LoggerWeb;
-use asn_core::{Array2D, Size2D};
+use asn_core::{Array2D, Point2D, Size2D};
 use asn_images::decode_texture;
 use asn_render_webgl::RenderContext;
 use asn_tiled::load_xml_map;
@@ -31,9 +31,13 @@ pub fn set_tiles( ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Resul
 pub fn update(game: &mut CellGame, time: f32) -> Result<(), String> {
 	game.update(time)?;
 
-	// for _ in 0..1000 {
-	// 	some(&mut game.map)?;
-	// }
+	let mut rng = rand::thread_rng();
+	let pos = Point2D {
+		x: rng.gen_range(0..game.map.width),
+		y: rng.gen_range(0..game.map.height)
+	};
+
+	game.look_at(&pos)?;
 
 	Ok(())
 }

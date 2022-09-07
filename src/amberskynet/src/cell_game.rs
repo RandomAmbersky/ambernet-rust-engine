@@ -40,4 +40,9 @@ impl CellGame {
 		self.view.update(time)?;
 		Ok(())
 	}
+
+	pub fn look_at(&mut self, pos: &Point2D) -> Result<(), String> {
+		self.view.look_at(pos, &self.window_size, &self.map)?;
+		Ok(())
+	}
 }

@@ -8,9 +8,10 @@ use asn_render_webgl::{ RenderContext };
 
 use web_sys::WebGlRenderingContext as GL;
 use asn_core::{Array2D, Point2D, Size2D};
+use asn_core::math::mult_matrix_4;
 
 use render_data::RenderData;
-use crate::view_utils::set_view_from;
+use crate::view_utils::{look_at, set_view_from};
 
 pub struct View2D {
 	view: Array2D,
@@ -71,6 +72,11 @@ impl View2D {
 			y: 0
 		};
 		set_view_from(map, &pos, window, &mut self.view)?;
+		self.is_need_update_texture_view = true;
+		Ok(())
+	}
+	pub fn look_at (&mut self, pos: &Point2D, window: &Size2D, map: &Array2D) -> Result<(), String> {
+		look_at(map, pos, window, &mut self.view)?;
 		self.is_need_update_texture_view = true;
 		Ok(())
 	}

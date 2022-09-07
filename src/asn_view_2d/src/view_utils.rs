@@ -1,3 +1,4 @@
+use amberskynet_logger_web::LoggerWeb;
 use asn_core::{Array2D, Point2D, Size2D};
 
 pub fn set_view_from(src: &Array2D, pos: &Point2D, window: &Size2D, dst: &mut Array2D) -> Result<(), String> {
@@ -21,29 +22,40 @@ pub fn set_view_from(src: &Array2D, pos: &Point2D, window: &Size2D, dst: &mut Ar
 }
 
 pub fn look_at(src: &Array2D, pos: &Point2D, window: &Size2D, dst: &mut Array2D) -> Result<(), String> {
+
+    let mess = format!("look_at: {:?} {:?}", pos, window);
+    LoggerWeb::log(&mess);
+
     let half_width = window.width / 2;
     let half_height = window.height / 2;
 
-    let map_width_minus_half_width = src.width - half_width;
-    let map_height_minus_half_height = src.height - half_height;
+    let map_width_minus_width = src.width - window.width;
+    let map_height_minus_height = src.height - window.height;
 
     let mut n_pos: Point2D = *pos;
 
-    if n_pos.x < half_width {
-        n_pos.x = 0;
-    } else if n_pos.x > map_width_minus_half_width {
-        n_pos.x = map_width_minus_half_width;
-    } else {
+    if n_pos.x > half_width {
         n_pos.x -= half_width;
+    } else {
+        n_pos.x = 0;
     }
 
-    if n_pos.y < half_height {
-        n_pos.y = 0;
-    } else if n_pos.y > map_height_minus_half_height {
-        n_pos.y = map_height_minus_half_height;
-    } else {
+    if n_pos.y > half_height {
         n_pos.y -= half_height;
+    } else {
+        n_pos.y = 0;
     }
+
+    if n_pos.y > map_height_minus_height {
+        n_pos.y = map_height_minus_height;
+    }
+
+    if n_pos.x > map_width_minus_width {
+        n_pos.x = map_width_minus_width;
+    }
+
+    let mess = format!("n_pos: {:?}", n_pos);
+    LoggerWeb::log(&mess);
 
     set_view_from(src, &n_pos, window, dst)
 }
