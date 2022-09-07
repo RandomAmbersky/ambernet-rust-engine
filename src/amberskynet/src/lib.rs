@@ -8,7 +8,6 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
 use amberskynet_logger_web::LoggerWeb;
-use asn_core::Size2D;
 use asn_render_webgl::RenderContext;
 
 use color_quad::{new_item as new_color_quad, ColorQuad};

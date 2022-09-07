@@ -1,10 +1,10 @@
 use xmlparser::{Token, Tokenizer};
 use amberskynet_logger_web::LoggerWeb;
-use crate::{DecodedMap};
+use asn_array_2d::Array2D;
 use crate::utils::{is_end, is_start};
 
-pub fn parse(text: &str) -> Result<DecodedMap, String> {
-    let mut map = DecodedMap::default();
+pub fn parse(text: &str) -> Result<Array2D, String> {
+    let mut map = Array2D::default();
 
     let mut parser = Tokenizer::from(text);
     while let Some(result) = parser.next() {
@@ -17,7 +17,7 @@ pub fn parse(text: &str) -> Result<DecodedMap, String> {
     Ok(map)
 }
 
-fn parse_map(parser: &mut Tokenizer, map: &mut DecodedMap) {
+fn parse_map(parser: &mut Tokenizer, map: &mut Array2D) {
     LoggerWeb::log("map start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
@@ -34,19 +34,19 @@ fn parse_map(parser: &mut Tokenizer, map: &mut DecodedMap) {
             else if local.as_str() == "height" {
                 map.height = value.as_str().parse::<u32>().unwrap();
             }
-            else if local.as_str() == "tilewidth" {
-                map.tile_width = value.as_str().parse::<u32>().unwrap()
-            }
-            else if local.as_str() == "tileheight" {
-                map.tile_height = value.as_str().parse::<u32>().unwrap();
-            }
+            // else if local.as_str() == "tilewidth" {
+            //     map.tile_width = value.as_str().parse::<u32>().unwrap()
+            // }
+            // else if local.as_str() == "tileheight" {
+            //     map.tile_height = value.as_str().parse::<u32>().unwrap();
+            // }
             // let mess = format!("map Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
             // LoggerWeb::log(&mess);
         }
     }
 }
 
-fn parse_layer(parser: &mut Tokenizer, map: &mut DecodedMap) {
+fn parse_layer(parser: &mut Tokenizer, map: &mut Array2D) {
     LoggerWeb::log("layer start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
@@ -64,7 +64,7 @@ fn parse_layer(parser: &mut Tokenizer, map: &mut DecodedMap) {
     }
 }
 
-fn parse_data(parser: &mut Tokenizer, map: &mut DecodedMap) {
+fn parse_data(parser: &mut Tokenizer, map: &mut Array2D) {
     LoggerWeb::log("data start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
@@ -78,10 +78,11 @@ fn parse_data(parser: &mut Tokenizer, map: &mut DecodedMap) {
     }
 }
 
-fn parse_data_text(map: &mut DecodedMap, map_txt: &str) {
-        map.map = Vec::new();
+fn parse_data_text(map: &mut Array2D, map_txt: &str) {
+        let mut bytes = Vec::new();
         for x in map_txt.replace('\n', "").split(',') {
             let cell_num = x.parse::<u8>().unwrap();
-            map.map.push(cell_num);
+            bytes.push(cell_num);
         };
+    map.bytes = bytes
 }
