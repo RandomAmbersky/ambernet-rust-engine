@@ -1,7 +1,7 @@
 mod utils;
 mod loader;
 
-use asn_array_2d::Array2D;
+use asn_core::Array2D;
 
 pub fn load_xml_map (buf: &[u8]) -> Result<Array2D, String> {
 	let map_str = match std::str::from_utf8(buf) {

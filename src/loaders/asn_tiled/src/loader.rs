@@ -1,6 +1,6 @@
 use xmlparser::{Token, Tokenizer};
 use amberskynet_logger_web::LoggerWeb;
-use asn_array_2d::Array2D;
+use asn_core::Array2D;
 use crate::utils::{is_end, is_start};
 
 pub fn parse(text: &str) -> Result<Array2D, String> {

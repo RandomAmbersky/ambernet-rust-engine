@@ -1,6 +1,5 @@
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
-use asn_array_2d::Array2D;
-use asn_core::Size2D;
+use asn_core::{Array2D, Size2D};
 use asn_render_webgl::RenderContext;
 use crate::{GL, utils};
 
@@ -37,18 +36,18 @@ impl RenderData {
 
         let u_transform =  ctx.gl.get_uniform_location(&program, "uTransform").unwrap();
 
-        let scale_matrix = asn_math::scaling_matrix(
+        let scale_matrix = asn_core::math::scaling_matrix(
             2.,
             2.,
             1.
         );
-        let trans_matrix = asn_math::translation_matrix(
+        let trans_matrix = asn_core::math::translation_matrix(
             -1.,
             -1.,
             0.
         );
 
-        let transform_matrix = asn_math::mult_matrix_4(scale_matrix, trans_matrix);
+        let transform_matrix = asn_core::math::mult_matrix_4(scale_matrix, trans_matrix);
 
         let u_image0 = match ctx.gl.get_uniform_location(&program, "uTileMap") {
             Some(t) => t,

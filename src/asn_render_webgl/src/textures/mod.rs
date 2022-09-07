@@ -1,7 +1,7 @@
 use web_sys::WebGlTexture;
 use amberskynet_logger_web::LoggerWeb;
 pub use web_sys::WebGlRenderingContext as GL;
-use asn_array_2d::Array2D;
+use asn_core::Array2D;
 
 #[allow(dead_code)]
 pub fn update (

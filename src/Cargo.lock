@@ -19,7 +19,6 @@ name = "amberskynet"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
- "asn_array_2d",
  "asn_core",
  "asn_images",
  "asn_render_webgl",
@@ -45,14 +44,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "asn_array_2d"
-version = "0.1.0"
-dependencies = [
- "amberskynet_logger_web",
- "asn_core",
-]
-
-[[package]]
 name = "asn_core"
 version = "0.1.0"
 
@@ -60,22 +51,17 @@ version = "0.1.0"
 name = "asn_images"
 version = "0.1.0"
 dependencies = [
- "asn_array_2d",
+ "asn_core",
  "image",
 ]
-
-[[package]]
-name = "asn_math"
-version = "0.1.0"
 
 [[package]]
 name = "asn_render_webgl"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
- "asn_array_2d",
+ "asn_core",
  "asn_images",
- "asn_math",
  "js-sys",
  "wasm-bindgen",
  "web-sys",
@@ -85,7 +71,7 @@ dependencies = [
 name = "asn_test_2d"
 version = "0.1.0"
 dependencies = [
- "asn_math",
+ "asn_core",
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
@@ -97,7 +83,7 @@ name = "asn_tiled"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
- "asn_array_2d",
+ "asn_core",
  "xmlparser",
 ]
 
@@ -115,9 +101,7 @@ name = "asn_view_2d"
 version = "0.1.0"
 dependencies = [
  "amberskynet_logger_web",
- "asn_array_2d",
  "asn_core",
- "asn_math",
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
@@ -170,7 +154,7 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 name = "color_quad"
 version = "0.1.0"
 dependencies = [
- "asn_math",
+ "asn_core",
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
@@ -643,8 +627,8 @@ dependencies = [
 name = "textured_quad"
 version = "0.1.0"
 dependencies = [
+ "asn_core",
  "asn_images",
- "asn_math",
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
@@ -675,7 +659,7 @@ dependencies = [
 name = "triangle"
 version = "0.1.0"
 dependencies = [
- "asn_math",
+ "asn_core",
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",

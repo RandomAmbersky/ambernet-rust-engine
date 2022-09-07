@@ -1,7 +1,6 @@
 use rand::Rng;
 use amberskynet_logger_web::LoggerWeb;
-use asn_array_2d::Array2D;
-use asn_core::Size2D;
+use asn_core::{Array2D, Size2D};
 use asn_images::decode_texture;
 use asn_render_webgl::RenderContext;
 use asn_tiled::load_xml_map;

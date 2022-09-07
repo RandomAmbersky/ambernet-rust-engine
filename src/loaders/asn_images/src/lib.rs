@@ -1,4 +1,4 @@
-use asn_array_2d::Array2D;
+use asn_core::Array2D;
 
 pub fn decode_texture (
     buf: &[u8]
