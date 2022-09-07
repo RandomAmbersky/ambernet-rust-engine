@@ -8,7 +8,7 @@ use asn_render_webgl::{ RenderContext };
 
 use web_sys::WebGlRenderingContext as GL;
 use asn_array_2d::Array2D;
-use asn_core::Rect2D;
+use asn_core::Size2D;
 
 use render_data::RenderData;
 
@@ -30,7 +30,7 @@ pub fn new_item (ctx: &RenderContext) -> Result<View2D, String> {
 	Ok(view2d)
 }
 
-pub fn set_view (item: &mut View2D, window: Rect2D, map: &[u8]) {
+pub fn set_view (item: &mut View2D, window: Size2D, map: &[u8]) {
 	item.view.width = window.width;
 	item.view.height = window.height;
 	let mut bytes: Vec<u8> = Vec::new();
@@ -83,7 +83,7 @@ pub fn get_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, String> {
 	Ok(index)
 }
 
-pub fn get_texture_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, String> {
+fn get_texture_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, String> {
 	let index = (item.texture_data.width * y * 4 + x * 4) as usize;
 
 	if index >= item.texture_data.bytes.len() {
@@ -98,12 +98,11 @@ impl View2D {
 	pub fn set_tiles(
 		&self,
 		ctx: &RenderContext,
-		tile_width: u32,
-		tile_height: u32,
+		tile_size: &Size2D,
 		tex: &Array2D) -> Result<(), String>
 	{
 		self.render_data.update_tiles(ctx, tex)?;
-		self.render_data.set_tile_size(ctx, tile_width, tile_height)?;
+		self.render_data.set_tile_size(ctx, tile_size)?;
 		self.render_data.update_view(ctx, &self.texture_data)?;
 		Ok(())
 	}

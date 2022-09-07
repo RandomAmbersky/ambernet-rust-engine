@@ -1,5 +1,6 @@
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_array_2d::Array2D;
+use asn_core::Size2D;
 use asn_render_webgl::RenderContext;
 use crate::{GL, utils};
 
@@ -101,9 +102,9 @@ impl RenderData {
         Ok(data)
     }
 
-    pub fn set_tile_size (&self, ctx: &RenderContext, width: u32, height: u32) -> Result<(), String> {
+    pub fn set_tile_size (&self, ctx: &RenderContext, tile_size: &Size2D) -> Result<(), String> {
         ctx.gl.use_program(Some(&self.program));
-        ctx.gl.uniform2f(Some(&self.u_tile_size), width as f32, height as f32);
+        ctx.gl.uniform2f(Some(&self.u_tile_size), tile_size.width as f32, tile_size.height as f32);
         ctx.gl.use_program(None);
         Ok(())
     }

@@ -1,7 +1,7 @@
 use rand::Rng;
 use amberskynet_logger_web::LoggerWeb;
 use asn_array_2d::Array2D;
-use asn_core::Rect2D;
+use asn_core::Size2D;
 use asn_images::decode_texture;
 use asn_render_webgl::RenderContext;
 use asn_tiled::load_xml_map;
@@ -20,7 +20,7 @@ pub fn set_map(game: &mut CellGame, view: &mut View2D, data: &Vec<u8>) -> Result
 		bytes: decoded_map.map,
 	};
 
-	let rect = Rect2D {
+	let rect = Size2D {
 		width: decoded_map.width,
 		height: decoded_map.height
 	};
@@ -33,12 +33,11 @@ pub fn set_map(game: &mut CellGame, view: &mut View2D, data: &Vec<u8>) -> Result
 pub fn set_tiles(
 	ctx: &RenderContext,
 	view: &mut View2D,
-	tile_width: u32,
-	tile_height: u32,
+	tile_size: &Size2D,
 	data: &Vec<u8>) -> Result<(), String>
 {
 	let tex = decode_texture(data)?;
-	view.set_tiles(ctx, tile_width, tile_height, &tex)?;
+	view.set_tiles(ctx, tile_size, &tex)?;
 	Ok(())
 }
 

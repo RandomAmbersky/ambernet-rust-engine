@@ -8,6 +8,7 @@ use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
 
 use amberskynet_logger_web::LoggerWeb;
+use asn_core::Size2D;
 use asn_render_webgl::RenderContext;
 
 use color_quad::{new_item as new_color_quad, ColorQuad};
@@ -79,6 +80,11 @@ impl Default for AmberSkyNetClient {
     }
 }
 
+const TILE_SIZE: Size2D = Size2D {
+    width: 16,
+    height: 16
+};
+
 #[wasm_bindgen]
 impl AmberSkyNetClient {
     #[wasm_bindgen(constructor)]
@@ -90,7 +96,7 @@ impl AmberSkyNetClient {
     pub fn upload_tiles(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
-        game_utils::set_tiles(&self.ctx, &mut self.view_2d, 16, 16, &data)?;
+        game_utils::set_tiles(&self.ctx, &mut self.view_2d,&TILE_SIZE, &data)?;
         Ok(())
     }
 
