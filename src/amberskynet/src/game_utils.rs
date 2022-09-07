@@ -35,11 +35,10 @@ pub fn set_tiles(
 	view: &mut View2D,
 	tile_width: u32,
 	tile_height: u32,
-	data: &Vec<u8>) -> Result<(), String> {
+	data: &Vec<u8>) -> Result<(), String>
+{
 	let tex = decode_texture(data)?;
-	view.render_data.update_tiles(ctx, &tex)?;
-	view.render_data.set_tile_size(ctx, tile_width, tile_height)?;
-	view.render_data.update_view(ctx, &view.texture_data)?;
+	view.set_tiles(ctx, tile_width, tile_height, &tex)?;
 	Ok(())
 }
 
@@ -73,6 +72,5 @@ pub fn update(
 	    }
 	};
 
-	// LoggerWeb::log(&mess);
 	Ok(())
 }

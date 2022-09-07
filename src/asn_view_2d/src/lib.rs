@@ -15,7 +15,7 @@ use render_data::RenderData;
 pub struct View2D {
 	view: Array2D,
 	pub texture_data: Array2D,
-	pub render_data: RenderData,
+	render_data: RenderData,
 }
 
 pub fn new_item (ctx: &RenderContext) -> Result<View2D, String> {
@@ -92,4 +92,25 @@ pub fn get_texture_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, St
 	};
 
 	Ok(index)
+}
+
+impl View2D {
+	pub fn set_tiles(
+		&self,
+		ctx: &RenderContext,
+		tile_width: u32,
+		tile_height: u32,
+		tex: &Array2D) -> Result<(), String>
+	{
+		self.render_data.update_tiles(ctx, tex)?;
+		self.render_data.set_tile_size(ctx, tile_width, tile_height)?;
+		self.render_data.update_view(ctx, &self.texture_data)?;
+		Ok(())
+	}
+	pub fn draw(&self, ctx: &RenderContext) {
+		self.render_data.draw(ctx);
+	}
+	pub fn update(&mut self, ctx: &RenderContext) -> Result<(), String> {
+		self.render_data.update_view(ctx, &self.texture_data)
+	}
 }

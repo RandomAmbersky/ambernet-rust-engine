@@ -106,7 +106,7 @@ impl AmberSkyNetClient {
         for _ in 0..1000 {
             game_utils::update(&mut self.cell_game.map, &mut self.view_2d, time)?;
         }
-        self.view_2d.render_data.update_view(&self.ctx, &self.view_2d.texture_data)?;
+        self.view_2d.update(&self.ctx)?;
         Ok(())
     }
 
@@ -121,7 +121,7 @@ impl AmberSkyNetClient {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
         // textured_quad::draw(&self.ctx, &self.textured_quad);
-        self.view_2d.render_data.draw(&self.ctx);
+        self.view_2d.draw(&self.ctx);
         // color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())
     }
