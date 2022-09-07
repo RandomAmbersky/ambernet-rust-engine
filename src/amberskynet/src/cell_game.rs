@@ -9,8 +9,11 @@ pub struct CellGame {
 }
 
 impl CellGame {
-	pub fn set_map(&mut self, map: Array2D) -> Result<(), String>{
+	pub fn set_map(&mut self, map: Array2D) -> Result<(), String> {
 		self.map = map;
+		Ok(())
+	}
+	pub fn update(&mut self, _time: f32) -> Result<(), String> {
 		Ok(())
 	}
 }

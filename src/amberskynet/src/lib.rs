@@ -80,11 +80,6 @@ impl Default for AmberSkyNetClient {
     }
 }
 
-const TILE_SIZE: Size2D = Size2D {
-    width: 16,
-    height: 16
-};
-
 #[wasm_bindgen]
 impl AmberSkyNetClient {
     #[wasm_bindgen(constructor)]
@@ -96,23 +91,21 @@ impl AmberSkyNetClient {
     pub fn upload_tiles(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
-        game_utils::set_tiles(&self.ctx, &mut self.view_2d,&TILE_SIZE, &data)?;
+        game_utils::set_tiles(&self.ctx, &mut self.view_2d, &data)?;
         Ok(())
     }
 
     pub fn upload_map(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_map";
         LoggerWeb::log(mess);
-
-        game_utils::set_map(&mut self.cell_game, &mut self.view_2d, &data)?;
+        game_utils::set_map(&mut self.cell_game, &data)?;
         Ok(())
     }
 
     pub fn update(&mut self, time: f32) -> Result<(), JsValue> {
-        for _ in 0..1000 {
-            game_utils::update(&mut self.cell_game.map, &mut self.view_2d, time)?;
-        }
-        self.view_2d.update(&self.ctx)?;
+        // let mess = format!("update times: {} ", time);
+        // LoggerWeb::log(&mess);
+        game_utils::update(&mut self.cell_game, &mut self.view_2d, time)?;
         Ok(())
     }
 
@@ -123,11 +116,11 @@ impl AmberSkyNetClient {
         Ok(())
     }
 
-    pub fn render(&self) -> Result<(), JsValue> {
+    pub fn render(&mut self) -> Result<(), JsValue> {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
         // textured_quad::draw(&self.ctx, &self.textured_quad);
-        self.view_2d.draw(&self.ctx);
+        self.view_2d.draw(&self.ctx)?;
         // color_quad::draw(&self.ctx, &self.color_quad);
         Ok(())
     }
