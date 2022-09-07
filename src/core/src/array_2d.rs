@@ -1,5 +1,4 @@
-use std::fmt::format;
-use amberskynet_logger_web::LoggerWeb;
+use crate::{Point2D, Size2D};
 
 #[derive(Default, Debug)]
 pub struct Array2D {

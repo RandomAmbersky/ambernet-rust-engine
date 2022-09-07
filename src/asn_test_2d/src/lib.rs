@@ -1,6 +1,6 @@
 use web_sys::{WebGlRenderingContext as GL};
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlUniformLocation};
-use asn_math::{mult_matrix_4, scaling_matrix, translation_matrix};
+use asn_core::math::{mult_matrix_4, scaling_matrix, translation_matrix};
 use asn_render_webgl::{link_program, load_buffer, RenderContext};
 
 pub struct Test2D {

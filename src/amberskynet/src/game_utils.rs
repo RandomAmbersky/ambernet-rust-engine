@@ -1,7 +1,6 @@
 use rand::Rng;
 use amberskynet_logger_web::LoggerWeb;
-use asn_array_2d::Array2D;
-use asn_core::Size2D;
+use asn_core::{Array2D, Size2D};
 use asn_images::decode_texture;
 use asn_render_webgl::RenderContext;
 use asn_tiled::load_xml_map;
@@ -13,14 +12,8 @@ const TILE_SIZE: Size2D = Size2D {
 	height: 16
 };
 
-const WINDOW_SIZE: Size2D = Size2D {
-	width: 32,
-	height: 32
-};
-
 pub fn set_map(game: &mut CellGame, data: &[u8]) -> Result<(), String> {
 	let decoded_map = load_xml_map(&data)?;
-
 	// let mess = format!("parsed map is: {:?}", decoded_map);
 	// LoggerWeb::log(&mess);
 
@@ -31,20 +24,17 @@ pub fn set_map(game: &mut CellGame, data: &[u8]) -> Result<(), String> {
 pub fn set_tiles( ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Result<(), String>
 {
 	let tex = decode_texture(image)?;
-
 	view.set_tiles(ctx, &TILE_SIZE, &tex)?;
 	Ok(())
 }
 
-pub fn update(game: &mut CellGame, view: &mut View2D, time: f32) -> Result<(), String> {
+pub fn update(game: &mut CellGame, time: f32) -> Result<(), String> {
 	game.update(time)?;
 
-	for _ in 0..1000 {
-		some(&mut game.map)?;
-	}
+	// for _ in 0..1000 {
+	// 	some(&mut game.map)?;
+	// }
 
-	view.set_view(&WINDOW_SIZE, &game.map);
-	view.update(time)?;
 	Ok(())
 }
 

@@ -4,7 +4,7 @@ mod buffers;
 mod textures;
 
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
-use asn_array_2d::Array2D;
+use asn_core::Array2D;
 use utils::GL as GL;
 
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
