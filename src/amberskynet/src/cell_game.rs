@@ -5,15 +5,14 @@ use asn_view_2d::View2D;
 use crate::new_view_2d;
 
 const WINDOW_SIZE: Size2D = Size2D {
-	width: 32,
-	height: 32
+	width: 10,
+	height: 10
 };
 
 pub struct CellGame {
 	pub view: View2D,
 	pub map: Array2D,
-	window_size: Size2D,
-	pos: Point2D
+	window_size: Size2D
 }
 
 impl CellGame {
@@ -22,7 +21,6 @@ impl CellGame {
 
 		let game = CellGame {
 			map: Default::default(),
-			pos: Default::default(),
 			window_size: WINDOW_SIZE,
 			view: view_2d
 		};
