@@ -1,6 +1,7 @@
 mod utils;
 mod cell_game;
 mod game_utils;
+mod logic;
 
 use asn_view_2d::{new_item as new_view_2d, View2D};
 
