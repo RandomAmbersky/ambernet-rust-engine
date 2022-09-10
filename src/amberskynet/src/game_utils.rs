@@ -20,7 +20,7 @@ pub fn set_map(game: &mut CellGame, data: &[u8]) -> Result<(), String> {
 	Ok(())
 }
 
-pub fn set_tiles( ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Result<(), String>
+pub fn set_tiles(ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Result<(), String>
 {
 	let tex = decode_texture(image)?;
 	view.set_tiles(ctx, &TILE_SIZE, &tex)?;
@@ -38,7 +38,7 @@ pub fn update(game: &mut CellGame, time: f32) -> Result<(), String> {
 
 	let rnd = rng.gen_range(0..100);
 
-	if rnd > 10 {
+	if rnd > 90 {
 		game.look_at(&pos)?;
 	}
 

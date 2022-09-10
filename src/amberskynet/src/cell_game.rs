@@ -1,40 +1,30 @@
-use asn_core::{Array2D, Camera2D};
-use asn_core::{Point2D, Size2D};
+use asn_core::{Array2D, Point2D, Size2D};
 use asn_render_webgl::RenderContext;
-use asn_view_2d::View2D;
-use crate::new_view_2d;
+use asn_view_2d::{new_item as new_view_2d, View2D };
 
 const WINDOW_SIZE: Size2D = Size2D {
-	width: 20,
-	height: 20
+	width: 10,
+	height: 10
 };
 
 pub struct CellGame {
-	pub view: View2D,
 	pub map: Array2D,
-	pub cam: Camera2D
+	pub view: View2D
 }
 
 impl CellGame {
 	pub fn new(ctx: &RenderContext) -> Result<CellGame, String> {
-		let view_2d = new_view_2d(&ctx)?;
-
-		let cam = Camera2D {
-			pos: Default::default(),
-			window: WINDOW_SIZE
-		};
+		let view_2d = new_view_2d(&ctx, &WINDOW_SIZE)?;
 
 		let game = CellGame {
 			map: Default::default(),
 			view: view_2d,
-			cam,
 		};
 		Ok(game)
 	}
 
 	pub fn set_map(&mut self, map: Array2D) -> Result<(), String> {
 		self.map = map;
-		self.view.look_at(&mut self.cam, &self.map)?;
 		Ok(())
 	}
 
@@ -44,8 +34,10 @@ impl CellGame {
 	}
 
 	pub fn look_at(&mut self, pos: &Point2D) -> Result<(), String> {
-		self.cam.pos = *pos;
-		self.view.look_at(&mut self.cam, &self.map)?;
+		if self.map.is_zero() {
+			return Err(String::from("map size is zero"))
+		}
+		self.view.look_at(pos, &self.map)?;
 		Ok(())
 	}
 }

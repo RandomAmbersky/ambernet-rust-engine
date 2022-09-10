@@ -6,92 +6,97 @@ use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::{ RenderContext };
 
 use web_sys::WebGlRenderingContext as GL;
-use asn_core::{Array2D, Camera2D, Size2D};
-use asn_core::math::mult_matrix_4;
+use asn_core::{Array2D, Point2D, Size2D};
 
 use render_data::RenderData;
+use crate::texture_data::from_array2d;
 
 pub struct View2D {
-	view: Array2D,
+	screen: Array2D,
 	render_data: RenderData,
-	is_need_update_texture_view: bool
+	is_need_texture_update: bool
 }
 
-pub fn new_item (ctx: &RenderContext) -> Result<View2D, String> {
-
+pub fn new_item(ctx: &RenderContext, window_size: &Size2D) -> Result<View2D, String> {
 	let render_data = RenderData::new(ctx)?;
+
+	let screen = Array2D {
+		width: window_size.width,
+		height: window_size.height,
+		bytes: Default::default()
+	};
 
 	let view2d = View2D {
 		render_data,
-		view: Array2D::default(),
-		is_need_update_texture_view: false
+		is_need_texture_update: false,
+		screen,
 	};
 	Ok(view2d)
 }
 
-pub fn set_cell (item: &mut View2D, x: u32, y: u32, cell: u32) -> Result<(), String> {
-	let index = get_index(item, x, y)?;
-
-	let cell_u8 = cell as u8;
-
-	item.view.bytes[index] = cell_u8;
-
-	// let cell_y = cell_u8 / 16;
-	// let cell_x = cell_u8 - cell_y * 16;
-
-	// let mess = format!("set_cell on {}, {}", cell_y, cell_x);
-	// LoggerWeb::log(&mess);
-
-	// let texture_index = get_texture_index(item, x, y)?;
-
-	// item.texture_data.bytes[texture_index] = cell_x as u8;
-	// item.texture_data.bytes[texture_index+1] = cell_y as u8;
-	// item.texture_data.bytes[texture_index+2] = 255;
-	// item.texture_data.bytes[texture_index+3] = 255;
-	//
-	Ok(())
-}
-
-pub fn get_index (item: &mut View2D, x: u32, y: u32) -> Result<usize, String> {
-	let index = (item.view.width * y + x ) as usize;
-
-	if index >= item.view.bytes.len() {
-		let mess = format!("Invalid index {} on map [{},{}]", index, x, y);
-		return Err(mess)
-	};
-
-	Ok(index)
-}
-
 impl View2D {
-	pub fn look_at (&mut self, cam: &mut Camera2D, map: &Array2D) -> Result<(), String> {
-		cam.look_at(map, &mut self.view)?;
-		self.is_need_update_texture_view = true;
+	pub fn set_tiles(&self, ctx: &RenderContext, tile_size: &Size2D, tex: &Array2D) -> Result<(), String>
+	{
+		self.render_data.update_tiles(ctx, tex, tile_size)?;
 		Ok(())
 	}
 
-	pub fn set_tiles(&self, ctx: &RenderContext, tile_size: &Size2D, tex: &Array2D) -> Result<(), String>
-	{
-		self.render_data.update_tiles(ctx, tex)?;
-		self.render_data.set_tile_size(ctx, tile_size)?;
+	pub fn look_at(&mut self, pos: &Point2D, map: &Array2D) -> Result<(), String> {
+
+		if self.screen.is_zero() {
+			return Err(String::from("window size is zero"))
+		}
+
+		let half_width = self.screen.width / 2;
+		let half_height = self.screen.height / 2;
+
+		let map_width_minus_width = map.width - self.screen.width;
+		let map_height_minus_height = map.height - self.screen.height;
+
+		let mut n_pos = *pos;
+
+		if n_pos.x > half_width {
+			n_pos.x -= half_width;
+		} else {
+			n_pos.x = 0;
+		}
+
+		if n_pos.y > half_height {
+			n_pos.y -= half_height;
+		} else {
+			n_pos.y = 0;
+		}
+
+		if n_pos.y > map_height_minus_height {
+			n_pos.y = map_height_minus_height;
+		}
+
+		if n_pos.x > map_width_minus_width {
+			n_pos.x = map_width_minus_width;
+		}
+
+		// let mess = format!("n_pos: {:?}", n_pos);
+		// LoggerWeb::log(&mess);
+
+		self.screen.cut_from(&n_pos, map)?;
+		self.is_need_texture_update = true;
+		Ok(())
+	}
+
+	// ф-ция для перекодирования номера Entity в текущий номер спрайта анимации (на будущее)
+	// обновление таймеров спрайтов анимации
+	pub fn update(&mut self, _time: f32) -> Result<(), String> {
+		// self.is_need_texture_update = true;
 		Ok(())
 	}
 
 	pub fn draw(&mut self, ctx: &RenderContext) -> Result<(), String> {
-		if self.is_need_update_texture_view {
-			self.update_texture_view(ctx)?;
-			self.is_need_update_texture_view = false;
+		if self.is_need_texture_update {
+			let texture = from_array2d(&self.screen, 16);
+			self.render_data.update_view(ctx, &texture)?;
+			self.is_need_texture_update = false;
 		}
 		self.render_data.draw(ctx);
-		Ok(())
-	}
-	fn update_texture_view (&self, ctx: &RenderContext) -> Result<(), String> {
-		let texture_data = texture_data::from_array2d(&self.view, 16);
-		self.render_data.update_view(ctx, &texture_data)?;
-		Ok(())
-	}
-	pub fn update(&mut self, _time: f32) -> Result<(), String> {
-		self.is_need_update_texture_view = true;
 		Ok(())
 	}
 }

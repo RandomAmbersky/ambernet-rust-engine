@@ -101,19 +101,15 @@ impl RenderData {
         Ok(data)
     }
 
-    pub fn set_tile_size (&self, ctx: &RenderContext, tile_size: &Size2D) -> Result<(), String> {
+    pub fn update_tiles (&self, ctx: &RenderContext, tex: &Array2D, tile_size: &Size2D) -> Result<(), String> {
+        asn_render_webgl::update_texture(ctx, &self.texture, tex, false)?;
         ctx.gl.use_program(Some(&self.program));
+        ctx.gl.uniform2f(Some(&self.u_sheet_size), tex.width as f32, tex.height as f32);
         ctx.gl.uniform2f(Some(&self.u_tile_size), tile_size.width as f32, tile_size.height as f32);
         ctx.gl.use_program(None);
         Ok(())
     }
-    pub fn update_tiles (&self, ctx: &RenderContext, tex: &Array2D) -> Result<(), String> {
-        asn_render_webgl::update_texture(ctx, &self.texture, tex, false)?;
-        ctx.gl.use_program(Some(&self.program));
-        ctx.gl.uniform2f(Some(&self.u_sheet_size), tex.width as f32, tex.height as f32);
-        ctx.gl.use_program(None);
-        Ok(())
-    }
+    
     pub fn update_view (&self, ctx: &RenderContext, texture_data: &Array2D) -> Result<(), String> {
         asn_render_webgl::update_texture(ctx, &self.map_texture, texture_data, false)?;
         ctx.gl.use_program(Some(&self.program));
@@ -121,6 +117,7 @@ impl RenderData {
         ctx.gl.use_program(None);
         Ok(())
     }
+    
     pub fn draw(&self, ctx: &RenderContext) {
         ctx.gl.use_program(Some(&self.program));
 
