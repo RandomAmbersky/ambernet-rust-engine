@@ -35,3 +35,4 @@ uuid = { version="*", features = ['wasm-bindgen', 'v4'] }
 js-sys = "*"
 wasm-bindgen = "*"
 rand = "*"
+specs = "*"
