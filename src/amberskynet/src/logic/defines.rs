@@ -1,4 +1,4 @@
-use asn_core::Point2D;
+use asn_core::{Delta2D};
 
 pub enum Direction {
 	Up,
@@ -13,13 +13,14 @@ pub enum Action {
 }
 
 impl Direction {
-	pub fn do_move(&self, pos: &mut Point2D ) -> Result<(), String>{
+	pub fn to_delta(&self) -> Delta2D {
+		let mut res = Delta2D::default();
 		match self {
-				Direction::Down => pos.y -=1,
-				Direction::Up => pos.y +=1,
-				Direction::Left => pos.x -=1,
-				Direction::Right => pos.x +=1,
+				Direction::Down => res.y -=1,
+				Direction::Up => res.y +=1,
+				Direction::Left => res.x -=1,
+				Direction::Right => res.x +=1,
 		}
-		Ok(())
+		return res;
 	}
 }

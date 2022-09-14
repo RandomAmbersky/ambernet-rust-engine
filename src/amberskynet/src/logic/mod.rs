@@ -31,6 +31,8 @@ pub fn new () -> Logic {
 
 impl Logic {
     pub fn do_action(&mut self, act: Action, dir: Direction) {
+        let delta = dir.to_delta();
+        
         let mut positions = self.world.write_storage::<Position>();
         let mut players = self.world.write_storage::<Player>();
 

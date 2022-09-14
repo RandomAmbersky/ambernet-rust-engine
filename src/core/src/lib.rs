@@ -11,4 +11,4 @@ pub use size_2d::Size2dU32 as Size2D;
 
 use delta_2d::Delta2dU32;
 #[allow(dead_code)]
-type Delta2D = Delta2dU32;
+pub type Delta2D = Delta2dU32;
