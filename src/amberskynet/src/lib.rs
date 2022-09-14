@@ -16,6 +16,7 @@ use textured_quad::{new_item as new_textured_quad, TexturedQuad};
 use triangle::{new_item as new_triangle, Triangle};
 use cell_game::CellGame;
 use logic::Logic;
+use crate::logic::defines::{Action, Direction};
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
@@ -108,6 +109,7 @@ impl AmberSkyNetClient {
         // let mess = format!("update times: {} ", time);
         // LoggerWeb::log(&mess);
         game_utils::update(&mut self.game, time)?;
+        self.logic.do_action(Action::Move,Direction::Up);
         Ok(())
     }
 

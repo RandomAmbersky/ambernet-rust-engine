@@ -1,12 +1,13 @@
 mod position;
 mod actor;
 mod player;
-mod defines;
+pub mod defines;
 
 use specs::{World, WorldExt, Builder, Join, Entity};
 use asn_core::Point2D;
 use position::Position;
 use actor::Actor;
+use amberskynet_logger_web::LoggerWeb;
 use defines::{Action, Direction};
 use player::Player;
 
@@ -18,8 +19,15 @@ pub fn new () -> Logic {
     let mut world = World::new();
     world.register::<Position>();
     world.register::<Player>();
+    world.register::<Actor>();
 
-    world.create_entity().with(Player{}).build();
+    world.create_entity()
+        .with(Player{})
+        .with(Actor{})
+        .with(Position{
+            pos: Point2D{ x: 10, y: 10 }
+        })
+        .build();
     Logic {
         world
     }
@@ -27,13 +35,17 @@ pub fn new () -> Logic {
 
 impl Logic {
     pub fn do_action(&mut self, act: Action, dir: Direction) {
+        let mess = format!("do_action");
+        LoggerWeb::log(&mess);
+
         let delta = dir.to_delta();
         
         let mut positions = self.world.write_storage::<Position>();
         let mut players = self.world.write_storage::<Player>();
 
-        for (_player, _pos) in (&mut players, &mut positions).join() {
-
+        for (_player, pos) in (&mut players, &mut positions).join() {
+            let mess = format!("do_action {:?} {:?}", act, pos);
+            LoggerWeb::log(&mess);
         }
     }
 

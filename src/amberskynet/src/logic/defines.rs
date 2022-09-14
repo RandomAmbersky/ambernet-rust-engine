@@ -1,5 +1,6 @@
 use asn_core::{Delta2D};
 
+#[derive(Debug)]
 pub enum Direction {
 	Up,
 	Down,
@@ -7,6 +8,7 @@ pub enum Direction {
 	Right
 }
 
+#[derive(Debug)]
 pub enum Action {
 	Move,
 	Use
