@@ -11,35 +11,35 @@ canvas.setAttribute('tabindex','0');
 canvas.focus();
 
 canvas.onclick = (e) => {
-  console.log(e)
+  engine.on_event(e)
 }
 
 canvas.onkeydown = (e) => {
-  console.log(e)
+  engine.on_event(e)
 }
 
 canvas.onkeyup = (e) => {
-  console.log(e)
+  engine.on_event(e)
 }
 
 canvas.onmousedown = (e) => {
-  console.log(e)
+  engine.on_event(e)
 }
 
 canvas.onmouseup = (e) => {
-  console.log(e)
+  engine.on_event(e)
 }
 
 canvas.onmousemove = (e) => {
-  console.log(e)
+  engine.on_event(e)
 }
 
 canvas.ondrag = (e) => {
-  console.log(e)
+  engine.on_event(e)
 }
 
 canvas.onwheel = (e) => {
-  console.log(e)
+  engine.on_event(e)
 }
 
 const data1 = {

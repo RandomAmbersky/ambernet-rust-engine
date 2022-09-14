@@ -16,7 +16,7 @@ use textured_quad::{new_item as new_textured_quad, TexturedQuad};
 use triangle::{new_item as new_triangle, Triangle};
 use cell_game::CellGame;
 use logic::Logic;
-use crate::logic::defines::{Action, Direction};
+use logic::defines::{Action, Direction};
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
@@ -91,6 +91,12 @@ impl AmberSkyNetClient {
         AmberSkyNetClient::default()
     }
 
+    pub fn on_event(&mut self, evt: web_sys::Event) -> Result<(), JsValue> {
+        let mess = format!("on_event {:?}", evt);
+        LoggerWeb::log(&mess);
+        Ok(())
+    }
+
     pub fn upload_tiles(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
@@ -109,7 +115,6 @@ impl AmberSkyNetClient {
         // let mess = format!("update times: {} ", time);
         // LoggerWeb::log(&mess);
         game_utils::update(&mut self.game, time)?;
-        self.logic.do_action(Action::Move,Direction::Up);
         Ok(())
     }
 

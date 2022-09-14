@@ -38,7 +38,7 @@ impl Logic {
         let mess = format!("do_action");
         LoggerWeb::log(&mess);
 
-        let delta = dir.to_delta();
+        let delta = dir.as_delta();
         
         let mut positions = self.world.write_storage::<Position>();
         let mut players = self.world.write_storage::<Player>();

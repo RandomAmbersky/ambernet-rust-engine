@@ -37,3 +37,9 @@ js-sys = "*"
 wasm-bindgen = "*"
 rand = "*"
 specs = "*"
+
+[dependencies.web-sys]
+version = "*"
+features = [
+    "Event"
+]

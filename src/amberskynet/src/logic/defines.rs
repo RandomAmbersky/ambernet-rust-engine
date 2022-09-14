@@ -15,7 +15,7 @@ pub enum Action {
 }
 
 impl Direction {
-	pub fn to_delta(&self) -> Delta2D {
+	pub fn as_delta(&self) -> Delta2D {
 		let mut res = Delta2D::default();
 		match self {
 				Direction::Down => res.y -=1,
