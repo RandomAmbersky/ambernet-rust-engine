@@ -1,6 +1,6 @@
 mod utils;
 mod texture_data;
-mod render_data;
+pub mod render_tiles;
 
 use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::{ RenderContext };
@@ -8,26 +8,28 @@ use asn_render_webgl::{ RenderContext };
 use web_sys::WebGlRenderingContext as GL;
 use asn_core::{Array2D, Point2D, Size2D};
 
-use render_data::RenderData;
-use crate::texture_data::from_array2d;
+use render_tiles::RenderTiles;
 
 pub struct View2D {
 	screen: Array2D,
-	render_data: RenderData,
 	is_need_texture_update: bool
 }
 
-pub fn new_item(ctx: &RenderContext, window_size: &Size2D) -> Result<View2D, String> {
-	let render_data = RenderData::new(ctx)?;
+pub fn new_render(ctx: &RenderContext) -> Result<RenderTiles, String> {
+	let render_data = RenderTiles::new(ctx)?;
+	Ok(render_data)
+}
 
+pub fn new_item(window_size: &Size2D) -> Result<View2D, String> {
 	let screen = Array2D {
-		width: window_size.width,
-		height: window_size.height,
+		size: Size2D {
+			width: window_size.width,
+			height: window_size.height
+		},
 		bytes: Default::default()
 	};
 
 	let view2d = View2D {
-		render_data,
 		is_need_texture_update: false,
 		screen,
 	};
@@ -35,23 +37,17 @@ pub fn new_item(ctx: &RenderContext, window_size: &Size2D) -> Result<View2D, Str
 }
 
 impl View2D {
-	pub fn set_tiles(&self, ctx: &RenderContext, tile_size: &Size2D, tex: &Array2D) -> Result<(), String>
-	{
-		self.render_data.update_tiles(ctx, tex, tile_size)?;
-		Ok(())
-	}
-
 	pub fn look_at(&mut self, pos: &Point2D, map: &Array2D) -> Result<(), String> {
 
 		if self.screen.is_zero() {
 			return Err(String::from("window size is zero"))
 		}
 
-		let half_width = self.screen.width / 2;
-		let half_height = self.screen.height / 2;
+		let half_width = self.screen.size.width / 2;
+		let half_height = self.screen.size.height / 2;
 
-		let map_width_minus_width = map.width - self.screen.width;
-		let map_height_minus_height = map.height - self.screen.height;
+		let map_width_minus_width = map.size.width - self.screen.size.width;
+		let map_height_minus_height = map.size.height - self.screen.size.height;
 
 		let mut n_pos = *pos;
 
@@ -87,16 +83,6 @@ impl View2D {
 	// обновление таймеров спрайтов анимации
 	pub fn update(&mut self, _time: f32) -> Result<(), String> {
 		// self.is_need_texture_update = true;
-		Ok(())
-	}
-
-	pub fn draw(&mut self, ctx: &RenderContext) -> Result<(), String> {
-		if self.is_need_texture_update {
-			let texture = from_array2d(&self.screen, 16);
-			self.render_data.update_view(ctx, &texture)?;
-			self.is_need_texture_update = false;
-		}
-		self.render_data.draw(ctx);
 		Ok(())
 	}
 }

@@ -1,4 +1,4 @@
-use asn_core::Array2D;
+use asn_core::{Array2D, Size2D};
 
 pub fn decode_texture (
     buf: &[u8]
@@ -11,8 +11,10 @@ pub fn decode_texture (
         }
     };
     let resp = Array2D {
-        width: img.width(),
-        height: img.height(),
+        size: Size2D {
+            width: img.width(),
+            height: img.height()
+        },
         bytes: img.to_rgba8().into_raw()
     };
 

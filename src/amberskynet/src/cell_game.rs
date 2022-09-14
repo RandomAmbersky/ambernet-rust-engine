@@ -14,11 +14,11 @@ pub struct CellGame {
 
 impl CellGame {
 	pub fn new(ctx: &RenderContext) -> Result<CellGame, String> {
-		let view_2d = new_view_2d(&ctx, &WINDOW_SIZE)?;
+		// let view_2d = new_view_2d(&ctx, &WINDOW_SIZE)?;
 
 		let game = CellGame {
 			map: Default::default(),
-			view: view_2d,
+			// view: view_2d,
 		};
 		Ok(game)
 	}

@@ -4,7 +4,7 @@ mod buffers;
 mod textures;
 
 use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
-use asn_core::Array2D;
+use asn_core::{Array2D, Size2D};
 use utils::GL as GL;
 
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
@@ -68,8 +68,10 @@ pub fn upload_texture(ctx: &RenderContext, tex: &Array2D, is_linear: bool) -> Re
 pub fn load_empty_texture(ctx: &RenderContext) -> Result<WebGlTexture, String> {
 	// look at https://snoozetime.github.io/2019/12/19/webgl-texture.html
 	let tex = Array2D {
-		width: 1,
-		height: 1,
+		size: Size2D {
+			width: 1,
+			height: 1,
+		},
 		bytes: ONE_BLUE_PIXEL.to_vec()
 	};
 	textures::upload(&ctx.gl, &tex, false)

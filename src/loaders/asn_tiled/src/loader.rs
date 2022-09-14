@@ -29,10 +29,10 @@ fn parse_map(parser: &mut Tokenizer, map: &mut Array2D) {
             parse_layer(parser, map);
         } else if let Token::Attribute { local, value,  .. } = token {
             if local.as_str() == "width" {
-                map.width = value.as_str().parse::<u32>().unwrap();
+                map.size.width = value.as_str().parse::<u32>().unwrap();
             }
             else if local.as_str() == "height" {
-                map.height = value.as_str().parse::<u32>().unwrap();
+                map.size.height = value.as_str().parse::<u32>().unwrap();
             }
             // else if local.as_str() == "tilewidth" {
             //     map.tile_width = value.as_str().parse::<u32>().unwrap()

@@ -1,4 +1,4 @@
-use asn_core::Array2D;
+use asn_core::{Array2D, Size2D};
 
 // из массива тайлов в текстуру для шейдера
 pub fn from_array2d (buf: &Array2D, tiles_width: u8) -> Array2D {
@@ -16,8 +16,7 @@ pub fn from_array2d (buf: &Array2D, tiles_width: u8) -> Array2D {
     }
 
     Array2D {
-        width: buf.width,
-        height: buf.height,
+        size: buf.size,
         bytes
     }
 }

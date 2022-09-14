@@ -1,4 +1,14 @@
-use asn_core::{Delta2D};
+use asn_core::{Delta2D, Size2D};
+
+pub const TILE_SIZE: Size2D = Size2D {
+	width: 16,
+	height: 16
+};
+
+pub const WINDOW_SIZE: Size2D = Size2D {
+	width: 10,
+	height: 10
+};
 
 #[derive(Debug)]
 pub enum Direction {

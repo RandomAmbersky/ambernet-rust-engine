@@ -3,7 +3,7 @@ use asn_core::{Array2D, Size2D};
 use asn_render_webgl::RenderContext;
 use crate::{GL, utils};
 
-pub struct RenderData {
+pub struct RenderTiles {
     texture: WebGlTexture,
     map_texture: WebGlTexture,
     program: WebGlProgram,
@@ -18,8 +18,8 @@ pub struct RenderData {
     u_tile_size: WebGlUniformLocation,
 }
 
-impl RenderData {
-    pub fn new (ctx: &RenderContext) -> Result<RenderData, String> {
+impl RenderTiles {
+    pub fn new (ctx: &RenderContext) -> Result<RenderTiles, String> {
         let vertices_buf = asn_render_webgl::load_buffer(ctx, &utils::VERTICES);
 
         let program = match asn_render_webgl::link_program(ctx, utils::VERTEX_SHADER, utils::FRAG_SHADER) {
@@ -84,7 +84,7 @@ impl RenderData {
             Some(t) => t
         };
 
-        let data = RenderData {
+        let data = RenderTiles {
             program,
             a_position,
             texture,
@@ -104,7 +104,7 @@ impl RenderData {
     pub fn update_tiles (&self, ctx: &RenderContext, tex: &Array2D, tile_size: &Size2D) -> Result<(), String> {
         asn_render_webgl::update_texture(ctx, &self.texture, tex, false)?;
         ctx.gl.use_program(Some(&self.program));
-        ctx.gl.uniform2f(Some(&self.u_sheet_size), tex.width as f32, tex.height as f32);
+        ctx.gl.uniform2f(Some(&self.u_sheet_size), tex.size.width as f32, tex.size.height as f32);
         ctx.gl.uniform2f(Some(&self.u_tile_size), tile_size.width as f32, tile_size.height as f32);
         ctx.gl.use_program(None);
         Ok(())
@@ -113,7 +113,7 @@ impl RenderData {
     pub fn update_view (&self, ctx: &RenderContext, texture_data: &Array2D) -> Result<(), String> {
         asn_render_webgl::update_texture(ctx, &self.map_texture, texture_data, false)?;
         ctx.gl.use_program(Some(&self.program));
-        ctx.gl.uniform2f(Some(&self.u_map_size), texture_data.width as f32, texture_data.height as f32);
+        ctx.gl.uniform2f(Some(&self.u_map_size), texture_data.size.width as f32, texture_data.size.height as f32);
         ctx.gl.use_program(None);
         Ok(())
     }
