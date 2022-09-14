@@ -10,6 +10,7 @@ crate-type = ["cdylib"]
 wasm-opt = false
 
 [profile.release]
+panic = 'unwind'
 debug = true
 lto = true
 opt-level = 'z'

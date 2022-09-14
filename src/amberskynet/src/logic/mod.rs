@@ -3,7 +3,7 @@ mod actor;
 mod player;
 mod defines;
 
-use specs::{World, WorldExt, Builder, Join};
+use specs::{World, WorldExt, Builder, Join, Entity};
 use asn_core::Point2D;
 use position::Position;
 use actor::Actor;
@@ -17,13 +17,9 @@ pub struct Logic {
 pub fn new () -> Logic {
     let mut world = World::new();
     world.register::<Position>();
-    world.register::<Actor>();
-    world.create_entity()
-      .with(Position{
-        pos: Default::default()
-    })
-      .with(Player{})
-      .build();
+    world.register::<Player>();
+
+    world.create_entity().with(Player{}).build();
     Logic {
         world
     }
