@@ -41,5 +41,6 @@ specs = "*"
 [dependencies.web-sys]
 version = "*"
 features = [
-    "Event"
+    "Event",
+    "KeyboardEvent"
 ]
