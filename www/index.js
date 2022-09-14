@@ -7,8 +7,40 @@ const FPS_THROTTLE = 1000.0 / 30.0 // milliseconds / frames
 const canvas = document.getElementById('canvasGL')
 const engine = new AmberSkyNetClient()
 
-// const mapArray = await loadBinary('/map/laboratory3.tmx')
-// const tilesArray = await loadBinary('/map/tiles_many.png')
+canvas.setAttribute('tabindex','0');
+canvas.focus();
+
+canvas.onclick = (e) => {
+  console.log(e)
+}
+
+canvas.onkeydown = (e) => {
+  console.log(e)
+}
+
+canvas.onkeyup = (e) => {
+  console.log(e)
+}
+
+canvas.onmousedown = (e) => {
+  console.log(e)
+}
+
+canvas.onmouseup = (e) => {
+  console.log(e)
+}
+
+canvas.onmousemove = (e) => {
+  console.log(e)
+}
+
+canvas.ondrag = (e) => {
+  console.log(e)
+}
+
+canvas.onwheel = (e) => {
+  console.log(e)
+}
 
 const data1 = {
   map: {
@@ -45,6 +77,7 @@ const data2 = {
 }
 
 async function loadData (data) {
+
   const mapArray = await loadBinary(data.mapName)
   const tilesArray = await loadBinary(data.tileName)
   engine.upload_tiles(tilesArray)

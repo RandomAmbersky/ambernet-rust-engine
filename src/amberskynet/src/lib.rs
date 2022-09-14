@@ -15,7 +15,7 @@ use color_quad::{new_item as new_color_quad, ColorQuad};
 use textured_quad::{new_item as new_textured_quad, TexturedQuad};
 use triangle::{new_item as new_triangle, Triangle};
 use cell_game::CellGame;
-use logic::Logic;
+// use logic::Logic;
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
@@ -29,8 +29,8 @@ pub struct AmberSkyNetClient {
     textured_quad: TexturedQuad,
     #[allow(dead_code)]
     game: CellGame,
-    #[allow(dead_code)]
-    logic: Logic
+    // #[allow(dead_code)]
+    // logic: Logic
 }
 
 impl Default for AmberSkyNetClient {
@@ -69,7 +69,7 @@ impl Default for AmberSkyNetClient {
             }
         };
 
-        let logic = logic::new();
+        // let logic = logic::new();
 
         Self {
             ctx,
@@ -77,7 +77,7 @@ impl Default for AmberSkyNetClient {
             color_quad,
             textured_quad,
             game,
-            logic
+            // logic
         }
     }
 }
