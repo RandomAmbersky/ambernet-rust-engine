@@ -78,7 +78,7 @@ impl Default for AmberSkyNetClient {
             textured_quad,
             game,
             logic
-
+        }
     }
 }
 
