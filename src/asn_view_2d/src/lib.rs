@@ -67,8 +67,8 @@ impl View2D {
 			self.is_need_texture_update = false;
 		}
 
-		let mess = format!("draw: {:?}", &self.screen);
-		LoggerWeb::log(&mess);
+		// let mess = format!("draw: {:?}", &self.screen);
+		// LoggerWeb::log(&mess);
 
 		self.render_tiles.draw(ctx);
 		Ok(())

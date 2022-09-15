@@ -5,14 +5,14 @@ use asn_images::decode_texture;
 use asn_render_webgl::RenderContext;
 use asn_tiled::load_xml_map;
 use asn_view_2d::View2D;
-use crate::logic;
+use crate::{logic, Logic};
 use crate::logic::defines::TILE_SIZE;
 
-pub fn set_map(w: &mut World, data: &[u8]) -> Result<(), String> {
+pub fn set_map(l: &mut Logic, w: &mut World, data: &[u8]) -> Result<(), String> {
 	let decoded_map = load_xml_map(&data)?;
 	let mess = format!("parsed map is: {:?}", decoded_map);
 	LoggerWeb::log(&mess);
-	logic::set_map(w, decoded_map);
+	l.set_map(w, decoded_map);
 	Ok(())
 }
 

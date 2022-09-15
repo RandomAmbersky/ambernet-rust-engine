@@ -24,6 +24,16 @@ pub enum Action {
 	Use
 }
 
+#[derive(Debug)]
+pub enum Key {
+	None,
+	Up,
+	Down,
+	Left,
+	Right,
+	Fire
+}
+
 impl Direction {
 	pub fn as_delta(&self) -> Delta2D {
 		let mut res = Delta2D::default();

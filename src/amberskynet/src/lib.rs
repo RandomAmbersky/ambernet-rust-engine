@@ -1,6 +1,7 @@
 mod utils;
 mod game_utils;
 mod logic;
+mod key_utils;
 
 use specs::World;
 use asn_view_2d::{new_item as new_view_2d, View2D};
@@ -95,7 +96,6 @@ impl AmberSkyNetClient {
         AmberSkyNetClient::default()
     }
 
-
     pub fn on_event(&mut self, evt: web_sys::Event) -> Result<(), JsValue> {
 
         // let mess = format!("on_event: {:?}", evt.type_());
@@ -110,10 +110,9 @@ impl AmberSkyNetClient {
         Ok(())
     }
 
-    fn on_keyboard_event (&self, evt: &web_sys::KeyboardEvent) -> Result<(), JsValue> {
-        let key = evt.key();
-        let mess = format!("KeyboardEvent: {:?}", &key);
-        LoggerWeb::log(&mess);
+    fn on_keyboard_event (&mut self, evt: &web_sys::KeyboardEvent) -> Result<(), JsValue> {
+        let key = key_utils::match_key(evt);
+        self.logic.process_key(&mut self.world, key);
         Ok(())
     }
 
@@ -127,7 +126,7 @@ impl AmberSkyNetClient {
     pub fn upload_map(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_map";
         LoggerWeb::log(mess);
-        game_utils::set_map(&mut self.world, &data)?;
+        game_utils::set_map(&mut self.logic, &mut self.world, &data)?;
         Ok(())
     }
 
@@ -135,7 +134,7 @@ impl AmberSkyNetClient {
         // let mess = format!("update times: {} ", time);
         // LoggerWeb::log(&mess);
         // game_utils::update(&mut self.logic, time)?;
-        self.logic.update_view(&mut self.world, &mut self.view)?;
+        self.logic.update(&mut self.world, &mut self.view, time)?;
         self.view.update(time)?;
         Ok(())
     }
