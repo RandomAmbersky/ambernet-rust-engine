@@ -95,6 +95,7 @@ impl AmberSkyNetClient {
         AmberSkyNetClient::default()
     }
 
+
     pub fn on_event(&mut self, evt: web_sys::Event) -> Result<(), JsValue> {
 
         // let mess = format!("on_event: {:?}", evt.type_());
@@ -103,8 +104,8 @@ impl AmberSkyNetClient {
         if let Some(key_e) = wasm_bindgen::JsCast::dyn_ref::<web_sys::KeyboardEvent>(&evt) {
             self.on_keyboard_event(key_e)?
         } else {
-            let mess = format!("on_event: {:?}", evt);
-            LoggerWeb::log(&mess);
+            // let mess = format!("on_event: {:?}", evt);
+            // LoggerWeb::log(&mess);
         }
         Ok(())
     }

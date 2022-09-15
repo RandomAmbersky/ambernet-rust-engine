@@ -101,7 +101,7 @@ impl RenderTiles {
         Ok(data)
     }
 
-    pub fn update_tiles (&self, ctx: &RenderContext, tex: &Array2D, tile_size: &Size2D) -> Result<(), String> {
+    pub fn set_tiles (&self, ctx: &RenderContext, tex: &Array2D, tile_size: &Size2D) -> Result<(), String> {
         asn_render_webgl::update_texture(ctx, &self.texture, tex, false)?;
         ctx.gl.use_program(Some(&self.program));
         ctx.gl.uniform2f(Some(&self.u_sheet_size), tex.size.width as f32, tex.size.height as f32);

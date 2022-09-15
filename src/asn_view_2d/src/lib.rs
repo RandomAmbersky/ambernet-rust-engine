@@ -9,6 +9,7 @@ use web_sys::WebGlRenderingContext as GL;
 use asn_core::{Array2D, Point2D, Size2D};
 
 use render_tiles::RenderTiles;
+use crate::texture_data::from_array2d;
 
 pub struct View2D {
 	screen: Array2D,
@@ -38,7 +39,7 @@ pub fn new_item(ctx: &RenderContext, window_size: &Size2D) -> Result<View2D, Str
 impl View2D {
 
 	pub fn set_tiles(&mut self, ctx: &RenderContext, tex: &Array2D, tile_size: &Size2D) -> Result<(), String> {
-		self.render_tiles.update_tiles(ctx, tex, tile_size)
+		self.render_tiles.set_tiles(ctx, tex, tile_size)
 	}
 
 	pub fn look_at(&mut self, pos: &Point2D, map: &Array2D) -> Result<(), String> {
@@ -61,9 +62,14 @@ impl View2D {
 
 	pub fn draw(&mut self, ctx: &RenderContext) -> Result<(), String> {
 		if self.is_need_texture_update {
-			self.render_tiles.update_view(ctx, &self.screen)?;
+			let texture_data = from_array2d( &self.screen, 16);
+			self.render_tiles.update_view(ctx, &texture_data)?;
 			self.is_need_texture_update = false;
 		}
+
+		let mess = format!("draw: {:?}", &self.screen);
+		LoggerWeb::log(&mess);
+
 		self.render_tiles.draw(ctx);
 		Ok(())
 	}

@@ -49,26 +49,7 @@ pub fn set_map(w: &mut World, map: Array2D) {
 impl Logic {
     pub fn update_view(&self, w: &World, view: &mut View2D) -> Result<(), String> {
         let my_map = w.fetch::<Map>();
-
-        let mess = format!("update_view: {:?}", my_map.map.size);
-        LoggerWeb::log(&mess);
-
         view.look_at(&self.pos, &my_map.map)?;
         Ok(())
-    }
-}
-
-impl Logic {
-    pub fn do_action_at(&mut self, act: Action, pos: Point2D) {
-        return match act {
-            Action::Move => self.do_move(pos),
-            Action::Use => self.do_use(pos)
-        }
-    }
-
-    pub fn do_move(&mut self, pos: Point2D) {
-    }
-
-    pub fn do_use(&mut self, pos: Point2D) {
     }
 }
