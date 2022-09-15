@@ -1,6 +1,6 @@
 mod utils;
 mod texture_data;
-pub mod render_tiles;
+mod render_tiles;
 
 use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::{ RenderContext };
@@ -36,11 +36,16 @@ pub fn new_item(ctx: &RenderContext, window_size: &Size2D) -> Result<View2D, Str
 }
 
 impl View2D {
+
+	pub fn set_tiles(&mut self, ctx: &RenderContext, tex: &Array2D, tile_size: &Size2D) -> Result<(), String> {
+		self.render_tiles.update_tiles(ctx, tex, tile_size)
+	}
+
 	pub fn look_at(&mut self, pos: &Point2D, map: &Array2D) -> Result<(), String> {
 
 		let n_pos = map.calc_screen_pos(pos, &self.screen.size)?;
-		// let mess = format!("n_pos: {:?}", n_pos);
-		// LoggerWeb::log(&mess);
+		let mess = format!("n_pos: {:?}", n_pos);
+		LoggerWeb::log(&mess);
 
 		self.screen.cut_from(&n_pos, map)?;
 		self.is_need_texture_update = true;

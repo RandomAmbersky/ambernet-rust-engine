@@ -2,6 +2,7 @@ mod utils;
 mod game_utils;
 mod logic;
 
+use specs::World;
 use asn_view_2d::{new_item as new_view_2d, View2D};
 
 use wasm_bindgen::prelude::wasm_bindgen;
@@ -9,7 +10,6 @@ use wasm_bindgen::JsValue;
 
 use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::RenderContext;
-use asn_view_2d::render_tiles::RenderTiles;
 
 use color_quad::{new_item as new_color_quad, ColorQuad};
 use textured_quad::{new_item as new_textured_quad, TexturedQuad};
@@ -31,7 +31,9 @@ pub struct AmberSkyNetClient {
     #[allow(dead_code)]
     view: View2D,
     #[allow(dead_code)]
-    logic: Logic
+    logic: Logic,
+    #[allow(dead_code)]
+    world: World
 }
 
 impl Default for AmberSkyNetClient {
@@ -62,7 +64,8 @@ impl Default for AmberSkyNetClient {
             }
         };
 
-        let logic = logic::new();
+        let logic = Logic::default();
+        let world = logic::create_world();
 
         let view = match asn_view_2d::new_item(&ctx, &WINDOW_SIZE) {
             Ok(t) => t,
@@ -78,7 +81,8 @@ impl Default for AmberSkyNetClient {
             color_quad,
             textured_quad,
             view,
-            logic
+            logic,
+            world
         }
     }
 }
@@ -115,14 +119,14 @@ impl AmberSkyNetClient {
     pub fn upload_tiles(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
-        // game_utils::set_tiles(&self.ctx, &mut self.view, &data)?;
+        game_utils::set_tiles(&self.ctx, &mut self.view, &data)?;
         Ok(())
     }
 
     pub fn upload_map(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_map";
         LoggerWeb::log(mess);
-        // game_utils::set_map(&mut self.logic, &data)?;
+        game_utils::set_map(&mut self.world, &data)?;
         Ok(())
     }
 
@@ -130,6 +134,7 @@ impl AmberSkyNetClient {
         // let mess = format!("update times: {} ", time);
         // LoggerWeb::log(&mess);
         // game_utils::update(&mut self.logic, time)?;
+        self.logic.update_view(&mut self.world, &mut self.view)?;
         self.view.update(time)?;
         Ok(())
     }
