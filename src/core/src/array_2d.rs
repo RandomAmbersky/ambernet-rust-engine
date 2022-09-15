@@ -79,4 +79,44 @@ impl Array2D {
 
         Ok(())
     }
+
+    pub fn calc_screen_pos(&self, pos: &Point2D, screen: &Size2D) -> Result<Point2D, String> {
+        if self.is_zero() {
+            return Err(String::from("Array2D size is zero"))
+        }
+
+        if screen.is_zero() {
+            return Err(String::from("screen size is zero"))
+        }
+
+        let half_width = screen.width / 2;
+        let half_height = screen.height / 2;
+
+        let map_width_minus_width = self.size.width - screen.width;
+        let map_height_minus_height = self.size.height - screen.height;
+
+        let mut n_pos = *pos;
+
+        if n_pos.x > half_width {
+            n_pos.x -= half_width;
+        } else {
+            n_pos.x = 0;
+        }
+
+        if n_pos.y > half_height {
+            n_pos.y -= half_height;
+        } else {
+            n_pos.y = 0;
+        }
+
+        if n_pos.y > map_height_minus_height {
+            n_pos.y = map_height_minus_height;
+        }
+
+        if n_pos.x > map_width_minus_width {
+            n_pos.x = map_width_minus_width;
+        }
+
+        Ok(n_pos)
+    }
 }

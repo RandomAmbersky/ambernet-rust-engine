@@ -16,6 +16,7 @@ use textured_quad::{new_item as new_textured_quad, TexturedQuad};
 use triangle::{new_item as new_triangle, Triangle};
 use logic::Logic;
 use logic::defines::{Action, Direction};
+use crate::logic::defines::WINDOW_SIZE;
 
 #[wasm_bindgen]
 pub struct AmberSkyNetClient {
@@ -28,7 +29,7 @@ pub struct AmberSkyNetClient {
     #[allow(dead_code)]
     textured_quad: TexturedQuad,
     #[allow(dead_code)]
-    render_tiles: RenderTiles,
+    view: View2D,
     #[allow(dead_code)]
     logic: Logic
 }
@@ -63,7 +64,7 @@ impl Default for AmberSkyNetClient {
 
         let logic = logic::new();
 
-        let render_tiles = match asn_view_2d::new_render(&ctx) {
+        let view = match asn_view_2d::new_item(&ctx, &WINDOW_SIZE) {
             Ok(t) => t,
             Err(err) => {
                 LoggerWeb::log(&err);
@@ -76,7 +77,7 @@ impl Default for AmberSkyNetClient {
             triangle,
             color_quad,
             textured_quad,
-            render_tiles,
+            view,
             logic
         }
     }
@@ -114,21 +115,22 @@ impl AmberSkyNetClient {
     pub fn upload_tiles(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
-        game_utils::set_tiles(&self.ctx, &mut self.render_tiles, &data)?;
+        // game_utils::set_tiles(&self.ctx, &mut self.view, &data)?;
         Ok(())
     }
 
     pub fn upload_map(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
         let mess = "engine upload_map";
         LoggerWeb::log(mess);
-        game_utils::set_map(&mut self.logic, &data)?;
+        // game_utils::set_map(&mut self.logic, &data)?;
         Ok(())
     }
 
     pub fn update(&mut self, time: f32) -> Result<(), JsValue> {
         // let mess = format!("update times: {} ", time);
         // LoggerWeb::log(&mess);
-        game_utils::update(&mut self.logic, time)?;
+        // game_utils::update(&mut self.logic, time)?;
+        self.view.update(time)?;
         Ok(())
     }
 
@@ -143,8 +145,9 @@ impl AmberSkyNetClient {
         asn_render_webgl::draw(&self.ctx);
         // triangle::draw(&self.ctx, &self.triangle);
         // textured_quad::draw(&self.ctx, &self.textured_quad);
-        self.render_tiles.draw(&self.ctx);
-        // color_quad::draw(&self.ctx, &self.color_quad);
+        self.view.draw(&self.ctx)?;
+        // color_quad::draw(&self.ctx, &self.
+        // color_quad);
         Ok(())
     }
 }

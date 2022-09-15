@@ -12,15 +12,11 @@ use render_tiles::RenderTiles;
 
 pub struct View2D {
 	screen: Array2D,
+	render_tiles: RenderTiles,
 	is_need_texture_update: bool
 }
 
-pub fn new_render(ctx: &RenderContext) -> Result<RenderTiles, String> {
-	let render_data = RenderTiles::new(ctx)?;
-	Ok(render_data)
-}
-
-pub fn new_item(window_size: &Size2D) -> Result<View2D, String> {
+pub fn new_item(ctx: &RenderContext, window_size: &Size2D) -> Result<View2D, String> {
 	let screen = Array2D {
 		size: Size2D {
 			width: window_size.width,
@@ -29,8 +25,11 @@ pub fn new_item(window_size: &Size2D) -> Result<View2D, String> {
 		bytes: Default::default()
 	};
 
+	let render_tiles = RenderTiles::new(ctx)?;
+
 	let view2d = View2D {
 		is_need_texture_update: false,
+		render_tiles,
 		screen,
 	};
 	Ok(view2d)
@@ -39,38 +38,7 @@ pub fn new_item(window_size: &Size2D) -> Result<View2D, String> {
 impl View2D {
 	pub fn look_at(&mut self, pos: &Point2D, map: &Array2D) -> Result<(), String> {
 
-		if self.screen.is_zero() {
-			return Err(String::from("window size is zero"))
-		}
-
-		let half_width = self.screen.size.width / 2;
-		let half_height = self.screen.size.height / 2;
-
-		let map_width_minus_width = map.size.width - self.screen.size.width;
-		let map_height_minus_height = map.size.height - self.screen.size.height;
-
-		let mut n_pos = *pos;
-
-		if n_pos.x > half_width {
-			n_pos.x -= half_width;
-		} else {
-			n_pos.x = 0;
-		}
-
-		if n_pos.y > half_height {
-			n_pos.y -= half_height;
-		} else {
-			n_pos.y = 0;
-		}
-
-		if n_pos.y > map_height_minus_height {
-			n_pos.y = map_height_minus_height;
-		}
-
-		if n_pos.x > map_width_minus_width {
-			n_pos.x = map_width_minus_width;
-		}
-
+		let n_pos = map.calc_screen_pos(pos, &self.screen.size)?;
 		// let mess = format!("n_pos: {:?}", n_pos);
 		// LoggerWeb::log(&mess);
 
@@ -82,7 +50,16 @@ impl View2D {
 	// ф-ция для перекодирования номера Entity в текущий номер спрайта анимации (на будущее)
 	// обновление таймеров спрайтов анимации
 	pub fn update(&mut self, _time: f32) -> Result<(), String> {
-		// self.is_need_texture_update = true;
+		self.is_need_texture_update = true;
+		Ok(())
+	}
+
+	pub fn draw(&mut self, ctx: &RenderContext) -> Result<(), String> {
+		if self.is_need_texture_update {
+			self.render_tiles.update_view(ctx, &self.screen)?;
+			self.is_need_texture_update = false;
+		}
+		self.render_tiles.draw(ctx);
 		Ok(())
 	}
 }
