@@ -11,6 +11,10 @@ impl Array2D {
         return self.size.width == 0 && self.size.height == 0
     }
 
+    pub fn is_valid_pos(&self, pos: &Point2D ) -> bool {
+        return pos.x < self.size.width && pos.y < self.size.height
+    }
+
     pub fn set_cell (&mut self,  point: &Point2D, cell: u8) -> Result<(), String> {
         if point.x > self.size.width {
             let mess = format!("Invalid width {}", point.x);

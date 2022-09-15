@@ -35,6 +35,17 @@ pub enum Key {
 }
 
 impl Direction {
+	pub fn from_key(key: &Key) -> Result<Direction, String> {
+		let result = match key {
+			Key::Up=> Direction::Up,
+			Key::Down => Direction::Down,
+			Key::Left => Direction::Left,
+			Key::Right=> Direction::Right,
+		    _ => return Err(String::from("Invalid direction"))
+		};
+		return Ok(result)
+	}
+
 	pub fn as_delta(&self) -> Delta2D {
 		let mut res = Delta2D::default();
 		match self {

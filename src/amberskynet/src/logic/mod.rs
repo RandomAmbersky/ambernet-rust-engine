@@ -50,9 +50,17 @@ impl Logic {
         self.is_need_view_update = true;
     }
 
-    pub fn process_key(&mut self, w: &mut World, key: Key) {
+    pub fn process_key(&mut self, w: &mut World, key: Key) -> Result<(), String> {
         let mess = format!("process_key {:?}", key);
         LoggerWeb::log(&mess);
+
+        let dir = Direction::from_key(&key)?;
+
+        let my_map = w.fetch::<Map>();
+        move_point(&mut self.pos, &my_map.map, &dir)?;
+        self.is_need_view_update = true;
+
+        Ok(())
     }
 
     pub fn update(&mut self, w: &mut World, view: &mut View2D, _time: f32) -> Result<(), String> {
@@ -67,4 +75,13 @@ impl Logic {
         view.look_at(&self.pos, &my_map.map)?;
         Ok(())
     }
+}
+
+fn move_point(pos: &mut Point2D, map: &Array2D, dir: &Direction) -> Result<(), String> {
+    let dir_delta = dir.as_delta();
+    let mut new_pos = pos.add(&dir_delta)?;
+    if map.is_valid_pos(&new_pos) {
+        *pos = new_pos;
+    }
+    Ok(())
 }

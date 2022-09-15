@@ -112,7 +112,7 @@ impl AmberSkyNetClient {
 
     fn on_keyboard_event (&mut self, evt: &web_sys::KeyboardEvent) -> Result<(), JsValue> {
         let key = key_utils::match_key(evt);
-        self.logic.process_key(&mut self.world, key);
+        self.logic.process_key(&mut self.world, key)?;
         Ok(())
     }
 
