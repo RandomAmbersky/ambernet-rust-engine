@@ -5,14 +5,14 @@ pub mod defines;
 mod render;
 mod background;
 
-use specs::{World, WorldExt, Builder, Join, Entity, Component, VecStorage};
-use asn_core::{Array2D, Point2D};
+use specs::{World, WorldExt, Builder, Join};
+use asn_core::{Array2D, Direction, Point2D};
 use position::Position;
 use actor::Actor;
 use amberskynet_logger_web::LoggerWeb;
 use asn_view_2d::View2D;
-use defines::{Action, Direction};
 use player::Player;
+use crate::Action;
 use crate::logic::background::Background;
 use crate::logic::defines::{Key, PLAYER_SPRITE_ID};
 
@@ -36,6 +36,35 @@ pub fn create_world () -> World {
     world
 }
 
+
+fn move_player(w: &mut World, dir: &Direction) -> Result<(), String> {
+    let mut players = w.write_storage::<Player>();
+    let mut positions = w.write_storage::<Position>();
+    let mut backgrounds = w.write_storage::<Background>();
+
+    let mut my_map = w.fetch_mut::<Map>();
+
+    for (player, position, background) in (&mut players, &mut positions, &mut backgrounds).join() {
+        if &player.dir != dir {
+            player.dir = *dir;
+            let new_sprite_num = player::dir_to_sprite(dir);
+            my_map.map.set_cell(&position.pos, new_sprite_num)?;
+            continue
+        }
+        let new_pos = match my_map.map.move_point(&position.pos, dir) {
+            Ok(t) => t,
+            Err(_) => continue
+        };
+        let background_cell = my_map.map.get_cell(&new_pos)?;
+        my_map.map.set_cell(&position.pos, background.cell)?;
+        let new_sprite_num = player::dir_to_sprite(dir);
+        my_map.map.set_cell(&new_pos, new_sprite_num)?;
+        position.pos = new_pos;
+        background.cell = background_cell;
+    }
+    Ok(())
+}
+
 impl Logic {
     pub fn set_map(&mut self, w: &mut World, map: Array2D) -> Result<(), String> {
         let mut my_map = Map {
@@ -48,7 +77,7 @@ impl Logic {
         my_map.map.set_cell(&player_pos, PLAYER_SPRITE_ID)?;
 
         w.create_entity()
-            .with(Player{})
+            .with(Player::default())
             .with(Actor{})
             .with(Background {
                 cell: background_cell
@@ -67,21 +96,26 @@ impl Logic {
         let mess = format!("process_key {:?}", key);
         LoggerWeb::log(&mess);
 
-        let mut dir = Direction::from_key(&key)?;
-
-        // inverse map
-        match dir {
-            Direction::Up => {
-                dir = Direction::Down
+        match key {
+            Key::None => {},
+            Key::Up => {
+                process_moving_dir(w, &Direction::Down)?;
             },
-            Direction::Down => {
-                dir = Direction::Up
+            Key::Down => {
+                process_moving_dir(w, &Direction::Up)?;
+            },
+            Key::Left => {
+                process_moving_dir(w, &Direction::Left)?;
+            },
+            Key::Right => {
+                process_moving_dir(w, &Direction::Right)?;
+            },
+            Key::Fire => {
+                process_action(w, &Action::Use)?;
             }
-            _ => {}
         }
 
         self.is_need_view_update = true;
-        move_player(w, &dir)?;
         Ok(())
     }
 
@@ -104,33 +138,11 @@ impl Logic {
     }
 }
 
-fn move_player(w: &mut World, dir: &Direction) -> Result<(), String> {
-    let players = w.read_storage::<Player>();
-    let mut positions = w.write_storage::<Position>();
-    let mut backgrounds = w.write_storage::<Background>();
-
-    let mut my_map = w.fetch_mut::<Map>();
-
-
-    for (_player, position, background) in (&players, &mut positions, &mut backgrounds).join() {
-        let new_pos = match move_point(&position.pos, &my_map.map, dir) {
-            Ok(t) => t,
-            Err(_) => continue
-        };
-        let background_cell = my_map.map.get_cell(&new_pos)?;
-        my_map.map.set_cell(&position.pos, background.cell)?;
-        my_map.map.set_cell(&new_pos, PLAYER_SPRITE_ID)?;
-        position.pos = new_pos;
-        background.cell = background_cell;
-    }
+pub fn process_moving_dir (w: &mut World, dir: &Direction) -> Result<(), String> {
+    move_player(w, dir)?;
     Ok(())
 }
 
-fn move_point(pos: &Point2D, map: &Array2D, dir: &Direction) -> Result<Point2D, String> {
-    let dir_delta = dir.as_delta();
-    let new_pos = pos.add(&dir_delta)?;
-    if map.is_valid_pos(&new_pos) {
-        return Ok(new_pos)
-    }
-    Err(String::from("can't move "))
+pub fn process_action (w: &mut World, act: &Action) -> Result<(), String> {
+    Ok(())
 }

@@ -4,7 +4,7 @@ mod logic;
 mod key_utils;
 
 use specs::World;
-use asn_view_2d::{new_item as new_view_2d, View2D};
+use asn_view_2d::{View2D};
 
 use wasm_bindgen::prelude::wasm_bindgen;
 use wasm_bindgen::JsValue;
@@ -16,7 +16,7 @@ use color_quad::{new_item as new_color_quad, ColorQuad};
 use textured_quad::{new_item as new_textured_quad, TexturedQuad};
 use triangle::{new_item as new_triangle, Triangle};
 use logic::Logic;
-use logic::defines::{Action, Direction};
+use logic::defines::{Action};
 use crate::logic::defines::WINDOW_SIZE;
 
 #[wasm_bindgen]

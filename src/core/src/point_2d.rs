@@ -1,4 +1,4 @@
-use crate::{Delta2D, Point2D};
+use crate::{Delta2D};
 
 #[derive(Default, Debug, Clone, Copy)]
 pub struct Point2dU32 {

@@ -1,4 +1,4 @@
-use crate::{Point2D, Size2D};
+use crate::{Direction, Point2D, Size2D};
 
 #[derive(Default, Debug)]
 pub struct Array2D {
@@ -13,6 +13,15 @@ impl Array2D {
 
     pub fn is_valid_pos(&self, pos: &Point2D ) -> bool {
         return pos.x < self.size.width && pos.y < self.size.height
+    }
+
+    pub fn move_point(&self, pos: &Point2D, dir: &Direction) -> Result<Point2D, String> {
+        let dir_delta = dir.as_delta();
+        let new_pos = pos.add(&dir_delta)?;
+        if self.is_valid_pos(&new_pos) {
+            return Ok(new_pos)
+        }
+        Err(String::from("can't move "))
     }
 
     pub fn set_cell (&mut self,  point: &Point2D, cell: u8) -> Result<(), String> {
