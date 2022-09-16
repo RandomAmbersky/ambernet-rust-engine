@@ -120,6 +120,7 @@ impl Logic {
     }
 
     pub fn update(&mut self, w: &mut World, view: &mut View2D, _time: f32) -> Result<(), String> {
+        w.maintain();
         if self.is_need_view_update {
             self.update_view(w, view)?;
             self.is_need_view_update = false;
@@ -143,6 +144,6 @@ pub fn process_moving_dir (w: &mut World, dir: &Direction) -> Result<(), String>
     Ok(())
 }
 
-pub fn process_action (w: &mut World, act: &Action) -> Result<(), String> {
+pub fn process_action (_w: &mut World, _act: &Action) -> Result<(), String> {
     Ok(())
 }

@@ -8,9 +8,10 @@ pub const TILE_SIZE: Size2D = Size2D {
 };
 
 pub const WINDOW_SIZE: Size2D = Size2D {
-	width: 10,
-	height: 10
+	width: 30,
+	height: 30
 };
+
 
 #[derive(Debug)]
 pub enum Action {
