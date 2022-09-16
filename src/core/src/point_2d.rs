@@ -19,7 +19,7 @@ impl Point2dU32 {
 		Ok(())
 	}
 
-	pub fn add(&mut self, delta: &Delta2D) -> Result<Point2dU32, String>{
+	pub fn add(&self, delta: &Delta2D) -> Result<Point2dU32, String>{
 		let mut new_pos = *self;
 		new_pos.apply(delta)?;
 		Ok(new_pos)

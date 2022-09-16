@@ -4,6 +4,7 @@ mod player;
 pub mod defines;
 mod render;
 
+use std::fs::DirEntry;
 use specs::{World, WorldExt, Builder, Join, Entity};
 use asn_core::{Array2D, Point2D};
 use position::Position;
@@ -24,6 +25,7 @@ pub struct Logic {
 struct Map {
     map: Array2D
 }
+
 
 pub fn create_world () -> World {
     let mut world = World::new();
@@ -54,10 +56,22 @@ impl Logic {
         let mess = format!("process_key {:?}", key);
         LoggerWeb::log(&mess);
 
-        let dir = Direction::from_key(&key)?;
+        let mut dir = Direction::from_key(&key)?;
+
+        // inverse map
+        match dir {
+            Direction::Up => {
+                dir = Direction::Down
+            },
+            Direction::Down => {
+                dir = Direction::Up
+            }
+            _ => {}
+        }
 
         let my_map = w.fetch::<Map>();
-        move_point(&mut self.pos, &my_map.map, &dir)?;
+        let new_pos = move_point(&mut self.pos, &my_map.map, &dir)?;
+        self.pos = new_pos;
         self.is_need_view_update = true;
 
         Ok(())
@@ -77,11 +91,11 @@ impl Logic {
     }
 }
 
-fn move_point(pos: &mut Point2D, map: &Array2D, dir: &Direction) -> Result<(), String> {
+fn move_point(pos: &Point2D, map: &Array2D, dir: &Direction) -> Result<Point2D, String> {
     let dir_delta = dir.as_delta();
     let mut new_pos = pos.add(&dir_delta)?;
     if map.is_valid_pos(&new_pos) {
-        *pos = new_pos;
+        return Ok(new_pos)
     }
-    Ok(())
+    Err(String::from("can't move "))
 }
