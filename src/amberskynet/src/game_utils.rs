@@ -12,7 +12,7 @@ pub fn set_map(l: &mut Logic, w: &mut World, data: &[u8]) -> Result<(), String> 
 	let decoded_map = load_xml_map(&data)?;
 	let mess = format!("parsed map is: {:?}", decoded_map);
 	LoggerWeb::log(&mess);
-	l.set_map(w, decoded_map);
+	l.set_map(w, decoded_map)?;
 	Ok(())
 }
 

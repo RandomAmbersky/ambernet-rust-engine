@@ -1,9 +1,10 @@
 use specs::{Component, VecStorage};
 
 #[derive(Default, Debug)]
-pub struct Player {
+pub struct Background {
+    pub cell: u8
 }
 
-impl Component for Player {
+impl Component for Background {
     type Storage = VecStorage<Self>;
 }

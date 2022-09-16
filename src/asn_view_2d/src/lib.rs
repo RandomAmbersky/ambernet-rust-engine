@@ -45,8 +45,8 @@ impl View2D {
 	pub fn look_at(&mut self, pos: &Point2D, map: &Array2D) -> Result<(), String> {
 
 		let n_pos = map.calc_screen_pos(pos, &self.screen.size)?;
-		let mess = format!("n_pos: {:?}", n_pos);
-		LoggerWeb::log(&mess);
+		// let mess = format!("n_pos: {:?}", n_pos);
+		// LoggerWeb::log(&mess);
 
 		self.screen.cut_from(&n_pos, map)?;
 		self.is_need_texture_update = true;

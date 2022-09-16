@@ -1,5 +1,7 @@
 use asn_core::{Delta2D, Size2D};
 
+pub const PLAYER_SPRITE_ID: u8 = 100;
+
 pub const TILE_SIZE: Size2D = Size2D {
 	width: 16,
 	height: 16
