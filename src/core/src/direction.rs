@@ -3,9 +3,12 @@ use crate::Delta2D;
 #[derive(Debug, Default, Clone, Copy, Eq, PartialEq)]
 pub enum Direction {
     #[default]
-    Up,
     Down,
+    // DownLeft,
     Left,
+    // LeftUp,
+    Up,
+    // UpRight,
     Right
 }
 
