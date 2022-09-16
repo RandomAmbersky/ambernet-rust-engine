@@ -18,8 +18,8 @@ canvas.onkeydown = (e) => {
   engine.on_event(e)
 }
 
-canvas.onkeyup = (e) => {
-  engine.on_event(e)
+canvas.onkeyup = (_e) => {
+  // engine.on_event(e)
 }
 
 canvas.onmousedown = (e) => {
