@@ -11,7 +11,6 @@ impl Component for Player {
     type Storage = VecStorage<Self>;
 }
 
-
 pub fn dir_to_sprite(dir: &Direction) -> u8 {
     return match dir {
         Direction::Up => { PLAYER_SPRITE_ID }

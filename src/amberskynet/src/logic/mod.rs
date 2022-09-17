@@ -1,18 +1,16 @@
-mod position;
-mod actor;
-mod player;
 pub mod defines;
-mod background;
+mod components;
 
-use specs::{World, WorldExt, Builder, Join};
+use specs::{Builder, Join, World, WorldExt};
 use asn_core::{Array2D, Direction, Point2D};
-use position::Position;
-use actor::Actor;
+use components::position::Position;
+use components::actor::Actor;
 use amberskynet_logger_web::LoggerWeb;
 use asn_view_2d::View2D;
-use player::Player;
+use components::player::Player;
 use crate::Action;
-use crate::logic::background::Background;
+use components::background::Background;
+use components::player;
 use crate::logic::defines::{Key, PLAYER_SPRITE_ID};
 
 #[derive(Default, Debug)]
@@ -34,7 +32,6 @@ pub fn create_world () -> World {
 
     world
 }
-
 
 fn move_player(w: &mut World, dir: &Direction) -> Result<(), String> {
     let mut players = w.write_storage::<Player>();
