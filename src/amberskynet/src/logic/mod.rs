@@ -2,7 +2,6 @@ mod position;
 mod actor;
 mod player;
 pub mod defines;
-mod render;
 mod background;
 
 use specs::{World, WorldExt, Builder, Join};

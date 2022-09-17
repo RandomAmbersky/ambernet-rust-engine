@@ -15,6 +15,7 @@ pub const WINDOW_SIZE: Size2D = Size2D {
 
 #[derive(Debug)]
 pub enum Action {
+	#[allow(dead_code)]
 	Move,
 	Use
 }
@@ -26,5 +27,6 @@ pub enum Key {
 	Down,
 	Left,
 	Right,
+	#[allow(dead_code)]
 	Fire
 }

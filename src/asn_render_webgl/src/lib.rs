@@ -3,7 +3,7 @@ mod shaders;
 mod buffers;
 mod textures;
 
-use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
+use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture};
 use asn_core::{Array2D, Size2D};
 use utils::GL as GL;
 

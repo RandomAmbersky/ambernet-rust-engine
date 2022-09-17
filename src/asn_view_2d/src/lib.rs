@@ -2,7 +2,6 @@ mod utils;
 mod texture_data;
 mod render_tiles;
 
-use amberskynet_logger_web::LoggerWeb;
 use asn_render_webgl::{ RenderContext };
 
 use web_sys::WebGlRenderingContext as GL;

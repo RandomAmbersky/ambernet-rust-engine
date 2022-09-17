@@ -1,5 +1,4 @@
 use web_sys::WebGlTexture;
-use amberskynet_logger_web::LoggerWeb;
 pub use web_sys::WebGlRenderingContext as GL;
 use asn_core::Array2D;
 
