@@ -15,6 +15,11 @@ pub fn set_map(l: &mut Logic, w: &mut World, data: &[u8]) -> Result<(), String> 
 	Ok(())
 }
 
+
+pub fn set_tiles_meta (l: &mut Logic, data: &[u8]) -> Result<(), String> {
+	Ok(())
+}
+
 pub fn set_tiles(ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Result<(), String>
 {
 	let tex = decode_texture(image)?;
