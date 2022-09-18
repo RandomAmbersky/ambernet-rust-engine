@@ -1,3 +1,4 @@
+use std::any::Any;
 use specs::World;
 use amberskynet_logger_web::LoggerWeb;
 use asn_core::Array2D;
@@ -30,11 +31,10 @@ pub fn set_tiles(ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Result
 	Ok(())
 }
 
-pub fn set_cell_types (_l: &mut Logic, data: &[u8]) -> Result<(), String> {
+pub fn set_cell_types (l: &mut Logic, data: &[u8]) -> Result<(), String> {
 	let tileset = load_tsx(&data)?;
 	for tile in tileset.tiles {
-		let mess = format!("tile is: {:?}", tile);
-		LoggerWeb::log(&mess);
+		l.set_tile_type(tile.id, &tile.class)?;
 	}
 	Ok(())
 }

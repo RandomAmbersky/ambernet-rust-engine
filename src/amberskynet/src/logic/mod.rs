@@ -14,16 +14,18 @@ use components::background::Background;
 use components::player;
 use crate::logic::defines::{Key, PLAYER_SPRITE_ID};
 
+use std::collections::HashMap;
+
 #[derive(Default, Debug)]
 pub struct Logic {
-    is_need_view_update: bool
+    is_need_view_update: bool,
+    tile_list: HashMap<u32, String>
 }
 
 #[derive(Default, Debug)]
 struct Map {
     map: Array2D
 }
-
 
 pub fn create_world () -> World {
     let mut world = World::new();
@@ -64,7 +66,33 @@ fn move_player(w: &mut World, dir: &Direction) -> Result<(), String> {
 }
 
 impl Logic {
+    pub fn set_tile_type(&mut self, id: u32, name: &String) -> Result<(), String> {
+        // let mess = format!("tile is: {:?} {:?}", id, name);
+        // LoggerWeb::log(&mess);
+        self.tile_list.insert(id, String::from(name));
+        Ok(())
+    }
+
+    pub fn get_tile_type(&self, id: &u32) -> Result<(), String> {
+        let tile_type = self.tile_list.get(id).ok_or(format!("Item id {} not found", id));
+        let mess = format!("tile is: {:?}", tile_type);
+        LoggerWeb::log(&mess);
+        Ok(())
+    }
+
     pub fn set_map(&mut self, w: &mut World, map: Array2D) -> Result<(), String> {
+
+        for i in 0..256 {
+            match self.get_tile_type(&i) {
+                Ok(t) => {
+                    LoggerWeb::log(format!("{:?}", t).as_str());
+                }
+                Err(err) => {
+                        LoggerWeb::log(&err);
+                }
+            }
+        }
+
         let mut my_map = Map {
             map
         };

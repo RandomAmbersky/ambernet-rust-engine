@@ -5,8 +5,8 @@ use crate::utils::{is_end, is_start};
 
 #[derive(Default, Debug)]
 pub struct DecodedTileInfo {
-    id: u32,
-    class: String
+    pub id: u32,
+    pub class: String
 }
 
 #[derive(Default, Debug)]
