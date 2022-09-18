@@ -4,6 +4,12 @@ use asn_core::{Size2D};
 use crate::utils::{is_end, is_start};
 
 #[derive(Default, Debug)]
+pub struct DecodedTileInfo {
+    id: u32,
+    class: String
+}
+
+#[derive(Default, Debug)]
 pub struct DecodedImageInfo {
     source: String,
     size: Size2D,
@@ -16,6 +22,7 @@ pub struct DecodedTileset {
     tile_count: u32,
     columns: u32,
     image_info: DecodedImageInfo,
+    tiles: Vec<DecodedTileInfo>
 }
 
 pub fn parse(text: &str) -> Result<DecodedTileset, String> {
@@ -39,8 +46,15 @@ fn parse_tileset(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
     LoggerWeb::log("tileset start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
+        if is_end(&token, "tileset") {
+            LoggerWeb::log("tileset end");
+            return;
+        }
         if is_start(&token, "image") {
             parse_image(parser, tileset);
+        }
+        if is_start(&token, "tile") {
+            parse_tile(parser, tileset);
         }
         if let Token::Attribute { local, value, .. } = token {
             if local.as_str() == "name" {
@@ -58,16 +72,20 @@ fn parse_tileset(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
             if local.as_str() == "columns" {
                 tileset.columns = value.to_string().parse::<u32>().unwrap();
             }
-            let mess = format!("layer Attribute: {:?} = {:?}", local.as_str(), value.as_str() );
-            LoggerWeb::log(&mess);
         }
     }
 }
+
 
 fn parse_image(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
     LoggerWeb::log("image start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
+
+        if let Token::ElementEnd { .. } = token {
+            LoggerWeb::log("image end");
+            return;
+        }
         if let Token::Attribute { local, value, .. } = token {
             if local.as_str() == "source" {
                 tileset.image_info.source = value.to_string();
@@ -77,6 +95,28 @@ fn parse_image(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
             }
             if local.as_str() == "height" {
                 tileset.image_info.size.height = value.to_string().parse::<u32>().unwrap();
+            }
+        }
+
+    }
+}
+
+fn parse_tile(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
+    LoggerWeb::log("tile start");
+    let mut new_tile_info = DecodedTileInfo::default();
+    while let Some(result) = parser.next() {
+        let token = result.unwrap();
+        if let Token::ElementEnd { .. } = token {
+            LoggerWeb::log("tile end");
+            tileset.tiles.push(new_tile_info);
+            return;
+        }
+        if let Token::Attribute { local, value, .. } = token {
+            if local.as_str() == "id" {
+                new_tile_info.id = value.to_string().parse::<u32>().unwrap();
+            }
+            if local.as_str() == "class" {
+                new_tile_info.class = value.to_string();
             }
         }
     }

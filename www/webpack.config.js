@@ -24,7 +24,8 @@ const wasmPackPlugin = new WasmPackPlugin({
     path.resolve(__dirname, "../src/asn_render_webgl"),
     path.resolve(__dirname, "../src/asn_view_2d"),
     path.resolve(__dirname, "../src/asn_tiled"),
-    path.resolve(__dirname, "../src/asn_core")
+    path.resolve(__dirname, "../src/asn_core"),
+    path.resolve(__dirname, "../src/loaders/asn_tiled")
   ],
 })
 
