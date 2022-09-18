@@ -43,45 +43,25 @@ canvas.onwheel = (e) => {
 }
 
 const data1 = {
-  map: {
-    cellSizeX: 32,
-    cellSizeY: 32
-  },
-  sheet: {
-    pixelSizeX: 256,
-    pixelSizeY: 192
-  },
-  tiles: {
-    pixelSizeX: 16,
-    pixelSizeY: 16
-  },
   mapName: '/map/cell.tmx',
+  cellTypesName: '/map/tiles_mod.tsx',
   tileName: '/map/tiles_mod.png'
 }
 
 const data2 = {
-  map: {
-    cellSizeX: 32,
-    cellSizeY: 32
-  },
-  sheet: {
-    pixelSizeX: 256,
-    pixelSizeY: 192
-  },
-  tiles: {
-    pixelSizeX: 16,
-    pixelSizeY: 16
-  },
   mapName: '/map/laboratory3.tmx',
+  cellTypesName: '/map/tiles_many.tsx',
   tileName: '/map/tiles_many.png'
 }
 
 async function loadData (data) {
-
   const mapArray = await loadBinary(data.mapName)
   const tilesArray = await loadBinary(data.tileName)
+  const cellTypesArray = await loadBinary(data.cellTypesName)
+
   engine.upload_tiles(tilesArray)
   engine.upload_map(mapArray)
+  engine.upload_cell_types(cellTypesArray)
 }
 
 loadData(data2)
