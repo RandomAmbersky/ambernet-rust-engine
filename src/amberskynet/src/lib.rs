@@ -1,3 +1,5 @@
+extern crate core;
+
 mod utils;
 mod game_utils;
 mod logic;

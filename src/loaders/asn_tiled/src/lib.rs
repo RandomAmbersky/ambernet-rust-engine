@@ -3,9 +3,10 @@ mod loader_tmx;
 mod loader_tsx;
 
 use asn_core::Array2D;
+use crate::loader_tmx::{DecodedMap};
 use crate::loader_tsx::DecodedTileset;
 
-pub fn load_tmx(buf: &[u8]) -> Result<Array2D, String> {
+pub fn load_tmx(buf: &[u8]) -> Result<DecodedMap, String> {
 	let map_str = match std::str::from_utf8(buf) {
 		Ok(v) => v,
 		Err(err) => {

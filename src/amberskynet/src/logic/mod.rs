@@ -23,6 +23,7 @@ struct Map {
     map: Array2D
 }
 
+
 pub fn create_world () -> World {
     let mut world = World::new();
     world.register::<Position>();
