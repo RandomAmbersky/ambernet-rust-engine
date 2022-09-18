@@ -88,7 +88,6 @@ impl Default for AmberSkyNetClient {
     }
 }
 
-
 #[wasm_bindgen]
 impl AmberSkyNetClient {
     #[wasm_bindgen(constructor)]
