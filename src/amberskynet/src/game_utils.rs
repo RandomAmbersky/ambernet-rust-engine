@@ -8,12 +8,10 @@ use asn_view_2d::View2D;
 use crate::{Logic};
 use crate::logic::defines::TILE_SIZE;
 
-
-
 pub fn set_map(l: &mut Logic, w: &mut World, data: &[u8]) -> Result<(), String> {
 	let decoded_map = load_tmx(&data)?;
-	let mess = format!("parsed map is: {:?}", decoded_map);
-	LoggerWeb::log(&mess);
+	// let mess = format!("parsed map is: {:?}", decoded_map);
+	// LoggerWeb::log(&mess);
 	// let last_layer_idx = &decoded_map.layers.len() - 1 ;
 	let one_layer = &decoded_map.layers[0];
 	// let mess = format!("one_layer is: {:?}", one_layer.name);
@@ -34,7 +32,9 @@ pub fn set_tiles(ctx: &RenderContext, view: &mut View2D, image: &[u8]) -> Result
 
 pub fn set_cell_types (_l: &mut Logic, data: &[u8]) -> Result<(), String> {
 	let tileset = load_tsx(&data)?;
-	// let mess = format!("tileset is: {:?}", tileset);
-	// LoggerWeb::log(&mess);
+	for tile in tileset.tiles {
+		let mess = format!("tile is: {:?}", tile);
+		LoggerWeb::log(&mess);
+	}
 	Ok(())
 }

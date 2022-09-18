@@ -119,28 +119,26 @@ impl AmberSkyNetClient {
         Ok(())
     }
 
-    pub fn upload_tiles(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
+    pub fn upload_tiles(&mut self, data: &[u8]) -> Result<(), JsValue> {
         let mess = "engine upload_tiles";
         LoggerWeb::log(mess);
         game_utils::set_tiles(&self.ctx, &mut self.view, &data)?;
         Ok(())
     }
 
-
-    pub fn upload_map(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
+    pub fn upload_map(&mut self, data: &[u8]) -> Result<(), JsValue> {
         let mess = "engine upload_map";
         LoggerWeb::log(mess);
         game_utils::set_map(&mut self.logic, &mut self.world, &data)?;
         Ok(())
     }
 
-    pub fn upload_cell_types(&mut self, data: Vec<u8>) -> Result<(), JsValue> {
+    pub fn upload_cell_types(&mut self, data: &[u8]) -> Result<(), JsValue> {
         let mess = "engine upload_cell_types";
         LoggerWeb::log(mess);
         game_utils::set_cell_types(&mut self.logic, &data)?;
         Ok(())
     }
-
 
     pub fn update(&mut self, time: f32) -> Result<(), JsValue> {
         // let mess = format!("update times: {} ", time);

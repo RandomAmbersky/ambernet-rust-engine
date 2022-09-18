@@ -59,9 +59,9 @@ async function loadData (data) {
   const tilesArray = await loadBinary(data.tileName)
   const cellTypesArray = await loadBinary(data.cellTypesName)
 
+  engine.upload_cell_types(cellTypesArray)
   engine.upload_tiles(tilesArray)
   engine.upload_map(mapArray)
-  engine.upload_cell_types(cellTypesArray)
 }
 
 loadData(data2)

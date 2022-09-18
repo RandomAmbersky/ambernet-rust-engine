@@ -1,5 +1,6 @@
 pub mod defines;
 mod components;
+mod entities;
 
 use specs::{Builder, Join, World, WorldExt};
 use asn_core::{Array2D, Direction, Point2D};

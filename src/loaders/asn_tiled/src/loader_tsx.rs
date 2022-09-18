@@ -11,25 +11,25 @@ pub struct DecodedTileInfo {
 
 #[derive(Default, Debug)]
 pub struct DecodedImageInfo {
-    source: String,
-    size: Size2D,
+    pub source: String,
+    pub size: Size2D,
 }
 
 #[derive(Default, Debug)]
 pub struct DecodedTileset {
-    name: String,
-    tile_size: Size2D,
-    tile_count: u32,
-    columns: u32,
-    image_info: DecodedImageInfo,
-    tiles: Vec<DecodedTileInfo>
+    pub name: String,
+    pub tile_size: Size2D,
+    pub tile_count: u32,
+    pub columns: u32,
+    pub image_info: DecodedImageInfo,
+    pub tiles: Vec<DecodedTileInfo>
 }
 
 pub fn parse(text: &str) -> Result<DecodedTileset, String> {
     let mut tileset = DecodedTileset::default();
 
-    let mess = format!("parsed map is: {:?}", text);
-    LoggerWeb::log(&mess);
+    // let mess = format!("parsed map is: {:?}", text);
+    // LoggerWeb::log(&mess);
 
     let mut parser = Tokenizer::from(text);
     while let Some(result) = parser.next() {
@@ -43,11 +43,11 @@ pub fn parse(text: &str) -> Result<DecodedTileset, String> {
 }
 
 fn parse_tileset(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
-    LoggerWeb::log("tileset start");
+    // LoggerWeb::log("tileset start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
         if is_end(&token, "tileset") {
-            LoggerWeb::log("tileset end");
+            // LoggerWeb::log("tileset end");
             return;
         }
         if is_start(&token, "image") {
@@ -78,12 +78,12 @@ fn parse_tileset(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
 
 
 fn parse_image(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
-    LoggerWeb::log("image start");
+    // LoggerWeb::log("image start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
 
         if let Token::ElementEnd { .. } = token {
-            LoggerWeb::log("image end");
+            // LoggerWeb::log("image end");
             return;
         }
         if let Token::Attribute { local, value, .. } = token {
@@ -102,12 +102,12 @@ fn parse_image(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
 }
 
 fn parse_tile(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
-    LoggerWeb::log("tile start");
+    // LoggerWeb::log("tile start");
     let mut new_tile_info = DecodedTileInfo::default();
     while let Some(result) = parser.next() {
         let token = result.unwrap();
         if let Token::ElementEnd { .. } = token {
-            LoggerWeb::log("tile end");
+            // LoggerWeb::log("tile end");
             tileset.tiles.push(new_tile_info);
             return;
         }

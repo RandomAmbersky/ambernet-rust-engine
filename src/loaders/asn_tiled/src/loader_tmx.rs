@@ -33,11 +33,11 @@ pub fn parse(text: &str) -> Result<DecodedMap, String> {
 }
 
 fn parse_map(parser: &mut Tokenizer, map: &mut DecodedMap) {
-    LoggerWeb::log("map start");
+    // LoggerWeb::log("map start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
         if is_end(&token, "map") {
-            LoggerWeb::log("map end");
+            // LoggerWeb::log("map end");
             return;
         }
         if is_start(&token, "layer") {
@@ -63,14 +63,14 @@ fn parse_map(parser: &mut Tokenizer, map: &mut DecodedMap) {
 
 fn parse_layer(parser: &mut Tokenizer, map: &mut DecodedMap) {
     let mut layer = DecodedLayer::default();
-    LoggerWeb::log("layer start");
+    // LoggerWeb::log("layer start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
         if is_start(&token, "data") {
             parse_data(parser, &mut layer);
         }
         else if is_end(&token, "layer") {
-            LoggerWeb::log("layer end");
+            // LoggerWeb::log("layer end");
             map.layers.push(layer);
             return;
         }
@@ -88,11 +88,11 @@ fn parse_layer(parser: &mut Tokenizer, map: &mut DecodedMap) {
 }
 
 fn parse_data(parser: &mut Tokenizer, layer: &mut DecodedLayer) {
-    LoggerWeb::log("data start");
+    // LoggerWeb::log("data start");
     while let Some(result) = parser.next() {
         let token = result.unwrap();
         if is_end(&token, "data") {
-            LoggerWeb::log("layer end");
+            // LoggerWeb::log("data end");
             return;
         }
         else if let Token::Text { text } = token {
