@@ -80,8 +80,11 @@ impl Logic {
         Ok(())
     }
 
-    pub fn set_map(&mut self, w: &mut World, map: Array2D) -> Result<(), String> {
+    pub fn set_background(&mut self, w: &mut World, map: Array2D) -> Result<(), String> {
+        Ok(())
+    }
 
+    pub fn set_map(&mut self, w: &mut World, map: Array2D) -> Result<(), String> {
         for i in 0..256 {
             match self.get_tile_type(&i) {
                 Ok(t) => {
