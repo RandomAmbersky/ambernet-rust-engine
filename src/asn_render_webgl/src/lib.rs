@@ -3,11 +3,16 @@ mod shaders;
 mod buffers;
 mod textures;
 
-use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture};
+use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_core::{Array2D, Size2D};
-use utils::GL as GL;
+pub use utils::GL as GL;
 
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
+
+pub type RenderBuffer=WebGlBuffer;
+pub type RenderTexture=WebGlTexture;
+pub type RenderProgram=WebGlProgram;
+pub type RenderUniformLocation=WebGlUniformLocation;
 
 pub struct RenderContext {
 	pub gl: GL,
@@ -45,15 +50,15 @@ pub fn init_context() -> RenderContext {
 		}
 }
 
-pub fn link_program (ctx: &RenderContext, vert: &str, frag: &str) -> Result<WebGlProgram, String> {
+pub fn link_program (ctx: &RenderContext, vert: &str, frag: &str) -> Result<RenderProgram, String> {
 	shaders::link_program(&ctx.gl, vert, frag)
 }
 
-pub fn load_buffer(ctx: &RenderContext, buf: &[f32]) -> WebGlBuffer {
+pub fn load_buffer(ctx: &RenderContext, buf: &[f32]) -> RenderBuffer {
 	buffers::load_buffer(&ctx.gl, buf)
 }
 
-pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> WebGlBuffer {
+pub fn load_index_buffer(ctx: &RenderContext, buf: &[u16]) -> RenderBuffer {
 	buffers::load_index_buffer(&ctx.gl, buf)
 }
 
@@ -61,11 +66,11 @@ pub fn update_texture(ctx: &RenderContext, texture: &WebGlTexture, tex: &Array2D
 	textures::update(&ctx.gl, texture, tex, is_linear)
 }
 
-pub fn upload_texture(ctx: &RenderContext, tex: &Array2D, is_linear: bool) -> Result<WebGlTexture, String> {
+pub fn upload_texture(ctx: &RenderContext, tex: &Array2D, is_linear: bool) -> Result<RenderTexture, String> {
 	textures::upload(&ctx.gl, tex, is_linear)
 }
 
-pub fn load_empty_texture(ctx: &RenderContext) -> Result<WebGlTexture, String> {
+pub fn load_empty_texture(ctx: &RenderContext) -> Result<RenderTexture, String> {
 	// look at https://snoozetime.github.io/2019/12/19/webgl-texture.html
 	let tex = Array2D {
 		size: Size2D {

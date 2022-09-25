@@ -2,7 +2,6 @@ mod utils;
 mod loader_tmx;
 mod loader_tsx;
 
-use asn_core::Array2D;
 use crate::loader_tmx::{DecodedMap};
 use crate::loader_tsx::DecodedTileset;
 

@@ -73,13 +73,14 @@ impl Logic {
         Ok(())
     }
 
+    #[allow(dead_code)]
     pub fn get_tile_type(&self, id: &u32) -> Result<(), String> {
         let tile_type = self.tile_list.get(id).ok_or(format!("Item id {} not found", id));
         let mess = format!("tile is: {:?}", tile_type);
         LoggerWeb::log(&mess);
         Ok(())
     }
-
+    #[allow(dead_code)]
     pub fn set_map(&mut self, w: &mut World, map: Array2D) -> Result<(), String> {
         for i in 0..256 {
             match self.get_tile_type(&i) {

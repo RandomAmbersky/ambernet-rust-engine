@@ -95,7 +95,6 @@ dependencies = [
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]
@@ -125,7 +124,6 @@ dependencies = [
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]
@@ -193,7 +191,6 @@ dependencies = [
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]
@@ -769,7 +766,6 @@ dependencies = [
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]
@@ -811,7 +807,6 @@ dependencies = [
  "asn_render_webgl",
  "js-sys",
  "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]

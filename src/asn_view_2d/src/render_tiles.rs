@@ -1,21 +1,20 @@
-use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
 use asn_core::{Array2D, Size2D};
-use asn_render_webgl::RenderContext;
-use crate::{GL, utils};
+use asn_render_webgl::{GL, RenderBuffer, RenderContext, RenderProgram, RenderTexture, RenderUniformLocation};
+use crate::utils;
 
 pub struct RenderTiles {
-    texture: WebGlTexture,
-    map_texture: WebGlTexture,
-    program: WebGlProgram,
+    texture: RenderTexture,
+    map_texture: RenderTexture,
+    program: RenderProgram,
     a_position: u32,
-    u_transform: WebGlUniformLocation,
+    u_transform: RenderUniformLocation,
     transform_matrix: [f32;16],
-    u_image0: WebGlUniformLocation,
-    u_image1: WebGlUniformLocation,
-    vertices_buf: WebGlBuffer,
-    u_map_size: WebGlUniformLocation,
-    u_sheet_size: WebGlUniformLocation,
-    u_tile_size: WebGlUniformLocation,
+    u_image0: RenderUniformLocation,
+    u_image1: RenderUniformLocation,
+    vertices_buf: RenderBuffer,
+    u_map_size: RenderUniformLocation,
+    u_sheet_size: RenderUniformLocation,
+    u_tile_size: RenderUniformLocation,
 }
 
 impl RenderTiles {

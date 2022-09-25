@@ -1,16 +1,13 @@
 mod utils;
-
-use web_sys::{WebGlBuffer, WebGlProgram};
-use asn_render_webgl::RenderContext;
-use web_sys::WebGlRenderingContext as GL;
+use asn_render_webgl::{GL, RenderBuffer, RenderContext, RenderProgram};
 
 pub struct ColorQuad {
-	program: WebGlProgram,
+	program: RenderProgram,
 	a_coordinates: u32,
 	a_color: u32,
-	vertices_buf: WebGlBuffer,
-	indices_buf: WebGlBuffer,
-	colors_buf: WebGlBuffer,
+	vertices_buf: RenderBuffer,
+	indices_buf: RenderBuffer,
+	colors_buf: RenderBuffer,
 	indices_len: i32
 }
 

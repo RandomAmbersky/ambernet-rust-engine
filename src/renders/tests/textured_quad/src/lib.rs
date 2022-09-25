@@ -1,18 +1,15 @@
 mod utils;
-
-use web_sys::{WebGlBuffer, WebGlProgram, WebGlTexture, WebGlUniformLocation};
-use asn_render_webgl::{ RenderContext };
-use web_sys::WebGlRenderingContext as GL;
+use asn_render_webgl::{GL, RenderBuffer, RenderContext, RenderProgram, RenderTexture, RenderUniformLocation};
 
 pub struct TexturedQuad {
-	texture: WebGlTexture,
-	program: WebGlProgram,
+	texture: RenderTexture,
+	program: RenderProgram,
 	a_coordinates: u32,
 	a_texture_coord: u32,
-	u_sampler: WebGlUniformLocation,
-	vertices_buf: WebGlBuffer,
-	texture_coords_buf: WebGlBuffer,
-	indices_buf: WebGlBuffer,
+	u_sampler: RenderUniformLocation,
+	vertices_buf: RenderBuffer,
+	texture_coords_buf: RenderBuffer,
+	indices_buf: RenderBuffer,
 	indices_len: i32
 }
 

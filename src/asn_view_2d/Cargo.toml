@@ -17,16 +17,3 @@ asn_core = { path = "../core" }
 js-sys = "*"
 [dependencies.wasm-bindgen]
 version = "*"
-[dependencies.web-sys]
-version = "*"
-features = [
-    "Window",
-    'Document',
-    'Element',
-    'HtmlCanvasElement',
-    'WebGlRenderingContext',
-    'WebGlProgram',
-    'WebGlShader',
-    'WebGlBuffer',
-    'WebGlUniformLocation'
-]

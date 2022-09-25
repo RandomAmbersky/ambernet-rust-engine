@@ -1,14 +1,12 @@
-use web_sys::{WebGlRenderingContext as GL};
-use web_sys::{WebGlBuffer, WebGlProgram, WebGlUniformLocation};
 use asn_core::math::{mult_matrix_4, scaling_matrix, translation_matrix};
-use asn_render_webgl::{link_program, load_buffer, RenderContext};
+use asn_render_webgl::{GL, link_program, load_buffer, RenderBuffer, RenderContext, RenderProgram, RenderUniformLocation};
 
 pub struct Test2D {
-	pub program: WebGlProgram,
-	pub buffer: WebGlBuffer,
-	pub u_color: WebGlUniformLocation,
-	pub u_opacity: WebGlUniformLocation,
-	pub u_transform: WebGlUniformLocation,
+	pub program: RenderProgram,
+	pub buffer: RenderBuffer,
+	pub u_color: RenderUniformLocation,
+	pub u_opacity: RenderUniformLocation,
+	pub u_transform: RenderUniformLocation,
 }
 
 pub fn new_item (

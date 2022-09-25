@@ -4,7 +4,6 @@ mod render_tiles;
 
 use asn_render_webgl::{ RenderContext };
 
-use web_sys::WebGlRenderingContext as GL;
 use asn_core::{Array2D, Point2D, Size2D};
 
 use render_tiles::RenderTiles;

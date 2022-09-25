@@ -1,7 +1,5 @@
-use std::any::Any;
 use specs::World;
 use amberskynet_logger_web::LoggerWeb;
-use asn_core::Array2D;
 use asn_images::decode_texture;
 use asn_render_webgl::RenderContext;
 use asn_tiled::{ load_tmx, load_tsx };
