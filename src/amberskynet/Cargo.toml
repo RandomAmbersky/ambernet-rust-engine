@@ -37,6 +37,7 @@ js-sys = "*"
 wasm-bindgen = "*"
 rand = "*"
 specs = "*"
+tiled = { version = "0.9", default-features = false }
 
 [dependencies.web-sys]
 version = "*"
