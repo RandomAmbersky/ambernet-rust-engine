@@ -7,9 +7,6 @@ edition = "2021"
 name = "asn_tiled"
 path = "src/lib.rs"
 
-#[package.metadata.wasm-pack.profile.release]
-#wasm-opt = false
-
 [dependencies]
 asn_core = { path = "../../core" }
 amberskynet_logger_web = { path= "../../amberskynet_logger_web" }

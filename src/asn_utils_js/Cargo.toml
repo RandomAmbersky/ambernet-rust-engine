@@ -7,9 +7,6 @@ edition = "2021"
 name = "asn_utils_js"
 path = "src/lib.rs"
 
-[package.metadata.wasm-pack.profile.release]
-wasm-opt = false
-
 [dependencies]
 js-sys = "*"
 wasm-bindgen-futures = "*"

@@ -7,9 +7,6 @@ edition = "2021"
 name = "asn_render_webgl"
 path = "src/lib.rs"
 
-[package.metadata.wasm-pack.profile.release]
-wasm-opt = false
-
 [dependencies]
 amberskynet_logger_web = { path="../amberskynet_logger_web" }
 asn_core = { path = "../core" }

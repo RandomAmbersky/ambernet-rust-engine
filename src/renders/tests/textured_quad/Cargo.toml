@@ -7,13 +7,7 @@ edition = "2021"
 name = "textured_quad"
 path = "src/lib.rs"
 
-[package.metadata.wasm-pack.profile.release]
-wasm-opt = false
-
 [dependencies]
 asn_render_webgl = { path="../../../asn_render_webgl" }
 asn_core = { path = "../../../core" }
 asn_images= { path= "../../../loaders/asn_images" }
-js-sys = "*"
-[dependencies.wasm-bindgen]
-version = "*"
