@@ -2,22 +2,10 @@ use xmlparser::{Token, Tokenizer};
 #[allow(unused_imports)]
 use amberskynet_logger_web::LoggerWeb;
 use asn_core::{Size2D};
+use crate::decoded_map::DecodedLayer;
+use crate::DecodedMap;
+use crate::loader_tsx::parse_tileset;
 use crate::utils::{is_end, is_start};
-
-#[derive(Default, Debug)]
-pub struct DecodedLayer {
-    pub name: String,
-    pub id: u32,
-    pub size: Size2D,
-    pub bytes: Vec<u8>,
-    pub visible: bool
-}
-
-#[derive(Default, Debug)]
-pub struct DecodedMap {
-    pub size: Size2D,
-    pub layers: Vec<DecodedLayer>
-}
 
 pub fn parse(text: &str) -> Result<DecodedMap, String> {
     let mut map = DecodedMap::default();
@@ -43,6 +31,8 @@ fn parse_map(parser: &mut Tokenizer, map: &mut DecodedMap) {
         }
         if is_start(&token, "layer") {
             parse_layer(parser, map);
+        } else if is_start(&token, "tileset") {
+            parse_tileset(parser, map);
         } else if let Token::Attribute { local, value,  .. } = token {
             if local.as_str() == "width" {
                 map.size.width = value.as_str().parse::<u32>().unwrap();

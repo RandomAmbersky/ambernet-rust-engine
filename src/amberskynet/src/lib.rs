@@ -133,13 +133,6 @@ impl AmberSkyNetClient {
         Ok(())
     }
 
-    pub fn upload_cell_types(&mut self, data: &[u8]) -> Result<(), JsValue> {
-        let mess = "engine upload_cell_types";
-        LoggerWeb::log(mess);
-        game_utils::set_cell_types(&mut self.logic, &data)?;
-        Ok(())
-    }
-
     pub fn update(&mut self, time: f32) -> Result<(), JsValue> {
         // let mess = format!("update times: {} ", time);
         // LoggerWeb::log(&mess);

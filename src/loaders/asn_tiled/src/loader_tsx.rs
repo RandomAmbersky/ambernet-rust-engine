@@ -1,61 +1,42 @@
 use xmlparser::{Token, Tokenizer};
 #[allow(unused_imports)]
 use amberskynet_logger_web::LoggerWeb;
-use asn_core::{Size2D};
+use crate::decoded_map::{DecodedTileInfo, DecodedTileset};
+use crate::DecodedMap;
 use crate::utils::{is_end, is_start};
 
-#[derive(Default, Debug)]
-pub struct DecodedTileInfo {
-    pub id: u32,
-    pub class: String
-}
+// pub fn parse(text: &str) -> Result<DecodedMap, String> {
+//     let mut tileset = DecodedTileset::default();
+//
+//     // let mess = format!("parsed map is: {:?}", text);
+//     // LoggerWeb::log(&mess);
+//
+//     let mut parser = Tokenizer::from(text);
+//     while let Some(result) = parser.next() {
+//         let token = result.unwrap();
+//         if is_start(&token, "tileset") {
+//             parse_tileset(&mut parser, &mut tileset)
+//         }
+//     }
+//
+//     Ok(tileset)
+// }
 
-#[derive(Default, Debug)]
-pub struct DecodedImageInfo {
-    pub source: String,
-    pub size: Size2D,
-}
-
-#[derive(Default, Debug)]
-pub struct DecodedTileset {
-    pub name: String,
-    pub tile_size: Size2D,
-    pub tile_count: u32,
-    pub columns: u32,
-    pub image_info: DecodedImageInfo,
-    pub tiles: Vec<DecodedTileInfo>
-}
-
-pub fn parse(text: &str) -> Result<DecodedTileset, String> {
-    let mut tileset = DecodedTileset::default();
-
-    // let mess = format!("parsed map is: {:?}", text);
-    // LoggerWeb::log(&mess);
-
-    let mut parser = Tokenizer::from(text);
-    while let Some(result) = parser.next() {
-        let token = result.unwrap();
-        if is_start(&token, "tileset") {
-            parse_tileset(&mut parser, &mut tileset)
-        }
-    }
-
-    Ok(tileset)
-}
-
-fn parse_tileset(parser: &mut Tokenizer, tileset: &mut DecodedTileset) {
+pub fn parse_tileset(parser: &mut Tokenizer, map: &mut DecodedMap) {
     // LoggerWeb::log("tileset start");
+    let mut tileset = DecodedTileset::default();
     while let Some(result) = parser.next() {
         let token = result.unwrap();
         if is_end(&token, "tileset") {
+            map.tilesets.push(tileset);
             // LoggerWeb::log("tileset end");
             return;
         }
         if is_start(&token, "image") {
-            parse_image(parser, tileset);
+            parse_image(parser, &mut tileset);
         }
         if is_start(&token, "tile") {
-            parse_tile(parser, tileset);
+            parse_tile(parser, &mut tileset);
         }
         if let Token::Attribute { local, value, .. } = token {
             if local.as_str() == "name" {
