@@ -1,4 +1,6 @@
+use crate::shaders::VERTICES;
 use wgpu;
+use wgpu::util::DeviceExt;
 use winit::event::WindowEvent;
 use winit::window::Window;
 
@@ -9,6 +11,7 @@ pub struct State {
     config: wgpu::SurfaceConfiguration,
     pub size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
+    vertex_buffer: wgpu::Buffer,
 }
 
 impl State {
@@ -123,6 +126,12 @@ impl State {
             multiview: None, // 5.
         });
 
+        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+            label: Some("Vertex Buffer"),
+            contents: bytemuck::cast_slice(VERTICES),
+            usage: wgpu::BufferUsages::VERTEX,
+        });
+
         Self {
             surface,
             device,
@@ -130,6 +139,7 @@ impl State {
             config,
             size,
             render_pipeline,
+            vertex_buffer,
         }
     }
 

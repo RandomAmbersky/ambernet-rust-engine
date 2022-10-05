@@ -1,5 +1,7 @@
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
+
+mod shaders;
 mod state;
 
 use state::State;
