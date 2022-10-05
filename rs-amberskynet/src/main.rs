@@ -7,5 +7,4 @@ fn main() {
         run().await;
     };
     my_fut.block_on();
-    println!("Have a nice day...")
 }

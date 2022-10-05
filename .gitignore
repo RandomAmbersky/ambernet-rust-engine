@@ -4,9 +4,8 @@ node_modules/
 .cache/
 crate/target
 .DS_Store
-/src/target/
+target/
 /.parcel-cache/
 /yarn-error.log
 web_build/
 /www/pkg/
-
