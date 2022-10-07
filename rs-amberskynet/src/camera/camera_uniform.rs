@@ -1,6 +1,6 @@
 use crate::camera::camera::Camera;
-use crate::utils;
-use utils::OPENGL_TO_WGPU_MATRIX;
+use crate::data;
+use data::OPENGL_TO_WGPU_MATRIX;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]

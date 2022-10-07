@@ -1,7 +1,7 @@
 mod camera;
+mod data;
 mod state;
 mod texture;
-mod utils;
 mod vertex;
 
 use winit::{

@@ -7,8 +7,8 @@ use winit::window::Window;
 use crate::camera::camera::Camera;
 use crate::camera::camera_controller::CameraController;
 use crate::camera::camera_uniform::CameraUniform;
+use crate::data::{INDICES, VERTICES};
 use crate::texture::Texture;
-use crate::utils::{INDICES, VERTICES};
 use crate::Vertex;
 
 pub struct State {
