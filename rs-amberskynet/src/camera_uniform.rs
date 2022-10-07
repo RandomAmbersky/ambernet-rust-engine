@@ -1,4 +1,5 @@
-use crate::{Camera, OPENGL_TO_WGPU_MATRIX};
+use crate::{utils, Camera};
+use utils::OPENGL_TO_WGPU_MATRIX;
 
 #[repr(C)]
 #[derive(Debug, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
