@@ -1,5 +1,4 @@
 use std::iter;
-use wgpu::CompositeAlphaMode;
 
 use wgpu::util::DeviceExt;
 use winit::{
@@ -7,9 +6,6 @@ use winit::{
     event_loop::{ControlFlow, EventLoop},
     window::{Window, WindowBuilder},
 };
-
-#[cfg(target_arch = "wasm32")]
-use wasm_bindgen::prelude::*;
 
 mod texture;
 
@@ -65,7 +61,7 @@ const VERTICES: &[Vertex] = &[
     }, // E
 ];
 
-const INDICES: &[u16] = &[0, 1, 4, 1, 2, 4, 2, 3, 4, /* padding */ 0];
+const INDICES: &[u16] = &[0, 1, 4, 1, 2, 4, 2, 3, 4];
 
 struct State {
     surface: wgpu::Surface,
@@ -77,10 +73,13 @@ struct State {
     vertex_buffer: wgpu::Buffer,
     index_buffer: wgpu::Buffer,
     num_indices: u32,
-    // NEW!
     #[allow(dead_code)]
     diffuse_texture: texture::Texture,
     diffuse_bind_group: wgpu::BindGroup,
+    #[allow(dead_code)]
+    cartoon_texture: texture::Texture,
+    cartoon_bind_group: wgpu::BindGroup,
+    is_space_pressed: bool,
 }
 
 impl State {
@@ -123,13 +122,8 @@ impl State {
             width: size.width,
             height: size.height,
             present_mode: wgpu::PresentMode::Fifo,
-            alpha_mode: CompositeAlphaMode::Auto,
         };
         surface.configure(&device, &config);
-
-        let diffuse_bytes = include_bytes!("happy-tree.png");
-        let diffuse_texture =
-            texture::Texture::from_bytes(&device, &queue, diffuse_bytes, "happy-tree.png").unwrap();
 
         let texture_bind_group_layout =
             device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -154,6 +148,10 @@ impl State {
                 label: Some("texture_bind_group_layout"),
             });
 
+        let diffuse_bytes = include_bytes!("happy-tree.png");
+        let diffuse_texture =
+            texture::Texture::from_bytes(&device, &queue, diffuse_bytes, "happy-tree.png").unwrap();
+
         let diffuse_bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
             layout: &texture_bind_group_layout,
             entries: &[
@@ -167,6 +165,26 @@ impl State {
                 },
             ],
             label: Some("diffuse_bind_group"),
+        });
+
+        let cartoon_bytes = include_bytes!("happy-tree-cartoon.png");
+        let cartoon_texture =
+            texture::Texture::from_bytes(&device, &queue, cartoon_bytes, "happy-tree-cartoon.png")
+                .unwrap();
+
+        let cartoon_bind_group = device.create_bind_group(&wgpu::BindGroupDescriptor {
+            layout: &texture_bind_group_layout,
+            entries: &[
+                wgpu::BindGroupEntry {
+                    binding: 0,
+                    resource: wgpu::BindingResource::TextureView(&cartoon_texture.view),
+                },
+                wgpu::BindGroupEntry {
+                    binding: 1,
+                    resource: wgpu::BindingResource::Sampler(&cartoon_texture.sampler),
+                },
+            ],
+            label: Some("cartoon_bind_group"),
         });
 
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
@@ -242,13 +260,16 @@ impl State {
             device,
             queue,
             config,
-            size,
             render_pipeline,
             vertex_buffer,
             index_buffer,
             num_indices,
             diffuse_texture,
             diffuse_bind_group,
+            cartoon_texture,
+            cartoon_bind_group,
+            size,
+            is_space_pressed: false,
         }
     }
 
@@ -261,9 +282,22 @@ impl State {
         }
     }
 
-    #[allow(unused_variables)]
     fn input(&mut self, event: &WindowEvent) -> bool {
-        false
+        match event {
+            WindowEvent::KeyboardInput {
+                input:
+                    KeyboardInput {
+                        state,
+                        virtual_keycode: Some(VirtualKeyCode::Space),
+                        ..
+                    },
+                ..
+            } => {
+                self.is_space_pressed = *state == ElementState::Pressed;
+                true
+            }
+            _ => false,
+        }
     }
 
     fn update(&mut self) {}
@@ -299,8 +333,14 @@ impl State {
                 depth_stencil_attachment: None,
             });
 
+            let bind_group = if self.is_space_pressed {
+                &self.cartoon_bind_group
+            } else {
+                &self.diffuse_bind_group
+            };
+
             render_pass.set_pipeline(&self.render_pipeline);
-            render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
+            render_pass.set_bind_group(0, bind_group, &[]);
             render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
             render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
             render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
@@ -313,38 +353,14 @@ impl State {
     }
 }
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen(start))]
-pub async fn run() {
-    cfg_if::cfg_if! {
-        if #[cfg(target_arch = "wasm32")] {
-            std::panic::set_hook(Box::new(console_error_panic_hook::hook));
-            console_log::init_with_level(log::Level::Warn).expect("Could't initialize logger");
-        } else {
-            env_logger::init();
-        }
-    }
+fn main() {
+    pollster::block_on(run());
+}
 
+async fn run() {
+    env_logger::init();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-
-    #[cfg(target_arch = "wasm32")]
-    {
-        // Winit prevents sizing with CSS, so we have to set
-        // the size manually when on web.
-        use winit::dpi::PhysicalSize;
-        window.set_inner_size(PhysicalSize::new(450, 400));
-
-        use winit::platform::web::WindowExtWebSys;
-        web_sys::window()
-            .and_then(|win| win.document())
-            .and_then(|doc| {
-                let dst = doc.get_element_by_id("wasm-example")?;
-                let canvas = web_sys::Element::from(window.canvas());
-                dst.append_child(&canvas).ok()?;
-                Some(())
-            })
-            .expect("Couldn't append canvas to document body.");
-    }
 
     // State::new uses async code, so we're going to wait for it to finish
     let mut state = State::new(&window).await;
@@ -371,7 +387,7 @@ pub async fn run() {
                             state.resize(*physical_size);
                         }
                         WindowEvent::ScaleFactorChanged { new_inner_size, .. } => {
-                            // new_inner_size is &mut so w have to dereference it twice
+                            // new_inner_size is &mut so we have to dereference it twice
                             state.resize(**new_inner_size);
                         }
                         _ => {}
@@ -383,9 +399,7 @@ pub async fn run() {
                 match state.render() {
                     Ok(_) => {}
                     // Reconfigure the surface if it's lost or outdated
-                    Err(wgpu::SurfaceError::Lost | wgpu::SurfaceError::Outdated) => {
-                        state.resize(state.size)
-                    }
+                    Err(wgpu::SurfaceError::Lost | wgpu::SurfaceError::Outdated) => state.resize(state.size),
                     // The system is out of memory, we should probably quit
                     Err(wgpu::SurfaceError::OutOfMemory) => *control_flow = ControlFlow::Exit,
                     // We're ignoring timeouts
