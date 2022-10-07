@@ -1,4 +1,4 @@
-use crate::Camera;
+use crate::camera::camera::Camera;
 use winit::event::{ElementState, KeyboardInput, VirtualKeyCode, WindowEvent};
 
 pub struct CameraController {

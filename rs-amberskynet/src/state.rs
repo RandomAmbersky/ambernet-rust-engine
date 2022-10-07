@@ -4,11 +4,12 @@ use wgpu::CompositeAlphaMode;
 use winit::event::WindowEvent;
 use winit::window::Window;
 
+use crate::camera::camera::Camera;
 use crate::camera::camera_controller::CameraController;
 use crate::camera::camera_uniform::CameraUniform;
 use crate::texture::Texture;
 use crate::utils::{INDICES, VERTICES};
-use crate::{Camera, Vertex};
+use crate::Vertex;
 
 pub struct State {
     surface: wgpu::Surface,

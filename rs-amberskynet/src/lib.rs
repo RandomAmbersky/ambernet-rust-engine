@@ -10,7 +10,6 @@ use winit::{
     window::WindowBuilder,
 };
 
-use camera::Camera;
 use state::State;
 use vertex::Vertex;
 

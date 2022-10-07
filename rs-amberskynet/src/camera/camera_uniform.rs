@@ -1,4 +1,5 @@
-use crate::{utils, Camera};
+use crate::camera::camera::Camera;
+use crate::utils;
 use utils::OPENGL_TO_WGPU_MATRIX;
 
 #[repr(C)]
