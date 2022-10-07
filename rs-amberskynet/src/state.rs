@@ -1,6 +1,6 @@
 use std::iter;
 use wgpu::util::DeviceExt;
-use wgpu::CompositeAlphaMode;
+use wgpu::{CommandEncoder, CompositeAlphaMode, TextureView};
 use winit::event::WindowEvent;
 use winit::window::Window;
 
@@ -287,36 +287,55 @@ impl State {
                 label: Some("Render Encoder"),
             });
 
-        {
-            let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-                label: Some("Render Pass"),
-                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-                    view: &view,
-                    resolve_target: None,
-                    ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.1,
-                            g: 0.2,
-                            b: 0.3,
-                            a: 1.0,
-                        }),
-                        store: true,
-                    },
-                })],
-                depth_stencil_attachment: None,
-            });
-
-            render_pass.set_pipeline(&self.render_pipeline);
-            render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
-            render_pass.set_bind_group(1, &self.camera_bind_group, &[]);
-            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-            render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
-            render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
-        }
+        render_once(
+            &mut encoder,
+            &view,
+            &self.render_pipeline,
+            &self.diffuse_bind_group,
+            &self.camera_bind_group,
+            &self.vertex_buffer,
+            &self.index_buffer,
+            self.num_indices,
+        );
 
         self.queue.submit(iter::once(encoder.finish()));
         output.present();
 
         Ok(())
     }
+}
+
+fn render_once(
+    encoder: &mut CommandEncoder,
+    view: &TextureView,
+    render_pipeline: &wgpu::RenderPipeline,
+    diffuse_bind_group: &wgpu::BindGroup,
+    camera_bind_group: &wgpu::BindGroup,
+    vertex_buffer: &wgpu::Buffer,
+    index_buffer: &wgpu::Buffer,
+    num_indices: u32,
+) {
+    let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+        label: Some("Render Pass"),
+        color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+            view: &view,
+            resolve_target: None,
+            ops: wgpu::Operations {
+                load: wgpu::LoadOp::Clear(wgpu::Color {
+                    r: 0.1,
+                    g: 0.2,
+                    b: 0.3,
+                    a: 1.0,
+                }),
+                store: true,
+            },
+        })],
+        depth_stencil_attachment: None,
+    });
+    render_pass.set_pipeline(&render_pipeline);
+    render_pass.set_bind_group(0, &diffuse_bind_group, &[]);
+    render_pass.set_bind_group(1, &camera_bind_group, &[]);
+    render_pass.set_vertex_buffer(0, vertex_buffer.slice(..));
+    render_pass.set_index_buffer(index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+    render_pass.draw_indexed(0..num_indices, 0, 0..1);
 }
