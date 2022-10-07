@@ -7,8 +7,8 @@ use winit::window::Window;
 use crate::camera::camera::Camera;
 use crate::camera::camera_controller::CameraController;
 use crate::camera::camera_uniform::CameraUniform;
-use crate::data::{INDICES, VERTICES};
 use crate::texture::Texture;
+use crate::view2d::View2D;
 use crate::Vertex;
 
 pub struct State {
@@ -18,9 +18,10 @@ pub struct State {
     config: wgpu::SurfaceConfiguration,
     pub(crate) size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
-    vertex_buffer: wgpu::Buffer,
-    index_buffer: wgpu::Buffer,
-    num_indices: u32,
+    view_2d: View2D,
+    // vertex_buffer: wgpu::Buffer,
+    // index_buffer: wgpu::Buffer,
+    // num_indices: u32,
     #[allow(dead_code)]
     diffuse_texture: Texture,
     diffuse_bind_group: wgpu::BindGroup,
@@ -218,17 +219,18 @@ impl State {
             multiview: None,
         });
 
-        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(VERTICES),
-            usage: wgpu::BufferUsages::VERTEX,
-        });
-        let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Index Buffer"),
-            contents: bytemuck::cast_slice(INDICES),
-            usage: wgpu::BufferUsages::INDEX,
-        });
-        let num_indices = INDICES.len() as u32;
+        let view_2d = View2D::new(&device);
+        // let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+        //     label: Some("Vertex Buffer"),
+        //     contents: bytemuck::cast_slice(VERTICES),
+        //     usage: wgpu::BufferUsages::VERTEX,
+        // });
+        // let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+        //     label: Some("Index Buffer"),
+        //     contents: bytemuck::cast_slice(INDICES),
+        //     usage: wgpu::BufferUsages::INDEX,
+        // });
+        // let num_indices = INDICES.len() as u32;
 
         Self {
             surface,
@@ -237,9 +239,10 @@ impl State {
             config,
             size,
             render_pipeline,
-            vertex_buffer,
-            index_buffer,
-            num_indices,
+            view_2d,
+            // vertex_buffer,
+            // index_buffer,
+            // num_indices,
             diffuse_texture,
             diffuse_bind_group,
             camera,
@@ -293,9 +296,9 @@ impl State {
             &self.render_pipeline,
             &self.diffuse_bind_group,
             &self.camera_bind_group,
-            &self.vertex_buffer,
-            &self.index_buffer,
-            self.num_indices,
+            &self.view_2d, // &self.vertex_buffer,
+                           // &self.index_buffer,
+                           // self.num_indices,
         );
 
         self.queue.submit(iter::once(encoder.finish()));
@@ -311,9 +314,9 @@ fn render_once(
     render_pipeline: &wgpu::RenderPipeline,
     diffuse_bind_group: &wgpu::BindGroup,
     camera_bind_group: &wgpu::BindGroup,
-    vertex_buffer: &wgpu::Buffer,
-    index_buffer: &wgpu::Buffer,
-    num_indices: u32,
+    view_2d: &View2D, // vertex_buffer: &wgpu::Buffer,
+                      // index_buffer: &wgpu::Buffer,
+                      // num_indices: u32,
 ) {
     let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
         label: Some("Render Pass"),
@@ -335,7 +338,7 @@ fn render_once(
     render_pass.set_pipeline(&render_pipeline);
     render_pass.set_bind_group(0, &diffuse_bind_group, &[]);
     render_pass.set_bind_group(1, &camera_bind_group, &[]);
-    render_pass.set_vertex_buffer(0, vertex_buffer.slice(..));
-    render_pass.set_index_buffer(index_buffer.slice(..), wgpu::IndexFormat::Uint16);
-    render_pass.draw_indexed(0..num_indices, 0, 0..1);
+    render_pass.set_vertex_buffer(0, view_2d.vertex_buffer.slice(..));
+    render_pass.set_index_buffer(view_2d.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+    render_pass.draw_indexed(0..view_2d.num_indices, 0, 0..1);
 }
