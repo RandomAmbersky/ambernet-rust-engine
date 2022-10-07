@@ -1,10 +1,5 @@
-use pollster::FutureExt;
-use rs_amberskynet::run;
+use tutorial6_uniforms::run;
 
 fn main() {
-    println!("Let's go...");
-    let my_fut = async {
-        run().await;
-    };
-    my_fut.block_on();
+    pollster::block_on(run());
 }

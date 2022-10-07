@@ -1,4 +1,4 @@
-use crate::shaders::VERTICES;
+use crate::shaders::{Vertex, VERTICES};
 use wgpu;
 use wgpu::util::DeviceExt;
 use winit::event::WindowEvent;
@@ -12,6 +12,7 @@ pub struct State {
     pub size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
     vertex_buffer: wgpu::Buffer,
+    num_vertices: u32,
 }
 
 impl State {
@@ -89,8 +90,8 @@ impl State {
             layout: Some(&render_pipeline_layout),
             vertex: wgpu::VertexState {
                 module: &shader,
-                entry_point: "vs_main", // 1.
-                buffers: &[],           // 2.
+                entry_point: "vs_main",     // 1.
+                buffers: &[Vertex::desc()], // 2.
             },
             fragment: Some(wgpu::FragmentState {
                 // 3.
@@ -132,6 +133,8 @@ impl State {
             usage: wgpu::BufferUsages::VERTEX,
         });
 
+        let num_vertices = VERTICES.len() as u32;
+
         Self {
             surface,
             device,
@@ -140,6 +143,7 @@ impl State {
             size,
             render_pipeline,
             vertex_buffer,
+            num_vertices,
         }
     }
 
@@ -192,7 +196,8 @@ impl State {
 
             // NEW!
             render_pass.set_pipeline(&self.render_pipeline); // 2.
-            render_pass.draw(0..3, 0..1); // 3.
+            render_pass.draw(0..self.num_vertices, 0..1);
+            // render_pass.draw(0..3, 0..1); // 3.
         }
 
         // submit will accept anything that implements IntoIter

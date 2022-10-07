@@ -7,9 +7,6 @@ use winit::{
     window::{Window, WindowBuilder},
 };
 
-#[cfg(target_arch="wasm32")]
-use wasm_bindgen::prelude::*;
-
 mod texture;
 
 #[repr(C)]
@@ -64,7 +61,7 @@ const VERTICES: &[Vertex] = &[
     }, // E
 ];
 
-const INDICES: &[u16] = &[0, 1, 4, 1, 2, 4, 2, 3, 4, /* padding */ 0];
+const INDICES: &[u16] = &[0, 1, 4, 1, 2, 4, 2, 3, 4];
 
 #[rustfmt::skip]
 pub const OPENGL_TO_WGPU_MATRIX: cgmath::Matrix4<f32> = cgmath::Matrix4::new(
@@ -92,29 +89,43 @@ impl Camera {
     }
 }
 
+struct CameraStaging {
+    camera: Camera,
+    model_rotation: cgmath::Deg<f32>,
+}
+
+impl CameraStaging {
+    fn new(camera: Camera) -> Self {
+        Self {
+            camera,
+            model_rotation: cgmath::Deg(0.0),
+        }
+    }
+    fn update_camera(&self, camera_uniform: &mut CameraUniform) {
+        camera_uniform.model_view_proj = (OPENGL_TO_WGPU_MATRIX
+            * self.camera.build_view_projection_matrix()
+            * cgmath::Matrix4::from_angle_z(self.model_rotation))
+        .into();
+    }
+}
+
 #[repr(C)]
 #[derive(Debug, Copy, Clone, bytemuck::Pod, bytemuck::Zeroable)]
 struct CameraUniform {
-    view_proj: [[f32; 4]; 4],
+    model_view_proj: [[f32; 4]; 4],
 }
 
 impl CameraUniform {
     fn new() -> Self {
         use cgmath::SquareMatrix;
         Self {
-            view_proj: cgmath::Matrix4::identity().into(),
+            model_view_proj: cgmath::Matrix4::identity().into(),
         }
-    }
-
-    fn update_view_proj(&mut self, camera: &Camera) {
-        self.view_proj = (OPENGL_TO_WGPU_MATRIX * camera.build_view_projection_matrix()).into();
     }
 }
 
 struct CameraController {
     speed: f32,
-    is_up_pressed: bool,
-    is_down_pressed: bool,
     is_forward_pressed: bool,
     is_backward_pressed: bool,
     is_left_pressed: bool,
@@ -125,8 +136,6 @@ impl CameraController {
     fn new(speed: f32) -> Self {
         Self {
             speed,
-            is_up_pressed: false,
-            is_down_pressed: false,
             is_forward_pressed: false,
             is_backward_pressed: false,
             is_left_pressed: false,
@@ -147,14 +156,6 @@ impl CameraController {
             } => {
                 let is_pressed = *state == ElementState::Pressed;
                 match keycode {
-                    VirtualKeyCode::Space => {
-                        self.is_up_pressed = is_pressed;
-                        true
-                    }
-                    VirtualKeyCode::LShift => {
-                        self.is_down_pressed = is_pressed;
-                        true
-                    }
                     VirtualKeyCode::W | VirtualKeyCode::Up => {
                         self.is_forward_pressed = is_pressed;
                         true
@@ -216,7 +217,6 @@ struct State {
     device: wgpu::Device,
     queue: wgpu::Queue,
     config: wgpu::SurfaceConfiguration,
-    size: winit::dpi::PhysicalSize<u32>,
     render_pipeline: wgpu::RenderPipeline,
     vertex_buffer: wgpu::Buffer,
     index_buffer: wgpu::Buffer,
@@ -224,12 +224,12 @@ struct State {
     #[allow(dead_code)]
     diffuse_texture: texture::Texture,
     diffuse_bind_group: wgpu::BindGroup,
-    // NEW!
-    camera: Camera,
     camera_controller: CameraController,
     camera_uniform: CameraUniform,
+    camera_staging: CameraStaging,
     camera_buffer: wgpu::Buffer,
     camera_bind_group: wgpu::BindGroup,
+    size: winit::dpi::PhysicalSize<u32>,
 }
 
 impl State {
@@ -329,7 +329,8 @@ impl State {
         let camera_controller = CameraController::new(0.2);
 
         let mut camera_uniform = CameraUniform::new();
-        camera_uniform.update_view_proj(&camera);
+        let camera_staging = CameraStaging::new(camera);
+        camera_staging.update_camera(&mut camera_uniform);
 
         let camera_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Camera Buffer"),
@@ -434,18 +435,18 @@ impl State {
             device,
             queue,
             config,
-            size,
             render_pipeline,
             vertex_buffer,
             index_buffer,
             num_indices,
             diffuse_texture,
             diffuse_bind_group,
-            camera,
             camera_controller,
+            camera_staging,
             camera_buffer,
             camera_bind_group,
             camera_uniform,
+            size,
         }
     }
 
@@ -456,7 +457,8 @@ impl State {
             self.config.height = new_size.height;
             self.surface.configure(&self.device, &self.config);
 
-            self.camera.aspect = self.config.width as f32 / self.config.height as f32;
+            self.camera_staging.camera.aspect =
+                self.config.width as f32 / self.config.height as f32;
         }
     }
 
@@ -465,8 +467,10 @@ impl State {
     }
 
     fn update(&mut self) {
-        self.camera_controller.update_camera(&mut self.camera);
-        self.camera_uniform.update_view_proj(&self.camera);
+        self.camera_controller
+            .update_camera(&mut self.camera_staging.camera);
+        self.camera_staging.model_rotation += cgmath::Deg(2.0);
+        self.camera_staging.update_camera(&mut self.camera_uniform);
         self.queue.write_buffer(
             &self.camera_buffer,
             0,
@@ -520,38 +524,14 @@ impl State {
     }
 }
 
-#[cfg_attr(target_arch="wasm32", wasm_bindgen(start))]
-pub async fn run() {
-    cfg_if::cfg_if! {
-        if #[cfg(target_arch = "wasm32")] {
-            std::panic::set_hook(Box::new(console_error_panic_hook::hook));
-            console_log::init_with_level(log::Level::Warn).expect("Could't initialize logger");
-        } else {
-            env_logger::init();
-        }
-    }
+fn main() {
+    pollster::block_on(run());
+}
 
+async fn run() {
+    env_logger::init();
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new().build(&event_loop).unwrap();
-
-    #[cfg(target_arch = "wasm32")]
-    {
-        // Winit prevents sizing with CSS, so we have to set
-        // the size manually when on web.
-        use winit::dpi::PhysicalSize;
-        window.set_inner_size(PhysicalSize::new(450, 400));
-        
-        use winit::platform::web::WindowExtWebSys;
-        web_sys::window()
-            .and_then(|win| win.document())
-            .and_then(|doc| {
-                let dst = doc.get_element_by_id("wasm-example")?;
-                let canvas = web_sys::Element::from(window.canvas());
-                dst.append_child(&canvas).ok()?;
-                Some(())
-            })
-            .expect("Couldn't append canvas to document body.");
-    }
 
     // State::new uses async code, so we're going to wait for it to finish
     let mut state = State::new(&window).await;
