@@ -1,3 +1,11 @@
+mod camera;
+mod camera_controller;
+mod camera_uniform;
+mod state;
+mod texture;
+mod utils;
+mod vertex;
+
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
@@ -10,14 +18,6 @@ use vertex::Vertex;
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
-
-mod camera;
-mod camera_controller;
-mod camera_uniform;
-mod state;
-mod texture;
-mod utils;
-mod vertex;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen(start))]
 pub async fn run() {
