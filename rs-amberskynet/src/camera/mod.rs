@@ -1,3 +1,6 @@
+pub mod camera_controller;
+pub mod camera_uniform;
+
 pub struct Camera {
     pub(crate) eye: cgmath::Point3<f32>,
     pub(crate) target: cgmath::Point3<f32>,

@@ -1,6 +1,4 @@
 mod camera;
-mod camera_controller;
-mod camera_uniform;
 mod state;
 mod texture;
 mod utils;
