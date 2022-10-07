@@ -1,4 +1,4 @@
-use tutorial6_uniforms::run;
+use rs_amberskynet::run;
 
 fn main() {
     pollster::block_on(run());

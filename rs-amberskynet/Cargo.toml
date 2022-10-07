@@ -1,50 +1,44 @@
 [package]
-name = "tutorial6-uniforms"
+name = "rs-amberskynet"
 version = "0.1.0"
-authors = ["Ben Hansen <bhbenjaminhansen@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 cfg-if = "1"
-anyhow = "1.0"
-bytemuck = { version = "1.4", features = [ "derive" ] }
-cgmath = "0.18"
-env_logger = "0.9"
-log = "0.4"
-pollster = "0.2"
-wgpu = "0.13"
-winit = "0.26"
+anyhow = "1.0.65"
+bytemuck = { version = "1.12.1", features = [ "derive" ] }
+cgmath = "0.18.0"
+env_logger = "0.9.1"
+log = "0.4.17"
+pollster = "0.2.5"
+wgpu = "0.14.0"
+winit = "0.27.3"
 
 [dependencies.image]
-version = "0.24"
+version = "0.24.4"
 default-features = false
 features = ["png", "jpeg"]
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-console_error_panic_hook = "0.1"
-console_log = "0.2"
-wgpu = { version = "0.13", features = ["webgl"]}
-wasm-bindgen = "0.2"
-wasm-bindgen-futures = "0.4"
-web-sys = { version = "0.3", features = [
+console_error_panic_hook = "0.1.7"
+console_log = "0.2.0"
+wgpu = { version = "0.14.0", features = ["webgl"]}
+wasm-bindgen = "0.2.83"
+wasm-bindgen-futures = "0.4.33"
+web-sys = { version = "0.3.60", features = [
     "Document",
     "Window",
     "Element",
 ]}
 
 [build-dependencies]
-anyhow = "1.0"
-fs_extra = "1.2"
-glob = "0.3"
+anyhow = "1.0.65"
+fs_extra = "1.2.0"
+glob = "0.3.0"
 
 [[bin]]
-name = "tutorial6-uniforms"
+name = "rs-amberskynet"
 path = "src/main.rs"
-
-
-[[bin]]
-name = "tutorial6-challenge"
-path = "src/challenge.rs"
