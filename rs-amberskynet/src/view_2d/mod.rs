@@ -1,16 +1,13 @@
-use wgpu::{BindGroupLayout, CommandEncoder, Device, Queue, SurfaceTexture};
+use wgpu::{CommandEncoder, Device, Queue, SurfaceTexture};
 use wgpu::util::DeviceExt;
 use crate::{INDICES, texture, Vertex, VERTICES};
 use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 
 pub struct View2D {
-	shader: wgpu::ShaderModule,
 	vertex_buffer: wgpu::Buffer,
 	index_buffer: wgpu::Buffer,
 	num_indices: u32,
-	diffuse_texture: texture::Texture,
 	diffuse_bind_group: wgpu::BindGroup,
-	texture_bind_group_layout: wgpu::BindGroupLayout,
 	render_pipeline: wgpu::RenderPipeline
 }
 
@@ -22,8 +19,7 @@ impl View2D {
 			source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
 		});
 
-		let diffuse_texture =
-			texture::Texture::from_bytes(&device, &queue, TEXTURE_SOURCE, "happy-tree.png").unwrap();
+		let diffuse_texture = texture::Texture::from_bytes(&device, &queue, TEXTURE_SOURCE, "happy-tree.png").unwrap();
 
 		let texture_bind_group_layout =
 			device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -75,8 +71,7 @@ impl View2D {
 		});
 		let num_indices = INDICES.len() as u32;
 
-		let render_pipeline_layout =
-			device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+		let render_pipeline_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
 				label: Some("Render Pipeline Layout"),
 				bind_group_layouts: &[&texture_bind_group_layout],
 				push_constant_ranges: &[],
@@ -127,13 +122,10 @@ impl View2D {
 		});
 
 		Self {
-			shader,
 			vertex_buffer,
 			index_buffer,
 			num_indices,
-			diffuse_texture,
 			diffuse_bind_group,
-			texture_bind_group_layout,
 			render_pipeline
 		}
 	}

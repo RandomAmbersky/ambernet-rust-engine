@@ -1,11 +1,8 @@
 use std::iter;
 use wgpu::CompositeAlphaMode;
 
-use wgpu::util::DeviceExt;
 use winit::event::WindowEvent;
 use winit::window::Window;
-use crate::{INDICES, texture, Vertex, VERTICES};
-use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 use crate::view_2d::View2D;
 
 pub struct State {
