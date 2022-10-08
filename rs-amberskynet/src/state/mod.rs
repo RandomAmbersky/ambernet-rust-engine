@@ -98,9 +98,7 @@ impl State {
 				label: Some("Render Encoder"),
 			});
 
-		{
-			self.view_2d.draw(&mut encoder, &output);
-		}
+		self.view_2d.draw(&mut encoder, &output);
 
 		self.queue.submit(iter::once(encoder.finish()));
 		output.present();
