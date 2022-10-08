@@ -2,6 +2,7 @@ mod vertex;
 mod texture;
 mod resource;
 mod state;
+mod view_2d;
 
 use winit::{
     event::*,
