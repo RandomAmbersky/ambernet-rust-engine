@@ -1,5 +1,8 @@
 use crate::Vertex;
 
+pub const SHADER_SOURCE: &str = include_str!("./shader.wgsl");
+pub const TEXTURE_SOURCE: &[u8] = include_bytes!("../resource/happy-tree.png");
+
 pub const VERTICES: &[Vertex] = &[
 	Vertex {
 		position: [-0.0868241, 0.49240386, 0.0],

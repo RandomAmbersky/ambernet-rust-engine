@@ -5,6 +5,7 @@ use wgpu::util::DeviceExt;
 use winit::event::WindowEvent;
 use winit::window::Window;
 use crate::{INDICES, texture, Vertex, VERTICES};
+use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 
 pub struct State {
 	surface: wgpu::Surface,
@@ -66,9 +67,8 @@ impl State {
 		};
 		surface.configure(&device, &config);
 
-		let diffuse_bytes = include_bytes!("resource/happy-tree.png");
 		let diffuse_texture =
-			texture::Texture::from_bytes(&device, &queue, diffuse_bytes, "happy-tree.png").unwrap();
+			texture::Texture::from_bytes(&device, &queue, TEXTURE_SOURCE, "happy-tree.png").unwrap();
 
 		let texture_bind_group_layout =
 			device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -110,7 +110,7 @@ impl State {
 
 		let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
 			label: Some("Shader"),
-			source: wgpu::ShaderSource::Wgsl(include_str!("resource/shader.wgsl").into()),
+			source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
 		});
 
 		let render_pipeline_layout =
