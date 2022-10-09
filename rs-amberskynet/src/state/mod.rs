@@ -9,7 +9,7 @@ pub struct State {
 	device: wgpu::Device,
 	queue: wgpu::Queue,
 	config: wgpu::SurfaceConfiguration,
-	pub(crate) size: winit::dpi::PhysicalSize<u32>,
+	size: winit::dpi::PhysicalSize<u32>,
 	view_2d: View2D
 }
 
@@ -69,6 +69,11 @@ impl State {
 			size,
 			view_2d
 		}
+	}
+
+	pub fn reload_size(&mut self) {
+		let size = self.size;
+		self.resize(size);
 	}
 
 	pub fn resize(&mut self, new_size: winit::dpi::PhysicalSize<u32>) {
