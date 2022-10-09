@@ -1,4 +1,3 @@
-use std::iter;
 use wgpu::CompositeAlphaMode;
 
 use winit::event::WindowEvent;

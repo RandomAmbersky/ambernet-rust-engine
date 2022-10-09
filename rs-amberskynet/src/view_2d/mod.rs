@@ -1,5 +1,5 @@
 use std::iter;
-use wgpu::{CommandEncoder, Device, Queue, SurfaceTexture};
+use wgpu::{Device, Queue, SurfaceTexture};
 use wgpu::util::DeviceExt;
 use crate::{INDICES, texture, Vertex, VERTICES};
 use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
