@@ -90,10 +90,6 @@ impl State {
 		let output = self.surface.get_current_texture()?;
 
 		self.view_2d.draw(&self.device, &self.queue, &output);
-		self.view_2d.draw(&self.device, &self.queue, &output);
-		self.view_2d.draw(&self.device, &self.queue, &output);
-		self.view_2d.draw(&self.device, &self.queue, &output);
-		self.view_2d.draw(&self.device, &self.queue, &output);
 
 		output.present();
 
