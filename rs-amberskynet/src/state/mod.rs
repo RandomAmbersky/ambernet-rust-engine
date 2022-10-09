@@ -29,6 +29,7 @@ impl State {
 			})
 			.await
 			.unwrap();
+
 		let (device, queue) = adapter
 			.request_device(
 				&wgpu::DeviceDescriptor {
@@ -55,6 +56,7 @@ impl State {
 			present_mode: wgpu::PresentMode::Fifo,
 			alpha_mode: CompositeAlphaMode::Auto,
 		};
+
 		surface.configure(&device, &config);
 
 		let view_2d = View2D::new(&device, &queue, &config);
