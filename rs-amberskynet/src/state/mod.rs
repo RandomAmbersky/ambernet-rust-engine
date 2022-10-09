@@ -89,15 +89,12 @@ impl State {
 	pub(crate) fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
 		let output = self.surface.get_current_texture()?;
 
-		let mut encoder = self
-			.device
-			.create_command_encoder(&wgpu::CommandEncoderDescriptor {
-				label: Some("Render Encoder"),
-			});
+		self.view_2d.draw(&self.device, &self.queue, &output);
+		self.view_2d.draw(&self.device, &self.queue, &output);
+		self.view_2d.draw(&self.device, &self.queue, &output);
+		self.view_2d.draw(&self.device, &self.queue, &output);
+		self.view_2d.draw(&self.device, &self.queue, &output);
 
-		self.view_2d.draw(&mut encoder, &output);
-
-		self.queue.submit(iter::once(encoder.finish()));
 		output.present();
 
 		Ok(())
