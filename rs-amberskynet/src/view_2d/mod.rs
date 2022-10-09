@@ -2,7 +2,9 @@ use std::iter;
 use wgpu::{Device, Queue, SurfaceTexture};
 use wgpu::util::DeviceExt;
 use crate::{INDICES, texture, Vertex, VERTICES};
-use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
+use crate::view_2d::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
+
+pub mod resource;
 
 pub struct View2D {
 	vertex_buffer: wgpu::Buffer,

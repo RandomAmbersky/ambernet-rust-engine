@@ -1,17 +1,16 @@
 mod vertex;
 mod texture;
-mod resource;
 mod state;
 mod view_2d;
 
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
-    window::{WindowBuilder},
+    window::WindowBuilder,
 };
 
 use vertex::Vertex;
-use resource::{VERTICES, INDICES};
+use view_2d::resource::{INDICES, VERTICES};
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;

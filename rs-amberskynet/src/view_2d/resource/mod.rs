@@ -1,7 +1,7 @@
 use crate::Vertex;
 
-pub const SHADER_SOURCE: &str = include_str!("./shader.wgsl");
-pub const TEXTURE_SOURCE: &[u8] = include_bytes!("../resource/happy-tree.png");
+pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
+pub const TEXTURE_SOURCE: &[u8] = include_bytes!("happy-tree.png");
 
 pub const VERTICES: &[Vertex] = &[
 	Vertex {
