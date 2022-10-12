@@ -1,8 +1,10 @@
 use wgpu::CompositeAlphaMode;
+use winit::event::VirtualKeyCode::C;
 
 use winit::event::WindowEvent;
 use winit::window::Window;
 use crate::view_2d::View2D;
+use crate::color_quad::ColorQuad;
 
 pub struct State {
 	surface: wgpu::Surface,
@@ -10,11 +12,12 @@ pub struct State {
 	queue: wgpu::Queue,
 	config: wgpu::SurfaceConfiguration,
 	size: winit::dpi::PhysicalSize<u32>,
-	view_2d: View2D
+	view_2d: View2D,
+	color_quad: ColorQuad,
 }
 
 impl State {
-	pub(crate) async fn new(window: &Window) -> Self {
+	pub async fn new(window: &Window) -> Self {
 		let size = window.inner_size();
 
 		// The instance is a handle to our GPU
@@ -60,6 +63,7 @@ impl State {
 		surface.configure(&device, &config);
 
 		let view_2d = View2D::new(&device, &queue, &config);
+		let color_quad = ColorQuad::new(&device, &queue, &config);
 
 		Self {
 			surface,
@@ -67,7 +71,8 @@ impl State {
 			queue,
 			config,
 			size,
-			view_2d
+			view_2d,
+			color_quad
 		}
 	}
 
@@ -95,6 +100,7 @@ impl State {
 	pub(crate) fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
 		let output = self.surface.get_current_texture()?;
 
+		self.color_quad.draw(&self.device, &self.queue, &output);
 		self.view_2d.draw(&self.device, &self.queue, &output);
 
 		output.present();

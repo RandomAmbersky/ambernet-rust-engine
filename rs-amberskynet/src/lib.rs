@@ -2,6 +2,7 @@ mod vertex;
 mod texture;
 mod state;
 mod view_2d;
+mod color_quad;
 
 use winit::{
     event::*,
