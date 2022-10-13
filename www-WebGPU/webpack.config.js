@@ -5,6 +5,13 @@ module.exports = {
   entry: {
     main: "./src/main"
   },
+  devServer: {
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true,
+    port: 9000,
+  },
   output: {
     filename: "[name].bundle.js",
     path: path.join(__dirname, bundleOutputDir),
