@@ -2,6 +2,7 @@ const path = require("path");
 const bundleOutputDir = "./dist";
 
 module.exports = {
+  mode: 'production',
   entry: {
     main: "./src/main"
   },
