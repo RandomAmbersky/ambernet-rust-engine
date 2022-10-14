@@ -1,4 +1,7 @@
 import $ from 'jquery';
 import { CheckWebGPU } from "./helper";
+console.log('hello console')
 
-$('#id-gpu-check').html(CheckWebGPU());
+$('#id-gpsu-check').html(CheckWebGPU());
+
+
