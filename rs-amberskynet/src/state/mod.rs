@@ -1,10 +1,8 @@
 use wgpu::CompositeAlphaMode;
-use winit::event::VirtualKeyCode::C;
 
 use winit::event::WindowEvent;
 use winit::window::Window;
 use crate::view_2d::View2D;
-use crate::color_quad::ColorQuad;
 
 pub struct State {
 	surface: wgpu::Surface,
@@ -13,7 +11,6 @@ pub struct State {
 	config: wgpu::SurfaceConfiguration,
 	size: winit::dpi::PhysicalSize<u32>,
 	view_2d: View2D,
-	color_quad: ColorQuad,
 }
 
 impl State {
@@ -40,11 +37,7 @@ impl State {
 					features: wgpu::Features::empty(),
 					// WebGL doesn't support all of wgpu's features, so if
 					// we're building for the web we'll have to disable some.
-					limits: if cfg!(target_arch = "wasm32") {
-						wgpu::Limits::downlevel_webgl2_defaults()
-					} else {
-						wgpu::Limits::default()
-					},
+					limits: wgpu::Limits::default()
 				},
 				None, // Trace path
 			)
@@ -63,7 +56,6 @@ impl State {
 		surface.configure(&device, &config);
 
 		let view_2d = View2D::new(&device, &queue, &config);
-		let color_quad = ColorQuad::new(&device, &queue, &config);
 
 		Self {
 			surface,
@@ -72,7 +64,6 @@ impl State {
 			config,
 			size,
 			view_2d,
-			color_quad
 		}
 	}
 
@@ -100,7 +91,6 @@ impl State {
 	pub(crate) fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
 		let output = self.surface.get_current_texture()?;
 
-		self.color_quad.draw(&self.device, &self.queue, &output);
 		self.view_2d.draw(&self.device, &self.queue, &output);
 
 		output.present();
