@@ -1,5 +1,5 @@
 use log::{debug, error};
-use winit::event::{Event, WindowEvent};
+use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget};
 use winit::window::{Window, WindowBuilder, WindowId};
 
@@ -53,6 +53,11 @@ impl AsnEngine {
             WindowEvent::Resized(size) => {
                 debug!("resize window {:?}", size);
             }
+            WindowEvent::KeyboardInput {
+                device_id,
+                input,
+                is_synthetic,
+            } => return self.process_keyboard_event(input, control_flow),
             _ => {
                 debug!("unprocesseble window event {:?}", event);
             }
@@ -73,5 +78,18 @@ impl AsnEngine {
 impl AsnEngine {
     fn process_main_events_cleared(&mut self) {
         self.window.request_redraw();
+    }
+}
+
+impl AsnEngine {
+    fn process_keyboard_event(&self, input: &KeyboardInput, control_flow: &mut ControlFlow) {
+        match input {
+            KeyboardInput {
+                state: ElementState::Pressed,
+                virtual_keycode: Some(VirtualKeyCode::Escape),
+                ..
+            } => *control_flow = ControlFlow::Exit,
+            _ => {}
+        }
     }
 }
