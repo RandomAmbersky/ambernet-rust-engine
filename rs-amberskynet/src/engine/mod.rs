@@ -19,14 +19,17 @@ impl AsnEngine {
         event_loop_window_target: &EventLoopWindowTarget<()>,
         control_flow: &mut ControlFlow,
     ) {
-        // debug!("this is a event {:?}", event);
         match event {
             Event::WindowEvent { window_id, event } => {
                 return self.process_window_event(control_flow, window_id, event)
             }
             Event::RedrawRequested(window_id) => return self.process_redraw_requested(window_id),
             Event::MainEventsCleared {} => return self.process_main_events_cleared(),
-            _ => {}
+            Event::RedrawEventsCleared {} => {}
+            Event::NewEvents(..) => {}
+            _ => {
+                // debug!("unprocesseble event {:?}", event);
+            }
         }
     }
 }
@@ -42,7 +45,19 @@ impl AsnEngine {
             error!("not correct window_id: {:?}", window_id);
             return;
         }
-        debug!("this is a debug {:?}", event);
+        match event {
+            WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit,
+            WindowEvent::CursorMoved { .. } => {}
+            WindowEvent::CursorLeft { .. } => {}
+            WindowEvent::CursorEntered { .. } => {}
+            WindowEvent::Resized(size) => {
+                debug!("resize window {:?}", size);
+            }
+            _ => {
+                debug!("unprocesseble window event {:?}", event);
+            }
+        }
+        // debug!("this is a debug {:?}", event);
     }
 }
 
