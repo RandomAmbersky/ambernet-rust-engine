@@ -21,7 +21,7 @@ impl AsnEngine {
     ) {
         match event {
             Event::WindowEvent { window_id, event } => {
-                return self.process_window_event(control_flow, window_id, event)
+                self.process_window_event(control_flow, window_id, event)
             }
             Event::RedrawRequested(window_id) => return self.process_redraw_requested(window_id),
             Event::MainEventsCleared {} => return self.process_main_events_cleared(),
@@ -56,7 +56,7 @@ impl AsnEngine {
             WindowEvent::KeyboardInput {
                 device_id,
                 input,
-                is_synthetic,
+                is_synthetic: _,
             } => return self.process_keyboard_event(input, control_flow),
             _ => {
                 debug!("unprocesseble window event {:?}", event);
@@ -83,13 +83,13 @@ impl AsnEngine {
 
 impl AsnEngine {
     fn process_keyboard_event(&self, input: &KeyboardInput, control_flow: &mut ControlFlow) {
-        match input {
-            KeyboardInput {
-                state: ElementState::Pressed,
-                virtual_keycode: Some(VirtualKeyCode::Escape),
-                ..
-            } => *control_flow = ControlFlow::Exit,
-            _ => {}
+        if let KeyboardInput {
+            state: ElementState::Pressed,
+            virtual_keycode: Some(VirtualKeyCode::Escape),
+            ..
+        } = input
+        {
+            *control_flow = ControlFlow::Exit
         }
     }
 }
