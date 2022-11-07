@@ -6,11 +6,7 @@ mod vertex;
 mod view_2d;
 
 use std::env;
-use winit::{
-    event::*,
-    event_loop::{ControlFlow, EventLoop},
-    window::WindowBuilder,
-};
+use winit::event_loop::EventLoop;
 
 use crate::engine::AsnEngine;
 use vertex::Vertex;
