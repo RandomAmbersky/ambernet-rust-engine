@@ -16,15 +16,15 @@ impl AsnEngine {
     pub fn process_event(
         &mut self,
         event: &Event<()>,
-        event_loop_window_target: &EventLoopWindowTarget<()>,
+        _event_loop_window_target: &EventLoopWindowTarget<()>,
         control_flow: &mut ControlFlow,
     ) {
         match event {
             Event::WindowEvent { window_id, event } => {
                 self.process_window_event(control_flow, window_id, event)
             }
-            Event::RedrawRequested(window_id) => return self.process_redraw_requested(window_id),
-            Event::MainEventsCleared {} => return self.process_main_events_cleared(),
+            Event::RedrawRequested(window_id) => self.process_redraw_requested(window_id),
+            Event::MainEventsCleared {} => self.process_main_events_cleared(),
             Event::RedrawEventsCleared {} => {}
             Event::NewEvents(..) => {}
             _ => {
@@ -47,17 +47,21 @@ impl AsnEngine {
         }
         match event {
             WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit,
+            WindowEvent::ScaleFactorChanged { .. } => {
+                // TODO state.resize(**new_inner_size);
+            }
             WindowEvent::CursorMoved { .. } => {}
             WindowEvent::CursorLeft { .. } => {}
             WindowEvent::CursorEntered { .. } => {}
             WindowEvent::Resized(size) => {
+                // TODO state.resize(*physical_size);
                 debug!("resize window {:?}", size);
             }
             WindowEvent::KeyboardInput {
-                device_id,
+                device_id: _,
                 input,
                 is_synthetic: _,
-            } => return self.process_keyboard_event(input, control_flow),
+            } => self.process_keyboard_event(input, control_flow),
             _ => {
                 debug!("unprocesseble window event {:?}", event);
             }
@@ -70,8 +74,19 @@ impl AsnEngine {
     fn process_redraw_requested(&mut self, window_id: &WindowId) {
         if window_id != &self.window.id() {
             error!("not correct window_id: {:?}", window_id);
-            return;
         }
+        // TODO state.update();
+        //         match state.render() {
+        //             Ok(_) => {}
+        //             // Reconfigure the surface if it's lost or outdated
+        //             Err(wgpu::SurfaceError::Lost | wgpu::SurfaceError::Outdated) => {
+        //                 state.reload_size()
+        //             }
+        //             // The system is out of memory, we should probably quit
+        //             Err(wgpu::SurfaceError::OutOfMemory) => *control_flow = ControlFlow::Exit,
+        //             // We're ignoring timeouts
+        //             Err(wgpu::SurfaceError::Timeout) => log::warn!("Surface timeout"),
+        //         }
     }
 }
 
