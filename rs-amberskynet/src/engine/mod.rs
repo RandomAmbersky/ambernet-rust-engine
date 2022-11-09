@@ -6,7 +6,7 @@ use crate::engine::viewport::Viewport;
 use crate::engine::viewport_desc::ViewportDesc;
 use crate::view_2d::View2D;
 use log::{debug, error};
-use wgpu::{Device, Queue};
+use wgpu::{Device, Queue, SurfaceTexture};
 use winit::dpi::PhysicalSize;
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget};
@@ -178,33 +178,34 @@ impl AsnEngine {
 }
 
 impl AsnEngine {
+    fn render_empty(&mut self, frame: &SurfaceTexture) -> Result<(), wgpu::SurfaceError> {
+        let view = frame
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+        let mut encoder = self
+            .device
+            .create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
+        {
+            let _rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+                label: None,
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+                    view: &view,
+                    resolve_target: None,
+                    ops: wgpu::Operations {
+                        load: wgpu::LoadOp::Clear(self.viewport.desc.background),
+                        store: true,
+                    },
+                })],
+                depth_stencil_attachment: None,
+            });
+        }
+        self.queue.submit(Some(encoder.finish()));
+        Ok(())
+    }
     fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
         let frame = self.viewport.get_current_texture();
-
+        // self.render_empty(&frame).expect("render_empty panic");
         self.view_2d.draw(&self.device, &self.queue, &frame);
-
-        // let view = frame
-        //     .texture
-        //     .create_view(&wgpu::TextureViewDescriptor::default());
-        // let mut encoder = self
-        //     .device
-        //     .create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
-        // {
-        //     let _rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-        //         label: None,
-        //         color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-        //             view: &view,
-        //             resolve_target: None,
-        //             ops: wgpu::Operations {
-        //                 load: wgpu::LoadOp::Clear(self.viewport.desc.background),
-        //                 store: true,
-        //             },
-        //         })],
-        //         depth_stencil_attachment: None,
-        //     });
-        // }
-
-        // self.queue.submit(Some(encoder.finish()));
         frame.present();
         Ok(())
     }
