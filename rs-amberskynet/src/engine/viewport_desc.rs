@@ -3,7 +3,7 @@ use winit::window::Window;
 
 pub struct ViewportDesc {
     pub window: Window,
-    pub(crate) background: wgpu::Color,
+    pub background: wgpu::Color,
     pub surface: wgpu::Surface,
 }
 
