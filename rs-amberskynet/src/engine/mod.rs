@@ -1,7 +1,14 @@
+mod viewport;
+mod viewport_desc;
+mod asn_engine_state;
+
 use log::{debug, error};
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget};
 use winit::window::{Window, WindowBuilder, WindowId};
+use crate::engine::asn_engine_state::AsnEngineState;
+use crate::engine::viewport_desc::ViewportDesc;
+use crate::state::State;
 
 pub struct AsnEngine {
     window: Window,
@@ -9,7 +16,28 @@ pub struct AsnEngine {
 
 impl AsnEngine {
     pub fn new(event_loop: &EventLoop<()>) -> Self {
+
+        let instance = wgpu::Instance::new(wgpu::Backends::all());
         let window = WindowBuilder::new().build(&event_loop).unwrap();
+
+        let window_color = wgpu::Color {
+            r: 0.5,
+            g: 0.5,
+            b: 0.5,
+            a: 1.0,
+        };
+
+        let viewport_desc = ViewportDesc::new(window, window_color, &instance);
+
+        let adapter = instance
+          .request_adapter(&wgpu::RequestAdapterOptions {
+              // Request an adapter which can render to our surface
+              compatible_surface: Option::from(&viewport_desc.surface),
+              ..Default::default()
+          })
+          .await
+          .expect("Failed to find an appropriate adapter");
+
         AsnEngine { window }
     }
 
