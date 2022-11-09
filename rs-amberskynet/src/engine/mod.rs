@@ -1,22 +1,24 @@
+mod asn_engine_state;
 mod viewport;
 mod viewport_desc;
-mod asn_engine_state;
 
+use crate::engine::viewport::Viewport;
+use crate::engine::viewport_desc::ViewportDesc;
 use log::{debug, error};
+use wgpu::{Device, Queue};
+use winit::dpi::PhysicalSize;
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget};
-use winit::window::{Window, WindowBuilder, WindowId};
-use crate::engine::asn_engine_state::AsnEngineState;
-use crate::engine::viewport_desc::ViewportDesc;
-use crate::state::State;
+use winit::window::{WindowBuilder, WindowId};
 
 pub struct AsnEngine {
-    window: Window,
+    viewport: Viewport,
+    device: Device,
+    queue: Queue,
 }
 
 impl AsnEngine {
-    pub fn new(event_loop: &EventLoop<()>) -> Self {
-
+    pub async fn new(event_loop: &EventLoop<()>) -> Self {
         let instance = wgpu::Instance::new(wgpu::Backends::all());
         let window = WindowBuilder::new().build(&event_loop).unwrap();
 
@@ -30,15 +32,34 @@ impl AsnEngine {
         let viewport_desc = ViewportDesc::new(window, window_color, &instance);
 
         let adapter = instance
-          .request_adapter(&wgpu::RequestAdapterOptions {
-              // Request an adapter which can render to our surface
-              compatible_surface: Option::from(&viewport_desc.surface),
-              ..Default::default()
-          })
-          .await
-          .expect("Failed to find an appropriate adapter");
+            .request_adapter(&wgpu::RequestAdapterOptions {
+                // Request an adapter which can render to our surface
+                compatible_surface: Some(&viewport_desc.surface),
+                force_fallback_adapter: false,
+                ..Default::default()
+            })
+            .await
+            .expect("Failed to find an appropriate adapter");
 
-        AsnEngine { window }
+        let (device, queue) = adapter
+            .request_device(
+                &wgpu::DeviceDescriptor {
+                    label: None,
+                    features: wgpu::Features::empty(),
+                    limits: wgpu::Limits::downlevel_defaults(),
+                },
+                None,
+            )
+            .await
+            .expect("Failed to create device");
+
+        let viewport = viewport_desc.build(&adapter, &device);
+
+        AsnEngine {
+            viewport,
+            device,
+            queue,
+        }
     }
 
     pub fn process_event(
@@ -69,21 +90,21 @@ impl AsnEngine {
         window_id: &WindowId,
         event: &WindowEvent,
     ) {
-        if window_id != &self.window.id() {
+        if window_id != &self.viewport.desc.window.id() {
             error!("not correct window_id: {:?}", window_id);
             return;
         }
         match event {
             WindowEvent::CloseRequested => *control_flow = ControlFlow::Exit,
-            WindowEvent::ScaleFactorChanged { .. } => {
-                // TODO state.resize(**new_inner_size);
-            }
+            WindowEvent::ScaleFactorChanged {
+                scale_factor: _,
+                new_inner_size,
+            } => self.process_resized(new_inner_size),
             WindowEvent::CursorMoved { .. } => {}
             WindowEvent::CursorLeft { .. } => {}
             WindowEvent::CursorEntered { .. } => {}
             WindowEvent::Resized(size) => {
-                // TODO state.resize(*physical_size);
-                debug!("resize window {:?}", size);
+                self.process_resized(size);
             }
             WindowEvent::KeyboardInput {
                 device_id: _,
@@ -100,8 +121,24 @@ impl AsnEngine {
 
 impl AsnEngine {
     fn process_redraw_requested(&mut self, window_id: &WindowId) {
-        if window_id != &self.window.id() {
+        if window_id != &self.viewport.desc.window.id() {
             error!("not correct window_id: {:?}", window_id);
+        }
+        match self.render() {
+            Ok(_) => {}
+            // Reconfigure the surface if it's lost or outdated
+            Err(wgpu::SurfaceError::Lost | wgpu::SurfaceError::Outdated) => {
+                let size =
+                    PhysicalSize::new(self.viewport.config.width, self.viewport.config.height);
+                self.viewport.resize(&self.device, size);
+            }
+            // The system is out of memory, we should probably quit
+            Err(wgpu::SurfaceError::OutOfMemory) => {
+                // *control_flow = ControlFlow::Exit
+                log::warn!("OutOfMemory")
+            }
+            // We're ignoring timeouts
+            Err(wgpu::SurfaceError::Timeout) => log::warn!("Timeout"),
         }
         // TODO state.update();
         //         match state.render() {
@@ -120,7 +157,7 @@ impl AsnEngine {
 
 impl AsnEngine {
     fn process_main_events_cleared(&mut self) {
-        self.window.request_redraw();
+        self.viewport.desc.window.request_redraw();
     }
 }
 
@@ -134,5 +171,43 @@ impl AsnEngine {
         {
             *control_flow = ControlFlow::Exit
         }
+    }
+}
+
+impl AsnEngine {
+    fn process_resized(&mut self, size: &PhysicalSize<u32>) {
+        debug!("resize window {:?}", size);
+        self.viewport.resize(&self.device, *size);
+        self.viewport.desc.window.request_redraw();
+    }
+}
+
+impl AsnEngine {
+    fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
+        let frame = self.viewport.get_current_texture();
+        let view = frame
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+        let mut encoder = self
+            .device
+            .create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
+        {
+            let _rpass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+                label: None,
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+                    view: &view,
+                    resolve_target: None,
+                    ops: wgpu::Operations {
+                        load: wgpu::LoadOp::Clear(self.viewport.desc.background),
+                        store: true,
+                    },
+                })],
+                depth_stencil_attachment: None,
+            });
+        }
+
+        self.queue.submit(Some(encoder.finish()));
+        frame.present();
+        Ok(())
     }
 }

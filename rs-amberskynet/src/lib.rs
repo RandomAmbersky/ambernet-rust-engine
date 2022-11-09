@@ -13,12 +13,13 @@ use vertex::Vertex;
 use view_2d::resource::{INDICES, VERTICES};
 
 pub async fn run() {
-    env::set_var("RUST_LOG", "trace");
+    // env::set_var("RUST_LOG", "trace");
+    env::set_var("RUST_LOG", "info");
     env_logger::init();
 
     let event_loop = EventLoop::new();
 
-    let mut engine = AsnEngine::new(&event_loop);
+    let mut engine = AsnEngine::new(&event_loop).await;
 
     event_loop.run(move |event, event_loop_window_target, control_flow| {
         engine.process_event(&event, event_loop_window_target, control_flow)
