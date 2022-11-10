@@ -1,4 +1,3 @@
-mod asn_engine_state;
 pub mod state;
 mod viewport;
 mod viewport_desc;
@@ -20,47 +19,9 @@ pub struct AsnEngine {
 
 impl AsnEngine {
     pub async fn new(event_loop: &EventLoop<()>) -> Self {
-        // let instance = wgpu::Instance::new(wgpu::Backends::all());
-
         let state = AsnState::new(event_loop).await;
 
-        // let window = WindowBuilder::new().build(event_loop).unwrap();
-
-        // let window_color = wgpu::Color {
-        //     r: 0.5,
-        //     g: 0.5,
-        //     b: 0.5,
-        //     a: 1.0,
-        // };
-
-        // let viewport_desc = ViewportDesc::new(window, window_color, &instance);
-
-        // let adapter = instance
-        //     .request_adapter(&wgpu::RequestAdapterOptions {
-        //         Request an adapter which can render to our surface
-        // compatible_surface: Some(&viewport_desc.surface),
-        // force_fallback_adapter: false,
-        // ..Default::default()
-        // })
-        // .await
-        // .expect("Failed to find an appropriate adapter");
-
-        // let (device, queue) = adapter
-        //     .request_device(
-        //         &wgpu::DeviceDescriptor {
-        //             label: None,
-        //             features: wgpu::Features::empty(),
-        //             limits: wgpu::Limits::downlevel_defaults(),
-        //         },
-        //         None,
-        //     )
-        //     .await
-        //     .expect("Failed to create device");
-
-        // let viewport = viewport_desc.build(&adapter, &device);
-
-        // let texture_format = TextureFormat::Rgba32Float;
-        let texture_format = state.main_window.get_supported_format(&state.adapter);
+        let texture_format = state.get_supported_format();
 
         let view_2d = View2D::new(&state.device, &state.queue, texture_format);
 

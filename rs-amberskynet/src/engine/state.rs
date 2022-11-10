@@ -1,12 +1,18 @@
 use crate::engine::window::AsnWindow;
-use wgpu::{Adapter, Device, Queue};
+use wgpu::{Adapter, Device, Queue, TextureFormat};
 use winit::event_loop::EventLoop;
 
 pub struct AsnState {
     pub main_window: AsnWindow,
     pub device: Device,
-    pub adapter: Adapter,
+    adapter: Adapter,
     pub queue: Queue,
+}
+
+impl AsnState {
+    pub fn get_supported_format(&self) -> TextureFormat {
+        self.main_window.get_supported_format(&self.adapter)
+    }
 }
 
 impl AsnState {
@@ -37,6 +43,7 @@ impl AsnState {
             .expect("Failed to create device");
 
         let size = main_window.window.inner_size();
+
         let config = wgpu::SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: main_window.surface.get_supported_formats(&adapter)[0],
@@ -45,6 +52,7 @@ impl AsnState {
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode: main_window.surface.get_supported_alpha_modes(&adapter)[0],
         };
+
         main_window.surface.configure(&device, &config);
 
         AsnState {
