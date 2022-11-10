@@ -6,7 +6,6 @@ mod window;
 use crate::engine::state::AsnState;
 use crate::view_2d::View2D;
 use log::{debug, error};
-use wgpu::TextureFormat;
 use winit::dpi::PhysicalSize;
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget};
@@ -132,7 +131,7 @@ impl AsnEngine {
 impl AsnEngine {
     fn process_resized(&mut self, size: &PhysicalSize<u32>) {
         debug!("resize window {:?}", size);
-        self.state.main_window.resize(&self.state.device, *size);
+        self.state.main_window.configure_surface(&self.state.adapter, &self.state.device);
         self.state.main_window.request_redraw();
     }
 }

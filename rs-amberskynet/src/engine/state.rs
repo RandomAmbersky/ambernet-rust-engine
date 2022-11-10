@@ -42,9 +42,10 @@ impl AsnState {
             .await
             .expect("Failed to create device");
 
-        let size = main_window.window.inner_size();
-        let config = main_window.get_config(&adapter, &size);
-        main_window.surface.configure(&device, &config);
+        main_window.configure_surface(&adapter, &device);
+        // let size = main_window.window.inner_size();
+        // let config = main_window.get_config(&adapter, &size);
+        // main_window.surface.configure(&device, &config);
 
         AsnState {
             main_window,

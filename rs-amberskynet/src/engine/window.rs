@@ -37,28 +37,10 @@ impl AsnWindow {
         let surface = unsafe { instance.create_surface(&window) };
         Self { window, surface }
     }
-    // pub fn init(&mut self, device: &Device, adapter: &Adapter) {
-    //     let size = self.window.inner_size();
-    //
-    //     let config = wgpu::SurfaceConfiguration {
-    //         usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-    //         format: self.surface.get_supported_formats(adapter)[0],
-    //         width: size.width,
-    //         height: size.height,
-    //         present_mode: wgpu::PresentMode::Fifo,
-    //         alpha_mode: self.surface.get_supported_alpha_modes(adapter)[0],
-    //     };
-    //     self.surface.configure(device, &config);
-    //     // self.config = Some(config)
-    // }
-    pub fn resize(&self, device: &Device, size: winit::dpi::PhysicalSize<u32>) {
-        // self.config.unwrap().width = size.width;
-        // self.config.unwrap().height = size.height;
-        // self.surface.configure(device, &self.config.unwrap());
-    }
-    pub fn reload_size(&self, device: &Device) {
+    pub fn configure_surface(&self, adapter: &Adapter, device: &Device) {
         let size = self.window.inner_size();
-        self.resize(device, size);
+        let config = self.get_config(adapter, &size);
+        self.surface.configure(device, &config);
     }
     pub fn request_redraw(&self) {
         self.window.request_redraw();
