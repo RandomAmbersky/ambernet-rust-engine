@@ -1,6 +1,4 @@
 mod engine;
-mod renderer;
-mod state;
 mod texture;
 mod vertex;
 mod view_2d;

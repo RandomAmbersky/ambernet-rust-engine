@@ -1,8 +1,9 @@
+use crate::engine::state::AsnState;
 use crate::view_2d::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 use crate::{texture, Vertex, INDICES, VERTICES};
 use std::iter;
 use wgpu::util::DeviceExt;
-use wgpu::{Device, Queue, SurfaceTexture};
+use wgpu::{Device, Queue, SurfaceTexture, TextureFormat};
 
 pub mod resource;
 
@@ -15,7 +16,7 @@ pub struct View2D {
 }
 
 impl View2D {
-    pub fn new(device: &Device, queue: &Queue, config: &wgpu::SurfaceConfiguration) -> Self {
+    pub fn new(device: &Device, queue: &Queue, format: TextureFormat) -> Self {
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Shader"),
             source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
@@ -68,11 +69,13 @@ impl View2D {
             contents: bytemuck::cast_slice(VERTICES),
             usage: wgpu::BufferUsages::VERTEX,
         });
+
         let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Index Buffer"),
             contents: bytemuck::cast_slice(INDICES),
             usage: wgpu::BufferUsages::INDEX,
         });
+
         let num_indices = INDICES.len() as u32;
 
         let render_pipeline_layout =
@@ -94,7 +97,7 @@ impl View2D {
                 module: &shader,
                 entry_point: "fs_main",
                 targets: &[Some(wgpu::ColorTargetState {
-                    format: config.format,
+                    format,
                     blend: Some(wgpu::BlendState {
                         color: wgpu::BlendComponent::REPLACE,
                         alpha: wgpu::BlendComponent::REPLACE,
