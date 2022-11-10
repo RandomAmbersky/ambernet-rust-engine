@@ -110,12 +110,6 @@ impl AsnEngine {
 }
 
 impl AsnEngine {
-    fn process_main_events_cleared(&mut self) {
-        self.state.main_window.request_redraw();
-    }
-}
-
-impl AsnEngine {
     fn process_keyboard_event(&self, input: &KeyboardInput, control_flow: &mut ControlFlow) {
         if let KeyboardInput {
             state: ElementState::Pressed,
@@ -129,6 +123,10 @@ impl AsnEngine {
 }
 
 impl AsnEngine {
+    fn process_main_events_cleared(&mut self) {
+        self.state.main_window.request_redraw();
+    }
+
     fn process_resized(&mut self, size: &PhysicalSize<u32>) {
         debug!("resize window {:?}", size);
         self.state.main_window.configure_surface(&self.state.adapter, &self.state.device);
