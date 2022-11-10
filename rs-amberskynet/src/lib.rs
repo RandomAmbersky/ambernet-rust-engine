@@ -12,8 +12,8 @@ use view_2d::resource::{INDICES, VERTICES};
 
 pub async fn run() {
     // env::set_var("RUST_LOG", "trace");
-    env::set_var("RUST_LOG", "info");
-    env_logger::init();
+    // env::set_var("RUST_LOG", "info");
+    // env_logger::init();
 
     let event_loop = EventLoop::new();
 

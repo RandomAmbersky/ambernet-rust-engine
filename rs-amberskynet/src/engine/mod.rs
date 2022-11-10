@@ -6,7 +6,7 @@ mod window;
 use crate::engine::state::AsnState;
 use crate::view_2d::View2D;
 use log::{debug, error};
-use wgpu::{Device, Queue, SurfaceTexture, TextureFormat};
+use wgpu::TextureFormat;
 use winit::dpi::PhysicalSize;
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget};
@@ -21,8 +21,7 @@ impl AsnEngine {
     pub async fn new(event_loop: &EventLoop<()>) -> Self {
         let state = AsnState::new(event_loop).await;
 
-        let texture_format = state.get_supported_format();
-
+        let texture_format = state.get_supported_format(&state.adapter);
         let view_2d = View2D::new(&state.device, &state.queue, texture_format);
 
         AsnEngine { state, view_2d }
