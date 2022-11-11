@@ -22,8 +22,7 @@ impl View2D {
         });
 
         let diffuse_texture =
-            texture::Texture::from_bytes(device, queue, TEXTURE_SOURCE, "happy-tree.png")
-                .unwrap();
+            texture::Texture::from_bytes(device, queue, TEXTURE_SOURCE, "happy-tree.png").unwrap();
 
         let texture_bind_group_layout =
             device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -68,13 +67,11 @@ impl View2D {
             contents: bytemuck::cast_slice(VERTICES),
             usage: wgpu::BufferUsages::VERTEX,
         });
-
         let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Index Buffer"),
             contents: bytemuck::cast_slice(INDICES),
             usage: wgpu::BufferUsages::INDEX,
         });
-
         let num_indices = INDICES.len() as u32;
 
         let render_pipeline_layout =
