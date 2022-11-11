@@ -1,4 +1,4 @@
-use wgpu::{Adapter, Device, Instance, Surface, SurfaceConfiguration, TextureFormat};
+use wgpu::{Adapter, Device, Instance, Surface, SurfaceConfiguration};
 use winit::dpi::PhysicalSize;
 use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder, WindowId};
@@ -19,15 +19,14 @@ impl AsnWindow {
             .expect("Failed to get_current_texture")
     }
     pub fn get_config(&self, adapter: &Adapter, size: &PhysicalSize<u32>) -> SurfaceConfiguration {
-        let config = SurfaceConfiguration {
+        SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: self.surface.get_supported_formats(adapter)[0],
             width: size.width,
             height: size.height,
             present_mode: wgpu::PresentMode::Fifo,
             alpha_mode: self.surface.get_supported_alpha_modes(adapter)[0],
-        };
-        config
+        }
     }
 }
 

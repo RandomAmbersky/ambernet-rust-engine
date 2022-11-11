@@ -1,4 +1,3 @@
-use crate::engine::state::AsnState;
 use crate::view_2d::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 use crate::{texture, Vertex, INDICES, VERTICES};
 use std::iter;
@@ -23,7 +22,7 @@ impl View2D {
         });
 
         let diffuse_texture =
-            texture::Texture::from_bytes(&device, &queue, TEXTURE_SOURCE, "happy-tree.png")
+            texture::Texture::from_bytes(device, queue, TEXTURE_SOURCE, "happy-tree.png")
                 .unwrap();
 
         let texture_bind_group_layout =
