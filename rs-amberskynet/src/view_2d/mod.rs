@@ -2,7 +2,7 @@ use crate::view_2d::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 use crate::{texture, Vertex, INDICES, VERTICES};
 use std::iter;
 use wgpu::util::DeviceExt;
-use wgpu::{Device, Queue, SurfaceTexture, TextureFormat};
+use wgpu::{CommandEncoder, Device, Queue, SurfaceTexture, TextureFormat};
 
 pub mod resource;
 
@@ -134,11 +134,7 @@ impl View2D {
         }
     }
 
-    pub fn draw(&self, device: &Device, queue: &Queue, output: &SurfaceTexture) {
-        let mut encoder = device.create_command_encoder(&wgpu::CommandEncoderDescriptor {
-            label: Some("Render Encoder"),
-        });
-
+    pub fn draw(&self, encoder: &mut CommandEncoder, output: &SurfaceTexture) {
         let view = output
             .texture
             .create_view(&wgpu::TextureViewDescriptor::default());
@@ -168,7 +164,5 @@ impl View2D {
             render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
             render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
         }
-
-        queue.submit(iter::once(encoder.finish()));
     }
 }
