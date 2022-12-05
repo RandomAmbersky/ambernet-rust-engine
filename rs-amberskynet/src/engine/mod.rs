@@ -4,6 +4,7 @@ mod window;
 use crate::engine::state::AsnState;
 use crate::view_2d::View2D;
 use log::{debug, error};
+use std::iter;
 use winit::dpi::PhysicalSize;
 use winit::event::{ElementState, Event, KeyboardInput, VirtualKeyCode, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopWindowTarget};
@@ -127,7 +128,9 @@ impl AsnEngine {
 
     fn process_resized(&mut self, size: &PhysicalSize<u32>) {
         debug!("resize window {:?}", size);
-        self.state.main_window.configure_surface(&self.state.adapter, &self.state.device);
+        self.state
+            .main_window
+            .configure_surface(&self.state.adapter, &self.state.device);
         self.state.main_window.request_redraw();
     }
 }
@@ -161,8 +164,16 @@ impl AsnEngine {
     fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
         let frame = self.state.main_window.get_current_texture();
         // self.render_empty(&frame).expect("render_empty panic");
-        self.view_2d
-            .draw(&self.state.device, &self.state.queue, &frame);
+
+        let mut encoder =
+            self.state
+                .device
+                .create_command_encoder(&wgpu::CommandEncoderDescriptor {
+                    label: Some("Render Encoder View2D"),
+                });
+        self.view_2d.draw(&mut encoder, &frame);
+        self.state.queue.submit(iter::once(encoder.finish()));
+
         frame.present();
         Ok(())
     }
