@@ -1,6 +1,6 @@
-use crate::asn_engine::AsnEngine;
+use crate::context::AsnContext;
 
 pub trait ExtHandlerTrait {
-    fn draw(&self, e: &AsnEngine);
-    fn update(&self, e: &AsnEngine);
+    fn draw(&self, e: &AsnContext);
+    fn update(&self, e: &AsnContext);
 }

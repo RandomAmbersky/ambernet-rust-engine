@@ -1,17 +1,9 @@
-mod asn_engine;
 mod ext_handler_trait;
-
-pub use asn_engine::AsnEngine;
 pub use ext_handler_trait::ExtHandlerTrait;
 
-pub fn new() -> AsnEngine {
-    AsnEngine {}
-}
+pub mod context;
+pub use context::AsnContext;
 
-pub fn run<E>(e: &AsnEngine, ext: &E)
-where
-    E: ExtHandlerTrait,
-{
-    ext.draw(e);
-    ext.update(e);
-}
+mod asn_engine;
+pub use asn_engine::init;
+pub use asn_engine::run;
