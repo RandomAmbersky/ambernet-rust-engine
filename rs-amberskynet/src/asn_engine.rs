@@ -10,25 +10,3 @@ pub fn init() -> (AsnContext, EventLoop<()>) {
 }
 
 pub fn process_event(_ctx: &AsnContext, _event: &Event<()>, _control_flow: &mut ControlFlow) {}
-
-pub fn run<E>(ctx: AsnContext, event_loop: EventLoop<()>, ext: E)
-where
-    E: ExtHandlerTrait,
-{
-    event_loop.run(
-        move |event, event_loop_window_target, control_flow| match event {
-            Event::NewEvents(_) => {}
-            Event::WindowEvent { .. } => {}
-            Event::DeviceEvent { .. } => {}
-            Event::UserEvent(_) => {}
-            Event::Suspended => {}
-            Event::Resumed => {}
-            Event::MainEventsCleared => {}
-            Event::RedrawRequested(_) => {}
-            Event::RedrawEventsCleared => {}
-            Event::LoopDestroyed => {}
-        },
-    )
-    // ext.draw(&ctx);
-    // ext.update(&ctx);
-}
