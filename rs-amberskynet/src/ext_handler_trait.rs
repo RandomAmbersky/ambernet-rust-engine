@@ -1,6 +1,6 @@
-use crate::amberskynet::asn_engine::AsnEngine;
+use crate::asn_engine::AsnEngine;
 
-pub trait ExtCoreTrait {
+pub trait ExtHandlerTrait {
     fn draw(&self, e: &AsnEngine);
     fn update(&self, e: &AsnEngine);
 }
