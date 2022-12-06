@@ -1,10 +1,9 @@
-use crate::view_2d::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
-use crate::{texture, Vertex, INDICES, VERTICES};
-use std::iter;
+use crate::view_2d::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
+use rs_amberskynet::gfx::{Texture, Vertex};
 use wgpu::util::DeviceExt;
 use wgpu::{CommandEncoder, Device, Queue, SurfaceTexture, TextureFormat};
 
-pub mod resource;
+mod resource;
 
 pub struct View2D {
     vertex_buffer: wgpu::Buffer,
@@ -22,7 +21,7 @@ impl View2D {
         });
 
         let diffuse_texture =
-            texture::Texture::from_bytes(device, queue, TEXTURE_SOURCE, "happy-tree.png").unwrap();
+            Texture::from_bytes(device, queue, TEXTURE_SOURCE, "happy-tree.png").unwrap();
 
         let texture_bind_group_layout =
             device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {

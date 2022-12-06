@@ -1,14 +1,24 @@
-use rs_amberskynet::{context, ExtHandlerTrait};
-use std::arch::asm;
-use winit::event_loop;
-use winit::event_loop::EventLoop;
+mod view_2d;
 
-struct Handler {}
+use crate::view_2d::View2D;
+use rs_amberskynet::{AsnContext, ExtHandlerTrait};
+
+struct Handler {
+    view_2d: View2D,
+}
+
 impl Handler {
-    pub fn new() -> Self {
-        Self {}
+    pub fn new(ctx: &AsnContext) -> Self {
+        let texture_format = ctx
+            .gfx
+            .main_window
+            .surface
+            .get_supported_formats(&ctx.gfx.adapter)[0];
+        let view_2d = View2D::new(&ctx.gfx.device, &ctx.gfx.queue, texture_format);
+        Self { view_2d }
     }
 }
+
 impl ExtHandlerTrait for Handler {
     fn draw(&self, e: &rs_amberskynet::AsnContext) {
         // todo!()
@@ -20,7 +30,7 @@ impl ExtHandlerTrait for Handler {
 }
 
 pub fn main() {
-    let h = Handler::new();
     let (ctx, event_loop) = rs_amberskynet::init();
+    let h = Handler::new(&ctx);
     rs_amberskynet::run(ctx, event_loop, h)
 }

@@ -16,45 +16,6 @@ where
         *control_flow = ControlFlow::Poll;
 
         process_event(&mut ctx, &event);
-
-        match event {
-            Event::NewEvents(_) => {}
-            Event::WindowEvent { window_id, event } => {
-                match event {
-                    WindowEvent::Resized(_) => {}
-                    WindowEvent::Moved(_) => {}
-                    WindowEvent::CloseRequested => {}
-                    WindowEvent::Destroyed => {}
-                    WindowEvent::DroppedFile(_) => {}
-                    WindowEvent::HoveredFile(_) => {}
-                    WindowEvent::HoveredFileCancelled => {}
-                    WindowEvent::ReceivedCharacter(_) => {}
-                    WindowEvent::Focused(_) => {}
-                    WindowEvent::KeyboardInput { .. } => {}
-                    WindowEvent::ModifiersChanged(_) => {}
-                    WindowEvent::Ime(_) => {}
-                    WindowEvent::CursorMoved { .. } => {}
-                    WindowEvent::CursorEntered { .. } => {}
-                    WindowEvent::CursorLeft { .. } => {}
-                    WindowEvent::MouseWheel { .. } => {}
-                    WindowEvent::MouseInput { .. } => {}
-                    WindowEvent::TouchpadPressure { .. } => {}
-                    WindowEvent::AxisMotion { .. } => {}
-                    WindowEvent::Touch(_) => {}
-                    WindowEvent::ScaleFactorChanged { .. } => {}
-                    WindowEvent::ThemeChanged(_) => {}
-                    WindowEvent::Occluded(_) => {}
-                };
-            }
-            Event::DeviceEvent { .. } => {}
-            Event::UserEvent(_) => {}
-            Event::Suspended => {}
-            Event::Resumed => {}
-            Event::MainEventsCleared => {}
-            Event::RedrawRequested(window_id) => {}
-            Event::RedrawEventsCleared => {}
-            Event::LoopDestroyed => {}
-        }
     })
     // ext.draw(&ctx);
     // ext.update(&ctx);
@@ -101,15 +62,18 @@ fn process_window_event(ctx: &mut AsnContext, event: &WindowEvent) {
         WindowEvent::TouchpadPressure { .. } => {}
         WindowEvent::AxisMotion { .. } => {}
         WindowEvent::Touch(_) => {}
-        WindowEvent::ScaleFactorChanged { .. } => {}
+        WindowEvent::ScaleFactorChanged {
+            scale_factor: _,
+            new_inner_size,
+        } => process_window_resized(ctx, new_inner_size),
         WindowEvent::ThemeChanged(_) => {}
         WindowEvent::Occluded(_) => {}
     }
 }
 
-fn process_redraw_requested(_ctx: &AsnContext) {}
-
-fn process_main_events_cleared(_ctx: &AsnContext) {}
+fn process_main_events_cleared(ctx: &AsnContext) {
+    ctx.gfx.main_window.request_redraw();
+}
 
 fn process_window_resized(ctx: &AsnContext, _size: &PhysicalSize<u32>) {
     ctx.gfx
@@ -117,3 +81,5 @@ fn process_window_resized(ctx: &AsnContext, _size: &PhysicalSize<u32>) {
         .configure_surface(&ctx.gfx.adapter, &ctx.gfx.device);
     ctx.gfx.main_window.request_redraw();
 }
+
+fn process_redraw_requested(_ctx: &AsnContext) {}

@@ -4,6 +4,12 @@ use crate::gfx::window::AsnWindow;
 use wgpu::{Adapter, Device, Queue};
 use winit::event_loop::EventLoop;
 
+mod texture;
+pub use texture::Texture;
+
+mod vertex;
+pub use vertex::Vertex;
+
 pub struct AsnGfx {
     pub main_window: AsnWindow,
     pub device: Device,
