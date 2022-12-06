@@ -3,7 +3,7 @@ use winit::dpi::PhysicalSize;
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
 
-pub fn run<E>(mut ctx: AsnContext, event_loop: EventLoop<()>, ext: E)
+pub fn run<E: 'static>(mut ctx: AsnContext, event_loop: EventLoop<()>, ext: E)
 where
     E: ExtHandlerTrait,
 {
@@ -16,9 +16,23 @@ where
         *control_flow = ControlFlow::Poll;
 
         process_event(&mut ctx, &event);
+
+        match event {
+            Event::NewEvents(_) => {}
+            Event::WindowEvent { .. } => {}
+            Event::DeviceEvent { .. } => {}
+            Event::UserEvent(_) => {}
+            Event::Suspended => {}
+            Event::Resumed => {}
+            Event::MainEventsCleared => {
+                ext.update(&ctx);
+                ext.draw(&ctx);
+            }
+            Event::RedrawRequested(_) => {}
+            Event::RedrawEventsCleared => {}
+            Event::LoopDestroyed => {}
+        }
     })
-    // ext.draw(&ctx);
-    // ext.update(&ctx);
 }
 
 fn process_event(ctx: &mut AsnContext, event: &Event<()>) {
