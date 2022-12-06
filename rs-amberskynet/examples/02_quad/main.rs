@@ -1,12 +1,10 @@
 mod resource;
 
-use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
+use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, Vertex};
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
 use std::iter;
 use wgpu::util::DeviceExt;
-
-pub const INDICES: &[u16] = &[0, 1, 4, 1, 2, 4, 2, 3, 4, 0];
 
 struct Handler {
     vertex_buffer: wgpu::Buffer,
