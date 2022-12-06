@@ -12,19 +12,11 @@ pub const VERTICES: &[Vertex] = &[
         tex_coords: [0.0048659444, 0.43041354],
     }, // B
     Vertex {
-        position: [-0.21918549, -0.44939706, 0.0],
-        tex_coords: [0.28081453, 0.949397],
-    }, // C
-    Vertex {
-        position: [0.35966998, -0.3473291, 0.0],
-        tex_coords: [0.85967, 0.84732914],
-    }, // D
-    Vertex {
         position: [0.5, 0.5, 0.0],
         tex_coords: [0.9414737, 0.2652641],
     }, // E
 ];
 
-pub const INDICES: &[u16] = &[0, 1, 4];
+pub const INDICES: &[u16] = &[0, 1, 2];
 
 // pub const INDICES: &[u16] = &[0, 1, 4, 1, 2, 4, 2, 3, 4, 0];
