@@ -107,11 +107,11 @@ fn process_window_event(ctx: &mut AsnContext, event: &WindowEvent) {
     }
 }
 
-fn process_redraw_requested(ctx: &AsnContext) {}
+fn process_redraw_requested(_ctx: &AsnContext) {}
 
-fn process_main_events_cleared(ctx: &AsnContext) {}
+fn process_main_events_cleared(_ctx: &AsnContext) {}
 
-fn process_window_resized(ctx: &AsnContext, size: &PhysicalSize<u32>) {
+fn process_window_resized(ctx: &AsnContext, _size: &PhysicalSize<u32>) {
     ctx.gfx
         .main_window
         .configure_surface(&ctx.gfx.adapter, &ctx.gfx.device);
