@@ -8,4 +8,6 @@ mod asn_engine;
 pub use asn_engine::init;
 
 mod events;
+mod gfx;
+
 pub use events::run;

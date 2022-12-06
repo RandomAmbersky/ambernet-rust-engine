@@ -54,4 +54,21 @@ where
     // ext.update(&ctx);
 }
 
-fn process_event(ctx: &AsnContext, event: &Event<()>) {}
+fn process_event(ctx: &AsnContext, event: &Event<()>) {
+    match event {
+        Event::NewEvents(_) => {}
+        Event::WindowEvent { window_id, event } => {
+            process_window_event(ctx, event);
+        }
+        Event::DeviceEvent { .. } => {}
+        Event::UserEvent(_) => {}
+        Event::Suspended => {}
+        Event::Resumed => {}
+        Event::MainEventsCleared => {}
+        Event::RedrawRequested(_) => {}
+        Event::RedrawEventsCleared => {}
+        Event::LoopDestroyed => {}
+    };
+}
+
+fn process_window_event(ctx: &AsnContext, event: &WindowEvent) {}
