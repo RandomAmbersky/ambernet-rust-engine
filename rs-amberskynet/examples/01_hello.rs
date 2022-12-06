@@ -21,7 +21,7 @@ impl Handler {
 }
 
 impl ExtHandlerTrait for Handler {
-    fn draw(&self, ctx: &rs_amberskynet::AsnContext) {
+    fn draw(&self, ctx: &AsnContext) {
         let frame = ctx.gfx.main_window.get_current_texture();
 
         let mut encoder = ctx
@@ -31,14 +31,18 @@ impl ExtHandlerTrait for Handler {
                 label: Some("Render Encoder View2D"),
             });
 
-        self.view_2d.draw(&mut encoder, &frame);
+        let view = frame
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+
+        self.view_2d.draw(&mut encoder, &view);
 
         ctx.gfx.queue.submit(iter::once(encoder.finish()));
 
         frame.present();
     }
 
-    fn update(&self, e: &rs_amberskynet::AsnContext) {
+    fn update(&self, e: &AsnContext) {
         // todo!()
     }
 }
