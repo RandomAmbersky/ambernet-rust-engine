@@ -5,7 +5,7 @@ use wgpu::{Adapter, Device, Queue};
 use winit::event_loop::EventLoop;
 
 mod texture;
-pub use texture::Texture;
+pub use texture::AsnTexture;
 
 mod vertex;
 pub use vertex::Vertex;

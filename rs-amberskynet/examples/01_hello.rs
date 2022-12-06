@@ -41,7 +41,6 @@ impl ExtHandlerTrait for Handler {
 
         frame.present();
     }
-
     fn update(&self, e: &AsnContext) {
         // todo!()
     }

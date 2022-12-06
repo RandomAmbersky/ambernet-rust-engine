@@ -1,5 +1,5 @@
 use crate::view_2d::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
-use rs_amberskynet::gfx::{Texture, Vertex};
+use rs_amberskynet::gfx::{AsnTexture, Vertex};
 use wgpu::util::DeviceExt;
 use wgpu::{CommandEncoder, Device, Queue, SurfaceTexture, TextureFormat, TextureView};
 
@@ -21,7 +21,7 @@ impl View2D {
         });
 
         let diffuse_texture =
-            Texture::from_bytes(device, queue, TEXTURE_SOURCE, "happy-tree.png").unwrap();
+            AsnTexture::from_bytes(device, queue, TEXTURE_SOURCE, "happy-tree.png").unwrap();
 
         let texture_bind_group_layout =
             device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
