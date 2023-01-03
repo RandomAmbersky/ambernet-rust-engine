@@ -1,3 +1,4 @@
+mod gfx_config;
 mod resource;
 
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
@@ -132,25 +133,9 @@ impl Handler {
                             write_mask: wgpu::ColorWrites::ALL,
                         })],
                     }),
-                    primitive: wgpu::PrimitiveState {
-                        topology: wgpu::PrimitiveTopology::TriangleList,
-                        strip_index_format: None,
-                        front_face: wgpu::FrontFace::Ccw,
-                        cull_mode: Some(wgpu::Face::Back),
-                        // Setting this to anything other than Fill requires Features::POLYGON_MODE_LINE
-                        // or Features::POLYGON_MODE_POINT
-                        polygon_mode: wgpu::PolygonMode::Fill,
-                        // Requires Features::DEPTH_CLIP_CONTROL
-                        unclipped_depth: false,
-                        // Requires Features::CONSERVATIVE_RASTERIZATION
-                        conservative: false,
-                    },
+                    primitive: gfx_config::get_primitive(),
                     depth_stencil: None,
-                    multisample: wgpu::MultisampleState {
-                        count: 1,
-                        mask: !0,
-                        alpha_to_coverage_enabled: false,
-                    },
+                    multisample: gfx_config::get_multisample(),
                     // If the pipeline will be used with a multiview render pass, this
                     // indicates how many array layers the attachments will have.
                     multiview: None,
@@ -210,7 +195,7 @@ impl ExtHandlerTrait for Handler {
 
         frame.present();
     }
-    fn update(&self, e: &AsnContext) {}
+    fn update(&self, _e: &AsnContext) {}
 }
 
 pub fn main() {
