@@ -1,7 +1,6 @@
-use rs_amberskynet::gfx::Vertex;
-use wgpu::{ShaderModule, TextureFormat};
+use wgpu::TextureFormat;
 
-pub fn get_multisample() -> wgpu::MultisampleState {
+pub fn get_multisample_state() -> wgpu::MultisampleState {
     wgpu::MultisampleState {
         count: 1,
         mask: !0,
@@ -9,7 +8,7 @@ pub fn get_multisample() -> wgpu::MultisampleState {
     }
 }
 
-pub fn get_primitive() -> wgpu::PrimitiveState {
+pub fn get_primitive_state() -> wgpu::PrimitiveState {
     wgpu::PrimitiveState {
         topology: wgpu::PrimitiveTopology::TriangleList,
         strip_index_format: None,

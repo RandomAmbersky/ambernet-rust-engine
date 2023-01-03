@@ -1,7 +1,9 @@
 mod gfx_config;
 mod resource;
 
-use crate::gfx_config::{get_clear_color, get_color_target_state, get_multisample, get_primitive};
+use crate::gfx_config::{
+    get_clear_color, get_color_target_state, get_multisample_state, get_primitive_state,
+};
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, Vertex};
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
@@ -111,25 +113,29 @@ impl Handler {
                     push_constant_ranges: &[],
                 });
 
+        let vertex_state = wgpu::VertexState {
+            module: &shader,
+            entry_point: "vs_main",
+            buffers: &[Vertex::desc()],
+        };
+
+        let fragment_state = wgpu::FragmentState {
+            module: &shader,
+            entry_point: "fs_main",
+            targets: &[Some(get_color_target_state(format))],
+        };
+
         let render_pipeline =
             ctx.gfx
                 .device
                 .create_render_pipeline(&wgpu::RenderPipelineDescriptor {
                     label: Some("Render Pipeline"),
                     layout: Some(&render_pipeline_layout),
-                    vertex: wgpu::VertexState {
-                        module: &shader,
-                        entry_point: "vs_main",
-                        buffers: &[Vertex::desc()],
-                    },
-                    fragment: Some(wgpu::FragmentState {
-                        module: &shader,
-                        entry_point: "fs_main",
-                        targets: &[Some(get_color_target_state(format))],
-                    }),
-                    primitive: get_primitive(),
+                    vertex: vertex_state,
+                    fragment: Some(fragment_state),
+                    primitive: get_primitive_state(),
                     depth_stencil: None,
-                    multisample: get_multisample(),
+                    multisample: get_multisample_state(),
                     // If the pipeline will be used with a multiview render pass, this
                     // indicates how many array layers the attachments will have.
                     multiview: None,
