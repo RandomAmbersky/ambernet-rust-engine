@@ -3,7 +3,7 @@ mod resource;
 
 use crate::gfx_config::{
     get_clear_color, get_color_attachment, get_color_target_state, get_multisample_state,
-    get_primitive_state,
+    get_primitive_state, get_render_pipeline,
 };
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, Vertex};
@@ -105,42 +105,8 @@ impl Handler {
             });
         let num_indices = INDICES.len() as u32;
 
-        let render_pipeline_layout =
-            ctx.gfx
-                .device
-                .create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
-                    label: Some("Render Pipeline Layout"),
-                    bind_group_layouts: &[&texture_bind_group_layout],
-                    push_constant_ranges: &[],
-                });
-
-        let vertex_state = wgpu::VertexState {
-            module: &shader,
-            entry_point: "vs_main",
-            buffers: &[Vertex::desc()],
-        };
-
-        let fragment_state = wgpu::FragmentState {
-            module: &shader,
-            entry_point: "fs_main",
-            targets: &[Some(get_color_target_state(format))],
-        };
-
         let render_pipeline =
-            ctx.gfx
-                .device
-                .create_render_pipeline(&wgpu::RenderPipelineDescriptor {
-                    label: Some("Render Pipeline"),
-                    layout: Some(&render_pipeline_layout),
-                    vertex: vertex_state,
-                    fragment: Some(fragment_state),
-                    primitive: get_primitive_state(),
-                    depth_stencil: None,
-                    multisample: get_multisample_state(),
-                    // If the pipeline will be used with a multiview render pass, this
-                    // indicates how many array layers the attachments will have.
-                    multiview: None,
-                });
+            get_render_pipeline(&ctx.gfx.device, format, &shader, &texture_bind_group_layout);
 
         Self {
             render_pipeline,

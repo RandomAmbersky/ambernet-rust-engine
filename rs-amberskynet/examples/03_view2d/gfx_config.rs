@@ -1,4 +1,5 @@
-use wgpu::{TextureFormat, TextureView};
+use rs_amberskynet::gfx::Vertex;
+use wgpu::{BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat, TextureView};
 
 pub fn get_multisample_state() -> wgpu::MultisampleState {
     wgpu::MultisampleState {
@@ -53,4 +54,42 @@ pub fn get_color_attachment(view: &TextureView) -> wgpu::RenderPassColorAttachme
             store: true,
         },
     }
+}
+
+pub fn get_render_pipeline(
+    device: &Device,
+    format: TextureFormat,
+    shader: &ShaderModule,
+    texture_bind_group_layout: &BindGroupLayout,
+) -> RenderPipeline {
+    let render_pipeline_layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
+        label: Some("Render Pipeline Layout"),
+        bind_group_layouts: &[texture_bind_group_layout],
+        push_constant_ranges: &[],
+    });
+
+    let vertex_state = wgpu::VertexState {
+        module: shader,
+        entry_point: "vs_main",
+        buffers: &[Vertex::desc()],
+    };
+
+    let fragment_state = wgpu::FragmentState {
+        module: shader,
+        entry_point: "fs_main",
+        targets: &[Some(get_color_target_state(format))],
+    };
+
+    device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
+        label: Some("Render Pipeline"),
+        layout: Some(&render_pipeline_layout),
+        vertex: vertex_state,
+        fragment: Some(fragment_state),
+        primitive: get_primitive_state(),
+        depth_stencil: None,
+        multisample: get_multisample_state(),
+        // If the pipeline will be used with a multiview render pass, this
+        // indicates how many array layers the attachments will have.
+        multiview: None,
+    })
 }
