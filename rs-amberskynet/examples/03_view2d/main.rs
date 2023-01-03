@@ -2,7 +2,8 @@ mod gfx_config;
 mod resource;
 
 use crate::gfx_config::{
-    get_clear_color, get_color_target_state, get_multisample_state, get_primitive_state,
+    get_clear_color, get_color_attachment, get_color_target_state, get_multisample_state,
+    get_primitive_state,
 };
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, Vertex};
@@ -169,14 +170,7 @@ impl ExtHandlerTrait for Handler {
         {
             let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: Some("Render Pass"),
-                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-                    view: &view,
-                    resolve_target: None,
-                    ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(get_clear_color()),
-                        store: true,
-                    },
-                })],
+                color_attachments: &[Some(get_color_attachment(&view))],
                 depth_stencil_attachment: None,
             });
             render_pass.set_pipeline(&self.render_pipeline);

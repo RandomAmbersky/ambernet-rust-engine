@@ -1,4 +1,4 @@
-use wgpu::TextureFormat;
+use wgpu::{TextureFormat, TextureView};
 
 pub fn get_multisample_state() -> wgpu::MultisampleState {
     wgpu::MultisampleState {
@@ -41,5 +41,16 @@ pub fn get_clear_color() -> wgpu::Color {
         g: 0.2,
         b: 0.3,
         a: 1.0,
+    }
+}
+
+pub fn get_color_attachment(view: &TextureView) -> wgpu::RenderPassColorAttachment {
+    wgpu::RenderPassColorAttachment {
+        view,
+        resolve_target: None,
+        ops: wgpu::Operations {
+            load: wgpu::LoadOp::Clear(get_clear_color()),
+            store: true,
+        },
     }
 }
