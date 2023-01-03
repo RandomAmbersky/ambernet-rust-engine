@@ -1,3 +1,6 @@
+use rs_amberskynet::gfx::Vertex;
+use wgpu::{ShaderModule, TextureFormat};
+
 pub fn get_multisample() -> wgpu::MultisampleState {
     wgpu::MultisampleState {
         count: 1,
@@ -19,5 +22,25 @@ pub fn get_primitive() -> wgpu::PrimitiveState {
         unclipped_depth: false,
         // Requires Features::CONSERVATIVE_RASTERIZATION
         conservative: false,
+    }
+}
+
+pub fn get_color_target_state(format: TextureFormat) -> wgpu::ColorTargetState {
+    wgpu::ColorTargetState {
+        format,
+        blend: Some(wgpu::BlendState {
+            color: wgpu::BlendComponent::REPLACE,
+            alpha: wgpu::BlendComponent::REPLACE,
+        }),
+        write_mask: wgpu::ColorWrites::ALL,
+    }
+}
+
+pub fn get_clear_color() -> wgpu::Color {
+    wgpu::Color {
+        r: 0.1,
+        g: 0.2,
+        b: 0.3,
+        a: 1.0,
     }
 }

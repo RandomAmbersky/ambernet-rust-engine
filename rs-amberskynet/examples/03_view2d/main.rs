@@ -1,6 +1,7 @@
 mod gfx_config;
 mod resource;
 
+use crate::gfx_config::{get_clear_color, get_color_target_state, get_multisample, get_primitive};
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, Vertex};
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
@@ -124,18 +125,11 @@ impl Handler {
                     fragment: Some(wgpu::FragmentState {
                         module: &shader,
                         entry_point: "fs_main",
-                        targets: &[Some(wgpu::ColorTargetState {
-                            format,
-                            blend: Some(wgpu::BlendState {
-                                color: wgpu::BlendComponent::REPLACE,
-                                alpha: wgpu::BlendComponent::REPLACE,
-                            }),
-                            write_mask: wgpu::ColorWrites::ALL,
-                        })],
+                        targets: &[Some(get_color_target_state(format))],
                     }),
-                    primitive: gfx_config::get_primitive(),
+                    primitive: get_primitive(),
                     depth_stencil: None,
-                    multisample: gfx_config::get_multisample(),
+                    multisample: get_multisample(),
                     // If the pipeline will be used with a multiview render pass, this
                     // indicates how many array layers the attachments will have.
                     multiview: None,
@@ -173,12 +167,7 @@ impl ExtHandlerTrait for Handler {
                     view: &view,
                     resolve_target: None,
                     ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.1,
-                            g: 0.2,
-                            b: 0.3,
-                            a: 1.0,
-                        }),
+                        load: wgpu::LoadOp::Clear(get_clear_color()),
                         store: true,
                     },
                 })],
