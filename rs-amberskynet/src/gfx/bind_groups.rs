@@ -39,6 +39,7 @@ impl BindGroupLayoutBuilder {
     pub fn new() -> Self {
         Self { entries: vec![] }
     }
+
     pub fn texture(mut self) -> Self {
         self.entries.push(wgpu::BindGroupLayoutEntry {
             binding: self.entries.len() as _,
