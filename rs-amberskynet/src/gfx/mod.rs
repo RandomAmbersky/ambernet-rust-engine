@@ -8,7 +8,11 @@ use winit::event_loop::EventLoop;
 mod texture;
 pub use texture::AsnTexture;
 
+mod bind_groups;
 mod vertex;
+pub use bind_groups::BindGroupEntryBuilder;
+pub use bind_groups::BindGroupLayoutBuilder;
+
 pub use vertex::Vertex;
 
 pub struct AsnGfx {

@@ -3,11 +3,9 @@ extern crate core;
 mod gfx_config;
 mod resource;
 
-use crate::gfx_config::{
-    get_bind_group_layout_descriptor, get_color_attachment, get_render_pipeline,
-};
+use crate::gfx_config::{get_color_attachment, get_render_pipeline};
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
-use rs_amberskynet::gfx::{AsnTexture, Vertex};
+use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, Vertex};
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
 use wgpu::util::DeviceExt;
 
@@ -43,26 +41,24 @@ impl Handler {
         )
         .unwrap();
 
-        let texture_bind_group_layout = ctx
-            .gfx
-            .device
-            .create_bind_group_layout(&get_bind_group_layout_descriptor());
+        let entries = BindGroupLayoutBuilder::new().texture().sampler();
+        let desc = wgpu::BindGroupLayoutDescriptor {
+            entries: entries.entries(),
+            label: Some("texture_bind_group_layout"),
+        };
+
+        let texture_bind_group_layout = ctx.gfx.device.create_bind_group_layout(&desc);
+
+        let entries = BindGroupEntryBuilder::new()
+            .texture(&texture.view)
+            .sampler(&texture.sampler);
 
         let diffuse_bind_group = ctx
             .gfx
             .device
             .create_bind_group(&wgpu::BindGroupDescriptor {
                 layout: &texture_bind_group_layout,
-                entries: &[
-                    wgpu::BindGroupEntry {
-                        binding: 0,
-                        resource: wgpu::BindingResource::TextureView(&texture.view),
-                    },
-                    wgpu::BindGroupEntry {
-                        binding: 1,
-                        resource: wgpu::BindingResource::Sampler(&texture.sampler),
-                    },
-                ],
+                entries: entries.entries(),
                 label: Some("diffuse_bind_group"),
             });
 
