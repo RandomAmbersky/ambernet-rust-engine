@@ -1,6 +1,6 @@
 use crate::context::AsnContext;
 
 pub trait ExtHandlerTrait {
-    fn draw(&self, e: &AsnContext);
-    fn update(&self, e: &AsnContext);
+    fn draw(&mut self, e: &mut AsnContext);
+    fn update(&mut self, e: &mut AsnContext);
 }

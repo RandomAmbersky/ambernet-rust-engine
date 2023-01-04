@@ -1,9 +1,9 @@
-use crate::{context, AsnContext, ExtHandlerTrait};
+use crate::{context, gfx, AsnContext, ExtHandlerTrait};
 use winit::dpi::PhysicalSize;
 use winit::event::{Event, WindowEvent};
 use winit::event_loop::{ControlFlow, EventLoop};
 
-pub fn run<E: 'static>(mut ctx: AsnContext, event_loop: EventLoop<()>, ext: E)
+pub fn run<E: 'static>(mut ctx: AsnContext, event_loop: EventLoop<()>, mut ext: E)
 where
     E: ExtHandlerTrait,
 {
@@ -25,8 +25,10 @@ where
             Event::Suspended => {}
             Event::Resumed => {}
             Event::MainEventsCleared => {
-                ext.update(&ctx);
-                ext.draw(&ctx);
+                ext.update(&mut ctx);
+                ctx.gfx.begin_frame();
+                ext.draw(&mut ctx);
+                ctx.gfx.end_frame();
             }
             Event::RedrawRequested(_) => {}
             Event::RedrawEventsCleared => {}

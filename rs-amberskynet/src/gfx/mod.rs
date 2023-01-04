@@ -1,7 +1,8 @@
 mod window;
 
 use crate::gfx::window::AsnWindow;
-use wgpu::{Adapter, Device, Queue};
+use std::iter;
+use wgpu::{Adapter, CommandEncoder, Device, Queue, SurfaceTexture, TextureView};
 use winit::event_loop::EventLoop;
 
 mod texture;
@@ -15,6 +16,13 @@ pub struct AsnGfx {
     pub device: Device,
     pub adapter: Adapter,
     pub queue: Queue,
+    pub fcx: Option<FrameCtx>,
+}
+
+pub struct FrameCtx {
+    pub encoder: CommandEncoder,
+    frame: SurfaceTexture,
+    pub view: TextureView,
 }
 
 impl AsnGfx {
@@ -45,6 +53,32 @@ impl AsnGfx {
             device,
             adapter,
             queue,
+            fcx: None,
+        }
+    }
+    pub fn begin_frame(&mut self) {
+        let frame = self.main_window.get_current_texture();
+
+        let encoder = self
+            .device
+            .create_command_encoder(&wgpu::CommandEncoderDescriptor {
+                label: Some("Render Encoder View2D"),
+            });
+
+        let view = frame
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+
+        self.fcx = Some(FrameCtx {
+            encoder,
+            frame,
+            view,
+        });
+    }
+    pub fn end_frame(&mut self) {
+        if let Some(fcx) = self.fcx.take() {
+            self.queue.submit(iter::once(fcx.encoder.finish()));
+            fcx.frame.present();
         }
     }
 }

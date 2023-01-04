@@ -1,14 +1,15 @@
+extern crate core;
+
 mod gfx_config;
 mod resource;
 
 use crate::gfx_config::{
-    get_clear_color, get_color_attachment, get_color_target_state, get_multisample_state,
-    get_primitive_state, get_render_pipeline,
+    get_color_attachment, get_color_target_state, get_multisample_state, get_primitive_state,
+    get_render_pipeline,
 };
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, Vertex};
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
-use std::iter;
 use wgpu::util::DeviceExt;
 
 struct Handler {
@@ -119,24 +120,12 @@ impl Handler {
 }
 
 impl ExtHandlerTrait for Handler {
-    fn draw(&self, ctx: &AsnContext) {
-        let frame = ctx.gfx.main_window.get_current_texture();
-
-        let mut encoder = ctx
-            .gfx
-            .device
-            .create_command_encoder(&wgpu::CommandEncoderDescriptor {
-                label: Some("Render Encoder View2D"),
-            });
-
-        let view = frame
-            .texture
-            .create_view(&wgpu::TextureViewDescriptor::default());
-
+    fn draw(&mut self, ctx: &mut AsnContext) {
+        let mut fcx = ctx.gfx.fcx.as_mut().unwrap();
         {
-            let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+            let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: Some("Render Pass"),
-                color_attachments: &[Some(get_color_attachment(&view))],
+                color_attachments: &[Some(get_color_attachment(&fcx.view))],
                 depth_stencil_attachment: None,
             });
             render_pass.set_pipeline(&self.render_pipeline);
@@ -145,12 +134,8 @@ impl ExtHandlerTrait for Handler {
             render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
             render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
         }
-
-        ctx.gfx.queue.submit(iter::once(encoder.finish()));
-
-        frame.present();
     }
-    fn update(&self, _e: &AsnContext) {}
+    fn update(&mut self, _e: &mut AsnContext) {}
 }
 
 pub fn main() {
