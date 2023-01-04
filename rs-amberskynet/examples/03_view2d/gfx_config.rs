@@ -1,4 +1,4 @@
-use rs_amberskynet::gfx::Vertex;
+use rs_amberskynet::gfx::{AsnTexture, Vertex};
 use wgpu::{BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat, TextureView};
 
 pub fn get_multisample_state() -> wgpu::MultisampleState {
@@ -93,3 +93,48 @@ pub fn get_render_pipeline(
         multiview: None,
     })
 }
+
+pub fn get_bind_group_layout_descriptor<'a>() -> wgpu::BindGroupLayoutDescriptor<'a> {
+    wgpu::BindGroupLayoutDescriptor {
+        entries: &[
+            wgpu::BindGroupLayoutEntry {
+                binding: 0,
+                visibility: wgpu::ShaderStages::FRAGMENT,
+                ty: wgpu::BindingType::Texture {
+                    multisampled: false,
+                    view_dimension: wgpu::TextureViewDimension::D2,
+                    sample_type: wgpu::TextureSampleType::Float { filterable: true },
+                },
+                count: None,
+            },
+            wgpu::BindGroupLayoutEntry {
+                binding: 1,
+                visibility: wgpu::ShaderStages::FRAGMENT,
+                ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
+                count: None,
+            },
+        ],
+        label: Some("texture_bind_group_layout"),
+    }
+}
+
+// pub fn get_group_descriptor<'a>(
+//     texture: &'static AsnTexture,
+//     layout: &'static BindGroupLayout,
+// ) -> wgpu::BindGroupDescriptor<'a> {
+//     let enteries = [
+//         wgpu::BindGroupEntry {
+//             binding: 0,
+//             resource: wgpu::BindingResource::TextureView(&texture.view),
+//         },
+//         wgpu::BindGroupEntry {
+//             binding: 1,
+//             resource: wgpu::BindingResource::Sampler(&texture.sampler),
+//         },
+//     ];
+//     wgpu::BindGroupDescriptor {
+//         layout,
+//         entries: &enteries,
+//         label: Some("diffuse_bind_group"),
+//     }
+// }

@@ -4,8 +4,7 @@ mod gfx_config;
 mod resource;
 
 use crate::gfx_config::{
-    get_color_attachment, get_color_target_state, get_multisample_state, get_primitive_state,
-    get_render_pipeline,
+    get_bind_group_layout_descriptor, get_color_attachment, get_render_pipeline,
 };
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, Vertex};
@@ -44,30 +43,10 @@ impl Handler {
         )
         .unwrap();
 
-        let texture_bind_group_layout =
-            ctx.gfx
-                .device
-                .create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
-                    entries: &[
-                        wgpu::BindGroupLayoutEntry {
-                            binding: 0,
-                            visibility: wgpu::ShaderStages::FRAGMENT,
-                            ty: wgpu::BindingType::Texture {
-                                multisampled: false,
-                                view_dimension: wgpu::TextureViewDimension::D2,
-                                sample_type: wgpu::TextureSampleType::Float { filterable: true },
-                            },
-                            count: None,
-                        },
-                        wgpu::BindGroupLayoutEntry {
-                            binding: 1,
-                            visibility: wgpu::ShaderStages::FRAGMENT,
-                            ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
-                            count: None,
-                        },
-                    ],
-                    label: Some("texture_bind_group_layout"),
-                });
+        let texture_bind_group_layout = ctx
+            .gfx
+            .device
+            .create_bind_group_layout(&get_bind_group_layout_descriptor());
 
         let diffuse_bind_group = ctx
             .gfx
@@ -121,7 +100,7 @@ impl Handler {
 
 impl ExtHandlerTrait for Handler {
     fn draw(&mut self, ctx: &mut AsnContext) {
-        let mut fcx = ctx.gfx.fcx.as_mut().unwrap();
+        let fcx = ctx.gfx.fcx.as_mut().unwrap();
         {
             let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
                 label: Some("Render Pass"),
