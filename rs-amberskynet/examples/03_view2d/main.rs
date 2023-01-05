@@ -48,6 +48,8 @@ impl Handler {
         };
 
         let texture_bind_group_layout = ctx.gfx.device.create_bind_group_layout(&desc);
+        let render_pipeline =
+            get_render_pipeline(&ctx.gfx.device, format, &shader, &texture_bind_group_layout);
 
         let entries = BindGroupEntryBuilder::new()
             .texture(&texture.view)
@@ -80,9 +82,6 @@ impl Handler {
                 usage: wgpu::BufferUsages::INDEX,
             });
         let num_indices = INDICES.len() as u32;
-
-        let render_pipeline =
-            get_render_pipeline(&ctx.gfx.device, format, &shader, &texture_bind_group_layout);
 
         Self {
             render_pipeline,
