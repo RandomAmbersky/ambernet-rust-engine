@@ -1,5 +1,3 @@
-use rs_amberskynet::gfx::Vertex;
-
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 pub struct ModelVertex {
@@ -28,8 +26,8 @@ pub const VERTICES: &[ModelVertex] = &[
 
 pub const INDICES: &[u16] = &[0, 1, 2, 0, 3, 1];
 
-impl Vertex for ModelVertex {
-    fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
+impl ModelVertex {
+    pub(crate) fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
         use std::mem;
         wgpu::VertexBufferLayout {
             array_stride: mem::size_of::<ModelVertex>() as wgpu::BufferAddress,
