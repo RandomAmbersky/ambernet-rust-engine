@@ -1,7 +1,7 @@
 use crate::resource::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, Vertex};
 use wgpu::util::DeviceExt;
-use wgpu::{BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat, TextureView};
+use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat};
 
 pub struct View2D {
     pub vertex_buffer: wgpu::Buffer,
@@ -77,7 +77,7 @@ pub fn get_render_pipeline(
     format: TextureFormat,
     shader: &ShaderModule,
     texture_bind_group_layout: &BindGroupLayout,
-) -> RenderPipeline {
+) -> wgpu::RenderPipeline {
     let desc = wgpu::PipelineLayoutDescriptor {
         label: Some("Render Pipeline Layout"),
         bind_group_layouts: &[texture_bind_group_layout],

@@ -10,6 +10,7 @@ pub use texture::AsnTexture;
 
 mod bind_groups;
 mod vertex;
+
 pub use bind_groups::BindGroupEntryBuilder;
 pub use bind_groups::BindGroupLayoutBuilder;
 
