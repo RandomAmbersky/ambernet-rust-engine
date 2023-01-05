@@ -46,40 +46,9 @@ impl Handler {
 impl ExtHandlerTrait for Handler {
     fn draw(&mut self, ctx: &mut AsnContext) {
         let fcx = ctx.gfx.fcx.as_mut().unwrap();
-        {
-            let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-                label: Some("Render Pass"),
-                color_attachments: &[Some(get_color_attachment(&fcx.view))],
-                depth_stencil_attachment: None,
-            });
-            render_pass.set_pipeline(&self.view_2d.render_pipeline);
-            render_pass.set_bind_group(0, &self.view_2d.diffuse_bind_group, &[]);
-            render_pass.set_vertex_buffer(0, self.view_2d.vertex_buffer.slice(..));
-            render_pass.set_index_buffer(
-                self.view_2d.index_buffer.slice(..),
-                wgpu::IndexFormat::Uint16,
-            );
-            render_pass.draw_indexed(0..self.view_2d.num_indices, 0, 0..1);
-        }
+        self.view_2d.draw(&mut fcx.encoder, &fcx.view);
     }
     fn update(&mut self, _e: &mut AsnContext) {}
-}
-
-fn get_color_attachment(view: &TextureView) -> wgpu::RenderPassColorAttachment {
-    let clear_color = wgpu::Color {
-        r: 0.1,
-        g: 0.2,
-        b: 0.3,
-        a: 1.0,
-    };
-    wgpu::RenderPassColorAttachment {
-        view,
-        resolve_target: None,
-        ops: wgpu::Operations {
-            load: wgpu::LoadOp::Clear(clear_color),
-            store: true,
-        },
-    }
 }
 
 pub fn main() {

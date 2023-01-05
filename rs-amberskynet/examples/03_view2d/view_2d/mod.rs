@@ -4,7 +4,7 @@ use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, Vertex};
 use wgpu::util::DeviceExt;
-use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat};
+use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat, TextureView};
 
 pub struct View2D {
     pub vertex_buffer: wgpu::Buffer,
@@ -46,7 +46,18 @@ impl View2D {
             render_pipeline,
         }
     }
-    pub fn draw(&self) {}
+    pub fn draw(&self, encoder: &mut CommandEncoder, view: &TextureView) {
+        let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+            label: Some("Render Pass"),
+            color_attachments: &[Some(get_color_attachment(&view))],
+            depth_stencil_attachment: None,
+        });
+        render_pass.set_pipeline(&self.render_pipeline);
+        render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
+        render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
+        render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+        render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
+    }
 }
 
 fn get_bind_group_layout(device: &Device) -> BindGroupLayout {
@@ -73,6 +84,23 @@ fn get_bind_group(
         label: Some("diffuse_bind_group"),
     };
     device.create_bind_group(&desc)
+}
+
+fn get_color_attachment(view: &TextureView) -> wgpu::RenderPassColorAttachment {
+    let clear_color = wgpu::Color {
+        r: 0.1,
+        g: 0.2,
+        b: 0.3,
+        a: 1.0,
+    };
+    wgpu::RenderPassColorAttachment {
+        view,
+        resolve_target: None,
+        ops: wgpu::Operations {
+            load: wgpu::LoadOp::Clear(clear_color),
+            store: true,
+        },
+    }
 }
 
 pub fn get_render_pipeline(
