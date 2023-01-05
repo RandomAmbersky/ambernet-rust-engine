@@ -1,5 +1,7 @@
-use crate::model_vertex::ModelVertex;
-use crate::resource::{INDICES, VERTICES};
+mod model_vertex;
+
+use crate::view_2d::model_vertex::{INDICES, VERTICES};
+use model_vertex::ModelVertex;
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, Vertex};
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat};

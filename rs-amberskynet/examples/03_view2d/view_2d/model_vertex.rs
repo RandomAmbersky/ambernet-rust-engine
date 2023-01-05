@@ -7,6 +7,27 @@ pub struct ModelVertex {
     pub tex_coords: [f32; 2],
 }
 
+pub const VERTICES: &[ModelVertex] = &[
+    ModelVertex {
+        position: [-1.0, -1.0, 0.0],
+        tex_coords: [0.0, 1.0],
+    }, // B
+    ModelVertex {
+        position: [1.0, 1.0, 0.0],
+        tex_coords: [1.0, 0.0],
+    }, // E
+    ModelVertex {
+        position: [-1.0, 1.0, 0.0],
+        tex_coords: [0.0, 0.0],
+    }, // A
+    ModelVertex {
+        position: [1.0, -1.0, 0.0],
+        tex_coords: [1.0, 1.0],
+    }, // A
+];
+
+pub const INDICES: &[u16] = &[0, 1, 2, 0, 3, 1];
+
 impl Vertex for ModelVertex {
     fn desc<'a>() -> wgpu::VertexBufferLayout<'a> {
         use std::mem;

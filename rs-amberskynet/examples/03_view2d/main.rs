@@ -1,10 +1,9 @@
 extern crate core;
 
-mod model_vertex;
 mod resource;
 mod view_2d;
 
-use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
+use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 use crate::view_2d::View2D;
 use rs_amberskynet::gfx::AsnTexture;
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
