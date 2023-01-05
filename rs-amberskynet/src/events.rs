@@ -7,7 +7,7 @@ pub fn run<E: 'static>(mut ctx: AsnContext, event_loop: EventLoop<()>, mut ext: 
 where
     E: ExtHandlerTrait,
 {
-    event_loop.run(move |event, event_loop_window_target, control_flow| {
+    event_loop.run(move |event, _event_loop_window_target, control_flow| {
         if ctx.is_need_exit {
             *control_flow = ControlFlow::Exit;
             return;
@@ -40,7 +40,10 @@ where
 fn process_event(ctx: &mut AsnContext, event: &Event<()>) {
     match event {
         Event::NewEvents(_) => {}
-        Event::WindowEvent { window_id, event } => {
+        Event::WindowEvent {
+            window_id: _,
+            event,
+        } => {
             process_window_event(ctx, event);
         }
         Event::DeviceEvent { .. } => {}
@@ -48,7 +51,7 @@ fn process_event(ctx: &mut AsnContext, event: &Event<()>) {
         Event::Suspended => {}
         Event::Resumed => {}
         Event::MainEventsCleared => process_main_events_cleared(ctx),
-        Event::RedrawRequested(window_id) => process_redraw_requested(ctx),
+        Event::RedrawRequested(_window_id) => process_redraw_requested(ctx),
         Event::RedrawEventsCleared => {}
         Event::LoopDestroyed => {}
     };

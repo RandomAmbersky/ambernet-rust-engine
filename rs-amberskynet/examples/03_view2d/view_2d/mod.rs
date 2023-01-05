@@ -2,7 +2,7 @@ mod model_vertex;
 
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
-use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, Vertex};
+use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat, TextureView};
 
@@ -49,7 +49,7 @@ impl View2D {
     pub fn draw(&self, encoder: &mut CommandEncoder, view: &TextureView) {
         let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("Render Pass"),
-            color_attachments: &[Some(get_color_attachment(&view))],
+            color_attachments: &[Some(get_color_attachment(view))],
             depth_stencil_attachment: None,
         });
         render_pass.set_pipeline(&self.render_pipeline);

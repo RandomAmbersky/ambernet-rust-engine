@@ -7,7 +7,6 @@ use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 use crate::view_2d::View2D;
 use rs_amberskynet::gfx::AsnTexture;
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
-use wgpu::TextureView;
 
 struct Handler {
     view_2d: View2D,
