@@ -1,5 +1,3 @@
-use wgpu::{Sampler, TextureView};
-
 #[derive(Default, Debug)]
 pub struct BindGroupLayoutBuilder {
     entries: Vec<wgpu::BindGroupLayoutEntry>,
