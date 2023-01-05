@@ -1,5 +1,6 @@
 extern crate core;
 
+mod model_vertex;
 mod resource;
 mod view_2d;
 

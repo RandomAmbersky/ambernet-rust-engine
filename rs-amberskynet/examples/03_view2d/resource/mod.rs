@@ -1,21 +1,21 @@
-use rs_amberskynet::gfx::Vertex;
+use crate::model_vertex::ModelVertex;
 
 pub const TEXTURE_SOURCE: &[u8] = include_bytes!("tiles_mod.png");
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
-pub const VERTICES: &[Vertex] = &[
-    Vertex {
+pub const VERTICES: &[ModelVertex] = &[
+    ModelVertex {
         position: [-1.0, -1.0, 0.0],
         tex_coords: [0.0, 1.0],
     }, // B
-    Vertex {
+    ModelVertex {
         position: [1.0, 1.0, 0.0],
         tex_coords: [1.0, 0.0],
     }, // E
-    Vertex {
+    ModelVertex {
         position: [-1.0, 1.0, 0.0],
         tex_coords: [0.0, 0.0],
     }, // A
-    Vertex {
+    ModelVertex {
         position: [1.0, -1.0, 0.0],
         tex_coords: [1.0, 1.0],
     }, // A

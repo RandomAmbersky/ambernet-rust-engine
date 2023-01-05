@@ -1,3 +1,4 @@
+use crate::model_vertex::ModelVertex;
 use crate::resource::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, Vertex};
 use wgpu::util::DeviceExt;
@@ -98,7 +99,7 @@ pub fn get_render_pipeline(
     let vertex_state = wgpu::VertexState {
         module: shader,
         entry_point: "vs_main",
-        buffers: &[Vertex::desc()],
+        buffers: &[ModelVertex::desc()],
     };
 
     let fragment_state = wgpu::FragmentState {
