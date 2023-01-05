@@ -1,15 +1,13 @@
 extern crate core;
 
-mod gfx_config;
 mod resource;
 mod view_2d;
 
-use crate::gfx_config::{get_color_attachment, get_render_pipeline};
 use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use crate::view_2d::View2D;
-use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, Vertex};
+use rs_amberskynet::gfx::AsnTexture;
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
-use wgpu::util::DeviceExt;
+use wgpu::TextureView;
 
 struct Handler {
     view_2d: View2D,
@@ -65,6 +63,23 @@ impl ExtHandlerTrait for Handler {
         }
     }
     fn update(&mut self, _e: &mut AsnContext) {}
+}
+
+fn get_color_attachment(view: &TextureView) -> wgpu::RenderPassColorAttachment {
+    let clear_color = wgpu::Color {
+        r: 0.1,
+        g: 0.2,
+        b: 0.3,
+        a: 1.0,
+    };
+    wgpu::RenderPassColorAttachment {
+        view,
+        resolve_target: None,
+        ops: wgpu::Operations {
+            load: wgpu::LoadOp::Clear(clear_color),
+            store: true,
+        },
+    }
 }
 
 pub fn main() {
