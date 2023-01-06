@@ -3,15 +3,12 @@ pub struct BindGroupLayoutBuilder {
     entries: Vec<wgpu::BindGroupLayoutEntry>,
 }
 
+#[derive(Default, Debug)]
 pub struct BindGroupEntryBuilder<'a> {
     entries: Vec<wgpu::BindGroupEntry<'a>>,
 }
 
 impl<'a> BindGroupEntryBuilder<'a> {
-    pub fn new() -> Self {
-        Self { entries: vec![] }
-    }
-
     pub fn texture(mut self, texture_view: &'a wgpu::TextureView) -> Self {
         self.entries.push(wgpu::BindGroupEntry {
             binding: self.entries.len() as _,

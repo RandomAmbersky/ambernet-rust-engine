@@ -33,11 +33,12 @@ impl View2D {
         });
         let num_indices = INDICES.len() as u32;
 
-        let group_layout = get_bind_group_layout(device);
-        let diffuse_bind_group = get_bind_group(device, texture, &group_layout);
+        let diffuse_group_layout = get_bind_group_layout(device);
+        let bind_group = &[&diffuse_group_layout];
 
-        let render_pipeline = get_render_pipeline(device, format, shader, &group_layout);
+        let render_pipeline = get_render_pipeline(device, format, shader, bind_group);
 
+        let diffuse_bind_group = get_bind_group(device, texture, &diffuse_group_layout);
         Self {
             vertex_buffer,
             index_buffer,
@@ -74,7 +75,7 @@ fn get_bind_group(
     texture: &AsnTexture,
     layout: &BindGroupLayout,
 ) -> wgpu::BindGroup {
-    let entries = BindGroupEntryBuilder::new()
+    let entries = BindGroupEntryBuilder::default()
         .texture(&texture.view)
         .sampler(&texture.sampler);
 
@@ -107,15 +108,21 @@ pub fn get_render_pipeline(
     device: &Device,
     format: TextureFormat,
     shader: &ShaderModule,
-    texture_bind_group_layout: &BindGroupLayout,
+    bind_group_layouts: &[&BindGroupLayout],
 ) -> wgpu::RenderPipeline {
     let desc = wgpu::PipelineLayoutDescriptor {
         label: Some("Render Pipeline Layout"),
-        bind_group_layouts: &[texture_bind_group_layout],
+        bind_group_layouts,
         push_constant_ranges: &[],
     };
 
     let render_pipeline_layout = device.create_pipeline_layout(&desc);
+
+    let vertex_state = wgpu::VertexState {
+        module: shader,
+        entry_point: "vs_main",
+        buffers: &[ModelVertex::desc()],
+    };
 
     let target_state = wgpu::ColorTargetState {
         format,
@@ -124,12 +131,6 @@ pub fn get_render_pipeline(
             alpha: wgpu::BlendComponent::REPLACE,
         }),
         write_mask: wgpu::ColorWrites::ALL,
-    };
-
-    let vertex_state = wgpu::VertexState {
-        module: shader,
-        entry_point: "vs_main",
-        buffers: &[ModelVertex::desc()],
     };
 
     let fragment_state = wgpu::FragmentState {
