@@ -1,5 +1,3 @@
-extern crate core;
-
 mod resource;
 mod view_2d;
 
