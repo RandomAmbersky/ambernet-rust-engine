@@ -12,11 +12,7 @@ struct Handler {
 
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Self {
-        let format = ctx
-            .gfx
-            .main_window
-            .surface
-            .get_supported_formats(&ctx.gfx.adapter)[0];
+        let format = ctx.gfx.main_window.get_format(&ctx.gfx.adapter);
 
         let shader = ctx
             .gfx
