@@ -10,7 +10,7 @@ pub struct View2D {
     pub vertex_buffer: wgpu::Buffer,
     pub index_buffer: wgpu::Buffer,
     pub num_indices: u32,
-    pub diffuse_bind_group: wgpu::BindGroup,
+    pub bind_group: wgpu::BindGroup,
     pub render_pipeline: wgpu::RenderPipeline,
 }
 
@@ -33,17 +33,17 @@ impl View2D {
         });
         let num_indices = INDICES.len() as u32;
 
-        let diffuse_group_layout = get_bind_group_layout(device);
-        let bind_group = &[&diffuse_group_layout];
+        let diffuse_bind_group_layout = get_diffuse_bind_group_layout(device);
+        let bind_group_layouts = &[&diffuse_bind_group_layout];
 
-        let render_pipeline = get_render_pipeline(device, format, shader, bind_group);
+        let render_pipeline = get_render_pipeline(device, format, shader, bind_group_layouts);
 
-        let diffuse_bind_group = get_bind_group(device, texture, &diffuse_group_layout);
+        let bind_group = get_bind_group(device, texture, &diffuse_bind_group_layout);
         Self {
             vertex_buffer,
             index_buffer,
             num_indices,
-            diffuse_bind_group,
+            bind_group,
             render_pipeline,
         }
     }
@@ -54,14 +54,14 @@ impl View2D {
             depth_stencil_attachment: None,
         });
         render_pass.set_pipeline(&self.render_pipeline);
-        render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
+        render_pass.set_bind_group(0, &self.bind_group, &[]);
         render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
         render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
         render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
     }
 }
 
-fn get_bind_group_layout(device: &Device) -> BindGroupLayout {
+fn get_diffuse_bind_group_layout(device: &Device) -> BindGroupLayout {
     let entries = BindGroupLayoutBuilder::new().texture().sampler();
     let desc = wgpu::BindGroupLayoutDescriptor {
         entries: entries.entries(),
