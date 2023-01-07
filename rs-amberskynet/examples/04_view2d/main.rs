@@ -1,7 +1,7 @@
 mod resource;
 mod view_2d;
 
-use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
+use crate::resource::TEXTURE_SOURCE;
 use crate::view_2d::View2D;
 use rs_amberskynet::gfx::AsnTexture;
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
@@ -14,14 +14,6 @@ impl Handler {
     pub fn new(ctx: &AsnContext) -> Self {
         let format = ctx.gfx.main_window.get_format(&ctx.gfx.adapter);
 
-        let shader = ctx
-            .gfx
-            .device
-            .create_shader_module(wgpu::ShaderModuleDescriptor {
-                label: Some("Shader"),
-                source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
-            });
-
         let texture = AsnTexture::from_bytes(
             &ctx.gfx.device,
             &ctx.gfx.queue,
@@ -30,7 +22,7 @@ impl Handler {
         )
         .unwrap();
 
-        let view_2d = View2D::new(&ctx.gfx.device, &texture, format, &shader);
+        let view_2d = View2D::new(&ctx.gfx.device, &texture, format);
 
         Self { view_2d }
     }

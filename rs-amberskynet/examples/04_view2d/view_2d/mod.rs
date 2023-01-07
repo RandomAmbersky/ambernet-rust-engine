@@ -6,6 +6,8 @@ use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuil
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat, TextureView};
 
+pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
+
 pub struct View2D {
     vertex_buffer: wgpu::Buffer,
     index_buffer: wgpu::Buffer,
@@ -15,12 +17,12 @@ pub struct View2D {
 }
 
 impl View2D {
-    pub fn new(
-        device: &Device,
-        texture: &AsnTexture,
-        format: TextureFormat,
-        shader: &ShaderModule,
-    ) -> Self {
+    pub fn new(device: &Device, texture: &AsnTexture, format: TextureFormat) -> Self {
+        let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
+            label: Some("Shader"),
+            source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
+        });
+
         let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
             label: Some("Vertex Buffer"),
             contents: bytemuck::cast_slice(VERTICES),
@@ -36,7 +38,7 @@ impl View2D {
         let diffuse_bind_group_layout = get_diffuse_bind_group_layout(device);
         let bind_group_layouts = &[&diffuse_bind_group_layout];
 
-        let render_pipeline = get_render_pipeline(device, format, shader, bind_group_layouts);
+        let render_pipeline = get_render_pipeline(device, format, &shader, bind_group_layouts);
 
         let bind_group = get_bind_group(device, texture, &diffuse_bind_group_layout);
         Self {
