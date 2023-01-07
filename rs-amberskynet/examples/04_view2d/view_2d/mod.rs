@@ -1,5 +1,7 @@
+mod mesh;
 mod model_vertex;
 
+use crate::view_2d::mesh::Mesh;
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
@@ -9,31 +11,19 @@ use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat,
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 
 pub struct View2D {
-    vertex_buffer: wgpu::Buffer,
-    index_buffer: wgpu::Buffer,
-    num_indices: u32,
+    mesh: Mesh,
     bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
 }
 
 impl View2D {
     pub fn new(device: &Device, texture: &AsnTexture, format: TextureFormat) -> Self {
+        let mesh = Mesh::build(VERTICES, INDICES, device);
+
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
             label: Some("Shader"),
             source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
         });
-
-        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(VERTICES),
-            usage: wgpu::BufferUsages::VERTEX,
-        });
-        let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Index Buffer"),
-            contents: bytemuck::cast_slice(INDICES),
-            usage: wgpu::BufferUsages::INDEX,
-        });
-        let num_indices = INDICES.len() as u32;
 
         let group_layout_builder = BindGroupLayoutBuilder::new().texture().sampler();
         let group_layout_desc = wgpu::BindGroupLayoutDescriptor {
@@ -56,9 +46,7 @@ impl View2D {
         let bind_group = device.create_bind_group(&desc);
 
         Self {
-            vertex_buffer,
-            index_buffer,
-            num_indices,
+            mesh,
             bind_group,
             render_pipeline,
         }
@@ -71,9 +59,9 @@ impl View2D {
         });
         render_pass.set_pipeline(&self.render_pipeline);
         render_pass.set_bind_group(0, &self.bind_group, &[]);
-        render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-        render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
-        render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
+        render_pass.set_vertex_buffer(0, self.mesh.vertex_buffer.slice(..));
+        render_pass.set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+        render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
 }
 
