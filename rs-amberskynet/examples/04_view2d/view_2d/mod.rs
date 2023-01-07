@@ -3,7 +3,7 @@ mod model_vertex;
 mod view_screen;
 
 use crate::view_2d::mesh::Mesh;
-use crate::view_2d::view_screen::{get_from_rgba, Array2D, Size2D};
+use crate::view_2d::view_screen::{Array2D, Size2D};
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
@@ -53,7 +53,7 @@ impl View2D {
             bytes: ONE_BLUE_PIXEL.to_vec(),
         };
 
-        let texture = get_from_rgba(device, queue, &view.bytes);
+        let texture = AsnTexture::get_from_rgba(device, queue, None, &view.bytes).unwrap();
 
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
