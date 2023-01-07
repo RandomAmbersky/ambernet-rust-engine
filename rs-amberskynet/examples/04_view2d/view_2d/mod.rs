@@ -7,11 +7,11 @@ use wgpu::util::DeviceExt;
 use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat, TextureView};
 
 pub struct View2D {
-    pub vertex_buffer: wgpu::Buffer,
-    pub index_buffer: wgpu::Buffer,
-    pub num_indices: u32,
-    pub bind_group: wgpu::BindGroup,
-    pub render_pipeline: wgpu::RenderPipeline,
+    vertex_buffer: wgpu::Buffer,
+    index_buffer: wgpu::Buffer,
+    num_indices: u32,
+    bind_group: wgpu::BindGroup,
+    render_pipeline: wgpu::RenderPipeline,
 }
 
 impl View2D {
