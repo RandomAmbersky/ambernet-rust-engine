@@ -1,5 +1,3 @@
-mod core;
-
 mod ext_handler_trait;
 pub use ext_handler_trait::ExtHandlerTrait;
 

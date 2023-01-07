@@ -3,23 +3,31 @@ mod model_vertex;
 mod view_screen;
 
 use crate::view_2d::mesh::Mesh;
+use crate::view_2d::view_screen::{get_from_rgba, Array2D, Size2D};
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
-use view_screen::ViewScreen;
-use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat, TextureView};
+use wgpu::{
+    BindGroupLayout, CommandEncoder, Device, Queue, ShaderModule, TextureFormat, TextureView,
+};
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
+const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
 
 pub struct View2D {
-    view: ViewScreen,
+    view: Array2D<u32, u8>,
     mesh: Mesh,
     bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
 }
 
 impl View2D {
-    pub fn new(device: &Device, texture: &AsnTexture, format: TextureFormat) -> Self {
+    pub fn new(
+        device: &Device,
+        queue: &Queue,
+        _texture: &AsnTexture,
+        format: TextureFormat,
+    ) -> Self {
         let mesh = Mesh::build(VERTICES, INDICES, device);
 
         let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
@@ -37,6 +45,16 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(device, format, &shader, bind_group_layouts);
 
+        let view = Array2D {
+            size: Size2D {
+                width: 1,
+                height: 1,
+            },
+            bytes: ONE_BLUE_PIXEL.to_vec(),
+        };
+
+        let texture = get_from_rgba(device, queue, &view.bytes);
+
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
             .sampler(&texture.sampler);
@@ -47,7 +65,6 @@ impl View2D {
         };
         let bind_group = device.create_bind_group(&group_desc);
 
-        let view = ViewScreen::default();
         Self {
             view,
             mesh,

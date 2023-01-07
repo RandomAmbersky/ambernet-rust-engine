@@ -22,7 +22,7 @@ impl Handler {
         )
         .unwrap();
 
-        let view_2d = View2D::new(&ctx.gfx.device, &texture, format);
+        let view_2d = View2D::new(&ctx.gfx.device, &ctx.gfx.queue, &texture, format);
 
         Self { view_2d }
     }
