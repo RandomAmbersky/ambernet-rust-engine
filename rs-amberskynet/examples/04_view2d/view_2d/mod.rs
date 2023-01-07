@@ -38,12 +38,12 @@ impl View2D {
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
             .sampler(&texture.sampler);
-        let desc = wgpu::BindGroupDescriptor {
+        let group_desc = wgpu::BindGroupDescriptor {
             layout: &diffuse_bind_group_layout,
             entries: group_entry_builder.entries(),
             label: Some("diffuse_bind_group"),
         };
-        let bind_group = device.create_bind_group(&desc);
+        let bind_group = device.create_bind_group(&group_desc);
 
         Self {
             mesh,
