@@ -1,7 +1,7 @@
-mod resource;
 mod view_2d;
 
-use crate::resource::TEXTURE_SOURCE;
+pub const TEXTURE_SOURCE: &[u8] = include_bytes!("./resource/tiles_mod.png");
+
 use crate::view_2d::View2D;
 use rs_amberskynet::gfx::AsnTexture;
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
