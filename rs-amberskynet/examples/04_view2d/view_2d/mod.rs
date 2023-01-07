@@ -45,7 +45,16 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(device, format, &shader, bind_group_layouts);
 
-        let bind_group = get_bind_group(device, texture, &diffuse_bind_group_layout);
+        let group_entry_builder = BindGroupEntryBuilder::default()
+            .texture(&texture.view)
+            .sampler(&texture.sampler);
+        let desc = wgpu::BindGroupDescriptor {
+            layout: &diffuse_bind_group_layout,
+            entries: group_entry_builder.entries(),
+            label: Some("diffuse_bind_group"),
+        };
+        let bind_group = device.create_bind_group(&desc);
+
         Self {
             vertex_buffer,
             index_buffer,
@@ -66,32 +75,6 @@ impl View2D {
         render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
         render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
     }
-}
-
-fn get_diffuse_bind_group_layout(device: &Device) -> BindGroupLayout {
-    let entries = BindGroupLayoutBuilder::new().texture().sampler();
-    let desc = wgpu::BindGroupLayoutDescriptor {
-        entries: entries.entries(),
-        label: Some("texture_bind_group_layout"),
-    };
-    device.create_bind_group_layout(&desc)
-}
-
-fn get_bind_group(
-    device: &Device,
-    texture: &AsnTexture,
-    layout: &BindGroupLayout,
-) -> wgpu::BindGroup {
-    let entries = BindGroupEntryBuilder::default()
-        .texture(&texture.view)
-        .sampler(&texture.sampler);
-
-    let desc = wgpu::BindGroupDescriptor {
-        layout,
-        entries: entries.entries(),
-        label: Some("diffuse_bind_group"),
-    };
-    device.create_bind_group(&desc)
 }
 
 fn get_color_attachment(view: &TextureView) -> wgpu::RenderPassColorAttachment {
