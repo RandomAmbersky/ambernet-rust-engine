@@ -3,7 +3,7 @@ mod model_vertex;
 mod view_screen;
 
 use crate::view_2d::mesh::Mesh;
-use crate::view_2d::view_screen::{Array2D, Size2D};
+use crate::view_2d::view_screen::{array_to_texture, Array2D, Size2D};
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
@@ -13,6 +13,8 @@ use wgpu::{
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
+
+const TWO_PIXEL: [u8; 8] = [0, 0, 255, 255, 255, 0, 0, 255];
 
 pub struct View2D {
     view: Array2D<u32, u8>,
@@ -47,13 +49,14 @@ impl View2D {
 
         let view = Array2D {
             size: Size2D {
-                width: 1,
+                width: 2,
                 height: 1,
             },
-            bytes: ONE_BLUE_PIXEL.to_vec(),
+            bytes: TWO_PIXEL.to_vec(),
         };
 
-        let texture = AsnTexture::get_from_rgba(device, queue, None, &view.bytes).unwrap();
+        let texture = array_to_texture(device, queue, &view);
+        // AsnTexture::get_from_rgba(device, queue, None, &view.bytes).unwrap();
 
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
