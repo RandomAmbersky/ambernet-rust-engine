@@ -35,7 +35,12 @@ impl View2D {
         });
         let num_indices = INDICES.len() as u32;
 
-        let diffuse_bind_group_layout = get_diffuse_bind_group_layout(device);
+        let group_layout_builder = BindGroupLayoutBuilder::new().texture().sampler();
+        let group_layout_desc = wgpu::BindGroupLayoutDescriptor {
+            entries: group_layout_builder.entries(),
+            label: Some("texture_bind_group_layout"),
+        };
+        let diffuse_bind_group_layout = device.create_bind_group_layout(&group_layout_desc);
         let bind_group_layouts = &[&diffuse_bind_group_layout];
 
         let render_pipeline = get_render_pipeline(device, format, &shader, bind_group_layouts);
