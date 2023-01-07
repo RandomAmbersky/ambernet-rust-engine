@@ -1,15 +1,18 @@
 mod mesh;
 mod model_vertex;
+mod view_screen;
 
 use crate::view_2d::mesh::Mesh;
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
+use view_screen::ViewScreen;
 use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat, TextureView};
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 
 pub struct View2D {
+    view: ViewScreen,
     mesh: Mesh,
     bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
@@ -44,7 +47,9 @@ impl View2D {
         };
         let bind_group = device.create_bind_group(&group_desc);
 
+        let view = ViewScreen::default();
         Self {
+            view,
             mesh,
             bind_group,
             render_pipeline,
