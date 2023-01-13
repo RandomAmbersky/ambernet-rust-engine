@@ -12,9 +12,8 @@ use wgpu::{
 use rs_amberskynet::core::{Array2D, Size2D};
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
-const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
-
-const TWO_PIXEL: [u8; 8] = [0, 0, 255, 255, 255, 0, 0, 255];
+// const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
+// const TWO_PIXEL: [u8; 8] = [0, 0, 255, 255, 255, 0, 0, 255];
 
 pub struct View2D {
     texture: AsnTexture,
@@ -51,10 +50,10 @@ impl View2D {
 
         let view = Array2D {
             size: Size2D {
-                width: 2,
-                height: 1,
+                width: 20,
+                height: 20,
             },
-            bytes: TWO_PIXEL.to_vec(),
+            bytes: vec![],
         };
 
         let texture = AsnTexture::from_array(device, queue, &view);
