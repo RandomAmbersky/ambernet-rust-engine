@@ -31,9 +31,12 @@ impl Handler {
 impl ExtHandlerTrait for Handler {
     fn draw(&mut self, ctx: &mut AsnContext) {
         let fcx = ctx.gfx.fcx.as_mut().unwrap();
-        self.view_2d.draw(&mut fcx.encoder, &fcx.view);
+        self.view_2d
+            .draw(&ctx.gfx.queue, &mut fcx.encoder, &fcx.view);
     }
-    fn update(&mut self, _e: &mut AsnContext) {}
+    fn update(&mut self, _e: &mut AsnContext) {
+        self.view_2d.update();
+    }
 }
 
 pub fn main() {

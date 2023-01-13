@@ -13,6 +13,31 @@ pub struct Array2D<S, T> {
     pub bytes: Vec<T>,
 }
 
+pub fn update_texture(texture: &mut AsnTexture, queue: &Queue, array: &Array2D<u32, u8>) {
+    let dimensions: (u32, u32) = (array.size.width, array.size.height);
+    let size = wgpu::Extent3d {
+        width: dimensions.0,
+        height: dimensions.1,
+        depth_or_array_layers: 1,
+    };
+
+    queue.write_texture(
+        wgpu::ImageCopyTexture {
+            aspect: wgpu::TextureAspect::All,
+            texture: &texture.texture,
+            mip_level: 0,
+            origin: wgpu::Origin3d::ZERO,
+        },
+        &array.bytes,
+        wgpu::ImageDataLayout {
+            offset: 0,
+            bytes_per_row: NonZeroU32::new(4 * dimensions.0),
+            rows_per_image: NonZeroU32::new(dimensions.1),
+        },
+        size,
+    );
+}
+
 pub fn array_to_texture(device: &Device, queue: &Queue, array: &Array2D<u32, u8>) -> AsnTexture {
     let dimensions: (u32, u32) = (array.size.width, array.size.height);
 

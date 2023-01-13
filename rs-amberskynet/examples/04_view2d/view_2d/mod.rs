@@ -3,7 +3,7 @@ mod model_vertex;
 mod view_screen;
 
 use crate::view_2d::mesh::Mesh;
-use crate::view_2d::view_screen::{array_to_texture, Array2D, Size2D};
+use crate::view_2d::view_screen::{array_to_texture, update_texture, Array2D, Size2D};
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
@@ -11,16 +11,20 @@ use wgpu::{
     BindGroupLayout, CommandEncoder, Device, Queue, ShaderModule, TextureFormat, TextureView,
 };
 
+use rand::Rng;
+
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
 
 const TWO_PIXEL: [u8; 8] = [0, 0, 255, 255, 255, 0, 0, 255];
 
 pub struct View2D {
+    texture: AsnTexture,
     view: Array2D<u32, u8>,
     mesh: Mesh,
     bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
+    is_need_update: bool,
 }
 
 impl View2D {
@@ -69,13 +73,35 @@ impl View2D {
         let bind_group = device.create_bind_group(&group_desc);
 
         Self {
+            texture,
             view,
             mesh,
             bind_group,
             render_pipeline,
+            is_need_update: false,
         }
     }
-    pub fn draw(&self, encoder: &mut CommandEncoder, view: &TextureView) {
+    pub fn draw(&mut self, queue: &Queue, encoder: &mut CommandEncoder, view: &TextureView) {
+        if self.is_need_update {
+            self.is_need_update = false;
+            // let num = rand::thread_rng().gen_range(0..100);
+            self.view.bytes[0] = rand::random();
+            self.view.bytes[1] = rand::random();
+            self.view.bytes[2] = rand::random();
+
+            self.view.bytes[4] = rand::random();
+            self.view.bytes[5] = rand::random();
+            self.view.bytes[6] = rand::random();
+
+            // let view = Array2D {
+            //     size: Size2D {
+            //         width: 2,
+            //         height: 1,
+            //     },
+            //     bytes: TWO_PIXEL.to_vec(),
+            // };
+            update_texture(&mut self.texture, queue, &self.view);
+        }
         let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("Render Pass"),
             color_attachments: &[Some(get_color_attachment(view))],
@@ -86,6 +112,9 @@ impl View2D {
         render_pass.set_vertex_buffer(0, self.mesh.vertex_buffer.slice(..));
         render_pass.set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
         render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
+    }
+    pub fn update(&mut self) {
+        self.is_need_update = true
     }
 }
 
