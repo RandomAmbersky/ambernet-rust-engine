@@ -9,7 +9,6 @@ use wgpu::{
     BindGroupLayout, CommandEncoder, Device, Queue, ShaderModule, TextureFormat, TextureView,
 };
 
-use rand::Rng;
 use rs_amberskynet::core::{Array2D, Size2D};
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
