@@ -1,6 +1,6 @@
 use crate::context;
 use crate::context::AsnContext;
-use winit::event_loop::{ControlFlow, EventLoop};
+use winit::event_loop::EventLoop;
 
 pub fn init() -> (AsnContext, EventLoop<()>) {
     let event_loop = EventLoop::new();
