@@ -1,9 +1,7 @@
 mod mesh;
 mod model_vertex;
-mod view_screen;
 
 use crate::view_2d::mesh::Mesh;
-use crate::view_2d::view_screen::{array_to_texture, update_texture, Array2D, Size2D};
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
@@ -12,6 +10,7 @@ use wgpu::{
 };
 
 use rand::Rng;
+use rs_amberskynet::core::{Array2D, Size2D};
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
@@ -59,7 +58,7 @@ impl View2D {
             bytes: TWO_PIXEL.to_vec(),
         };
 
-        let texture = array_to_texture(device, queue, &view);
+        let texture = AsnTexture::from_array(device, queue, &view);
         // AsnTexture::get_from_rgba(device, queue, None, &view.bytes).unwrap();
 
         let group_entry_builder = BindGroupEntryBuilder::default()
@@ -86,12 +85,12 @@ impl View2D {
             self.is_need_update = false;
             // let num = rand::thread_rng().gen_range(0..100);
             self.view.bytes[0] = rand::random();
-            self.view.bytes[1] = rand::random();
-            self.view.bytes[2] = rand::random();
+            // self.view.bytes[1] = rand::random();
+            // self.view.bytes[2] = rand::random();
 
             self.view.bytes[4] = rand::random();
-            self.view.bytes[5] = rand::random();
-            self.view.bytes[6] = rand::random();
+            // self.view.bytes[5] = rand::random();
+            // self.view.bytes[6] = rand::random();
 
             // let view = Array2D {
             //     size: Size2D {
@@ -100,7 +99,7 @@ impl View2D {
             //     },
             //     bytes: TWO_PIXEL.to_vec(),
             // };
-            update_texture(&mut self.texture, queue, &self.view);
+            self.texture.update_from_array(queue, &self.view);
         }
         let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("Render Pass"),
