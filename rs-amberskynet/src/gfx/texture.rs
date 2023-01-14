@@ -4,7 +4,7 @@ use crate::core::{Array2D, Size2D};
 use crate::core_gfx::texture::AsnTextureTrait;
 use crate::gfx::gfx_error::GfxError;
 use crate::gfx::AsnGfx;
-use image::{DynamicImage, GenericImageView, ImageResult};
+use image::{DynamicImage, GenericImageView};
 
 pub struct AsnTexture {
     pub texture: wgpu::Texture,

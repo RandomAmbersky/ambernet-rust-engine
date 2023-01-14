@@ -1,6 +1,5 @@
 use crate::core::{Array2D, AsnError, Size2D};
 use crate::core_gfx::gfx_context::GfxContextTrait;
-use wgpu::Error;
 
 pub trait AsnTextureTrait<T, G, E>
 where

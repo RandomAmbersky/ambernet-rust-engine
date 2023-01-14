@@ -4,14 +4,9 @@ mod model_vertex;
 use crate::view_2d::mesh::Mesh;
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
-use rs_amberskynet::gfx::{
-    AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, FrameCtx,
-};
-use wgpu::{
-    BindGroupLayout, CommandEncoder, Device, Queue, ShaderModule, TextureFormat, TextureView,
-};
+use rs_amberskynet::gfx::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
+use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
-use crate::view_2d;
 use rs_amberskynet::core::{Array2D, Size2D};
 use rs_amberskynet::core_gfx::texture::AsnTextureTrait;
 use rs_amberskynet::gfx::gfx_error::GfxError;
@@ -108,7 +103,7 @@ impl View2D {
                 .update_from_array(gfx, &self.view)
                 .expect("TODO: panic message");
         }
-        let mut fcx = gfx.fcx.as_mut().unwrap();
+        let fcx = gfx.fcx.as_mut().unwrap();
         let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("Render Pass"),
             color_attachments: &[Some(get_color_attachment(&fcx.view))],
