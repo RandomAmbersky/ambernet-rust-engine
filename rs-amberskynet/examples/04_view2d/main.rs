@@ -26,9 +26,7 @@ impl Handler {
 
 impl ExtHandlerTrait for Handler {
     fn draw(&mut self, ctx: &mut AsnContext) {
-        let fcx = ctx.gfx.fcx.as_mut().unwrap();
-        self.view_2d
-            .draw(&ctx.gfx.queue, &mut fcx.encoder, &fcx.view);
+        self.view_2d.draw(&mut ctx.gfx);
     }
     fn update(&mut self, _e: &mut AsnContext) {
         self.view_2d.update();
@@ -37,8 +35,7 @@ impl ExtHandlerTrait for Handler {
 
 pub fn main() {
     let (ctx, event_loop) = rs_amberskynet::init();
-    let h = match Handler::new(&ctx) {
-        Ok(t) => rs_amberskynet::run(ctx, event_loop, t),
-        Err(_) => {}
+    if let Ok(t) = Handler::new(&ctx) {
+        rs_amberskynet::run(ctx, event_loop, t)
     };
 }

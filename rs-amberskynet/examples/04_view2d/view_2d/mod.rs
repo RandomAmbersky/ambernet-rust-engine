@@ -85,7 +85,7 @@ impl View2D {
         };
         Ok(view_2d)
     }
-    pub fn draw(&mut self, queue: &Queue, encoder: &mut CommandEncoder, view: &TextureView) {
+    pub fn draw(&mut self, gfx: &mut AsnGfx) {
         if self.is_need_update {
             self.is_need_update = false;
             // let num = rand::thread_rng().gen_range(0..100);
@@ -104,11 +104,14 @@ impl View2D {
             //     },
             //     bytes: TWO_PIXEL.to_vec(),
             // };
-            // self.texture.update_from_array(queue, &self.view);
+            self.texture
+                .update_from_array(gfx, &self.view)
+                .expect("TODO: panic message");
         }
-        let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+        let mut fcx = gfx.fcx.as_mut().unwrap();
+        let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("Render Pass"),
-            color_attachments: &[Some(get_color_attachment(view))],
+            color_attachments: &[Some(get_color_attachment(&fcx.view))],
             depth_stencil_attachment: None,
         });
         render_pass.set_pipeline(&self.render_pipeline);
