@@ -1,4 +1,4 @@
-use crate::core_gfx::gfx_context::GfxContext;
+use crate::core_gfx::gfx_context::GfxContextTrait;
 use crate::{AsnContext, ExtHandlerTrait};
 use winit::dpi::PhysicalSize;
 use winit::event::{Event, WindowEvent};

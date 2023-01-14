@@ -4,12 +4,17 @@ mod model_vertex;
 use crate::view_2d::mesh::Mesh;
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
-use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
+use rs_amberskynet::gfx::{
+    AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder, FrameCtx,
+};
 use wgpu::{
     BindGroupLayout, CommandEncoder, Device, Queue, ShaderModule, TextureFormat, TextureView,
 };
 
+use crate::view_2d;
 use rs_amberskynet::core::{Array2D, Size2D};
+use rs_amberskynet::core_gfx::texture::AsnTextureTrait;
+use rs_amberskynet::gfx::gfx_error::GfxError;
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
@@ -27,38 +32,38 @@ pub struct View2D {
 
 impl View2D {
     pub fn new(
-        device: &Device,
-        queue: &Queue,
+        gfx: &AsnGfx,
         _texture: &AsnTexture,
         format: TextureFormat,
-    ) -> Self {
-        let mesh = Mesh::build(VERTICES, INDICES, device);
+    ) -> Result<Self, GfxError> {
+        let mesh = Mesh::build(VERTICES, INDICES, &gfx.device);
 
-        let shader = device.create_shader_module(wgpu::ShaderModuleDescriptor {
-            label: Some("Shader"),
-            source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
-        });
+        let shader = gfx
+            .device
+            .create_shader_module(wgpu::ShaderModuleDescriptor {
+                label: Some("Shader"),
+                source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
+            });
 
         let group_layout_builder = BindGroupLayoutBuilder::new().texture().sampler();
         let group_layout_desc = wgpu::BindGroupLayoutDescriptor {
             entries: group_layout_builder.entries(),
             label: Some("texture_bind_group_layout"),
         };
-        let diffuse_bind_group_layout = device.create_bind_group_layout(&group_layout_desc);
+        let diffuse_bind_group_layout = gfx.device.create_bind_group_layout(&group_layout_desc);
         let bind_group_layouts = &[&diffuse_bind_group_layout];
 
-        let render_pipeline = get_render_pipeline(device, format, &shader, bind_group_layouts);
+        let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
         let view = Array2D {
             size: Size2D {
-                width: 2,
-                height: 1,
+                width: 2 as u32,
+                height: 1 as u32,
             },
             bytes: TWO_PIXEL.to_vec(),
         };
 
-        let texture = AsnTexture::from_array(device, queue, &view);
-        // AsnTexture::get_from_rgba(device, queue, None, &view.bytes).unwrap();
+        let texture = AsnTexture::from_array(&gfx, &view)?;
 
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
@@ -68,16 +73,17 @@ impl View2D {
             entries: group_entry_builder.entries(),
             label: Some("diffuse_bind_group"),
         };
-        let bind_group = device.create_bind_group(&group_desc);
+        let bind_group = gfx.device.create_bind_group(&group_desc);
 
-        Self {
+        let view_2d = Self {
             texture,
             view,
             mesh,
             bind_group,
             render_pipeline,
             is_need_update: false,
-        }
+        };
+        Ok(view_2d)
     }
     pub fn draw(&mut self, queue: &Queue, encoder: &mut CommandEncoder, view: &TextureView) {
         if self.is_need_update {
@@ -98,7 +104,7 @@ impl View2D {
             //     },
             //     bytes: TWO_PIXEL.to_vec(),
             // };
-            self.texture.update_from_array(queue, &self.view);
+            // self.texture.update_from_array(queue, &self.view);
         }
         let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("Render Pass"),
@@ -113,6 +119,26 @@ impl View2D {
     }
     pub fn update(&mut self) {
         self.is_need_update = true
+        // if self.is_need_update {
+        //     self.is_need_update = false;
+        //     // let num = rand::thread_rng().gen_range(0..100);
+        //     self.view.bytes[0] = rand::random();
+        //     // self.view.bytes[1] = rand::random();
+        //     // self.view.bytes[2] = rand::random();
+        //
+        //     self.view.bytes[4] = rand::random();
+        //     // self.view.bytes[5] = rand::random();
+        //     // self.view.bytes[6] = rand::random();
+        //
+        //     // let view = Array2D {
+        //     //     size: Size2D {
+        //     //         width: 2,
+        //     //         height: 1,
+        //     //     },
+        //     //     bytes: TWO_PIXEL.to_vec(),
+        //     // };
+        //     self.texture.update_from_array(gfx, &self.view);
+        // }
     }
 }
 

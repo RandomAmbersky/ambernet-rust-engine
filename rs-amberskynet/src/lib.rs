@@ -10,8 +10,8 @@ pub use asn_engine::init;
 pub mod gfx;
 
 pub mod core;
-mod events;
-mod core_gfx;
+pub mod core_gfx;
 mod error;
+mod events;
 
 pub use events::run;

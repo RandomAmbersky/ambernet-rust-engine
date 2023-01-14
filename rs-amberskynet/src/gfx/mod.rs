@@ -9,9 +9,9 @@ mod texture;
 pub use texture::AsnTexture;
 
 mod bind_groups;
-mod gfx_error;
+pub mod gfx_error;
 
-use crate::core_gfx::gfx_context::GfxContext;
+use crate::core_gfx::gfx_context::GfxContextTrait;
 use crate::gfx::gfx_error::GfxError;
 pub use bind_groups::BindGroupEntryBuilder;
 pub use bind_groups::BindGroupLayoutBuilder;
@@ -63,7 +63,7 @@ impl AsnGfx {
     }
 }
 
-impl GfxContext<GfxError> for AsnGfx {
+impl GfxContextTrait<GfxError> for AsnGfx {
     fn begin_frame(&mut self) -> Result<(), GfxError> {
         let frame = self.main_window.get_current_texture();
 

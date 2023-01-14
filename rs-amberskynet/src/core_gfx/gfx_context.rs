@@ -1,6 +1,6 @@
 use crate::core::AsnError;
 
-pub trait GfxContext<E>
+pub trait GfxContextTrait<E>
 where
     E: AsnError,
 {
