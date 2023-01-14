@@ -1,2 +1,2 @@
 pub mod texture;
-mod gfx_context;
+pub mod gfx_context;

@@ -9,7 +9,10 @@ mod texture;
 pub use texture::AsnTexture;
 
 mod bind_groups;
+mod gfx_error;
 
+use crate::core_gfx::gfx_context::GfxContext;
+use crate::gfx::gfx_error::GfxError;
 pub use bind_groups::BindGroupEntryBuilder;
 pub use bind_groups::BindGroupLayoutBuilder;
 
@@ -58,7 +61,10 @@ impl AsnGfx {
             fcx: None,
         }
     }
-    pub fn begin_frame(&mut self) {
+}
+
+impl GfxContext<GfxError> for AsnGfx {
+    fn begin_frame(&mut self) -> Result<(), GfxError> {
         let frame = self.main_window.get_current_texture();
 
         let encoder = self
@@ -76,11 +82,13 @@ impl AsnGfx {
             frame,
             view,
         });
+        Ok(())
     }
-    pub fn end_frame(&mut self) {
+    fn end_frame(&mut self) -> Result<(), GfxError> {
         if let Some(fcx) = self.fcx.take() {
             self.queue.submit(iter::once(fcx.encoder.finish()));
             fcx.frame.present();
         }
+        Ok(())
     }
 }

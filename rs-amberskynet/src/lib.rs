@@ -12,5 +12,6 @@ pub mod gfx;
 pub mod core;
 mod events;
 mod core_gfx;
+mod error;
 
 pub use events::run;
