@@ -3,7 +3,7 @@ use crate::core_gfx::gfx_context::GfxContext;
 
 pub trait AsnTextureTrait<T, G, E>
 where
-    G: GfxContext,
+    G: GfxContext<E>,
     E: AsnError,
 {
     fn from_raw_image(gfx: &G, bytes: &[u8]) -> Result<T, E>;
