@@ -117,26 +117,6 @@ impl View2D {
     }
     pub fn update(&mut self) {
         self.is_need_update = true
-        // if self.is_need_update {
-        //     self.is_need_update = false;
-        //     // let num = rand::thread_rng().gen_range(0..100);
-        //     self.view.bytes[0] = rand::random();
-        //     // self.view.bytes[1] = rand::random();
-        //     // self.view.bytes[2] = rand::random();
-        //
-        //     self.view.bytes[4] = rand::random();
-        //     // self.view.bytes[5] = rand::random();
-        //     // self.view.bytes[6] = rand::random();
-        //
-        //     // let view = Array2D {
-        //     //     size: Size2D {
-        //     //         width: 2,
-        //     //         height: 1,
-        //     //     },
-        //     //     bytes: TWO_PIXEL.to_vec(),
-        //     // };
-        //     self.texture.update_from_array(gfx, &self.view);
-        // }
     }
 }
 
