@@ -1,4 +1,4 @@
-pub struct Pixel<E> {
+pub struct PixelRGBA<E> {
     r: E,
     g: E,
     b: E,

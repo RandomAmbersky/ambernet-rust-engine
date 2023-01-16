@@ -9,6 +9,7 @@ mod texture;
 pub use texture::AsnTexture;
 
 mod bind_groups;
+pub mod defines;
 pub mod gfx_error;
 
 use crate::core_gfx::gfx_context::GfxContextTrait;

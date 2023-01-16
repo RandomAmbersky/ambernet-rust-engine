@@ -1,9 +1,9 @@
 use crate::core::{Array2D, AsnError, Size2D};
 use crate::core_gfx::gfx_context::GfxContextTrait;
-use crate::core_gfx::pixel::Pixel;
+use crate::core_gfx::pixel::PixelRGBA;
 use crate::core_gfx::point2d::Point2D;
 
-pub trait AsnTextureTrait<T, G, E, Pi, Po>
+pub trait AsnTextureTrait<T, G, E>
 where
     G: GfxContextTrait<E>,
     E: AsnError,
@@ -19,5 +19,5 @@ where
 
 pub trait AsnSurfaceTrait<U, S> {
     fn get_size(&self) -> Size2D<u32>;
-    fn set_pixel(&mut self, pos: Point2D<U>, p: &Pixel<S>);
+    fn set_pixel(&mut self, pos: Point2D<U>, p: &PixelRGBA<S>);
 }
