@@ -1,3 +1,4 @@
+use crate::core_gfx::gfx_context::GfxContextTrait;
 use crate::{AsnContext, ExtHandlerTrait};
 use winit::dpi::PhysicalSize;
 use winit::event::{Event, WindowEvent};
@@ -26,9 +27,19 @@ where
             Event::Resumed => {}
             Event::MainEventsCleared => {
                 ext.update(&mut ctx);
-                ctx.gfx.begin_frame();
+                match ctx.gfx.begin_frame() {
+                    Ok(_) => {}
+                    Err(_) => {
+                        println!("Error");
+                    }
+                }
                 ext.draw(&mut ctx);
-                ctx.gfx.end_frame();
+                match ctx.gfx.end_frame() {
+                    Ok(_) => {}
+                    Err(_) => {
+                        println!("Error");
+                    }
+                }
             }
             Event::RedrawRequested(_) => {}
             Event::RedrawEventsCleared => {}
