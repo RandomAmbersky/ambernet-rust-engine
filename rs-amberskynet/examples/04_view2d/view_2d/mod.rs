@@ -12,9 +12,11 @@ use rs_amberskynet::core_gfx::texture::AsnTextureTrait;
 use rs_amberskynet::gfx::gfx_error::GfxError;
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
-const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
-
-const TWO_PIXEL: [u8; 8] = [0, 0, 255, 255, 255, 0, 0, 255];
+// const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
+// const TWO_PIXEL: [u8; 8] = [0, 0, 255, 255, 255, 0, 0, 255];
+const FOUR_PIXEL: [u8; 16] = [
+    0, 0, 255, 255, 255, 0, 0, 255, 255, 0, 255, 255, 0, 255, 255, 255,
+];
 
 pub struct View2D {
     texture: AsnTexture,
@@ -50,15 +52,17 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
+        let texture_size: u32 = 255;
+
         let view = Array2D {
             size: Size2D {
-                width: 2 as u32,
-                height: 1 as u32,
+                width: texture_size,
+                height: texture_size,
             },
-            bytes: TWO_PIXEL.to_vec(),
+            bytes: vec![0; (texture_size * texture_size * 4) as usize],
         };
 
-        let texture = AsnTexture::from_array(&gfx, &view)?;
+        let texture = AsnTexture::from_array(gfx, &view)?;
 
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
@@ -84,11 +88,11 @@ impl View2D {
         if self.is_need_update {
             self.is_need_update = false;
             // let num = rand::thread_rng().gen_range(0..100);
-            self.view.bytes[0] = rand::random();
+            // self.view.bytes[0] = rand::random();
             // self.view.bytes[1] = rand::random();
             // self.view.bytes[2] = rand::random();
 
-            self.view.bytes[4] = rand::random();
+            // self.view.bytes[4] = rand::random();
             // self.view.bytes[5] = rand::random();
             // self.view.bytes[6] = rand::random();
 
