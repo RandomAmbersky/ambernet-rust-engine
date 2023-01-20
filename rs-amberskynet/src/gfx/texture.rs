@@ -2,7 +2,7 @@ use image::{DynamicImage, GenericImageView};
 use std::num::NonZeroU32;
 
 use crate::core_gfx::texture::AsnTextureTrait;
-use crate::gfx::defines::{Array2d, Size2d};
+use crate::gfx::defines::{BytesArray, Size2d};
 use crate::gfx::gfx_error::GfxError;
 use crate::gfx::AsnGfx;
 
@@ -74,7 +74,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError> for AsnTexture {
         })
     }
 
-    fn from_array(gfx: &AsnGfx, array: &Array2d) -> Result<AsnTexture, GfxError> {
+    fn from_array(gfx: &AsnGfx, array: &BytesArray) -> Result<AsnTexture, GfxError> {
         let dimensions: (u32, u32) = (array.size.width, array.size.height);
 
         let size = wgpu::Extent3d {
@@ -130,7 +130,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError> for AsnTexture {
         Ok(asn_texture)
     }
 
-    fn update_from_array(&mut self, gfx: &AsnGfx, array: &Array2d) -> Result<(), GfxError> {
+    fn update_from_array(&mut self, gfx: &AsnGfx, array: &BytesArray) -> Result<(), GfxError> {
         let dimensions: (u32, u32) = (array.size.width, array.size.height);
         let size = wgpu::Extent3d {
             width: dimensions.0,
