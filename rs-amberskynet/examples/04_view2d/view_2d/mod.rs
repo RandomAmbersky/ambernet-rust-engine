@@ -53,14 +53,15 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
-        let texture_size: u32 = 255;
+        let texture_size_w: u32 = 320 / 16;
+        let texture_size_h: u32 = 240 / 16;
 
         let view = Array2D {
             size: Size2D {
-                width: texture_size,
-                height: texture_size,
+                width: texture_size_w,
+                height: texture_size_h,
             },
-            bytes: vec![0; (texture_size * texture_size * 4) as usize],
+            bytes: vec![0; (texture_size_w * texture_size_h * 4) as usize],
         };
 
         let texture = AsnTexture::from_array(gfx, &view)?;
@@ -90,12 +91,12 @@ impl View2D {
             self.is_need_update = false;
             let mut rng = rand::thread_rng();
 
-            for _ in 0..1000 {
+            for _ in 0..100 {
                 let pos_x = rng.gen_range(0..self.view.size.width);
                 let pos_y = rng.gen_range(0..self.view.size.height);
                 let index = pos_y * self.view.size.width + pos_x;
 
-                let byte_index = index * 4 + rng.gen_range(0..3);
+                let byte_index = index * 4 + rng.gen_range(0..4);
                 let value: u8 = rng.gen();
                 self.view.bytes[byte_index as usize] = value;
             }
