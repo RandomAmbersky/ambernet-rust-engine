@@ -4,6 +4,7 @@ mod model_vertex;
 use crate::view_2d::mesh::Mesh;
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
+use rand::Rng;
 use rs_amberskynet::gfx::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
@@ -52,7 +53,7 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
-        let texture_size: u32 = 255;
+        let texture_size: u32 = 20;
 
         let view = Array2D {
             size: Size2D {
@@ -87,7 +88,16 @@ impl View2D {
     pub fn draw(&mut self, gfx: &mut AsnGfx) {
         if self.is_need_update {
             self.is_need_update = false;
-            // let num = rand::thread_rng().gen_range(0..100);
+            let mut rng = rand::thread_rng();
+
+            let pos_x = rng.gen_range(0..self.view.size.width);
+            let pos_y = rng.gen_range(0..self.view.size.height);
+            let index = pos_y * self.view.size.width + pos_x;
+
+            let byte_index = index * 4 + rng.gen_range(0..4);
+            let value: u8 = rng.gen();
+            self.view.bytes[byte_index as usize] = value;
+
             // self.view.bytes[0] = rand::random();
             // self.view.bytes[1] = rand::random();
             // self.view.bytes[2] = rand::random();
