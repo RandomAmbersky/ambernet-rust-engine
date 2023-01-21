@@ -53,7 +53,7 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
-        let texture_size: u32 = 20;
+        let texture_size: u32 = 255;
 
         let view = Array2D {
             size: Size2D {
@@ -90,29 +90,16 @@ impl View2D {
             self.is_need_update = false;
             let mut rng = rand::thread_rng();
 
-            let pos_x = rng.gen_range(0..self.view.size.width);
-            let pos_y = rng.gen_range(0..self.view.size.height);
-            let index = pos_y * self.view.size.width + pos_x;
+            for _ in 0..1000 {
+                let pos_x = rng.gen_range(0..self.view.size.width);
+                let pos_y = rng.gen_range(0..self.view.size.height);
+                let index = pos_y * self.view.size.width + pos_x;
 
-            let byte_index = index * 4 + rng.gen_range(0..4);
-            let value: u8 = rng.gen();
-            self.view.bytes[byte_index as usize] = value;
+                let byte_index = index * 4 + rng.gen_range(0..3);
+                let value: u8 = rng.gen();
+                self.view.bytes[byte_index as usize] = value;
+            }
 
-            // self.view.bytes[0] = rand::random();
-            // self.view.bytes[1] = rand::random();
-            // self.view.bytes[2] = rand::random();
-
-            // self.view.bytes[4] = rand::random();
-            // self.view.bytes[5] = rand::random();
-            // self.view.bytes[6] = rand::random();
-
-            // let view = Array2D {
-            //     size: Size2D {
-            //         width: 2,
-            //         height: 1,
-            //     },
-            //     bytes: TWO_PIXEL.to_vec(),
-            // };
             self.texture
                 .update_from_array(gfx, &self.view)
                 .expect("TODO: panic message");
