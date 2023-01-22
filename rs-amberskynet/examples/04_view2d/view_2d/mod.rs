@@ -53,8 +53,8 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
-        let texture_size_w: u32 = 320 / 16;
-        let texture_size_h: u32 = 240 / 16;
+        let texture_size_w: u32 = 3200 / 16;
+        let texture_size_h: u32 = 2400 / 16;
 
         let view = Array2D {
             size: Size2D {
@@ -89,18 +89,6 @@ impl View2D {
     pub fn draw(&mut self, gfx: &mut AsnGfx) {
         if self.is_need_update {
             self.is_need_update = false;
-            let mut rng = rand::thread_rng();
-
-            for _ in 0..100 {
-                let pos_x = rng.gen_range(0..self.view.size.width);
-                let pos_y = rng.gen_range(0..self.view.size.height);
-                let index = pos_y * self.view.size.width + pos_x;
-
-                let byte_index = index * 4 + rng.gen_range(0..4);
-                let value: u8 = rng.gen();
-                self.view.bytes[byte_index as usize] = value;
-            }
-
             self.texture
                 .update_from_array(gfx, &self.view)
                 .expect("TODO: panic message");
@@ -118,6 +106,26 @@ impl View2D {
         render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
     pub fn update(&mut self) {
+        let mut rng = rand::thread_rng();
+
+        for _ in 0..1000 {
+            let pos_x = rng.gen_range(0..self.view.size.width);
+            let pos_y = rng.gen_range(0..self.view.size.height);
+            let index = pos_y * self.view.size.width + pos_x;
+
+            let byte_index = index * 4 + rng.gen_range(0..4);
+
+            // let value: u8 = rng.gen();
+            let mut value: u8 = self.view.bytes[byte_index as usize];
+
+            // if rng.gen_range(0..100) > 50 {
+            //     value = value.wrapping_sub(1);
+            // } else {
+            value = value.wrapping_add(rng.gen_range(1..50));
+            // }
+            self.view.bytes[byte_index as usize] = value;
+        }
+
         self.is_need_update = true
     }
 }
