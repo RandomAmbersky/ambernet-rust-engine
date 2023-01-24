@@ -15,9 +15,9 @@ use rs_amberskynet::gfx::gfx_error::GfxError;
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 // const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
 // const TWO_PIXEL: [u8; 8] = [0, 0, 255, 255, 255, 0, 0, 255];
-const FOUR_PIXEL: [u8; 16] = [
-    0, 0, 255, 255, 255, 0, 0, 255, 255, 0, 255, 255, 0, 255, 255, 255,
-];
+// const FOUR_PIXEL: [u8; 16] = [
+//     0, 0, 255, 255, 255, 0, 0, 255, 255, 0, 255, 255, 0, 255, 255, 255,
+// ];
 
 pub struct View2D {
     texture: AsnTexture,
