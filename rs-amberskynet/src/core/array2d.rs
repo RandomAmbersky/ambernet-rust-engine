@@ -24,14 +24,14 @@ where
         let index = self.size.get_index(pos);
         let value = self.bytes[index];
         Ok(value)
-        // match value {
-        //     None => Err("Not in array".parse().unwrap()),
-        //     Some(t) => Ok(t),
-        // }
     }
 
     pub fn set_point(&mut self, pos: &Pos2D<S>, val: T) -> Result<(), String> {
-        let x = self.size.get_index_from_xy(pos.x, pos.y);
+        if !self.check_in_array(pos) {
+            return Err("Not in array".parse().unwrap());
+        }
+        let index = self.size.get_index(pos);
+        self.bytes[index] = val;
         Ok(())
     }
 }
