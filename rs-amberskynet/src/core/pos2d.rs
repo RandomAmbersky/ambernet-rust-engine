@@ -1,4 +1,5 @@
-pub struct Pos2D<E> {
-    pub x: E,
-    pub y: E,
+#[derive(Default, Debug, Copy, Clone, PartialOrd, PartialEq)]
+pub struct Pos2D<S> {
+    pub x: S,
+    pub y: S,
 }
