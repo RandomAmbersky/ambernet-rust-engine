@@ -3,7 +3,16 @@ use crate::core::Pos2D;
 use std::ops::{Add, Index, Mul};
 use std::slice::SliceIndex;
 
-pub struct Array2D<S, T> {
+pub struct Array2D<S, T>
+where
+    S: Sized
+        + Copy
+        + Mul<S, Output = S>
+        + Add<S, Output = S>
+        + PartialOrd
+        + SliceIndex<[T], Output = T>,
+    T: Copy,
+{
     pub size: Size2D<S>,
     pub bytes: Vec<T>,
 }

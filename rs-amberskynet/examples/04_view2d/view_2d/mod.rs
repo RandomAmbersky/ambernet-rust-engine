@@ -8,7 +8,7 @@ use rand::Rng;
 use rs_amberskynet::gfx::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
-use rs_amberskynet::core::{Array2D, Size2D};
+use rs_amberskynet::core::{Array2D, Pos2D, Size2D};
 use rs_amberskynet::core_gfx::texture::AsnTextureTrait;
 use rs_amberskynet::gfx::gfx_error::GfxError;
 
@@ -19,9 +19,12 @@ const FOUR_PIXEL: [u8; 16] = [
     0, 0, 255, 255, 255, 0, 0, 255, 255, 0, 255, 255, 0, 255, 255, 255,
 ];
 
+pub type AXIS = u32;
+pub type BYTE = u8;
+
 pub struct View2D {
     texture: AsnTexture,
-    view: Array2D<u32, u8>,
+    view: Array2D<AXIS, BYTE>,
     mesh: Mesh,
     bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
@@ -109,9 +112,13 @@ impl View2D {
         let mut rng = rand::thread_rng();
 
         for _ in 0..1000 {
-            let pos_x = rng.gen_range(0..self.view.size.width);
-            let pos_y = rng.gen_range(0..self.view.size.height);
-            let index = pos_y * self.view.size.width + pos_x;
+            let pos = Pos2D {
+                x: rng.gen_range(0..self.view.size.width),
+                y: rng.gen_range(0..self.view.size.height),
+            };
+
+            let index = self.view.get_point(&pos);
+            // let index = pos_y * self.view.size.width + pos_x;
 
             let byte_index = index * 4 + rng.gen_range(0..4);
 
