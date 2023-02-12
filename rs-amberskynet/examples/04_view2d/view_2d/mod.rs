@@ -10,21 +10,19 @@ use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
 use rs_amberskynet::core::{Array2D, Pos2D, Size2D};
 use rs_amberskynet::core_gfx::texture::AsnTextureTrait;
+use rs_amberskynet::gfx::defines::{BytesArray, Size2d};
 use rs_amberskynet::gfx::gfx_error::GfxError;
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 // const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
 // const TWO_PIXEL: [u8; 8] = [0, 0, 255, 255, 255, 0, 0, 255];
-const FOUR_PIXEL: [u8; 16] = [
-    0, 0, 255, 255, 255, 0, 0, 255, 255, 0, 255, 255, 0, 255, 255, 255,
-];
-
-pub type AXIS = u32;
-pub type BYTE = u8;
+// const FOUR_PIXEL: [u8; 16] = [
+//     0, 0, 255, 255, 255, 0, 0, 255, 255, 0, 255, 255, 0, 255, 255, 255,
+// ];
 
 pub struct View2D {
     texture: AsnTexture,
-    view: Array2D<AXIS, BYTE>,
+    view: BytesArray,
     mesh: Mesh,
     bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
@@ -60,9 +58,9 @@ impl View2D {
         let texture_size_h: u32 = 2400 / 16;
 
         let view = Array2D {
-            size: Size2D {
-                width: texture_size_w,
-                height: texture_size_h,
+            size: Size2d {
+                width: texture_size_w as usize,
+                height: texture_size_h as usize,
             },
             bytes: vec![0; (texture_size_w * texture_size_h * 4) as usize],
         };
@@ -108,7 +106,7 @@ impl View2D {
         render_pass.set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
         render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
-    pub fn update(&mut self) {
+    pub fn update(&mut self) -> Result<(), String> {
         let mut rng = rand::thread_rng();
 
         for _ in 0..1000 {
@@ -117,7 +115,7 @@ impl View2D {
                 y: rng.gen_range(0..self.view.size.height),
             };
 
-            let index = self.view.get_point(&pos);
+            let index = self.view.get_point(&pos)?;
             // let index = pos_y * self.view.size.width + pos_x;
 
             let byte_index = index * 4 + rng.gen_range(0..4);
@@ -133,7 +131,8 @@ impl View2D {
             self.view.bytes[byte_index as usize] = value;
         }
 
-        self.is_need_update = true
+        self.is_need_update = true;
+        Ok(())
     }
 }
 
