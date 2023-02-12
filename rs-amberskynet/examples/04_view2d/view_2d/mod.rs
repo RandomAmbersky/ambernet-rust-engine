@@ -8,7 +8,7 @@ use rand::Rng;
 use rs_amberskynet::gfx::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
-use rs_amberskynet::core::{Array2D, Pos2D, Size2D};
+use rs_amberskynet::core::{Array2D, Pos2D};
 use rs_amberskynet::core_gfx::texture::AsnTextureTrait;
 use rs_amberskynet::gfx::defines::{BytesArray, Size2d};
 use rs_amberskynet::gfx::gfx_error::GfxError;
