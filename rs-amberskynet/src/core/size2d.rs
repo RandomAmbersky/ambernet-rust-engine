@@ -21,15 +21,46 @@ where
 #[cfg(test)]
 mod tests {
     use crate::core::size2d::Size2D;
+    use crate::core::Pos2D;
 
     #[test]
     fn it_works() {
         let value: u32 = 10;
-        let pos = Size2D {
+        let my_size = Size2D {
             width: value,
             height: value,
         };
-        assert_eq!(pos.width, value);
-        assert_eq!(pos.height, value);
+        assert_eq!(my_size.width, value);
+        assert_eq!(my_size.height, value);
+    }
+
+    #[test]
+    fn get_index_from_xy() {
+        let value: u32 = 10;
+        let my_size = Size2D {
+            width: value,
+            height: value,
+        };
+
+        let index_value: u32 = 5;
+        let index = my_size.get_index_from_xy(index_value, index_value);
+        assert_eq!(index, 55);
+    }
+
+    #[test]
+    fn get_index() {
+        let value: u32 = 10;
+        let my_size = Size2D {
+            width: value,
+            height: value,
+        };
+
+        let index_value: u32 = 5;
+        let pos = Pos2D {
+            x: index_value,
+            y: index_value,
+        };
+        let index = my_size.get_index(&pos);
+        assert_eq!(index, 55);
     }
 }
