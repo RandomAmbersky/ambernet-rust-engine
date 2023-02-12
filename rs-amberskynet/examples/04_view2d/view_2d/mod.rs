@@ -116,18 +116,18 @@ impl View2D {
             };
 
             let index = self.view.get_point(&pos)?;
-            // let index = pos_y * self.view.size.width + pos_x;
-
+            //     // let index = pos_y * self.view.size.width + pos_x;
+            //
             let byte_index = index * 4 + rng.gen_range(0..4);
-
+            //
             // let value: u8 = rng.gen();
             let mut value: u8 = self.view.bytes[byte_index as usize];
-
-            // if rng.gen_range(0..100) > 50 {
-            //     value = value.wrapping_sub(1);
-            // } else {
-            value = value.wrapping_add(rng.gen_range(1..50));
-            // }
+            //
+            //     if rng.gen_range(0..100) > 50 {
+            //         value = value.wrapping_sub(1);
+            //     } else {
+            //     value = value.wrapping_add(rng.gen_range(1..50));
+            //     // }
             self.view.bytes[byte_index as usize] = value;
         }
 
