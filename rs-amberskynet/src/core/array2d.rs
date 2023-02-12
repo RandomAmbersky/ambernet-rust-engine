@@ -1,6 +1,6 @@
 use crate::core::size2d::Size2D;
 use crate::core::Pos2D;
-use std::ops::{Add, Index, Mul};
+use std::ops::{Add, Mul};
 use std::slice::SliceIndex;
 
 pub struct Array2D<S, T>
