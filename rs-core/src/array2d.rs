@@ -1,35 +1,15 @@
-use crate::core::size2d::Size2D;
-use crate::core::Pos2D;
-use std::fmt::{Debug, Display};
-use std::ops::{Add, Mul};
+use crate::axe_dimension::AxeDimension;
+use crate::cell_type::CellType;
+use crate::pos2d::Pos2D;
+use crate::size2d::Size2D;
 use std::slice::SliceIndex;
 
-pub struct Array2D<S, T>
-where
-    S: Sized
-        + Debug
-        + Copy
-        + Mul<S, Output = S>
-        + Add<S, Output = S>
-        + PartialOrd
-        + SliceIndex<[T], Output = T>,
-    T: Copy,
-{
+pub struct Array2D<S: AxeDimension, T: CellType> {
     pub size: Size2D<S>,
     pub bytes: Vec<T>,
 }
 
-impl<S, T> Array2D<S, T>
-where
-    S: Debug
-        + Display
-        + Copy
-        + Mul<S, Output = S>
-        + Add<S, Output = S>
-        + PartialOrd
-        + SliceIndex<[T], Output = T>,
-    T: Copy,
-{
+impl<S: AxeDimension + SliceIndex<[T], Output = T>, T: CellType> Array2D<S, T> {
     pub fn check_in_array(&mut self, pos: &Pos2D<S>) -> bool {
         if self.size.width > pos.x {
             println!("{:?} {}", self.size.width, pos.x);
