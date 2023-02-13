@@ -1,4 +1,5 @@
 mod array2d;
+mod axe_dimension;
 mod error;
 mod pos2d;
 mod size2d;
