@@ -98,12 +98,13 @@ mod tests {
                 width: axe_value,
                 height: axe_value,
             },
-            bytes: vec![0 as Byte; 100],
+            bytes: vec![55 as Byte; 100],
         };
         let pos = Pos2D {
             x: 5 as Axe,
             y: 5 as Axe,
         };
-        let result = arr.get_point(&pos);
+        let result = arr.get_point(&pos).expect("error");
+        assert_eq!(result, 55 as Byte);
     }
 }
