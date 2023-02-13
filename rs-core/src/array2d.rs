@@ -21,7 +21,9 @@ impl<S: AxeDimension, T: CellType> Array2D<S, T> {
         }
         true
     }
+}
 
+impl<S: AxeDimension + SliceIndex<[T], Output = T>, T: CellType> Array2D<S, T> {
     pub fn get_point(&mut self, pos: &Pos2D<S>) -> Result<T, String> {
         if !self.check_in_array(pos) {
             let err_msg = format!(
@@ -31,7 +33,7 @@ impl<S: AxeDimension, T: CellType> Array2D<S, T> {
             return Err(err_msg);
         }
         let index = self.size.get_index(pos);
-        let value = self.bytes[index as usize];
+        let value = self.bytes[index];
         Ok(value)
     }
 
@@ -75,6 +77,13 @@ mod tests {
             y: 5 as Axe,
         };
         let result = arr.check_in_array(&input);
-        assert!(result)
+        assert!(result);
+
+        let input = Pos2D {
+            x: 100 as Axe,
+            y: 110 as Axe,
+        };
+        let result = arr.check_in_array(&input);
+        assert!(!result)
     }
 }
