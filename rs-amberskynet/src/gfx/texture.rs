@@ -12,7 +12,7 @@ pub struct AsnTexture {
     pub sampler: wgpu::Sampler,
 }
 
-impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError> for AsnTexture {
+impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray, Size2d> for AsnTexture {
     fn from_raw_image(gfx: &AsnGfx, bytes: &[u8]) -> Result<AsnTexture, GfxError> {
         let img = image::load_from_memory(bytes);
         match img {
@@ -75,7 +75,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError> for AsnTexture {
     }
 
     fn from_array(gfx: &AsnGfx, array: &BytesArray) -> Result<AsnTexture, GfxError> {
-        let dimensions: (u32, u32) = (array.size.width, array.size.height);
+        let dimensions: (u32, u32) = (array.size.width as u32, array.size.height as u32);
 
         let size = wgpu::Extent3d {
             width: dimensions.0,
@@ -131,7 +131,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError> for AsnTexture {
     }
 
     fn update_from_array(&mut self, gfx: &AsnGfx, array: &BytesArray) -> Result<(), GfxError> {
-        let dimensions: (u32, u32) = (array.size.width, array.size.height);
+        let dimensions: (u32, u32) = (array.size.width as u32, array.size.height as u32);
         let size = wgpu::Extent3d {
             width: dimensions.0,
             height: dimensions.1,

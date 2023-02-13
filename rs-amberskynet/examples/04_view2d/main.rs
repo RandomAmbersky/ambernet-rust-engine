@@ -15,11 +15,8 @@ struct Handler {
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Result<Self, GfxError> {
         let format = ctx.gfx.main_window.get_format(&ctx.gfx.adapter);
-
         let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE)?;
-
         let view_2d = View2D::new(&ctx.gfx, &texture, format)?;
-
         Ok(Self { view_2d })
     }
 }
@@ -29,7 +26,7 @@ impl ExtHandlerTrait for Handler {
         self.view_2d.draw(&mut ctx.gfx);
     }
     fn update(&mut self, _e: &mut AsnContext) {
-        self.view_2d.update();
+        self.view_2d.update().expect("update error");
     }
 }
 
