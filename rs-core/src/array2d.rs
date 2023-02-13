@@ -2,7 +2,6 @@ use crate::axe_dimension::AxeDimension;
 use crate::cell_type::CellType;
 use crate::pos2d::Pos2D;
 use crate::size2d::Size2D;
-use std::slice::SliceIndex;
 
 pub struct Array2D<S: AxeDimension, T: CellType> {
     pub size: Size2D<S>,
@@ -23,8 +22,8 @@ impl<S: AxeDimension, T: CellType> Array2D<S, T> {
     }
 }
 
-impl<S: AxeDimension + SliceIndex<[T], Output = T>, T: CellType> Array2D<S, T> {
-    pub fn get_point(&mut self, pos: &Pos2D<S>) -> Result<T, String> {
+impl<S: AxeDimension, T: CellType> Array2D<S, T> {
+    pub fn get_point(&self, pos: &Pos2D<S>) -> Result<T, String> {
         if !self.check_in_array(pos) {
             let err_msg = format!(
                 "Not in array {:?} x {} [{}, {}]",
@@ -56,13 +55,17 @@ mod tests {
     use crate::size2d::Size2D;
 
     type Axe = u32;
-    impl AxeDimension for Axe {}
+    impl AxeDimension for Axe {
+        fn to_usize(&self) -> usize {
+            usize::try_from(*self).expect("convert error")
+        }
+    }
 
     type Byte = u8;
     impl CellType for Byte {}
 
     #[test]
-    fn it_works() {
+    fn check_in_array() {
         let axe_value: Axe = 10;
         let arr = Array2D {
             size: Size2D {
@@ -85,5 +88,22 @@ mod tests {
         };
         let result = arr.check_in_array(&input);
         assert!(!result)
+    }
+
+    #[test]
+    fn get_point() {
+        let axe_value: Axe = 10;
+        let arr = Array2D {
+            size: Size2D {
+                width: axe_value,
+                height: axe_value,
+            },
+            bytes: vec![0 as Byte; 100],
+        };
+        let pos = Pos2D {
+            x: 5 as Axe,
+            y: 5 as Axe,
+        };
+        let result = arr.get_point(&pos);
     }
 }
