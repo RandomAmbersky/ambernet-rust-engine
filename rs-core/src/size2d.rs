@@ -7,10 +7,16 @@ pub struct Size2D<T: AxeDimension> {
 }
 
 impl<T: AxeDimension> Size2D<T> {
-    pub fn get_index_from_xy(&self, x: T, y: T) -> T {
-        self.width * y + x
-    }
     pub fn get_index(&self, pos: &Pos2D<T>) -> usize {
         (self.width * pos.y + pos.x).to_usize()
+    }
+    pub fn check_into(&self, pos: &Pos2D<T>) -> bool {
+        if self.width < pos.x {
+            return false;
+        }
+        if self.height < pos.y {
+            return false;
+        }
+        true
     }
 }
