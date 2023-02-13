@@ -20,9 +20,6 @@ impl<S: AxeDimension, T: CellType> Array2D<S, T> {
         }
         true
     }
-}
-
-impl<S: AxeDimension, T: CellType> Array2D<S, T> {
     pub fn get_point(&self, pos: &Pos2D<S>) -> Result<T, String> {
         if !self.check_in_array(pos) {
             let err_msg = format!(
@@ -35,15 +32,18 @@ impl<S: AxeDimension, T: CellType> Array2D<S, T> {
         let value = self.bytes[index];
         Ok(value)
     }
-
-    // pub fn set_point(&mut self, pos: &Pos2D<S>, val: T) -> Result<(), String> {
-    //     if !self.check_in_array(pos) {
-    //         return Err("Not in array".parse().unwrap());
-    //     }
-    //     let index = self.size.get_index(pos);
-    //     self.bytes[index] = val;
-    //     Ok(())
-    // }
+    pub fn set_point(&mut self, pos: &Pos2D<S>, val: T) -> Result<(), String> {
+        if !self.check_in_array(pos) {
+            let err_msg = format!(
+                "Not in array {:?} x {} [{}, {}]",
+                self.size.width, self.size.height, pos.x, pos.y
+            );
+            return Err(err_msg);
+        }
+        let index = self.size.get_index(pos);
+        self.bytes[index] = val;
+        Ok(())
+    }
 }
 
 #[cfg(test)]
@@ -106,5 +106,27 @@ mod tests {
         };
         let result = arr.get_point(&pos).expect("error");
         assert_eq!(result, 55 as Byte);
+    }
+
+    #[test]
+    fn set_point() {
+        let axe_value: Axe = 10;
+        let size = Size2D {
+            width: axe_value,
+            height: axe_value,
+        };
+        let mut arr = Array2D {
+            size,
+            bytes: vec![55 as Byte; 100],
+        };
+        let pos = Pos2D {
+            x: 5 as Axe,
+            y: 5 as Axe,
+        };
+        let result = arr.set_point(&pos, 99 as Byte);
+        assert!(result.is_ok());
+
+        let cell = arr.bytes[(arr.size.width * pos.y + pos.x).to_usize()];
+        assert_eq!(cell, 99);
     }
 }
