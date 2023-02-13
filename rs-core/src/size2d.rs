@@ -8,6 +8,7 @@ pub struct Size2D<T: AxeDimension> {
 
 impl<T: AxeDimension> Size2D<T> {
     pub fn get_index(&self, pos: &Pos2D<T>) -> usize {
+        self.check_into(pos);
         (self.width * pos.y + pos.x).to_usize()
     }
     pub fn check_into(&self, pos: &Pos2D<T>) -> bool {
