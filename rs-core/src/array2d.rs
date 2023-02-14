@@ -9,38 +9,26 @@ pub struct Array2D<S: UnsignedDimension, T: CellType> {
 }
 
 impl<S: UnsignedDimension, T: CellType> Array2D<S, T> {
-    pub fn check_in_array(&self, pos: &Pos2D<S>) -> bool {
-        if self.size.width < pos.x {
-            println!("{} < {}", self.size.width, pos.x);
-            return false;
+    fn _check_not_in_array(&self, pos: &Pos2D<S>) -> Result<(), String> {
+        if self.size.is_pos_into(pos) {
+            return Ok(());
         }
-        if self.size.height < pos.y {
-            println!("{} < {}", self.size.height, pos.y);
-            return false;
-        }
-        true
+        let resp = format!(
+            "Not in array {:?} x {} [{}, {}]",
+            self.size.width, self.size.height, pos.x, pos.y
+        );
+        Err(resp)
     }
+
     pub fn get_point(&self, pos: &Pos2D<S>) -> Result<T, String> {
-        if !self.check_in_array(pos) {
-            let err_msg = format!(
-                "Not in array {:?} x {} [{}, {}]",
-                self.size.width, self.size.height, pos.x, pos.y
-            );
-            return Err(err_msg);
-        }
-        let index = self.size.get_index(pos);
+        self._check_not_in_array(pos)?;
+        let index = self.size.get_index(pos)?;
         let value = self.bytes[index];
         Ok(value)
     }
     pub fn set_point(&mut self, pos: &Pos2D<S>, val: T) -> Result<(), String> {
-        if !self.check_in_array(pos) {
-            let err_msg = format!(
-                "Not in array {:?} x {} [{}, {}]",
-                self.size.width, self.size.height, pos.x, pos.y
-            );
-            return Err(err_msg);
-        }
-        let index = self.size.get_index(pos);
+        self._check_not_in_array(pos)?;
+        let index = self.size.get_index(pos)?;
         self.bytes[index] = val;
         Ok(())
     }
@@ -79,15 +67,15 @@ mod tests {
             x: 5 as Axe,
             y: 5 as Axe,
         };
-        let result = arr.check_in_array(&input);
-        assert!(result);
+        let result = arr._check_not_in_array(&input);
+        assert!(result.is_ok());
 
         let input = Pos2D {
             x: 100 as Axe,
             y: 110 as Axe,
         };
-        let result = arr.check_in_array(&input);
-        assert!(!result)
+        let result = arr._check_not_in_array(&input);
+        assert!(result.is_err())
     }
 
     #[test]
