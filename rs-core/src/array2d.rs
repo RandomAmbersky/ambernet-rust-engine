@@ -61,8 +61,8 @@ mod tests {
         }
     }
 
-    type Byte = u8;
-    impl CellType for Byte {}
+    type Cell = u8;
+    impl CellType for Cell {}
 
     #[test]
     fn check_in_array() {
@@ -72,7 +72,7 @@ mod tests {
                 width: axe_value,
                 height: axe_value,
             },
-            bytes: vec![0 as Byte; 100],
+            bytes: vec![0 as Cell; 100],
         };
 
         let input = Pos2D {
@@ -98,14 +98,14 @@ mod tests {
                 width: axe_value,
                 height: axe_value,
             },
-            bytes: vec![55 as Byte; 100],
+            bytes: vec![55 as Cell; 100],
         };
         let pos = Pos2D {
             x: 5 as Axe,
             y: 5 as Axe,
         };
         let result = arr.get_point(&pos).expect("error");
-        assert_eq!(result, 55 as Byte);
+        assert_eq!(result, 55 as Cell);
     }
 
     #[test]
@@ -117,13 +117,13 @@ mod tests {
         };
         let mut arr = Array2D {
             size,
-            bytes: vec![55 as Byte; 100],
+            bytes: vec![55 as Cell; 100],
         };
         let pos = Pos2D {
             x: 5 as Axe,
             y: 5 as Axe,
         };
-        let result = arr.set_point(&pos, 99 as Byte);
+        let result = arr.set_point(&pos, 99 as Cell);
         assert!(result.is_ok());
 
         let cell = arr.bytes[(arr.size.width * pos.y + pos.x).to_usize()];
