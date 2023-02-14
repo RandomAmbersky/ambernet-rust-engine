@@ -1,14 +1,14 @@
-use crate::axe_dimension::UnsignedDimension;
+use crate::axe_dimension::UnsignedNum;
 use crate::cell_type::CellType;
 use crate::pos2d::Pos2D;
 use crate::size2d::Size2D;
 
-pub struct Array2D<S: UnsignedDimension, T: CellType> {
+pub struct Array2D<S: UnsignedNum, T: CellType> {
     pub size: Size2D<S>,
     pub bytes: Vec<T>,
 }
 
-impl<S: UnsignedDimension, T: CellType> Array2D<S, T> {
+impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
     fn _check_not_in_array(&self, pos: &Pos2D<S>) -> Result<(), String> {
         if self.size.is_pos_into(pos) {
             return Ok(());
@@ -37,13 +37,13 @@ impl<S: UnsignedDimension, T: CellType> Array2D<S, T> {
 #[cfg(test)]
 mod tests {
     use crate::array2d::Array2D;
-    use crate::axe_dimension::UnsignedDimension;
+    use crate::axe_dimension::UnsignedNum;
     use crate::cell_type::CellType;
     use crate::pos2d::Pos2D;
     use crate::size2d::Size2D;
 
     type Axe = u32;
-    impl UnsignedDimension for Axe {
+    impl UnsignedNum for Axe {
         fn to_usize(&self) -> usize {
             usize::try_from(*self).expect("convert error")
         }
