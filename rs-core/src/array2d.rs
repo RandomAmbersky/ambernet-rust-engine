@@ -1,14 +1,14 @@
-use crate::axe_dimension::AxeDimension;
+use crate::axe_dimension::UnsignedDimension;
 use crate::cell_type::CellType;
 use crate::pos2d::Pos2D;
 use crate::size2d::Size2D;
 
-pub struct Array2D<S: AxeDimension, T: CellType> {
+pub struct Array2D<S: UnsignedDimension, T: CellType> {
     pub size: Size2D<S>,
     pub bytes: Vec<T>,
 }
 
-impl<S: AxeDimension, T: CellType> Array2D<S, T> {
+impl<S: UnsignedDimension, T: CellType> Array2D<S, T> {
     pub fn check_in_array(&self, pos: &Pos2D<S>) -> bool {
         if self.size.width < pos.x {
             println!("{} < {}", self.size.width, pos.x);
@@ -49,13 +49,13 @@ impl<S: AxeDimension, T: CellType> Array2D<S, T> {
 #[cfg(test)]
 mod tests {
     use crate::array2d::Array2D;
-    use crate::axe_dimension::AxeDimension;
+    use crate::axe_dimension::UnsignedDimension;
     use crate::cell_type::CellType;
     use crate::pos2d::Pos2D;
     use crate::size2d::Size2D;
 
     type Axe = u32;
-    impl AxeDimension for Axe {
+    impl UnsignedDimension for Axe {
         fn to_usize(&self) -> usize {
             usize::try_from(*self).expect("convert error")
         }
