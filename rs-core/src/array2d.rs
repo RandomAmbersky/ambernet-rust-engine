@@ -3,12 +3,14 @@ use crate::pos2d::Pos2D;
 use crate::size2d::Size2D;
 use crate::unsigned_num::UnsignedNum;
 
+#[allow(dead_code)]
 pub struct Array2D<S: UnsignedNum, T: CellType> {
     pub size: Size2D<S>,
     pub bytes: Vec<T>,
 }
 
 impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
+    #[allow(dead_code)]
     fn new(width: S, height: S) -> Self {
         Self {
             size: Size2D { width, height },
@@ -27,12 +29,15 @@ impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
         Err(resp)
     }
 
+    #[allow(dead_code)]
     pub fn get_point(&self, pos: &Pos2D<S>) -> Result<T, String> {
         self._check_not_in_array(pos)?;
         let index = self.size.get_index(pos)?;
         let value = self.bytes[index];
         Ok(value)
     }
+
+    #[allow(dead_code)]
     pub fn set_point(&mut self, pos: &Pos2D<S>, val: T) -> Result<(), String> {
         self._check_not_in_array(pos)?;
         let index = self.size.get_index(pos)?;
@@ -43,11 +48,9 @@ impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::array2d;
     use crate::array2d::Array2D;
     use crate::cell_type::CellType;
     use crate::pos2d::Pos2D;
-    use crate::size2d::Size2D;
     use crate::unsigned_num::UnsignedNum;
 
     type Axe = u32;
