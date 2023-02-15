@@ -1,7 +1,7 @@
-use crate::axe_dimension::UnsignedNum;
 use crate::cell_type::CellType;
 use crate::pos2d::Pos2D;
 use crate::size2d::Size2D;
+use crate::unsigned_num::UnsignedNum;
 
 pub struct Array2D<S: UnsignedNum, T: CellType> {
     pub size: Size2D<S>,
@@ -37,10 +37,10 @@ impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
 #[cfg(test)]
 mod tests {
     use crate::array2d::Array2D;
-    use crate::axe_dimension::UnsignedNum;
     use crate::cell_type::CellType;
     use crate::pos2d::Pos2D;
     use crate::size2d::Size2D;
+    use crate::unsigned_num::UnsignedNum;
 
     type Axe = u32;
     impl UnsignedNum for Axe {
