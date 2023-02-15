@@ -74,13 +74,7 @@ mod tests {
     #[test]
     fn check_in_array() {
         let axe_value: Axe = 10;
-        let arr = Array2D {
-            size: Size2D {
-                width: axe_value,
-                height: axe_value,
-            },
-            bytes: vec![0 as Cell; 100],
-        };
+        let arr: Array2D<Axe, Cell> = Array2D::new(axe_value, axe_value);
 
         let input = Pos2D {
             x: 5 as Axe,
@@ -90,7 +84,7 @@ mod tests {
         assert!(result.is_ok());
 
         let input = Pos2D {
-            x: 100 as Axe,
+            x: 110 as Axe,
             y: 110 as Axe,
         };
         let result = arr._check_not_in_array(&input);
@@ -100,32 +94,23 @@ mod tests {
     #[test]
     fn get_point() {
         let axe_value: Axe = 10;
-        let arr = Array2D {
-            size: Size2D {
-                width: axe_value,
-                height: axe_value,
-            },
-            bytes: vec![55 as Cell; 100],
-        };
+        let mut arr: Array2D<Axe, Cell> = Array2D::new(axe_value, axe_value);
+
+        arr.bytes[(10 * 5 + 5).to_usize()] = 55;
+
         let pos = Pos2D {
             x: 5 as Axe,
             y: 5 as Axe,
         };
-        let result = arr.get_point(&pos).expect("error");
+
+        let result = arr.get_point(&pos).expect("test error");
         assert_eq!(result, 55 as Cell);
     }
 
     #[test]
     fn set_point() {
         let axe_value: Axe = 10;
-        let size = Size2D {
-            width: axe_value,
-            height: axe_value,
-        };
-        let mut arr = Array2D {
-            size,
-            bytes: vec![55 as Cell; 100],
-        };
+        let mut arr: Array2D<Axe, Cell> = Array2D::new(axe_value, axe_value);
         let pos = Pos2D {
             x: 5 as Axe,
             y: 5 as Axe,
