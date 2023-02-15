@@ -1,16 +1,20 @@
-use crate::axe_dimension::AxeDimension;
 use crate::pos2d::Pos2D;
+use crate::unsigned_num::UnsignedNum;
 
-pub struct Size2D<T: AxeDimension> {
+pub struct Size2D<T: UnsignedNum> {
     pub width: T,
     pub height: T,
 }
 
-impl<T: AxeDimension> Size2D<T> {
-    pub fn get_index(&self, pos: &Pos2D<T>) -> usize {
-        (self.width * pos.y + pos.x).to_usize()
+impl<T: UnsignedNum> Size2D<T> {
+    pub fn get_index(&self, pos: &Pos2D<T>) -> Result<usize, String> {
+        if !self.is_pos_into(pos) {
+            return Err(String::from("Not in size"));
+        };
+        let result = (self.width * pos.y + pos.x).to_usize();
+        Ok(result)
     }
-    pub fn check_into(&self, pos: &Pos2D<T>) -> bool {
+    pub fn is_pos_into(&self, pos: &Pos2D<T>) -> bool {
         if self.width < pos.x {
             return false;
         }

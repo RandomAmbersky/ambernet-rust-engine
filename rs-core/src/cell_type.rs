@@ -1,1 +1,3 @@
-pub trait CellType: Copy {}
+pub trait CellType: Copy {
+    const ZERO: Self;
+}
