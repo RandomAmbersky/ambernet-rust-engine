@@ -9,6 +9,13 @@ pub struct Array2D<S: UnsignedNum, T: CellType> {
 }
 
 impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
+    fn new(width: S, height: S) -> Self {
+        Self {
+            size: Size2D { width, height },
+            bytes: vec![T::ZERO; (width * height).to_usize()],
+        }
+    }
+
     fn _check_not_in_array(&self, pos: &Pos2D<S>) -> Result<(), String> {
         if self.size.is_pos_into(pos) {
             return Ok(());
@@ -36,6 +43,7 @@ impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
 
 #[cfg(test)]
 mod tests {
+    use crate::array2d;
     use crate::array2d::Array2D;
     use crate::cell_type::CellType;
     use crate::pos2d::Pos2D;
@@ -50,7 +58,18 @@ mod tests {
     }
 
     type Cell = u8;
-    impl CellType for Cell {}
+    impl CellType for Cell {
+        const ZERO: Self = 0 as Cell;
+    }
+
+    #[test]
+    fn it_working() {
+        let axe_value: Axe = 10;
+        let arr: Array2D<Axe, Cell> = Array2D::new(axe_value, axe_value);
+        assert_eq!(arr.size.width, axe_value);
+        assert_eq!(arr.size.height, axe_value);
+        assert_eq!(arr.bytes.len(), (axe_value * axe_value) as usize);
+    }
 
     #[test]
     fn check_in_array() {
