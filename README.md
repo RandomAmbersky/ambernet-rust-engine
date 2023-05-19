@@ -1,5 +1,10 @@
 # ambernet-rust-engine
 
+For implement SDL2 add in .zshrc this:
+```shell
+export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
+```
+
 macos fix wasm
 ```shell
 cd crate
