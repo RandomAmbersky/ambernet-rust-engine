@@ -1,4 +1,4 @@
-use crate::unsigned_num::UnsignedNum;
+use crate::UnsignedNum;
 
 pub struct Pos2D<T: UnsignedNum> {
     pub x: T,

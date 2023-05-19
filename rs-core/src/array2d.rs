@@ -1,7 +1,4 @@
-use crate::cell_type::CellType;
-use crate::pos2d::Pos2D;
-use crate::size2d::Size2D;
-use crate::unsigned_num::UnsignedNum;
+use crate::{CellType, Pos2D, Size2D, UnsignedNum};
 
 #[allow(dead_code)]
 pub struct Array2D<S: UnsignedNum, T: CellType> {

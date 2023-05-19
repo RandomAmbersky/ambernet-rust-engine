@@ -1,5 +1,4 @@
-use crate::pos2d::Pos2D;
-use crate::unsigned_num::UnsignedNum;
+use crate::{Pos2D, UnsignedNum};
 
 pub struct Size2D<T: UnsignedNum> {
     pub width: T,
