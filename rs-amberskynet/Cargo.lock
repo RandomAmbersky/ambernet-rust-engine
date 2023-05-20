@@ -1246,6 +1246,7 @@ dependencies = [
  "pollster",
  "rand",
  "rs-core",
+ "rs-core-gfx",
  "wgpu",
  "winit",
 ]
@@ -1253,6 +1254,13 @@ dependencies = [
 [[package]]
 name = "rs-core"
 version = "0.1.0"
+
+[[package]]
+name = "rs-core-gfx"
+version = "0.1.0"
+dependencies = [
+ "rs-core",
+]
 
 [[package]]
 name = "rustc-hash"

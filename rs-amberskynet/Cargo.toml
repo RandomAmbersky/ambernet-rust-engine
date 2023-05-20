@@ -18,6 +18,7 @@ wgpu = "0.14"
 winit = "0.27"
 rand = "0.8.5"
 rs-core = { path = "../rs-core" }
+rs-core-gfx = { path = "../rs-core-gfx" }
 
 [dependencies.image]
 version = "0.24"

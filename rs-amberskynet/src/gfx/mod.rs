@@ -12,10 +12,10 @@ mod bind_groups;
 pub mod defines;
 pub mod gfx_error;
 
-use crate::core_gfx::gfx_context::GfxContextTrait;
 use crate::gfx::gfx_error::GfxError;
 pub use bind_groups::BindGroupEntryBuilder;
 pub use bind_groups::BindGroupLayoutBuilder;
+use rs_core_gfx::GfxContextTrait;
 
 pub struct AsnGfx {
     pub main_window: AsnWindow,
