@@ -1,5 +1,5 @@
-use crate::core::Size2D;
 use image::{DynamicImage, GenericImageView};
+use rs_core::Size2D;
 use std::num::NonZeroU32;
 
 use crate::core_gfx::texture::AsnTextureTrait;

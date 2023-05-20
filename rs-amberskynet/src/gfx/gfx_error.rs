@@ -1,4 +1,4 @@
-use crate::core::AsnError;
+use rs_core::AsnError;
 
 #[derive(Debug)]
 pub struct GfxError {}
