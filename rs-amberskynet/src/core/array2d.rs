@@ -1,10 +1,11 @@
+use crate::core::axe_dimension::AxeDimension;
 use crate::core::size2d::Size2D;
 use crate::core::Pos2D;
 use std::fmt::{Debug, Display};
 use std::ops::{Add, Mul};
 use std::slice::SliceIndex;
 
-pub struct Array2D<S, T>
+pub struct Array2D<S: AxeDimension, T>
 where
     S: Sized
         + Debug

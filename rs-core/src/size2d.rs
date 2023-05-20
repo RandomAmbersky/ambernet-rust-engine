@@ -10,7 +10,7 @@ impl<T: UnsignedNum> Size2D<T> {
         if !self.is_pos_into(pos) {
             return Err(String::from("Not in size"));
         };
-        let result = (self.width * pos.y + pos.x).to_usize();
+        let result = (self.width * pos.y + pos.x).as_usize();
         Ok(result)
     }
     pub fn is_pos_into(&self, pos: &Pos2D<T>) -> bool {

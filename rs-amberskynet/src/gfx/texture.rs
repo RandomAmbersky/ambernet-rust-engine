@@ -1,3 +1,4 @@
+use crate::core::Size2D;
 use image::{DynamicImage, GenericImageView};
 use std::num::NonZeroU32;
 
@@ -12,7 +13,7 @@ pub struct AsnTexture {
     pub sampler: wgpu::Sampler,
 }
 
-impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray, Size2d> for AsnTexture {
+impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
     fn from_raw_image(gfx: &AsnGfx, bytes: &[u8]) -> Result<AsnTexture, GfxError> {
         let img = image::load_from_memory(bytes);
         match img {
@@ -154,9 +155,5 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray, Size2d> for AsnTe
             size,
         );
         Ok(())
-    }
-
-    fn get_size(&self) -> Size2d {
-        todo!()
     }
 }

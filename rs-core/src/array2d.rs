@@ -11,7 +11,7 @@ impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
     fn new(width: S, height: S) -> Self {
         Self {
             size: Size2D { width, height },
-            bytes: vec![T::ZERO; (width * height).to_usize()],
+            bytes: vec![T::ZERO; (width * height).as_usize()],
         }
     }
 
@@ -52,7 +52,7 @@ mod tests {
 
     type Axe = u32;
     impl UnsignedNum for Axe {
-        fn to_usize(&self) -> usize {
+        fn as_usize(&self) -> usize {
             usize::try_from(*self).expect("convert error")
         }
     }
@@ -93,10 +93,10 @@ mod tests {
 
     #[test]
     fn get_point() {
-        let axe_value: Axe = 10;
+        let axe_value: Axe = 10 as u32;
         let mut arr: Array2D<Axe, Cell> = Array2D::new(axe_value, axe_value);
 
-        arr.bytes[(10 * 5 + 5).to_usize()] = 55;
+        arr.bytes[(10 * 5 + 5) as usize] = 55;
 
         let pos = Pos2D {
             x: 5 as Axe,
@@ -118,7 +118,7 @@ mod tests {
         let result = arr.set_point(&pos, 99 as Cell);
         assert!(result.is_ok());
 
-        let cell = arr.bytes[(arr.size.width * pos.y + pos.x).to_usize()];
+        let cell = arr.bytes[(arr.size.width * pos.y + pos.x).as_usize()];
         assert_eq!(cell, 99);
     }
 }
