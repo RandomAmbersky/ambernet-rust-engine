@@ -1245,9 +1245,14 @@ dependencies = [
  "log",
  "pollster",
  "rand",
+ "rs-core",
  "wgpu",
  "winit",
 ]
+
+[[package]]
+name = "rs-core"
+version = "0.1.0"
 
 [[package]]
 name = "rustc-hash"

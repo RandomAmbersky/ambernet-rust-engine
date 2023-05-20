@@ -17,6 +17,7 @@ pollster = "0.2"
 wgpu = "0.14"
 winit = "0.27"
 rand = "0.8.5"
+rs-core = { path = "../rs-core" }
 
 [dependencies.image]
 version = "0.24"

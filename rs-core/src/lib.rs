@@ -5,6 +5,8 @@ mod pos2d;
 mod size2d;
 mod unsigned_num;
 
+pub use error::AsnError;
+
 pub use cell_type::CellType;
 pub use unsigned_num::UnsignedNum;
 
