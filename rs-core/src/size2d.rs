@@ -23,3 +23,26 @@ impl<T: UnsignedNum> Size2D<T> {
         true
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+
+    type MySize2D = Size2D<u32>;
+
+    #[test]
+    fn get_index() {
+        let my = MySize2D {
+            width: 10,
+            height: 20,
+        };
+
+        let pos = Pos2D { x: 50, y: 60 };
+        let actual = my.get_index(&pos);
+        assert!(actual.is_err());
+
+        let pos = Pos2D { x: 5, y: 6 };
+        let actual = my.get_index(&pos).unwrap();
+        assert_eq!(actual, 6 * 10 + 5);
+    }
+}

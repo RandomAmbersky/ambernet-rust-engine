@@ -10,7 +10,7 @@ mod tests {
     use crate::pos2d::Pos2D;
 
     #[test]
-    fn check_in_array() {
+    fn check_pos_2d() {
         let value: u32 = 10;
         let a = Pos2D { x: value, y: value };
         assert_eq!(a.x, value);
