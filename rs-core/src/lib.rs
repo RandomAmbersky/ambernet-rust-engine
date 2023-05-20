@@ -1,5 +1,6 @@
 mod array2d;
 mod cell_type;
+mod error;
 mod pos2d;
 mod size2d;
 mod unsigned_num;
