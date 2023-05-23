@@ -24,6 +24,6 @@ mod tests {
     fn test_unsigned_num_it_works() {
         let c: MyCoolNum = 10 as MyCoolNum;
         let actual = c.as_usize();
-        assert_eq!(actual, 10 as usize);
+        assert_eq!(actual, 10_usize);
     }
 }

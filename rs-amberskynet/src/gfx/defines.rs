@@ -1,11 +1,23 @@
-use rs_core::{Array2D, Size2D};
+use rs_core::{Array2D, CellType, Size2D, UnsignedNum};
 use rs_core_gfx::PixelRGBA;
 
-pub type MyAxeDimension = usize;
-pub type MyByteDimension = u8;
+// pub struct MyAxeDimension(usize);
+// pub struct MyByteDimension(u8);
 
-pub type Size2d = Size2D<MyAxeDimension>;
+// impl UnsignedNum for MyAxeDimension {
+// 	fn as_usize(&self) -> usize {
+// 		todo!()
+// 	}
+// };
 
-pub type BytesArray = Array2D<MyAxeDimension, MyByteDimension>;
+// impl UnsignedNum for MyAxeDimension {
+// 	fn as_usize(&self) -> usize {
+// 		usize::try_from(*self).expect("convert error")
+// 	}
+// }
 
-pub type Pixel = PixelRGBA<MyByteDimension>;
+pub type Size2d = Size2D<u32>;
+
+pub type BytesArray = Array2D<u32, u8>;
+
+pub type Pixel = PixelRGBA<u8>;
