@@ -8,17 +8,23 @@ pub trait UnsignedNum:
     fn as_usize(&self) -> usize;
 }
 
+macro_rules! empty_trait_impl {
+    ($name:ident for $($t:ty)*) => ($(
+        impl $name for $t {
+            fn as_usize(&self) -> usize {
+                usize::try_from(*self).expect("convert error")
+            }
+        }
+    )*)
+}
+
+empty_trait_impl!(UnsignedNum for u8 u16 u32 u64);
+
 #[cfg(test)]
 mod tests {
     use crate::UnsignedNum;
 
     type MyCoolNum = u8;
-
-    impl UnsignedNum for MyCoolNum {
-        fn as_usize(&self) -> usize {
-            usize::try_from(*self).expect("convert error")
-        }
-    }
 
     #[test]
     fn test_unsigned_num_it_works() {

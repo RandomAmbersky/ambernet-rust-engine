@@ -48,11 +48,6 @@ mod tests {
     use crate::*;
 
     type Axe = u32;
-    impl UnsignedNum for Axe {
-        fn as_usize(&self) -> usize {
-            usize::try_from(*self).expect("convert error")
-        }
-    }
 
     type Cell = u8;
     impl CellType for Cell {
@@ -90,7 +85,7 @@ mod tests {
 
     #[test]
     fn get_point() {
-        let axe_value: Axe = 10 as u32;
+        let axe_value: Axe = 10_u32;
         let mut arr: Array2D<Axe, Cell> = Array2D::new(axe_value, axe_value);
 
         arr.bytes[(10 * 5 + 5) as usize] = 55;
