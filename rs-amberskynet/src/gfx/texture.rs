@@ -2,7 +2,7 @@ use image::{DynamicImage, GenericImageView};
 
 use std::num::NonZeroU32;
 
-use crate::gfx::defines::{BytesArray, Size2d};
+use crate::gfx::defines::BytesArray;
 use crate::gfx::gfx_error::GfxError;
 use crate::gfx::AsnGfx;
 use rs_core_gfx::AsnTextureTrait;
