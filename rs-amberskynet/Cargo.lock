@@ -1247,6 +1247,7 @@ dependencies = [
  "rand",
  "rs-core",
  "rs-core-gfx",
+ "rs-gfx-wgpu",
  "wgpu",
  "winit",
 ]
@@ -1260,6 +1261,18 @@ name = "rs-core-gfx"
 version = "0.1.0"
 dependencies = [
  "rs-core",
+]
+
+[[package]]
+name = "rs-gfx-wgpu"
+version = "0.1.0"
+dependencies = [
+ "image",
+ "pollster",
+ "rs-core",
+ "rs-core-gfx",
+ "wgpu",
+ "winit",
 ]
 
 [[package]]

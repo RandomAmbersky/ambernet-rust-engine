@@ -7,8 +7,6 @@ pub use context::AsnContext;
 mod asn_engine;
 pub use asn_engine::init;
 
-pub mod gfx;
-
 mod error;
 mod events;
 

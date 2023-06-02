@@ -1,4 +1,4 @@
-use crate::gfx::AsnGfx;
+use rs_gfx_wgpu::AsnGfx;
 use winit::event_loop::EventLoop;
 
 pub struct AsnContext {

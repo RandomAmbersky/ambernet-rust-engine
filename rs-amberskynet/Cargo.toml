@@ -19,6 +19,7 @@ winit = "0.27"
 rand = "0.8.5"
 rs-core = { path = "../rs-core" }
 rs-core-gfx = { path = "../rs-core-gfx" }
+rs-gfx-wgpu = { path = "../rs-gfx-wgpu" }
 
 [dependencies.image]
 version = "0.24"
