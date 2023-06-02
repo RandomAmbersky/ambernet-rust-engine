@@ -7,7 +7,7 @@ pub struct Pos2D<T: UnsignedNum> {
 
 #[cfg(test)]
 mod tests {
-    use crate::pos2d::{MyStruct, Pos2D};
+    use crate::pos2d::Pos2D;
 
     #[test]
     fn check_pos_2d() {
@@ -15,7 +15,5 @@ mod tests {
         let a = Pos2D { x: value, y: value };
         assert_eq!(a.x, value);
         assert_eq!(a.y, value);
-
-        let s = MyStruct::default();
     }
 }
