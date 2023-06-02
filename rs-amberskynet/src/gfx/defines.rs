@@ -1,5 +1,6 @@
 use rs_core::{Array2D, CellType, Size2D, UnsignedNum};
 use rs_core_gfx::PixelRGBA;
+use std::cell::Cell;
 
 // pub struct MyAxeDimension(usize);
 // pub struct MyByteDimension(u8);

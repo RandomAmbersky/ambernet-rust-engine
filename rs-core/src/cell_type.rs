@@ -3,3 +3,7 @@
 pub trait CellType: Copy {
     const ZERO: Self;
 }
+
+impl CellType for u8 {
+    const ZERO: Self = 0_u8;
+}

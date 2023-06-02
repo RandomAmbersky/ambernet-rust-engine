@@ -1,7 +1,7 @@
 use rs_core::UnsignedNum;
 
 #[allow(dead_code)]
-pub struct PixelRGBA<E> {
+pub struct PixelRGBA<E: UnsignedNum> {
     r: E,
     g: E,
     b: E,
