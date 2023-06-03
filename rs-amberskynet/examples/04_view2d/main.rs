@@ -3,10 +3,10 @@ mod view_2d;
 pub const TEXTURE_SOURCE: &[u8] = include_bytes!("./resource/tiles_mod.png");
 
 use crate::view_2d::View2D;
-use rs_amberskynet::core_gfx::texture::AsnTextureTrait;
-use rs_amberskynet::gfx::gfx_error::GfxError;
-use rs_amberskynet::gfx::AsnTexture;
+
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
+use rs_gfx_wgpu::gfx_error::GfxError;
+use rs_gfx_wgpu::AsnTexture;
 
 struct Handler {
     view_2d: View2D,

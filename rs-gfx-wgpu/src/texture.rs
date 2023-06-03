@@ -22,7 +22,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
         }
     }
     fn from_array(gfx: &AsnGfx, array: &BytesArray) -> Result<AsnTexture, GfxError> {
-        let dimensions: (u32, u32) = (array.size.width as u32, array.size.height as u32);
+        let dimensions: (u32, u32) = (array.size.width, array.size.height);
 
         let size = wgpu::Extent3d {
             width: dimensions.0,
@@ -79,7 +79,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
     }
 
     fn update_from_array(&mut self, gfx: &AsnGfx, array: &BytesArray) -> Result<(), GfxError> {
-        let dimensions: (u32, u32) = (array.size.width as u32, array.size.height as u32);
+        let dimensions: (u32, u32) = (array.size.width, array.size.height);
         let size = wgpu::Extent3d {
             width: dimensions.0,
             height: dimensions.1,

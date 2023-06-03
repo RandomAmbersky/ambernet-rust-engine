@@ -5,13 +5,13 @@ use crate::view_2d::mesh::Mesh;
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rand::Rng;
-use rs_amberskynet::gfx::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
+use rs_gfx_wgpu::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
-use rs_amberskynet::core::{Array2D, Pos2D};
-use rs_amberskynet::core_gfx::texture::AsnTextureTrait;
-use rs_amberskynet::gfx::defines::{BytesArray, Size2d};
-use rs_amberskynet::gfx::gfx_error::GfxError;
+use rs_core::{Array2D, Pos2D};
+use rs_gfx_core::AsnTextureTrait;
+use rs_gfx_wgpu::defines::{BytesArray, Size2d, SizeDimension};
+use rs_gfx_wgpu::gfx_error::GfxError;
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 // const ONE_BLUE_PIXEL: [u8; 4] = [0, 0, 255, 255];
@@ -59,8 +59,8 @@ impl View2D {
 
         let view = Array2D {
             size: Size2d {
-                width: texture_size_w as usize,
-                height: texture_size_h as usize,
+                width: texture_size_w as SizeDimension,
+                height: texture_size_h as SizeDimension,
             },
             bytes: vec![0; (texture_size_w * texture_size_h * 4) as usize],
         };

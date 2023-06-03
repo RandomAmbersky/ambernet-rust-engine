@@ -1206,6 +1206,7 @@ dependencies = [
  "rs-core",
  "rs-gfx-core",
  "rs-gfx-wgpu",
+ "wgpu",
  "winit",
 ]
 
