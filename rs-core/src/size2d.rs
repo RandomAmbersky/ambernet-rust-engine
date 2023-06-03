@@ -1,5 +1,6 @@
 use crate::{Pos2D, UnsignedNum};
 
+#[derive(Default, Debug, Copy, Clone)]
 pub struct Size2D<T: UnsignedNum> {
     pub width: T,
     pub height: T,

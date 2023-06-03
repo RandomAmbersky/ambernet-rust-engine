@@ -27,6 +27,12 @@ impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
     }
 
     #[allow(dead_code)]
+    pub fn get_size(&self) -> Result<Size2D<S>, String> {
+        let size = self.size;
+        Ok(size)
+    }
+
+    #[allow(dead_code)]
     pub fn get_point(&self, pos: &Pos2D<S>) -> Result<T, String> {
         self._check_not_in_array(pos)?;
         let index = self.size.get_index(pos)?;

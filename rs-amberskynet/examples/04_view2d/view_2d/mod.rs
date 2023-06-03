@@ -54,8 +54,8 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
-        let texture_size_w: u32 = 3200 / 16;
-        let texture_size_h: u32 = 2400 / 16;
+        let texture_size_w: u32 = 100; //3200 / 16;
+        let texture_size_h: u32 = 100; //2400 / 16;
 
         let view = Array2D {
             size: Size2d {
@@ -109,18 +109,18 @@ impl View2D {
     pub fn update(&mut self) -> Result<(), String> {
         let mut rng = rand::thread_rng();
 
-        for _ in 0..1000 {
+        // println!("{:?} {:?}", &self.view.size, self.view.bytes.len());
+
+        for _ in 0..10000 {
             let pos = Pos2D {
                 x: rng.gen_range(0..self.view.size.width),
                 y: rng.gen_range(0..self.view.size.height),
             };
 
-            let index = self.view.get_point(&pos)?;
-            //     // let index = pos_y * self.view.size.width + pos_x;
-            //
+            let index = pos.y * self.view.size.width + pos.x;
+
             let byte_index = index * 4 + rng.gen_range(0..4);
-            //
-            // let value: u8 = rng.gen();
+
             let mut value: u8 = self.view.bytes[byte_index as usize];
 
             if rng.gen_range(0..100) > 50 {

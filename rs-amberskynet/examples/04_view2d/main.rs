@@ -5,6 +5,7 @@ pub const TEXTURE_SOURCE: &[u8] = include_bytes!("./resource/tiles_mod.png");
 use crate::view_2d::View2D;
 
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
+use rs_core::Array2D;
 use rs_gfx_core::AsnTextureTrait;
 use rs_gfx_wgpu::gfx_error::GfxError;
 use rs_gfx_wgpu::AsnTexture;
@@ -17,7 +18,8 @@ impl Handler {
     pub fn new(ctx: &AsnContext) -> Result<Self, GfxError> {
         let format = ctx.gfx.main_window.get_format(&ctx.gfx.adapter);
         let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE)?;
-        let view_2d = View2D::new(&ctx.gfx, &texture, format)?;
+        let mut view_2d = View2D::new(&ctx.gfx, &texture, format)?;
+        view_2d.update().expect("panic message");
         Ok(Self { view_2d })
     }
 }
