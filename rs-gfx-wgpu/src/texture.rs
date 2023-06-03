@@ -5,8 +5,6 @@ use crate::gfx_error::GfxError;
 use crate::AsnGfx;
 use rs_gfx_core::AsnTextureTrait;
 
-use wgpu::TextureFormat;
-
 pub struct AsnTexture {
     pub texture: wgpu::Texture,
     pub view: wgpu::TextureView,
@@ -30,13 +28,14 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
             depth_or_array_layers: 1,
         };
 
+        let texture_format = wgpu::TextureFormat::Rgba8UnormSrgb;
         let texture = gfx.device.create_texture(&wgpu::TextureDescriptor {
             label: None,
             size,
             mip_level_count: 1,
             sample_count: 1,
             dimension: wgpu::TextureDimension::D2,
-            format: wgpu::TextureFormat::Rgba8UnormSrgb,
+            format: texture_format,
             usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
             view_formats: &[],
         });

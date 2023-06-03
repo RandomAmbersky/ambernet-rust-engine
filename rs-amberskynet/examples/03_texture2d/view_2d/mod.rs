@@ -36,6 +36,7 @@ impl View2D {
         let group_layout = get_bind_group_layout(device);
         let diffuse_bind_group = get_bind_group(device, texture, &group_layout);
 
+        // let format = texture.texture.format();
         let render_pipeline = get_render_pipeline(device, format, shader, &group_layout);
 
         Self {
