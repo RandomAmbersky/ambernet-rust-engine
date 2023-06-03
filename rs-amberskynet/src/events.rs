@@ -90,6 +90,9 @@ fn process_window_event(ctx: &mut AsnContext, event: &WindowEvent) {
         WindowEvent::MouseWheel { .. } => {}
         WindowEvent::MouseInput { .. } => {}
         WindowEvent::TouchpadPressure { .. } => {}
+        WindowEvent::TouchpadMagnify { .. } => {}
+        WindowEvent::TouchpadRotate { .. } => {}
+        WindowEvent::SmartMagnify { .. } => {}
         WindowEvent::AxisMotion { .. } => {}
         WindowEvent::Touch(_) => {}
         WindowEvent::ScaleFactorChanged {
