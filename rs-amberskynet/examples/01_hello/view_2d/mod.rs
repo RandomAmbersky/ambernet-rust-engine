@@ -1,5 +1,4 @@
 use crate::view_2d::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
-use rs_amberskynet::gfx::{AsnTexture, Vertex};
 use wgpu::util::DeviceExt;
 use wgpu::{CommandEncoder, Device, Queue, SurfaceTexture, TextureFormat, TextureView};
 

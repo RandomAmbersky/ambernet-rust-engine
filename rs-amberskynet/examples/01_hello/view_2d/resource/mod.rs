@@ -1,5 +1,3 @@
-use rs_amberskynet::gfx::Vertex;
-
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 pub const TEXTURE_SOURCE: &[u8] = include_bytes!("happy-tree.png");
 

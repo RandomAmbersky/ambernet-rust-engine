@@ -5,6 +5,7 @@ pub const TEXTURE_SOURCE: &[u8] = include_bytes!("./resource/tiles_mod.png");
 use crate::view_2d::View2D;
 
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
+use rs_gfx_core::AsnTextureTrait;
 use rs_gfx_wgpu::gfx_error::GfxError;
 use rs_gfx_wgpu::AsnTexture;
 
@@ -32,7 +33,7 @@ impl ExtHandlerTrait for Handler {
 
 pub fn main() {
     let (ctx, event_loop) = rs_amberskynet::init();
-    if let Ok(t) = Handler::new(&ctx) {
-        rs_amberskynet::run(ctx, event_loop, t)
+    if let Ok(_t) = Handler::new(&ctx) {
+        rs_amberskynet::run(ctx, event_loop, _t)
     };
 }
