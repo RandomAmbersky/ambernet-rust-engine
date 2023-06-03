@@ -3,7 +3,7 @@ use image::{DynamicImage, GenericImageView};
 use crate::defines::BytesArray;
 use crate::gfx_error::GfxError;
 use crate::AsnGfx;
-use rs_core_gfx::AsnTextureTrait;
+use rs_gfx_core::AsnTextureTrait;
 
 use wgpu::TextureFormat;
 

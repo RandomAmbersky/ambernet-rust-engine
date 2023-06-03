@@ -8,7 +8,7 @@ pollster = "0.3"
 wgpu = "0.16"
 winit = "0.28"
 rs-core = { path = "../rs-core" }
-rs-core-gfx = { path = "../rs-gfx-core" }
+rs-gfx-core = { path = "../rs-gfx-core" }
 
 [dependencies.image]
 version = "0.24"

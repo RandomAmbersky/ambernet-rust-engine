@@ -1024,7 +1024,7 @@ name = "rs-core"
 version = "0.1.0"
 
 [[package]]
-name = "rs-core-gfx"
+name = "rs-gfx-core"
 version = "0.1.0"
 dependencies = [
  "rs-core",
@@ -1037,7 +1037,7 @@ dependencies = [
  "image",
  "pollster",
  "rs-core",
- "rs-core-gfx",
+ "rs-gfx-core",
  "wgpu",
  "winit",
 ]
