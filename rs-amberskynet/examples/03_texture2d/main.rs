@@ -20,6 +20,12 @@ impl Handler {
             .main_window
             .surface
             .get_capabilities(&ctx.gfx.adapter);
+
+        let surface_iter = surface_caps.formats.iter().copied();
+        for form in surface_iter {
+            println!("surface_format list: {:?}", form);
+        }
+
         let surface_format = surface_caps
             .formats
             .iter()
@@ -39,6 +45,11 @@ impl Handler {
             });
 
         let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE).unwrap();
+
+        let texture_format = texture.texture.format();
+        println!("texture_format: {:?}", texture_format);
+        let update_format = texture_format.add_srgb_suffix();
+        println!("texture_format: {:?}", update_format);
 
         let view_2d = View2D::new(&ctx.gfx.device, &texture, surface_format, &shader);
 

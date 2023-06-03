@@ -40,24 +40,48 @@ impl AsnGfx {
             dx12_shader_compiler: Default::default(),
         });
 
+        // let report = instance.generate_report();
+        // println!("{:?}", report);
+
+        // instance.create_surface_from_surface_handle();
         let main_window = AsnWindow::new(event_loop, &instance);
 
-        let adapter = pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions {
-            compatible_surface: Some(&main_window.surface),
-            force_fallback_adapter: false,
-            ..Default::default()
-        }))
-        .expect("Failed to find an appropriate adapter");
+        let adapter = instance
+            .enumerate_adapters(wgpu::Backends::all())
+            .find(|adapter| adapter.is_surface_supported(&main_window.surface))
+            .unwrap();
+        // let adapter = pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions {
+        //     compatible_surface: Some(&main_window.surface),
+        //     force_fallback_adapter: false,
+        //     ..Default::default()
+        // }))
+        // .expect("Failed to find an appropriate adapter");
 
         let (device, queue) = pollster::block_on(adapter.request_device(
             &wgpu::DeviceDescriptor {
-                label: None,
                 features: wgpu::Features::empty(),
-                limits: wgpu::Limits::downlevel_defaults(),
+                // WebGL doesn't support all of wgpu's features, so if
+                // we're building for the web we'll have to disable some.
+                limits: if cfg!(target_arch = "wasm32") {
+                    wgpu::Limits::downlevel_webgl2_defaults()
+                } else {
+                    wgpu::Limits::default()
+                },
+                label: None,
             },
-            None,
+            None, // Trace path
         ))
-        .expect("Failed to create device");
+        .unwrap();
+
+        // let (device, queue) = pollster::block_on(adapter.request_device(
+        //     &wgpu::DeviceDescriptor {
+        //         label: None,
+        //         features: wgpu::Features::empty(),
+        //         limits: wgpu::Limits::downlevel_defaults(),
+        //     },
+        //     None,
+        // ))
+        // .expect("Failed to create device");
 
         AsnGfx {
             main_window,
