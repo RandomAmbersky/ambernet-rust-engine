@@ -24,15 +24,8 @@ impl Handler {
             .formats
             .iter()
             .copied()
-            .filter(|f| f.is_srgb())
-            .next()
+            .find(|f| f.is_srgb())
             .unwrap_or(surface_caps.formats[0]);
-
-        // let format = ctx
-        //     .gfx
-        //     .main_window
-        //     .surface
-        //     .get_supported_formats(&ctx.gfx.adapter)[0];
 
         let shader = ctx
             .gfx
