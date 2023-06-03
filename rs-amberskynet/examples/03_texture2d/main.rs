@@ -5,8 +5,9 @@ mod view_2d;
 
 use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 use crate::view_2d::View2D;
-use rs_amberskynet::gfx::AsnTexture;
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
+use rs_gfx_core::AsnTextureTrait;
+use rs_gfx_wgpu::AsnTexture;
 
 struct Handler {
     view_2d: View2D,
@@ -14,11 +15,24 @@ struct Handler {
 
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Self {
-        let format = ctx
+        let surface_caps = ctx
             .gfx
             .main_window
             .surface
-            .get_supported_formats(&ctx.gfx.adapter)[0];
+            .get_capabilities(&ctx.gfx.adapter);
+        let surface_format = surface_caps
+            .formats
+            .iter()
+            .copied()
+            .filter(|f| f.is_srgb())
+            .next()
+            .unwrap_or(surface_caps.formats[0]);
+
+        // let format = ctx
+        //     .gfx
+        //     .main_window
+        //     .surface
+        //     .get_supported_formats(&ctx.gfx.adapter)[0];
 
         let shader = ctx
             .gfx
@@ -28,15 +42,9 @@ impl Handler {
                 source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
             });
 
-        let texture = AsnTexture::from_bytes(
-            &ctx.gfx.device,
-            &ctx.gfx.queue,
-            TEXTURE_SOURCE,
-            "Tiles Mod Texture",
-        )
-        .unwrap();
+        let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE).unwrap();
 
-        let view_2d = View2D::new(&ctx.gfx.device, &texture, format, &shader);
+        let view_2d = View2D::new(&ctx.gfx.device, &texture, surface_format, &shader);
 
         Self { view_2d }
     }

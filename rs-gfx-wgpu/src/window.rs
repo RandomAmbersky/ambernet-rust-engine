@@ -30,7 +30,7 @@ impl AsnWindow {
         surface_format
     }
     pub fn get_config(&self, adapter: &Adapter, size: &PhysicalSize<u32>) -> SurfaceConfiguration {
-        let surface_caps = self.surface.get_capabilities(&adapter);
+        let surface_caps = self.surface.get_capabilities(adapter);
         let surface_format = surface_caps
             .formats
             .iter()

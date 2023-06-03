@@ -2,7 +2,7 @@ mod model_vertex;
 
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
-use rs_amberskynet::gfx::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
+use rs_gfx_wgpu::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat, TextureView};
 
@@ -74,7 +74,7 @@ fn get_bind_group(
     texture: &AsnTexture,
     layout: &BindGroupLayout,
 ) -> wgpu::BindGroup {
-    let entries = BindGroupEntryBuilder::new()
+    let entries = BindGroupEntryBuilder::default()
         .texture(&texture.view)
         .sampler(&texture.sampler);
 
