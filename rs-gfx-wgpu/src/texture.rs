@@ -1,7 +1,5 @@
 use image::{DynamicImage, GenericImageView};
 
-use std::num::NonZeroU32;
-
 use crate::defines::BytesArray;
 use crate::gfx_error::GfxError;
 use crate::AsnGfx;
