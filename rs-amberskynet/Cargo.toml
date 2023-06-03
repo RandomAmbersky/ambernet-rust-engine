@@ -17,7 +17,7 @@ pollster = "0.3"
 winit = "0.28"
 rand = "0.8.5"
 rs-core = { path = "../rs-core" }
-rs-core-gfx = { path = "../rs-core-gfx" }
+rs-core-gfx = { path = "../rs-gfx-core" }
 rs-gfx-wgpu = { path = "../rs-gfx-wgpu" }
 
 [build-dependencies]
