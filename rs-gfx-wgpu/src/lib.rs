@@ -2,7 +2,9 @@ mod window;
 
 use crate::window::AsnWindow;
 use std::iter;
-use wgpu::{Adapter, CommandEncoder, Device, Queue, SurfaceTexture, TextureView};
+use wgpu::{
+    Adapter, CommandEncoder, Device, InstanceDescriptor, Queue, SurfaceTexture, TextureView,
+};
 use winit::event_loop::EventLoop;
 
 mod texture;
@@ -33,7 +35,10 @@ pub struct FrameCtx {
 
 impl AsnGfx {
     pub fn new(event_loop: &EventLoop<()>) -> Self {
-        let instance = wgpu::Instance::new(wgpu::Backends::all());
+        let instance = wgpu::Instance::new(InstanceDescriptor {
+            backends: wgpu::Backends::all(),
+            dx12_shader_compiler: Default::default(),
+        });
 
         let main_window = AsnWindow::new(event_loop, &instance);
 
