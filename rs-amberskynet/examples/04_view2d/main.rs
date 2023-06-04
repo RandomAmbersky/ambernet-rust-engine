@@ -3,6 +3,7 @@ mod view_2d;
 pub const TEXTURE_SOURCE: &[u8] = include_bytes!("./resource/tiles_mod.png");
 
 use crate::view_2d::View2D;
+use asn_logger::AsnLogLevel;
 
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
 use rs_gfx_core::AsnTextureTrait;
@@ -12,6 +13,8 @@ use rs_gfx_wgpu::AsnTexture;
 struct Handler {
     view_2d: View2D,
 }
+
+const GLOBAL_LOG_FILTER: AsnLogLevel = AsnLogLevel::Debug;
 
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Result<Self, GfxError> {
@@ -33,6 +36,7 @@ impl ExtHandlerTrait for Handler {
 }
 
 pub fn main() {
+    asn_logger::init_log(GLOBAL_LOG_FILTER);
     let (ctx, event_loop) = rs_amberskynet::init();
     if let Ok(_t) = Handler::new(&ctx) {
         rs_amberskynet::run(ctx, event_loop, _t)
