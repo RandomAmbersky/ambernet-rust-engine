@@ -1,4 +1,5 @@
 use crate::view_2d::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
+use rs_gfx_wgpu::AsnTexture;
 use wgpu::util::DeviceExt;
 use wgpu::{CommandEncoder, Device, Queue, SurfaceTexture, TextureFormat, TextureView};
 

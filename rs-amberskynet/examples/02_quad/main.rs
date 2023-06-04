@@ -1,10 +1,12 @@
 mod resource;
 
-use crate::resource::{INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
-use rs_amberskynet::gfx::{AsnTexture, Vertex};
+use crate::resource::{Vertex, INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
+use rs_gfx_core::AsnTextureTrait;
+use rs_gfx_wgpu::AsnTexture;
 use std::iter;
 use wgpu::util::DeviceExt;
+use wgpu::TextureFormat;
 
 struct Handler {
     vertex_buffer: wgpu::Buffer,
@@ -16,11 +18,21 @@ struct Handler {
 
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Self {
-        let format = ctx
+        let surface_caps = ctx
             .gfx
             .main_window
             .surface
-            .get_supported_formats(&ctx.gfx.adapter)[0];
+            .get_capabilities(&ctx.gfx.adapter);
+
+        let surface_iter = surface_caps.formats.iter().copied();
+
+        let surface_format = surface_caps
+            .formats
+            .iter()
+            .copied()
+            .find(|f| f.is_srgb())
+            // .next()
+            .unwrap_or(surface_caps.formats[0]);
 
         let shader = ctx
             .gfx
@@ -30,13 +42,7 @@ impl Handler {
                 source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
             });
 
-        let texture = AsnTexture::from_bytes(
-            &ctx.gfx.device,
-            &ctx.gfx.queue,
-            TEXTURE_SOURCE,
-            "Tiles Mod Texture",
-        )
-        .unwrap();
+        let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE).unwrap();
 
         let texture_bind_group_layout =
             ctx.gfx
@@ -124,7 +130,7 @@ impl Handler {
                         module: &shader,
                         entry_point: "fs_main",
                         targets: &[Some(wgpu::ColorTargetState {
-                            format,
+                            format: TextureFormat::R8Unorm,
                             blend: Some(wgpu::BlendState {
                                 color: wgpu::BlendComponent::REPLACE,
                                 alpha: wgpu::BlendComponent::REPLACE,
@@ -167,7 +173,7 @@ impl Handler {
 }
 
 impl ExtHandlerTrait for Handler {
-    fn draw(&self, ctx: &AsnContext) {
+    fn draw(&mut self, ctx: &mut AsnContext) {
         let frame = ctx.gfx.main_window.get_current_texture();
 
         let mut encoder = ctx
@@ -210,7 +216,7 @@ impl ExtHandlerTrait for Handler {
 
         frame.present();
     }
-    fn update(&self, e: &AsnContext) {}
+    fn update(&mut self, e: &mut AsnContext) {}
 }
 
 pub fn main() {
