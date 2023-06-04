@@ -11,13 +11,10 @@ cfg-if = "1"
 anyhow = "1.0"
 bytemuck = { version = "1.12", features = [ "derive" ] }
 cgmath = "0.18"
-env_logger = "0.10"
-log = "0.4"
-chrono = { version = "0.4", features = ["wasmbind"] }
-fern = { version = "0.6", features = ["colored"] }
 pollster = "0.3"
 winit = "0.28"
 rand = "0.8.5"
+asn-logger = { path = "../asn-logger"}
 rs-core = { path = "../rs-core" }
 rs-gfx-core = { path = "../rs-gfx-core" }
 rs-gfx-wgpu = { path = "../rs-gfx-wgpu" }
