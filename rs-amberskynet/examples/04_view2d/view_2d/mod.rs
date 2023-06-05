@@ -6,6 +6,7 @@ use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rand::Rng;
 use rs_gfx_wgpu::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
+
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
 use rs_core::{Array2D, Pos2D};
@@ -21,6 +22,7 @@ pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 // ];
 
 pub struct View2D {
+    tile_texture: AsnTexture,
     texture: AsnTexture,
     view: BytesArray,
     mesh: Mesh,
@@ -32,7 +34,7 @@ pub struct View2D {
 impl View2D {
     pub fn new(
         gfx: &AsnGfx,
-        _texture: &AsnTexture,
+        tile_texture: AsnTexture,
         format: TextureFormat,
     ) -> Result<Self, GfxError> {
         let mesh = Mesh::build(VERTICES, INDICES, &gfx.device);
@@ -54,8 +56,8 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
-        let texture_size_w: u32 = 100; //3200 / 16;
-        let texture_size_h: u32 = 100; //2400 / 16;
+        let texture_size_w: u32 = 10; //3200 / 16;
+        let texture_size_h: u32 = 10; //2400 / 16;
 
         let view = Array2D {
             size: Size2d {
@@ -78,6 +80,7 @@ impl View2D {
         let bind_group = gfx.device.create_bind_group(&group_desc);
 
         let view_2d = Self {
+            tile_texture,
             texture,
             view,
             mesh,

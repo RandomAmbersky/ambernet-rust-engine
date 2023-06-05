@@ -1,15 +1,14 @@
+mod mesh;
 mod model_vertex;
 
+use crate::view_2d::mesh::Mesh;
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
 use rs_gfx_wgpu::{AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
-use wgpu::util::DeviceExt;
 use wgpu::{BindGroupLayout, CommandEncoder, Device, ShaderModule, TextureFormat, TextureView};
 
 pub struct View2D {
-    pub vertex_buffer: wgpu::Buffer,
-    pub index_buffer: wgpu::Buffer,
-    pub num_indices: u32,
+    mesh: Mesh,
     pub diffuse_bind_group: wgpu::BindGroup,
     pub render_pipeline: wgpu::RenderPipeline,
 }
@@ -21,28 +20,15 @@ impl View2D {
         format: TextureFormat,
         shader: &ShaderModule,
     ) -> Self {
-        let vertex_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Vertex Buffer"),
-            contents: bytemuck::cast_slice(VERTICES),
-            usage: wgpu::BufferUsages::VERTEX,
-        });
-        let index_buffer = device.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-            label: Some("Index Buffer"),
-            contents: bytemuck::cast_slice(INDICES),
-            usage: wgpu::BufferUsages::INDEX,
-        });
-        let num_indices = INDICES.len() as u32;
+        let mesh = Mesh::build(VERTICES, INDICES, device);
 
         let group_layout = get_bind_group_layout(device);
         let diffuse_bind_group = get_bind_group(device, texture, &group_layout);
 
-        // let format = texture.texture.format();
         let render_pipeline = get_render_pipeline(device, format, shader, &group_layout);
 
         Self {
-            vertex_buffer,
-            index_buffer,
-            num_indices,
+            mesh,
             diffuse_bind_group,
             render_pipeline,
         }
@@ -55,9 +41,9 @@ impl View2D {
         });
         render_pass.set_pipeline(&self.render_pipeline);
         render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
-        render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-        render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
-        render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
+        render_pass.set_vertex_buffer(0, self.mesh.vertex_buffer.slice(..));
+        render_pass.set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+        render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
 }
 
