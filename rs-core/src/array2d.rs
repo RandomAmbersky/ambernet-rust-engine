@@ -8,7 +8,7 @@ pub struct Array2D<S: UnsignedNum, T: CellType> {
 
 impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
     #[allow(dead_code)]
-    fn new(width: S, height: S) -> Self {
+    pub fn new(width: S, height: S) -> Self {
         Self {
             size: Size2D { width, height },
             bytes: vec![T::ZERO; (width * height).as_usize()],
