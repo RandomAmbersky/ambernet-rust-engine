@@ -1,11 +1,9 @@
 mod view_2d;
 
 use crate::view_2d::View2D;
-use cgmath::num_traits::ToPrimitive;
 // use asn_logger::AsnLogLevel;
 
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
-use rs_core::Size2D;
 use rs_gfx_wgpu::gfx_error::GfxError;
 
 struct Handler {
@@ -16,8 +14,7 @@ struct Handler {
 
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Result<Self, GfxError> {
-        let format = ctx.gfx.main_window.get_format(&ctx.gfx.adapter);
-        let mut view_2d = View2D::new(&ctx.gfx, format)?;
+        let mut view_2d = View2D::new(&ctx.gfx)?;
         view_2d.update().expect("panic message");
         Ok(Self { view_2d })
     }

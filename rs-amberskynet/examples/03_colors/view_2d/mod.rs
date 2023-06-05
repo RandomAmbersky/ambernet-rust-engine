@@ -30,7 +30,9 @@ pub struct View2D {
 }
 
 impl View2D {
-    pub fn new(gfx: &AsnGfx, format: TextureFormat) -> Result<Self, GfxError> {
+    pub fn new(gfx: &AsnGfx) -> Result<Self, GfxError> {
+        let format = gfx.main_window.get_format(&gfx.adapter);
+
         let mesh = Mesh::build(VERTICES, INDICES, &gfx.device);
 
         let shader = gfx
