@@ -1,4 +1,5 @@
 use crate::{CellType, Pos2D, Size2D, UnsignedNum};
+use std::mem;
 
 #[allow(dead_code)]
 pub struct Array2D<S: UnsignedNum, T: CellType> {
@@ -9,9 +10,10 @@ pub struct Array2D<S: UnsignedNum, T: CellType> {
 impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
     #[allow(dead_code)]
     pub fn new(width: S, height: S) -> Self {
+        let cell_size = mem::size_of::<T>();
         Self {
             size: Size2D { width, height },
-            bytes: vec![T::ZERO; (width * height).as_usize()],
+            bytes: vec![T::ZERO; (width * height).as_usize() * cell_size],
         }
     }
 
