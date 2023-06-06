@@ -1,2 +1,2 @@
-cDefault, Debug)]
+#[derive(Default, Debug)]
 pub struct Sand {}
