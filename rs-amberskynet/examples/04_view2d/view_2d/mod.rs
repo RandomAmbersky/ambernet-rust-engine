@@ -46,7 +46,11 @@ impl View2D {
                 source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
             });
 
-        let group_layout_builder = BindGroupLayoutBuilder::new().texture().sampler();
+        let group_layout_builder = BindGroupLayoutBuilder::new()
+            .texture()
+            .sampler()
+            .texture()
+            .sampler();
         let group_layout_desc = wgpu::BindGroupLayoutDescriptor {
             entries: group_layout_builder.entries(),
             label: Some("texture_bind_group_layout"),
@@ -71,7 +75,10 @@ impl View2D {
 
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
-            .sampler(&texture.sampler);
+            .sampler(&texture.sampler)
+            .texture(&tile_texture.view)
+            .sampler(&tile_texture.sampler);
+
         let group_desc = wgpu::BindGroupDescriptor {
             layout: &diffuse_bind_group_layout,
             entries: group_entry_builder.entries(),

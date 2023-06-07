@@ -1,3 +1,5 @@
+use core::num;
+
 #[derive(Default, Debug)]
 pub struct BindGroupLayoutBuilder {
     entries: Vec<wgpu::BindGroupLayoutEntry>,
@@ -44,7 +46,7 @@ impl BindGroupLayoutBuilder {
                 view_dimension: wgpu::TextureViewDimension::D2,
                 sample_type: wgpu::TextureSampleType::Float { filterable: true },
             },
-            count: None,
+            count: std::num::NonZeroU32::new(self.entries.len() as u32),
         });
         self
     }
@@ -54,7 +56,7 @@ impl BindGroupLayoutBuilder {
             binding: 1,
             visibility: wgpu::ShaderStages::FRAGMENT,
             ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
-            count: None,
+            count: std::num::NonZeroU32::new(self.entries.len() as u32),
         });
         self
     }

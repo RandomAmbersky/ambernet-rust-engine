@@ -1,3 +1,5 @@
+extern crate core;
+
 mod window;
 
 use crate::window::AsnWindow;
