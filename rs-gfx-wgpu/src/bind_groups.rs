@@ -46,17 +46,17 @@ impl BindGroupLayoutBuilder {
                 view_dimension: wgpu::TextureViewDimension::D2,
                 sample_type: wgpu::TextureSampleType::Float { filterable: true },
             },
-            count: std::num::NonZeroU32::new(self.entries.len() as u32),
+            count: None,
         });
         self
     }
 
     pub fn sampler(mut self) -> Self {
         self.entries.push(wgpu::BindGroupLayoutEntry {
-            binding: 1,
+            binding: self.entries.len() as _,
             visibility: wgpu::ShaderStages::FRAGMENT,
             ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
-            count: std::num::NonZeroU32::new(self.entries.len() as u32),
+            count: None,
         });
         self
     }
