@@ -23,16 +23,17 @@ fn vs_main(
 // Fragment shader
 
 @group(0) @binding(0)
-var t_diffuse: texture_2d<f32>;
+var t_map: texture_2d<f32>;
 @group(0)@binding(1)
-var s_diffuse: sampler;
+var s_map: sampler;
 @group(0) @binding(2)
-var t_diffuse2: texture_2d<f32>;
+var t_texture: texture_2d<f32>;
 @group(0)@binding(3)
-var s_diffuse2: sampler;
+var s_texture: sampler;
 
 
 @fragment
 fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
-    return textureSample(t_diffuse2, s_diffuse2, in.tex_coords);
+//    return textureSample(t_map, s_map, in.tex_coords);
+    return textureSample(t_texture, s_texture, in.tex_coords);
 }
