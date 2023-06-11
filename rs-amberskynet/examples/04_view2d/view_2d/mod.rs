@@ -119,9 +119,7 @@ impl View2D {
     pub fn update(&mut self) -> Result<(), String> {
         let mut rng = rand::thread_rng();
 
-        // println!("{:?} {:?}", &self.view.size, self.view.bytes.len());
-
-        for _ in 0..10000 {
+        for _ in 0..100 {
             let pos = Pos2D {
                 x: rng.gen_range(0..self.view.size.width),
                 y: rng.gen_range(0..self.view.size.height),
@@ -129,15 +127,17 @@ impl View2D {
 
             let index = pos.y * self.view.size.width + pos.x;
 
-            let byte_index = index * 4 + rng.gen_range(0..4);
+            let byte_index = index * 4;
 
             let mut value: u8 = self.view.bytes[byte_index as usize];
 
-            if rng.gen_range(0..100) > 50 {
-                value = value.wrapping_sub(1);
-            } else {
-                value = value.wrapping_add(rng.gen_range(1..50));
-            }
+            value = rng.gen_range(0..50);
+            // if rng.gen_range(0..100) > 50 {
+            //     value = value.wrapping_sub(1);
+            // } else {
+            //     value = value.wrapping_add(1);
+            //     value = value.wrapping_add(rng.gen_range(1..50));
+            // }
             self.view.bytes[byte_index as usize] = value;
         }
 
