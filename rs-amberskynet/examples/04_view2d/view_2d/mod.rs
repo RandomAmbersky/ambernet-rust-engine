@@ -60,8 +60,8 @@ impl View2D {
 
         let render_pipeline = get_render_pipeline(&gfx.device, format, &shader, bind_group_layouts);
 
-        let texture_size_w: u32 = 10; //3200 / 16;
-        let texture_size_h: u32 = 10; //2400 / 16;
+        let texture_size_w: u32 = 32;
+        let texture_size_h: u32 = 32;
 
         let view = Array2D {
             size: Size2d {
