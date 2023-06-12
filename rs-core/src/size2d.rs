@@ -7,6 +7,9 @@ pub struct Size2D<T: UnsignedNum> {
 }
 
 impl<T: UnsignedNum> Size2D<T> {
+    pub fn get_size(&self) -> T {
+        self.width * self.height
+    }
     pub fn get_index(&self, pos: &Pos2D<T>) -> Result<usize, String> {
         if !self.is_pos_into(pos) {
             return Err(String::from("Not in size"));

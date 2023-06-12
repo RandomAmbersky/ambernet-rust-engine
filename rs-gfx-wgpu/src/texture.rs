@@ -1,5 +1,4 @@
 use image::{DynamicImage, GenericImageView};
-use std::os::macos;
 
 use crate::defines::BytesArray;
 use crate::gfx_error::GfxError;
@@ -44,9 +43,15 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
         array: &BytesArray,
         f: AsnTextureFormat,
     ) -> Result<AsnTexture, GfxError> {
-        let dimensions: (u32, u32) = (array.size.width, array.size.height);
+        let texture_format = f.to_wgpu_format();
+        let bytes_per_pixel = f.bytes_per_pixel();
 
-        // f.bytes_per_pixel();
+        let arr_len = (array.size.get_size() * bytes_per_pixel) as usize;
+        if arr_len != array.bytes.len() {
+            panic!("array len is not valid!")
+        }
+
+        let dimensions: (u32, u32) = (array.size.width, array.size.height);
 
         let size = wgpu::Extent3d {
             width: dimensions.0,
@@ -54,13 +59,6 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
             depth_or_array_layers: 1,
         };
 
-        let texture_format = f.to_wgpu_format();
-
-        // let texture_format = match f {
-        //     AsnTextureFormat::Rgba8 => wgpu::TextureFormat::Rgba8Unorm;
-        // };
-
-        // wgpu::TextureFormat::Rgba8Unorm;
         let texture = gfx.device.create_texture(&wgpu::TextureDescriptor {
             label: None,
             size,
@@ -82,7 +80,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
             &array.bytes,
             wgpu::ImageDataLayout {
                 offset: 0,
-                bytes_per_row: Some(f.bytes_per_pixel() * dimensions.0),
+                bytes_per_row: Some(bytes_per_pixel * dimensions.0),
                 rows_per_image: Some(dimensions.1),
             },
             size,

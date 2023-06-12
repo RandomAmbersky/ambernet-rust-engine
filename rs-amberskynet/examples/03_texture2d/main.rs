@@ -7,7 +7,7 @@ use crate::resource::{SHADER_SOURCE, TEXTURE_SOURCE};
 use crate::view_2d::View2D;
 use asn_logger::AsnLogLevel;
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
-use rs_gfx_core::AsnTextureTrait;
+use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
 use rs_gfx_wgpu::AsnTexture;
 
 const GLOBAL_LOG_FILTER: AsnLogLevel = AsnLogLevel::Debug;
@@ -47,7 +47,8 @@ impl Handler {
                 source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
             });
 
-        let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE).unwrap();
+        let texture =
+            AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgba8).unwrap();
 
         // let texture_format = texture.texture.format();
         // println!("texture_format: {:?}", texture_format);
