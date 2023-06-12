@@ -4,6 +4,7 @@ mod texture;
 
 pub use gfx_context::GfxContextTrait;
 pub use pixel::PixelRGBA;
+pub use texture::AsnTextureFormat;
 pub use texture::AsnTextureTrait;
 
 #[cfg(test)]

@@ -10,8 +10,8 @@ use rs_gfx_wgpu::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuil
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
 use rs_core::{Array2D, Pos2D};
-use rs_gfx_core::AsnTextureTrait;
-use rs_gfx_wgpu::defines::{BytesArray, Size2d, SizeDimension};
+use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
+use rs_gfx_wgpu::defines::{ByteDimension, BytesArray, Size2d, SizeDimension};
 use rs_gfx_wgpu::gfx_error::GfxError;
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
@@ -71,7 +71,7 @@ impl View2D {
             bytes: vec![0; (texture_size_w * texture_size_h * 4) as usize],
         };
 
-        let texture = AsnTexture::from_array(gfx, &view)?;
+        let texture = AsnTexture::from_array(gfx, &view, AsnTextureFormat::Rgb8)?;
 
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
@@ -117,29 +117,47 @@ impl View2D {
         render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
     pub fn update(&mut self) -> Result<(), String> {
-        let mut rng = rand::thread_rng();
+        // let mut rng = rand::thread_rng();
 
-        for _ in 0..100 {
-            let pos = Pos2D {
-                x: rng.gen_range(0..self.view.size.width),
-                y: rng.gen_range(0..self.view.size.height),
-            };
+        let pos_x: SizeDimension = 10;
+        let pos_y: SizeDimension = 1;
 
-            let index = pos.y * self.view.size.width + pos.x;
+        let index = ((pos_y * self.view.size.width + pos_x) * 4) as usize;
 
-            let byte_index = index * 4;
+        self.view.bytes[index] = 10;
+        self.view.bytes[index + 1] = 10;
+        self.view.bytes[index + 2] = 0;
+        self.view.bytes[index + 3] = 0;
 
-            let mut value: u8 = self.view.bytes[byte_index as usize];
+        // self.view.bytes[4] = 20;
+        // self.view.bytes[5] = 20;
+        // self.view.bytes[6] = 0;
+        // self.view.bytes[7] = 0;
 
-            value = rng.gen_range(0..50);
-            // if rng.gen_range(0..100) > 50 {
-            //     value = value.wrapping_sub(1);
-            // } else {
-            //     value = value.wrapping_add(1);
-            //     value = value.wrapping_add(rng.gen_range(1..50));
-            // }
-            self.view.bytes[byte_index as usize] = value;
-        }
+        // for index in 0..256 {
+        //     let byte_index = index * 4;
+        //     self.view.bytes[byte_index] = index as ByteDimension;
+        //     self.view.bytes[byte_index] = index as ByteDimension;
+        // }
+        // let value = rng.gen_range(0..50);
+
+        // println!("{value}");
+        // for _ in 0..5 {
+        //     let pos = Pos2D {
+        //         x: rng.gen_range(0..self.view.size.width),
+        //         y: rng.gen_range(0..self.view.size.height),
+        //     };
+        //
+        //     let index = pos.y * self.view.size.width + pos.x;
+        //
+        //     let byte_index = index * 4;
+        //
+        //     // let mut value: u8 = self.view.bytes[byte_index as usize];
+        //
+        //     let value = rng.gen_range(0..50);
+        //     self.view.bytes[byte_index as usize] = value;
+        //     // self.view.bytes[byte_index as usize + 1] = 0;
+        // }
 
         self.is_need_update = true;
         Ok(())

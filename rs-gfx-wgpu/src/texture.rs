@@ -3,7 +3,7 @@ use image::{DynamicImage, GenericImageView};
 use crate::defines::BytesArray;
 use crate::gfx_error::GfxError;
 use crate::AsnGfx;
-use rs_gfx_core::AsnTextureTrait;
+use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
 
 pub struct AsnTexture {
     pub texture: wgpu::Texture,
@@ -12,14 +12,22 @@ pub struct AsnTexture {
 }
 
 impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
-    fn from_raw_image(gfx: &AsnGfx, bytes: &[u8]) -> Result<AsnTexture, GfxError> {
+    fn from_raw_image(
+        gfx: &AsnGfx,
+        bytes: &[u8],
+        f: AsnTextureFormat,
+    ) -> Result<AsnTexture, GfxError> {
         let img = image::load_from_memory(bytes);
         match img {
             Err(_) => Err(GfxError {}),
-            Ok(t) => Self::from_image(gfx, &t),
+            Ok(t) => Self::from_image(gfx, &t, f),
         }
     }
-    fn from_array(gfx: &AsnGfx, array: &BytesArray) -> Result<AsnTexture, GfxError> {
+    fn from_array(
+        gfx: &AsnGfx,
+        array: &BytesArray,
+        f: AsnTextureFormat,
+    ) -> Result<AsnTexture, GfxError> {
         let dimensions: (u32, u32) = (array.size.width, array.size.height);
 
         let size = wgpu::Extent3d {
@@ -28,7 +36,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
             depth_or_array_layers: 1,
         };
 
-        let texture_format = wgpu::TextureFormat::Rgba8UnormSrgb;
+        let texture_format = wgpu::TextureFormat::Rgba8Unorm;
         let texture = gfx.device.create_texture(&wgpu::TextureDescriptor {
             label: None,
             size,
@@ -105,7 +113,11 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
 }
 
 impl AsnTexture {
-    fn from_image(gfx: &AsnGfx, img: &DynamicImage) -> Result<AsnTexture, GfxError> {
+    fn from_image(
+        gfx: &AsnGfx,
+        img: &DynamicImage,
+        f: AsnTextureFormat,
+    ) -> Result<AsnTexture, GfxError> {
         let rgba = img.to_rgba8();
         let dimensions = img.dimensions();
 

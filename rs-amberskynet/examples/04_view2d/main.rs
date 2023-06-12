@@ -6,7 +6,7 @@ use crate::view_2d::View2D;
 // use asn_logger::AsnLogLevel;
 
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
-use rs_gfx_core::AsnTextureTrait;
+use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
 use rs_gfx_wgpu::gfx_error::GfxError;
 use rs_gfx_wgpu::AsnTexture;
 
@@ -19,7 +19,7 @@ struct Handler {
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Result<Self, GfxError> {
         let format = ctx.gfx.main_window.get_format(&ctx.gfx.adapter);
-        let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE)?;
+        let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgb8)?;
         let mut view_2d = View2D::new(&ctx.gfx, texture, format)?;
         view_2d.update().expect("panic message");
         Ok(Self { view_2d })
@@ -31,7 +31,7 @@ impl ExtHandlerTrait for Handler {
         self.view_2d.draw(&mut ctx.gfx);
     }
     fn update(&mut self, _e: &mut AsnContext) {
-        self.view_2d.update().expect("update error");
+        // self.view_2d.update().expect("update error");
     }
 }
 
