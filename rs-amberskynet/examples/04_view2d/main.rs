@@ -19,7 +19,8 @@ struct Handler {
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Result<Self, GfxError> {
         let format = ctx.gfx.main_window.get_format(&ctx.gfx.adapter);
-        let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgb8)?;
+        let texture =
+            AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgba8)?;
         let mut view_2d = View2D::new(&ctx.gfx, texture, format)?;
         view_2d.update().expect("panic message");
         Ok(Self { view_2d })

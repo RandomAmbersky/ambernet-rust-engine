@@ -71,7 +71,7 @@ impl View2D {
             bytes: vec![0; (texture_size_w * texture_size_h * 4) as usize],
         };
 
-        let texture = AsnTexture::from_array(gfx, &view, AsnTextureFormat::Rgb8)?;
+        let texture = AsnTexture::from_array(gfx, &view, AsnTextureFormat::Rgba8)?;
 
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)
