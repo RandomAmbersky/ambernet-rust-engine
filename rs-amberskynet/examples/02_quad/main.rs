@@ -2,7 +2,7 @@ mod resource;
 
 use crate::resource::{Vertex, INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES};
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
-use rs_gfx_core::AsnTextureTrait;
+use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
 use rs_gfx_wgpu::AsnTexture;
 use std::iter;
 use wgpu::util::DeviceExt;
@@ -42,7 +42,8 @@ impl Handler {
                 source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
             });
 
-        let texture = AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE).unwrap();
+        let texture =
+            AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgb8).unwrap();
 
         let texture_bind_group_layout =
             ctx.gfx

@@ -6,6 +6,7 @@ use crate::AsnGfx;
 use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
 
 pub struct AsnTexture {
+    pub texture_format: AsnTextureFormat,
     pub texture: wgpu::Texture,
     pub view: wgpu::TextureView,
     pub sampler: wgpu::Sampler,
@@ -77,6 +78,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
         });
 
         let asn_texture = AsnTexture {
+            texture_format: f,
             texture,
             view,
             sampler,
@@ -165,6 +167,7 @@ impl AsnTexture {
         });
 
         Ok(Self {
+            texture_format: f,
             texture,
             view,
             sampler,

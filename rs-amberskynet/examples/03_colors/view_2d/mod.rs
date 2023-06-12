@@ -9,7 +9,7 @@ use rs_gfx_wgpu::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuil
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
 use rs_core::{Array2D, Pos2D};
-use rs_gfx_core::AsnTextureTrait;
+use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
 use rs_gfx_wgpu::defines::{BytesArray, Size2d, SizeDimension};
 use rs_gfx_wgpu::gfx_error::GfxError;
 
@@ -63,7 +63,7 @@ impl View2D {
             bytes: vec![0; (texture_size_w * texture_size_h * 4) as usize],
         };
 
-        let texture = AsnTexture::from_array(gfx, &view)?;
+        let texture = AsnTexture::from_array(gfx, &view, AsnTextureFormat::Rgb8)?;
 
         let group_entry_builder = BindGroupEntryBuilder::default()
             .texture(&texture.view)

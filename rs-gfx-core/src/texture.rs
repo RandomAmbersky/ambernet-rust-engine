@@ -1,15 +1,6 @@
+use crate::AsnTextureFormat;
 use crate::GfxContextTrait;
 use rs_core::AsnError;
-
-pub enum AsnTextureFormat {
-    #[allow(dead_code)]
-    Rgb8,
-    Rgb16,
-    Rgb32,
-    Rgba8,
-    Rgba16,
-    Rgba32,
-}
 
 pub trait AsnTextureTrait<T, G, E, A>
 where
