@@ -1,4 +1,5 @@
 use image::{DynamicImage, GenericImageView};
+use std::os::macos;
 
 use crate::defines::BytesArray;
 use crate::gfx_error::GfxError;
@@ -10,6 +11,20 @@ pub struct AsnTexture {
     pub texture: wgpu::Texture,
     pub view: wgpu::TextureView,
     pub sampler: wgpu::Sampler,
+}
+
+trait ToWgpuFormat {
+    fn to_wgpu_format(self) -> wgpu::TextureFormat;
+}
+
+impl ToWgpuFormat for AsnTextureFormat {
+    fn to_wgpu_format(self) -> wgpu::TextureFormat {
+        match self {
+            AsnTextureFormat::Rgba8 => wgpu::TextureFormat::Rgba8Unorm,
+            AsnTextureFormat::Rgba16 => wgpu::TextureFormat::Rgba16Unorm,
+            AsnTextureFormat::Rgba32 => wgpu::TextureFormat::Rgba32Uint,
+        }
+    }
 }
 
 impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
@@ -31,13 +46,21 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
     ) -> Result<AsnTexture, GfxError> {
         let dimensions: (u32, u32) = (array.size.width, array.size.height);
 
+        // f.bytes_per_pixel();
+
         let size = wgpu::Extent3d {
             width: dimensions.0,
             height: dimensions.1,
             depth_or_array_layers: 1,
         };
 
-        let texture_format = wgpu::TextureFormat::Rgba8Unorm;
+        let texture_format = f.to_wgpu_format();
+
+        // let texture_format = match f {
+        //     AsnTextureFormat::Rgba8 => wgpu::TextureFormat::Rgba8Unorm;
+        // };
+
+        // wgpu::TextureFormat::Rgba8Unorm;
         let texture = gfx.device.create_texture(&wgpu::TextureDescriptor {
             label: None,
             size,
@@ -59,7 +82,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
             &array.bytes,
             wgpu::ImageDataLayout {
                 offset: 0,
-                bytes_per_row: Some(4 * dimensions.0),
+                bytes_per_row: Some(f.bytes_per_pixel() * dimensions.0),
                 rows_per_image: Some(dimensions.1),
             },
             size,

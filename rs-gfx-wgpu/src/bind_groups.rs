@@ -1,5 +1,3 @@
-use core::num;
-
 #[derive(Default, Debug)]
 pub struct BindGroupLayoutBuilder {
     entries: Vec<wgpu::BindGroupLayoutEntry>,
