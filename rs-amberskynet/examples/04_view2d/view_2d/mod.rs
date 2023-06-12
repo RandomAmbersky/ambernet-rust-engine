@@ -119,10 +119,10 @@ impl View2D {
     pub fn update(&mut self) -> Result<(), String> {
         // let mut rng = rand::thread_rng();
 
-        let pos_x: SizeDimension = 10;
-        let pos_y: SizeDimension = 1;
+        let map_pos_x: SizeDimension = 2;
+        let map_pos_y: SizeDimension = 10;
 
-        let index = ((pos_y * self.view.size.width + pos_x) * 4) as usize;
+        let index = ((map_pos_y * self.view.size.width + map_pos_x) * 4) as usize;
 
         self.view.bytes[index] = 10;
         self.view.bytes[index + 1] = 10;
