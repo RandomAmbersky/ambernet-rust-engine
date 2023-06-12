@@ -9,9 +9,9 @@ use rs_gfx_wgpu::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuil
 
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
 
-use rs_core::{Array2D, Pos2D};
+use rs_core::Array2D;
 use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
-use rs_gfx_wgpu::defines::{ByteDimension, BytesArray, Size2d, SizeDimension};
+use rs_gfx_wgpu::defines::{BytesArray, Size2d, SizeDimension};
 use rs_gfx_wgpu::gfx_error::GfxError;
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");

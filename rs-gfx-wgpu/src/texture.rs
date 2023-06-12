@@ -48,7 +48,7 @@ impl AsnTextureTrait<AsnTexture, AsnGfx, GfxError, BytesArray> for AsnTexture {
 
         let arr_len = (array.size.get_size() * bytes_per_pixel) as usize;
         if arr_len != array.bytes.len() {
-            panic!("array len is not valid!")
+            panic!("array len is not valid with format {:?}!", f)
         }
 
         let dimensions: (u32, u32) = (array.size.width, array.size.height);
