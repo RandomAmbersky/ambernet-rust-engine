@@ -117,48 +117,20 @@ impl View2D {
         render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
     pub fn update(&mut self) -> Result<(), String> {
-        // let mut rng = rand::thread_rng();
+        let mut rng = rand::thread_rng();
 
-        let map_pos_x: SizeDimension = 2;
-        let map_pos_y: SizeDimension = 10;
+        for x in 0..self.view.size.width {
+            for y in 0..self.view.size.height {
+                let value: u8 = rng.gen_range(0..128);
+                let cell_y = value / 16;
+                let cell_x = value - cell_y * 16;
 
-        let index = ((map_pos_y * self.view.size.width + map_pos_x) * 4) as usize;
+                let index = ((y * self.view.size.width + x) * 4) as usize;
 
-        self.view.bytes[index] = 10;
-        self.view.bytes[index + 1] = 10;
-        self.view.bytes[index + 2] = 0;
-        self.view.bytes[index + 3] = 0;
-
-        // self.view.bytes[4] = 20;
-        // self.view.bytes[5] = 20;
-        // self.view.bytes[6] = 0;
-        // self.view.bytes[7] = 0;
-
-        // for index in 0..256 {
-        //     let byte_index = index * 4;
-        //     self.view.bytes[byte_index] = index as ByteDimension;
-        //     self.view.bytes[byte_index] = index as ByteDimension;
-        // }
-        // let value = rng.gen_range(0..50);
-
-        // println!("{value}");
-        // for _ in 0..5 {
-        //     let pos = Pos2D {
-        //         x: rng.gen_range(0..self.view.size.width),
-        //         y: rng.gen_range(0..self.view.size.height),
-        //     };
-        //
-        //     let index = pos.y * self.view.size.width + pos.x;
-        //
-        //     let byte_index = index * 4;
-        //
-        //     // let mut value: u8 = self.view.bytes[byte_index as usize];
-        //
-        //     let value = rng.gen_range(0..50);
-        //     self.view.bytes[byte_index as usize] = value;
-        //     // self.view.bytes[byte_index as usize + 1] = 0;
-        // }
-
+                self.view.bytes[index] = cell_x;
+                self.view.bytes[index + 1] = cell_y;
+            }
+        }
         self.is_need_update = true;
         Ok(())
     }

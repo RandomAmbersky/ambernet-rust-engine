@@ -32,7 +32,7 @@ impl ExtHandlerTrait for Handler {
         self.view_2d.draw(&mut ctx.gfx);
     }
     fn update(&mut self, _e: &mut AsnContext) {
-        // self.view_2d.update().expect("update error");
+        self.view_2d.update().expect("update error");
     }
 }
 
