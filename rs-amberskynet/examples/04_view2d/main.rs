@@ -17,7 +17,7 @@ struct Handler {
     delta_time: Instant,
 }
 
-const DURATION: Duration = Duration::from_millis(100); // Сколько вам нужно секунд.
+const DURATION: Duration = Duration::from_millis(10); // Сколько вам нужно секунд.
 
 // const GLOBAL_LOG_FILTER: AsnLogLevel = AsnLogLevel::Debug;
 
@@ -50,7 +50,6 @@ impl ExtHandlerTrait for Handler {
 
 pub fn main() {
     // asn_logger::init_log(GLOBAL_LOG_FILTER);
-    let start = Instant::now();
 
     let (ctx, event_loop) = rs_amberskynet::init();
     if let Ok(_t) = Handler::new(&ctx) {
