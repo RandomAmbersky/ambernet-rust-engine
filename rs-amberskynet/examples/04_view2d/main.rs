@@ -14,10 +14,11 @@ use rs_gfx_wgpu::AsnTexture;
 
 struct Handler {
     view_2d: View2D,
+    view_2d_2: View2D,
     delta_time: Instant,
 }
 
-const DURATION: Duration = Duration::from_millis(10); // Сколько вам нужно секунд.
+const DURATION: Duration = Duration::from_millis(1000); // Сколько вам нужно секунд.
 
 // const GLOBAL_LOG_FILTER: AsnLogLevel = AsnLogLevel::Debug;
 
@@ -28,8 +29,14 @@ impl Handler {
             AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgba8)?;
         let mut view_2d = View2D::new(&ctx.gfx, texture, format)?;
         view_2d.update().expect("panic message");
+
+        let texture =
+            AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgba8)?;
+        let mut view_2d_2 = View2D::new(&ctx.gfx, texture, format)?;
+
         Ok(Self {
             view_2d,
+            view_2d_2,
             delta_time: Instant::now(),
         })
     }
@@ -41,9 +48,12 @@ impl ExtHandlerTrait for Handler {
     }
     fn update(&mut self, _e: &mut AsnContext) {
         let now = Instant::now();
-        if now - self.delta_time >= DURATION {
+        let delta = now - self.delta_time;
+        if delta >= DURATION {
+            println!("{:?} {:?}", delta, self.delta_time);
             self.delta_time = now;
             self.view_2d.update().expect("update error");
+            self.view_2d_2.update().expect("update error");
         }
     }
 }
