@@ -1,13 +1,17 @@
 [workspace]
 resolver = "2"
 members = [
+    "asn-logger",
     "rs-core",
     "rs-gfx-core",
+    "rs-gfx-wgpu",
     "rs-amberskynet"
 ]
 exclude = []
 default-members = [
+    "asn-logger",
     "rs-core",
     "rs-gfx-core",
+    "rs-gfx-wgpu",
     "rs-amberskynet"
 ]
