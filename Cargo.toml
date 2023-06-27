@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = [
+    "rs-core",
+    "rs-gfx-core",
+    "rs-amberskynet"
+]
+exclude = []
+default-members = [
+    "rs-core",
+    "rs-gfx-core",
+    "rs-amberskynet"
+]
