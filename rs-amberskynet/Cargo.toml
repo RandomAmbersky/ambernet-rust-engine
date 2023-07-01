@@ -13,7 +13,7 @@ bytemuck = { version = "1.12", features = [ "derive" ] }
 cgmath = "0.18"
 pollster = "0.3"
 winit = "0.28"
-rand = "0.8.5"
+rand = { version = "0.8.5", default-features = false }
 asn-logger = { path = "../asn-logger"}
 rs-core = { path = "../rs-core" }
 rs-gfx-core = { path = "../rs-gfx-core" }
