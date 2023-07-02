@@ -4,7 +4,7 @@ mod model_vertex;
 use crate::view_2d::mesh::Mesh;
 use model_vertex::ModelVertex;
 use model_vertex::{INDICES, VERTICES};
-use rand::Rng;
+use rand::prelude::*;
 use rs_gfx_wgpu::{AsnGfx, AsnTexture, BindGroupEntryBuilder, BindGroupLayoutBuilder};
 
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat, TextureView};
@@ -16,6 +16,8 @@ use rs_gfx_wgpu::gfx_error::GfxError;
 
 pub const SHADER_SOURCE: &str = include_str!("shader.wgsl");
 
+const RNG_SEED: u64 = 11;
+
 pub struct View2D {
     tile_texture: AsnTexture,
     texture: AsnTexture,
@@ -24,6 +26,7 @@ pub struct View2D {
     bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
     is_need_update: bool,
+    rng: SmallRng,
 }
 
 impl View2D {
@@ -81,6 +84,8 @@ impl View2D {
         };
         let bind_group = gfx.device.create_bind_group(&group_desc);
 
+        let mut rng = SmallRng::seed_from_u64(RNG_SEED);
+
         let view_2d = Self {
             tile_texture,
             texture,
@@ -89,6 +94,7 @@ impl View2D {
             bind_group,
             render_pipeline,
             is_need_update: false,
+            rng,
         };
         Ok(view_2d)
     }
@@ -112,11 +118,9 @@ impl View2D {
         render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
     pub fn update(&mut self) -> Result<(), String> {
-        let mut rng = rand::thread_rng();
-
         for x in 0..self.view.size.width {
             for y in 0..self.view.size.height {
-                let value: u8 = rng.gen_range(0..128);
+                let value: u8 = self.rng.gen_range(0..128);
                 let cell_y = value / 16;
                 let cell_x = value - cell_y * 16;
 
