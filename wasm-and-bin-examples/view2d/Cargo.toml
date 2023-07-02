@@ -1,0 +1,11 @@
+[package]
+name = "view2d"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "view2d"
+path = "src/main.rs"
