@@ -16,8 +16,19 @@ make
 cd www
 yarn install
 yarn dev
-```bash
+```
 
 shaders
 
 https://thebookofshaders.com/glossary/?search=fract
+
+```shell
+ambernet-rust-engine % cargo run -p rs-amberskynet --example 04_view2d
+```                                   
+
+```shell
+cargo build -p rs-amberskynet --example 04_view2d  --target wasm32-unknown-unknown
+```                                   
+
+
+
