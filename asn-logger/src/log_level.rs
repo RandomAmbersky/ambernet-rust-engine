@@ -1,6 +1,7 @@
 use log::LevelFilter;
 
-pub(crate) fn init_log(global_log_filter: LevelFilter) {
+#[allow(dead_code)]
+pub fn init_log(global_log_filter: LevelFilter) {
     let mut builder = fern::Dispatch::new();
     let level_formatter;
     #[cfg(target_arch = "wasm32")]
