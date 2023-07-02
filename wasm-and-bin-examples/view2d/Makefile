@@ -1,4 +1,4 @@
-run: rust-build rust-run
+run: rust-run
 
 build: rust-build
 
