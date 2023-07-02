@@ -1,5 +1,6 @@
 mod view_2d;
 
+use asn_logger::AsnLogLevel;
 use std::time::{Duration, Instant};
 
 pub const TEXTURE_SOURCE: &[u8] = include_bytes!("./resource/tiles_mod.png");
@@ -18,9 +19,9 @@ struct Handler {
     delta_time: Instant,
 }
 
-const DURATION: Duration = Duration::from_millis(1000); // Сколько вам нужно секунд.
+const DURATION: Duration = Duration::from_millis(10); // Сколько вам нужно секунд.
 
-// const GLOBAL_LOG_FILTER: AsnLogLevel = AsnLogLevel::Debug;
+const GLOBAL_LOG_FILTER: AsnLogLevel = AsnLogLevel::Debug;
 
 impl Handler {
     pub fn new(ctx: &AsnContext) -> Result<Self, GfxError> {
@@ -49,8 +50,9 @@ impl ExtHandlerTrait for Handler {
     fn update(&mut self, _e: &mut AsnContext) {
         let now = Instant::now();
         let delta = now - self.delta_time;
+        println!("{:?} {:?}", delta, self.delta_time);
         if delta >= DURATION {
-            println!("{:?} {:?}", delta, self.delta_time);
+            println!("update...");
             self.delta_time = now;
             self.view_2d.update().expect("update error");
             self.view_2d_2.update().expect("update error");
@@ -59,7 +61,7 @@ impl ExtHandlerTrait for Handler {
 }
 
 pub fn main() {
-    // asn_logger::init_log(GLOBAL_LOG_FILTER);
+    asn_logger::init_log(GLOBAL_LOG_FILTER);
 
     let (ctx, event_loop) = rs_amberskynet::init();
     if let Ok(_t) = Handler::new(&ctx) {

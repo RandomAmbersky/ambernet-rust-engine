@@ -1,52 +1,22 @@
+mod asn_log_level;
 mod log_level;
+mod mapper;
 
-use log::LevelFilter;
-pub use log_level::AsnLogLevel;
-
-fn _init_log(global_log_filter: LevelFilter) {
-    let mut builder = fern::Dispatch::new();
-    let level_formatter;
-    #[cfg(target_arch = "wasm32")]
-    {
-        level_formatter = |level| level;
-        builder = builder.chain(fern::Output::call(console_log::log));
-    }
-    #[cfg(not(target_arch = "wasm32"))]
-    {
-        use fern::colors::{Color, ColoredLevelConfig};
-        let colors = ColoredLevelConfig::new()
-            .info(Color::Blue)
-            .debug(Color::Green);
-        level_formatter = move |level| colors.color(level);
-        builder = builder.chain(std::io::stdout());
-    }
-    builder
-        .level(global_log_filter)
-        .level_for(module_path!(), log::LevelFilter::Debug)
-        .format(move |out, message, record| {
-            out.finish(format_args!(
-                "{}[{}][{}:{}] {}",
-                chrono::Local::now().format("[%H:%M:%S]"),
-                level_formatter(record.level()),
-                record.target(),
-                record.line().unwrap_or_default(),
-                message
-            ))
-        })
-        .apply()
-        .unwrap();
-}
-
-// const GLOBAL_LOG_FILTER: log::LevelFilter = log::LevelFilter::Info;
+use crate::mapper::convert;
+pub use asn_log_level::AsnLogLevel;
 
 pub fn init_log(l: AsnLogLevel) {
-    let log_level = match l {
-        AsnLogLevel::Off => log::LevelFilter::Off,
-        AsnLogLevel::Error => log::LevelFilter::Error,
-        AsnLogLevel::Warn => log::LevelFilter::Warn,
-        AsnLogLevel::Info => log::LevelFilter::Info,
-        AsnLogLevel::Debug => log::LevelFilter::Debug,
-        AsnLogLevel::Trace => log::LevelFilter::Trace,
-    };
-    _init_log(log_level)
+    let log_level_filter = convert(l);
+    cfg_if::cfg_if! {
+        if #[cfg(target_arch = "wasm32")] {
+            std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+            let level_option = log_level_filter.to_level();
+            if level_option.is_some() {
+                console_log::init_with_level(level_option.unwrap()).expect("Couldn't initialize logger");
+            }
+        } else {
+            log_level::init_log(log_level_filter);
+            // env_logger::init();
+        }
+    }
 }
