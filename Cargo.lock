@@ -114,6 +114,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "asn-engine"
+version = "0.1.0"
+
+[[package]]
 name = "asn-logger"
 version = "0.1.0"
 dependencies = [
@@ -1579,7 +1583,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 name = "view2d"
 version = "0.1.0"
 dependencies = [
- "rs-amberskynet",
+ "asn-engine",
  "wasm-bindgen",
 ]
 

@@ -7,5 +7,5 @@
 //   .then(m => m.greet('World!'))
 //   .catch(console.error);
 
-import { greet } from './pkg'
-greet("Lol")
+import { start } from './pkg'
+start()

@@ -2,6 +2,8 @@
 resolver = "2"
 members = [
     "asn-logger",
+    "asn-engine",
+    "rs-amberskynet",
     "rs-core",
     "rs-gfx-core",
     "rs-gfx-wgpu",
