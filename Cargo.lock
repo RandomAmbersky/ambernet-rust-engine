@@ -1580,6 +1580,7 @@ name = "view2d"
 version = "0.1.0"
 dependencies = [
  "rs-amberskynet",
+ "wasm-bindgen",
 ]
 
 [[package]]
