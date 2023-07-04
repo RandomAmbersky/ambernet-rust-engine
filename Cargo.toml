@@ -3,6 +3,7 @@ resolver = "2"
 members = [
     "asn-logger",
     "asn-engine",
+    "asn-core",
     "rs-amberskynet",
     "rs-core",
     "rs-gfx-core",

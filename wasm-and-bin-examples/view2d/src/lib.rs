@@ -1,14 +1,24 @@
+#[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+#[allow(dead_code)]
 extern "C" {
+    #[cfg(target_arch = "wasm32")]
     fn alert(s: &str);
 }
 
-#[wasm_bindgen]
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub fn greet(name: &str) {
-    alert(&format!("Hello, {}!", name));
+    #[cfg(target_arch = "wasm32")]
+    {
+        alert(&format!("Hello, {}!", name));
+    }
+    println!("Hello {:}", name);
 }
 
-#[wasm_bindgen]
-pub fn start() {}
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+pub fn start() {
+    let ctx = asn_engine::init();
+    asn_engine::do_loop(&ctx);
+}
