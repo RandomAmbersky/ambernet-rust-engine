@@ -1,4 +1,4 @@
-use asn_core::Size2D;
+use crate::Size2D;
 
 #[derive(Debug)]
 pub struct WindowId(pub usize);

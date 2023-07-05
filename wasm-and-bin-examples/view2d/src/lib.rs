@@ -2,7 +2,7 @@
 use wasm_bindgen::prelude::*;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
-#[allow(dead_code)]
+// #[allow(dead_code)]
 extern "C" {
     #[cfg(target_arch = "wasm32")]
     fn alert(s: &str);
