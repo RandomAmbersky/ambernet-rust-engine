@@ -15,4 +15,3 @@ crate-type = ["cdylib", "rlib"]
 [[bin]]
 name = "view2d-bin"
 path = "src/main.rs"
-
