@@ -6,6 +6,9 @@ mod runner_trait;
 mod size2d;
 mod unsigned_num;
 
+pub use handler_trait::AsnHandlerTrait;
+pub use runner_trait::AsnRunnerTrait;
+
 pub use asn_errors::*;
 pub use asn_events::*;
 pub use pos2d::Pos2D;

@@ -140,6 +140,9 @@ dependencies = [
 [[package]]
 name = "asn-runner-winit"
 version = "0.1.0"
+dependencies = [
+ "asn-core",
+]
 
 [[package]]
 name = "atty"
