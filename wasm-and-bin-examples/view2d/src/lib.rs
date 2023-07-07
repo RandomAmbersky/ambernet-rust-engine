@@ -17,7 +17,7 @@ pub fn greet(name: &str) {
     {
         alert(&format!("Hello, {}!", name));
     }
-    println!("Hello {:}", name);
+    info!("Hello {:}", name);
 }
 
 struct MyHandler();
