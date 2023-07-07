@@ -142,6 +142,7 @@ name = "asn-runner-winit"
 version = "0.1.0"
 dependencies = [
  "asn-core",
+ "winit",
 ]
 
 [[package]]

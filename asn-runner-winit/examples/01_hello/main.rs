@@ -1,18 +1,16 @@
-use asn_runner_winit;
-
-use asn_core::{AsnError, AsnEvent, AsnHandlerTrait, AsnRunnerTrait};
+use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait};
 
 struct MyHandler();
 
 impl AsnHandlerTrait for MyHandler {
-    fn proceed(&mut self, evt: &AsnEvent) -> Option<AsnError> {
+    fn proceed(&mut self, ctx: &mut AsnContext, evt: &AsnEvent) -> Option<AsnError> {
         println!("{:?}", evt);
+        ctx.is_need_exit = true;
         Some(AsnError::Empty)
     }
 }
 
 fn main() {
-    let mut runner = asn_runner_winit::new();
-    let handler = MyHandler {};
-    runner.run(handler);
+    let h = MyHandler {};
+    asn_runner_winit::run(h);
 }

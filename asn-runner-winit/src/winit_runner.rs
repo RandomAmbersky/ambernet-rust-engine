@@ -1,24 +1,31 @@
-use asn_core::{AsnError, AsnEvent, AsnHandlerTrait, AsnRunnerTrait};
+use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait};
+use winit::event::Event;
+use winit::event_loop::{ControlFlow, EventLoop};
 
 #[derive(Default)]
 pub struct WinitRunner {}
 
-impl WinitRunner {
-    pub fn new() -> Self {
-        WinitRunner {}
-    }
-}
-
-impl<H> AsnRunnerTrait<H> for WinitRunner
+pub fn run<H: 'static>(mut h: H)
 where
     H: AsnHandlerTrait,
 {
-    fn run(&mut self, mut h: H) -> AsnError {
-        let evt = AsnEvent::Empty;
-        let err = h.proceed(&evt);
-        if let Some(..) = err {
-            return err.unwrap();
+    let event_loop = EventLoop::new();
+    let mut ctx = AsnContext::default();
+
+    event_loop.run(move |event, _event_loop_window_target, control_flow| {
+        if ctx.is_need_exit {
+            *control_flow = ControlFlow::Exit;
+            return;
         }
-        AsnError::Empty
-    }
+
+        *control_flow = ControlFlow::Poll;
+        let evt = process_event(&mut ctx, &event);
+        if let Some(..) = evt {
+            h.proceed(&mut ctx, &evt.unwrap());
+        }
+    })
+}
+
+fn process_event(_ctx: &mut AsnContext, _e: &Event<()>) -> Option<AsnEvent> {
+    Some(AsnEvent::Empty)
 }
