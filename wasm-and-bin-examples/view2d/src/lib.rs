@@ -1,7 +1,6 @@
-use asn_logger;
-
 use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
-use asn_logger::AsnLogLevel;
+use asn_logger::{info, AsnLogLevel};
+
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
@@ -44,6 +43,7 @@ impl AsnHandlerTrait for MyHandler {
 pub fn start() {
     let l: AsnLogLevel = AsnLogLevel::Trace;
     asn_logger::init_log(l);
+    info!("It worked :)");
 
     let h = MyHandler {};
     asn_runner_winit::run(h);

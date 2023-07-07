@@ -4,6 +4,7 @@ mod winit_event_processor;
 use crate::winit_context::WinitContext;
 use crate::winit_event_processor::process_event;
 use asn_core::AsnHandlerTrait;
+use asn_logger::info;
 use winit::event_loop::{ControlFlow, EventLoop};
 
 pub fn run<H: 'static>(mut h: H)
