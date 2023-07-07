@@ -142,6 +142,10 @@ name = "asn-runner-winit"
 version = "0.1.0"
 dependencies = [
  "asn-core",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+ "wgpu",
  "winit",
 ]
 
@@ -1598,7 +1602,9 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 name = "view2d"
 version = "0.1.0"
 dependencies = [
- "asn-engine",
+ "asn-core",
+ "asn-logger",
+ "asn-runner-winit",
  "wasm-bindgen",
 ]
 

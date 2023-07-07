@@ -4,7 +4,9 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-asn-engine = { path = "../../asn-engine" }
+asn-logger = { path = "../../asn-logger"}
+asn-runner-winit = { path = "../../asn-runner-winit" }
+asn-core = { path = "../../asn-core" }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wasm-bindgen = "0.2"

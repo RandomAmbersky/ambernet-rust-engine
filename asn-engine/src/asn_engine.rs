@@ -1,4 +1,4 @@
-use crate::asn_context::AsnContext;
+use asn_core::AsnContext;
 
 pub fn init() -> AsnContext {
     AsnContext {

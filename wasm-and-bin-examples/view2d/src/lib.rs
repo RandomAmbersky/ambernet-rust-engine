@@ -1,3 +1,7 @@
+use asn_logger;
+
+use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
+use asn_logger::AsnLogLevel;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
@@ -17,8 +21,30 @@ pub fn greet(name: &str) {
     println!("Hello {:}", name);
 }
 
+struct MyHandler();
+
+impl AsnHandlerTrait for MyHandler {
+    fn proceed(&mut self, ctx: &mut AsnContext, evt: &AsnEvent) -> Option<AsnError> {
+        println!("{:?}", evt);
+        match evt {
+            AsnEvent::WindowEvent(e) => match e {
+                AsnWindowEvent::Resized(_) => None,
+                AsnWindowEvent::RedrawRequested => None,
+                AsnWindowEvent::CloseRequested => {
+                    ctx.is_need_exit = true;
+                    None
+                }
+            },
+            _ => None,
+        }
+    }
+}
+
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub fn start() {
-    let ctx = asn_engine::init();
-    asn_engine::do_loop(&ctx);
+    let l: AsnLogLevel = AsnLogLevel::Trace;
+    asn_logger::init_log(l);
+
+    let h = MyHandler {};
+    asn_runner_winit::run(h);
 }
