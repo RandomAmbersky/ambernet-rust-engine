@@ -1,10 +1,10 @@
 use crate::Size2D;
 
 #[derive(Debug)]
-pub struct WindowId(pub usize);
+pub struct AsnWindowId(pub usize);
 
 #[derive(Debug)]
-pub enum WindowEvent {
+pub enum AsnWindowEvent {
     Resized(Size2D<u32>),
     RedrawRequested,
 }
@@ -13,7 +13,7 @@ pub enum WindowEvent {
 pub enum AsnEvent {
     Empty,
     WindowEvent {
-        window_id: WindowId,
-        event: WindowEvent,
+        window_id: AsnWindowId,
+        event: AsnWindowEvent,
     },
 }
