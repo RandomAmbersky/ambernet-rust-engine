@@ -1,7 +1,6 @@
 use crate::winit_context::WinitContext;
 use asn_core::AsnWindowEvent::{CloseRequested, RedrawRequested, Resized};
-use asn_core::{AsnEvent, AsnWindowEvent, AsnWindowId, Size2D};
-use winit::event::VirtualKeyCode::A;
+use asn_core::{AsnEvent, Size2D};
 use winit::event::{Event, WindowEvent};
 use winit::window::WindowId;
 
