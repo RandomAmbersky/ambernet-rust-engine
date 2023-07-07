@@ -25,8 +25,5 @@ pub enum AsnWindowEvent {
 #[derive(Debug)]
 pub enum AsnEvent {
     Empty,
-    WindowEvent {
-        window_id: AsnWindowId,
-        event: AsnWindowEvent,
-    },
+    WindowEvent(AsnWindowEvent),
 }

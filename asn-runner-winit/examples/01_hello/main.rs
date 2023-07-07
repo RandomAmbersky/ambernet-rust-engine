@@ -6,10 +6,7 @@ impl AsnHandlerTrait for MyHandler {
     fn proceed(&mut self, ctx: &mut AsnContext, evt: &AsnEvent) -> Option<AsnError> {
         println!("{:?}", evt);
         match evt {
-            AsnEvent::WindowEvent {
-                window_id: _,
-                event,
-            } => match event {
+            AsnEvent::WindowEvent(e) => match e {
                 AsnWindowEvent::Resized(_) => None,
                 AsnWindowEvent::RedrawRequested => None,
                 AsnWindowEvent::CloseRequested => {

@@ -1,11 +1,13 @@
 use crate::winit_context::WinitContext;
-use asn_core::AsnWindowEvent::CloseRequested;
-use asn_core::{AsnEvent, AsnWindowId};
+use asn_core::AsnWindowEvent::{CloseRequested, RedrawRequested, Resized};
+use asn_core::{AsnEvent, AsnWindowEvent, AsnWindowId, Size2D};
+use winit::event::VirtualKeyCode::A;
 use winit::event::{Event, WindowEvent};
 use winit::window::WindowId;
 
 pub fn process_event(_w_ctx: &mut WinitContext, e: &Event<()>) -> Option<AsnEvent> {
     match e {
+        Event::RedrawRequested(_window_id) => Some(AsnEvent::WindowEvent(RedrawRequested)),
         Event::WindowEvent {
             ref event,
             window_id,
@@ -14,13 +16,16 @@ pub fn process_event(_w_ctx: &mut WinitContext, e: &Event<()>) -> Option<AsnEven
     }
 }
 
-fn process_window_event(window_id: &WindowId, e: &WindowEvent) -> Option<AsnEvent> {
-    let id: u64 = u64::from(*window_id);
+fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEvent> {
     match e {
-        WindowEvent::CloseRequested => Some(AsnEvent::WindowEvent {
-            window_id: AsnWindowId::from(id),
-            event: CloseRequested,
-        }),
+        WindowEvent::CloseRequested => Some(AsnEvent::WindowEvent(CloseRequested)),
+        WindowEvent::Resized(size) => {
+            let w_size: Size2D<u32> = Size2D {
+                width: size.width,
+                height: size.height,
+            };
+            Some(AsnEvent::WindowEvent(Resized(w_size)))
+        }
         _ => None,
     }
 }
