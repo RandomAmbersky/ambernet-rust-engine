@@ -1617,6 +1617,7 @@ dependencies = [
  "asn-core",
  "asn-logger",
  "asn-runner-winit",
+ "asn-winapi-wgpu",
  "wasm-bindgen",
 ]
 

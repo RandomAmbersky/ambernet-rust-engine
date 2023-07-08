@@ -4,7 +4,6 @@ mod winit_event_processor;
 use crate::winit_context::WinitContext;
 use crate::winit_event_processor::process_event;
 use asn_core::AsnHandlerTrait;
-use asn_logger::info;
 use winit::event_loop::{ControlFlow, EventLoop};
 
 pub fn run<H: 'static>(mut h: H)
@@ -22,8 +21,8 @@ where
 
         *control_flow = ControlFlow::Poll;
         let evt = process_event(&mut w_ctx, &event);
-        if let Some(..) = evt {
-            h.proceed(&mut w_ctx.ctx, &evt.unwrap());
+        if let Some(e) = evt {
+            h.proceed(&mut w_ctx.ctx, &e);
         }
     })
 }
