@@ -156,6 +156,7 @@ version = "0.1.0"
 dependencies = [
  "asn-core",
  "asn-logger",
+ "pollster",
  "wgpu",
  "winit",
 ]
