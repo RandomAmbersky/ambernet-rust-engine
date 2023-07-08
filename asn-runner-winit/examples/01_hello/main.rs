@@ -1,18 +1,7 @@
+use crate::my_context::MyCtx;
 use asn_core::{AsnContextTrait, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
 
-struct MyCtx {
-    is_need_exit: bool,
-}
-
-impl AsnContextTrait for MyCtx {
-    fn is_need_exit(&self) -> bool {
-        self.is_need_exit
-    }
-
-    fn set_need_exit(&mut self) {
-        self.is_need_exit = true
-    }
-}
+mod my_context;
 
 struct MyHandler {}
 
@@ -24,7 +13,7 @@ impl AsnHandlerTrait<MyCtx> for MyHandler {
                 AsnWindowEvent::Resized(_) => None,
                 AsnWindowEvent::RedrawRequested => None,
                 AsnWindowEvent::CloseRequested => {
-                    ctx.is_need_exit = true;
+                    ctx.set_need_exit();
                     None
                 }
             },
@@ -34,9 +23,7 @@ impl AsnHandlerTrait<MyCtx> for MyHandler {
 }
 
 fn main() {
-    let ctx = MyCtx {
-        is_need_exit: false,
-    };
+    let ctx = MyCtx::default();
     let h = MyHandler {};
     asn_runner_winit::run(ctx, h);
 }
