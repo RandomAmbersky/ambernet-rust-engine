@@ -1,9 +1,8 @@
+mod asn_window;
 mod wgpu_context;
-mod winapi_wgpu;
 mod winit_context;
 mod winit_event_processor;
 
-use crate::winit_context::WinitContext;
 use crate::winit_event_processor::convert_event;
 use asn_core::{AsnContext, AsnHandlerTrait};
 use winit::event_loop::{ControlFlow, EventLoop};
@@ -14,7 +13,7 @@ where
 {
     let event_loop = EventLoop::new();
     let winint_ctx = winit_context::new(&event_loop);
-    let wgpu_ctx = wgpu_context::new(winint_ctx.get_window());
+    let wgpu_ctx = wgpu_context::new(winint_ctx.get_window().get_window());
 
     let mut ctx = AsnContext::default();
 
