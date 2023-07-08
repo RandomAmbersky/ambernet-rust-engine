@@ -12,7 +12,7 @@ where
     H: AsnHandlerTrait<A>,
 {
     let event_loop = EventLoop::new();
-    let win_api = asn_winapi::new(&event_loop);
+    let mut win_api = asn_winapi::new(&event_loop);
 
     event_loop.run(move |event, _event_loop_window_target, control_flow| {
         if ctx.is_need_exit() {
@@ -23,10 +23,8 @@ where
         *control_flow = ControlFlow::Poll;
         let evt = convert_event(&event);
         if let Some(e) = evt {
-            proceed(&win_api, &e);
+            win_api.proceed(&e);
             h.proceed(&mut ctx, &e);
         }
     })
 }
-
-fn proceed(win_api: &AsnWgpuWinApi, evt: &AsnEvent) {}
