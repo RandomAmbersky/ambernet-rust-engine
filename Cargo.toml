@@ -4,7 +4,6 @@ members = [
     "asn-logger",
     "asn-engine",
     "asn-core",
-    "asn-winapi-wgpu",
     "asn-runner-winit",
     "rs-amberskynet",
     "rs-core",

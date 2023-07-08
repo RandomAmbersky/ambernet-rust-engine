@@ -4,7 +4,7 @@ use asn_core::{AsnEvent, Size2D};
 use winit::event::{Event, WindowEvent};
 use winit::window::WindowId;
 
-pub fn process_event(_w_ctx: &mut WinitContext, e: &Event<()>) -> Option<AsnEvent> {
+pub fn convert_event(e: &Event<()>) -> Option<AsnEvent> {
     // info!("{:?}", e);
     match e {
         Event::RedrawRequested(_window_id) => Some(AsnEvent::WindowEvent(RedrawRequested)),

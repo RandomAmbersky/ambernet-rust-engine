@@ -143,20 +143,10 @@ version = "0.1.0"
 dependencies = [
  "asn-core",
  "asn-logger",
+ "pollster",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
- "wgpu",
- "winit",
-]
-
-[[package]]
-name = "asn-winapi-wgpu"
-version = "0.1.0"
-dependencies = [
- "asn-core",
- "asn-logger",
- "pollster",
  "wgpu",
  "winit",
 ]
@@ -1617,7 +1607,6 @@ dependencies = [
  "asn-core",
  "asn-logger",
  "asn-runner-winit",
- "asn-winapi-wgpu",
  "wasm-bindgen",
 ]
 

@@ -6,7 +6,6 @@ edition = "2021"
 [dependencies]
 asn-logger = { path = "../../asn-logger"}
 asn-runner-winit = { path = "../../asn-runner-winit" }
-asn-winapi-wgpu = { path = "../../asn-winapi-wgpu" }
 asn-core = { path = "../../asn-core" }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]

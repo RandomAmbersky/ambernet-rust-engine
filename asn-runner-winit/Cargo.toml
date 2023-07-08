@@ -7,6 +7,8 @@ edition = "2021"
 winit = "0.28.6"
 asn-core = { path = "../asn-core" }
 asn-logger = { path = "../asn-logger" }
+wgpu = { version = "0.16" }
+pollster = "0.3"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 #console_error_panic_hook = "0.1.7"

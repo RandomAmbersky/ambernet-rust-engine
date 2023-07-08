@@ -1,9 +1,11 @@
+mod wgpu_context;
+mod winapi_wgpu;
 mod winit_context;
 mod winit_event_processor;
 
 use crate::winit_context::WinitContext;
-use crate::winit_event_processor::process_event;
-use asn_core::AsnHandlerTrait;
+use crate::winit_event_processor::convert_event;
+use asn_core::{AsnContext, AsnHandlerTrait};
 use winit::event_loop::{ControlFlow, EventLoop};
 
 pub fn run<H: 'static>(mut h: H)
@@ -11,18 +13,21 @@ where
     H: AsnHandlerTrait,
 {
     let event_loop = EventLoop::new();
-    let mut w_ctx = WinitContext::new(&event_loop);
+    let winint_ctx = winit_context::new(&event_loop);
+    let wgpu_ctx = wgpu_context::new(winint_ctx.get_window());
+
+    let mut ctx = AsnContext::default();
 
     event_loop.run(move |event, _event_loop_window_target, control_flow| {
-        if w_ctx.ctx.is_need_exit {
+        if ctx.is_need_exit {
             *control_flow = ControlFlow::Exit;
             return;
         }
 
         *control_flow = ControlFlow::Poll;
-        let evt = process_event(&mut w_ctx, &event);
+        let evt = convert_event(&event);
         if let Some(e) = evt {
-            h.proceed(&mut w_ctx.ctx, &e);
+            h.proceed(&mut ctx, &e);
         }
     })
 }

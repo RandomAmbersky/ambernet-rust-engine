@@ -1,4 +1,3 @@
-use asn_core::AsnContext;
 use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder};
 
@@ -6,37 +5,38 @@ use winit::window::{Window, WindowBuilder};
 use wasm_bindgen::prelude::*;
 
 pub struct WinitContext {
-    pub main_window: Window,
-    pub ctx: AsnContext,
+    main_window: Window,
 }
 
 impl WinitContext {
-    pub fn new(event_loop: &EventLoop<()>) -> Self {
-        let ctx = AsnContext::default();
-        let window = WindowBuilder::new().build(event_loop).unwrap();
+    pub fn get_window(&self) -> &Window {
+        &self.main_window
+    }
+}
 
-        #[cfg(target_arch = "wasm32")]
-        {
-            // Winit prevents sizing with CSS, so we have to set
-            // the size manually when on web.
-            use winit::dpi::PhysicalSize;
-            window.set_inner_size(PhysicalSize::new(450, 400));
+pub fn new(event_loop: &EventLoop<()>) -> WinitContext {
+    let window = WindowBuilder::new().build(event_loop).unwrap();
 
-            use winit::platform::web::WindowExtWebSys;
-            web_sys::window()
-                .and_then(|win| win.document())
-                .and_then(|doc| {
-                    let dst = doc.get_element_by_id("wasm-example")?;
-                    let canvas = web_sys::Element::from(window.canvas());
-                    dst.append_child(&canvas).ok()?;
-                    Some(())
-                })
-                .expect("Couldn't append canvas to document body.");
-        }
+    #[cfg(target_arch = "wasm32")]
+    {
+        // Winit prevents sizing with CSS, so we have to set
+        // the size manually when on web.
+        use winit::dpi::PhysicalSize;
+        window.set_inner_size(PhysicalSize::new(450, 400));
 
-        Self {
-            ctx,
-            main_window: window,
-        }
+        use winit::platform::web::WindowExtWebSys;
+        web_sys::window()
+            .and_then(|win| win.document())
+            .and_then(|doc| {
+                let dst = doc.get_element_by_id("wasm-example")?;
+                let canvas = web_sys::Element::from(window.canvas());
+                dst.append_child(&canvas).ok()?;
+                Some(())
+            })
+            .expect("Couldn't append canvas to document body.");
+    }
+
+    WinitContext {
+        main_window: window,
     }
 }
