@@ -1,4 +1,5 @@
 mod example;
+mod handler;
 
 use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
 use asn_logger::{info, AsnLogLevel};
