@@ -1,9 +1,23 @@
-use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
+use asn_core::{AsnContextTrait, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
 
-struct MyHandler();
+struct MyCtx {
+    is_need_exit: bool,
+}
 
-impl AsnHandlerTrait for MyHandler {
-    fn proceed(&mut self, ctx: &mut AsnContext, evt: &AsnEvent) -> Option<AsnError> {
+impl AsnContextTrait for MyCtx {
+    fn is_need_exit(&self) -> bool {
+        self.is_need_exit
+    }
+
+    fn set_need_exit(&mut self) {
+        self.is_need_exit = true
+    }
+}
+
+struct MyHandler {}
+
+impl AsnHandlerTrait<MyCtx> for MyHandler {
+    fn proceed(&mut self, ctx: &mut MyCtx, evt: &AsnEvent) -> Option<AsnError> {
         println!("{:?}", evt);
         match evt {
             AsnEvent::WindowEvent(e) => match e {
@@ -20,6 +34,9 @@ impl AsnHandlerTrait for MyHandler {
 }
 
 fn main() {
+    let ctx = MyCtx {
+        is_need_exit: false,
+    };
     let h = MyHandler {};
-    asn_runner_winit::run(h);
+    asn_runner_winit::run(ctx, h);
 }

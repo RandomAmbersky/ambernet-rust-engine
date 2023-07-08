@@ -1,4 +1,6 @@
-use asn_core::AsnContext;
+use asn_core::AsnContextTrait;
+
+pub struct AsnContext {}
 
 pub fn init() -> AsnContext {
     AsnContext {
