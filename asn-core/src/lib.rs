@@ -5,8 +5,10 @@ mod handler_trait;
 mod pos2d;
 mod size2d;
 mod unsigned_num;
+mod winapi_trait;
 
 pub use handler_trait::AsnHandlerTrait;
+pub use winapi_trait::AsnWinapiTrait;
 
 pub use asn_context::AsnContext;
 

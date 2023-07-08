@@ -151,6 +151,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "asn-winapi-wgpu"
+version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "asn-logger",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+ "wgpu",
+ "winit",
+]
+
+[[package]]
 name = "atty"
 version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
