@@ -1,6 +1,4 @@
-#[derive(Debug)]
-pub struct AsnWinapiWgpu {}
+mod wgpu_context;
+mod winapi_wgpu;
 
-pub fn new() -> AsnWinapiWgpu {
-    AsnWinapiWgpu {}
-}
+pub use winapi_wgpu::new;
