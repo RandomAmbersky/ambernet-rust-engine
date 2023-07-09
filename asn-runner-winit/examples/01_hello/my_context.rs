@@ -15,8 +15,8 @@ impl AsnContextTrait<AsnWgpuWinApi> for MyCtx {
         self.is_need_exit = true
     }
 
-    fn winapi() -> &'static AsnWgpuWinApi {
-        todo!()
+    fn winapi(&self) -> &'a AsnWgpuWinApi {
+        &self.winapi
     }
 }
 
