@@ -33,3 +33,25 @@ where
         self.winapi
     }
 }
+
+pub struct AsnContextBuilder<'a, W>
+where
+    W: AsnWinapiTrait,
+{
+    winapi: Option<&'a W>,
+}
+
+impl<'a, W> AsnContextBuilder<'a, W>
+where
+    W: AsnWinapiTrait,
+{
+    pub fn new() -> AsnContextBuilder<'a, W> {
+        AsnContextBuilder { winapi: None }
+    }
+    pub fn build(&self) -> AsnContext<'a, W> {
+        AsnContext {
+            is_need_exit: false,
+            winapi: self.winapi.unwrap(),
+        }
+    }
+}
