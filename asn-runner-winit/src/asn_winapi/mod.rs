@@ -1,20 +1,20 @@
 mod asn_window;
 
 use crate::asn_winapi::asn_window::AsnWindow;
-use asn_core::{AsnEvent, AsnWinapiTrait, Size2D};
-use wgpu::{Adapter, Device, InstanceDescriptor, Queue, Surface};
+use asn_core::{AsnWinapiTrait, Size2D};
+use wgpu::{InstanceDescriptor, Surface};
 use winit::event_loop::EventLoop;
 
 pub struct AsnWgpuWinApi {
     window: AsnWindow,
     surface: Surface,
     config: wgpu::SurfaceConfiguration,
-    adapter: Adapter,
-    device: Device,
-    queue: Queue,
+    adapter: wgpu::Adapter,
+    device: wgpu::Device,
+    queue: wgpu::Queue,
 }
 
-pub fn new(event_loop: &EventLoop<()>) -> AsnWgpuWinApi {
+pub fn winapi_new(event_loop: &EventLoop<()>) -> AsnWgpuWinApi {
     let window = asn_window::new(event_loop);
 
     let instance = wgpu::Instance::new(InstanceDescriptor {

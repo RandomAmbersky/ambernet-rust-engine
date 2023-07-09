@@ -1,19 +1,18 @@
-mod asn_winapi;
+pub mod asn_winapi;
 mod winit_event_processor;
 
-use crate::asn_winapi::AsnWgpuWinApi;
+pub use asn_winapi::{winapi_new, AsnWgpuWinApi};
+
 use crate::winit_event_processor::convert_event;
-use asn_core::{AsnContextTrait, AsnEvent, AsnHandlerTrait};
+use asn_core::{AsnContextTrait, AsnHandlerTrait, AsnWinapiTrait};
 use winit::event_loop::{ControlFlow, EventLoop};
 
-pub fn run<A: 'static, H: 'static>(mut ctx: A, mut h: H)
+pub fn run<W, A: 'static, H: 'static>(event_loop: EventLoop<()>, mut ctx: A, mut h: H)
 where
-    A: AsnContextTrait,
-    H: AsnHandlerTrait<A>,
+    W: AsnWinapiTrait,
+    A: AsnContextTrait<W>,
+    H: AsnHandlerTrait<W, A>,
 {
-    let event_loop = EventLoop::new();
-    let mut win_api = asn_winapi::new(&event_loop);
-
     event_loop.run(move |event, _event_loop_window_target, control_flow| {
         if ctx.is_need_exit() {
             *control_flow = ControlFlow::Exit;

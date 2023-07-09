@@ -1,16 +1,18 @@
-use asn_core::{AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
+use crate::my_context::MyCtx;
+use asn_core::{AsnContextTrait, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
+use asn_runner_winit::AsnWgpuWinApi;
 
-pub struct MyHandler();
+pub struct MyHandler {}
 
-impl AsnHandlerTrait for MyHandler {
-    fn proceed(&mut self, ctx: &mut AsnContext, evt: &AsnEvent) -> Option<AsnError> {
+impl AsnHandlerTrait<AsnWgpuWinApi, MyCtx> for MyHandler {
+    fn proceed(&mut self, ctx: &mut MyCtx, evt: &AsnEvent) -> Option<AsnError> {
         println!("{:?}", evt);
         match evt {
             AsnEvent::WindowEvent(e) => match e {
                 AsnWindowEvent::Resized(_) => None,
                 AsnWindowEvent::RedrawRequested => None,
                 AsnWindowEvent::CloseRequested => {
-                    ctx.is_need_exit = true;
+                    ctx.set_need_exit();
                     None
                 }
             },

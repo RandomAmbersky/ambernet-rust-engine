@@ -1,29 +1,15 @@
-use crate::my_context::MyCtx;
-use asn_core::{AsnContextTrait, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
-
 mod my_context;
+mod my_handler;
 
-struct MyHandler {}
-
-impl AsnHandlerTrait<MyCtx> for MyHandler {
-    fn proceed(&mut self, ctx: &mut MyCtx, evt: &AsnEvent) -> Option<AsnError> {
-        println!("{:?}", evt);
-        match evt {
-            AsnEvent::WindowEvent(e) => match e {
-                AsnWindowEvent::Resized(_) => None,
-                AsnWindowEvent::RedrawRequested => None,
-                AsnWindowEvent::CloseRequested => {
-                    ctx.set_need_exit();
-                    None
-                }
-            },
-            _ => None,
-        }
-    }
-}
+use asn_core::{AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
+use asn_runner_winit::winapi_new;
+use my_handler::MyHandler;
+use winit::event_loop::EventLoop;
 
 fn main() {
-    let ctx = MyCtx::default();
+    let event_loop = EventLoop::new();
+    let win_api = winapi_new(&event_loop);
+    let ctx = my_context::new(win_api);
     let h = MyHandler {};
-    asn_runner_winit::run(ctx, h);
+    asn_runner_winit::run(event_loop, ctx, h);
 }

@@ -1,16 +1,28 @@
 use asn_core::AsnContextTrait;
+use asn_runner_winit::AsnWgpuWinApi;
 
-#[derive(Default)]
 pub struct MyCtx {
     is_need_exit: bool,
+    winapi: AsnWgpuWinApi,
 }
 
-impl AsnContextTrait for MyCtx {
+impl AsnContextTrait<AsnWgpuWinApi> for MyCtx {
     fn is_need_exit(&self) -> bool {
         self.is_need_exit
     }
 
     fn set_need_exit(&mut self) {
         self.is_need_exit = true
+    }
+
+    fn winapi() -> &'static AsnWgpuWinApi {
+        todo!()
+    }
+}
+
+pub fn new(winapi: AsnWgpuWinApi) -> MyCtx {
+    MyCtx {
+        winapi,
+        is_need_exit: false,
     }
 }
