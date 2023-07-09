@@ -23,7 +23,6 @@ where
         *control_flow = ControlFlow::Poll;
         let evt = convert_event(&event);
         if let Some(e) = evt {
-            win_api.proceed(&e);
             h.proceed(&mut ctx, &e);
         }
     })

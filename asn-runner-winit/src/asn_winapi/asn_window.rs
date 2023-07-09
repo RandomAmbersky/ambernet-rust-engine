@@ -4,15 +4,18 @@ use winit::window::{Window, WindowBuilder};
 
 pub struct AsnWindow {
     window: Window,
-    size: Size2D<u64>,
+    size: Size2D<u32>,
 }
 
 impl AsnWindow {
-    pub fn get_size(&self) -> Size2D<u64> {
+    pub fn get_size(&self) -> Size2D<u32> {
         self.size
     }
     pub fn get_window(&self) -> &Window {
         &self.window
+    }
+    pub fn resize(&mut self, size: Size2D<u32>) {
+        self.size = size;
     }
 }
 
@@ -20,8 +23,8 @@ pub fn new(event_loop: &EventLoop<()>) -> AsnWindow {
     let window = WindowBuilder::new().build(event_loop).unwrap();
 
     let size = Size2D {
-        width: 450_u64,
-        height: 400_u64,
+        width: 450_u32,
+        height: 400_u32,
     };
 
     #[cfg(target_arch = "wasm32")]

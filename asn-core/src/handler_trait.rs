@@ -1,8 +1,9 @@
-use crate::{AsnContextTrait, AsnError, AsnEvent};
+use crate::{AsnContextTrait, AsnError, AsnEvent, AsnWinapiTrait};
 
-pub trait AsnHandlerTrait<A>
+pub trait AsnHandlerTrait<W, A>
 where
-    A: AsnContextTrait,
+    W: AsnWinapiTrait,
+    A: AsnContextTrait<W>,
 {
     fn proceed(&mut self, ctx: &mut A, evt: &AsnEvent) -> Option<AsnError>;
 }
