@@ -1,6 +1,6 @@
 mod library;
 
-use crate::library::get_context;
+use crate::library::{get_context, WinApiTrait};
 
 fn main() {
     let mut ctx = get_context();

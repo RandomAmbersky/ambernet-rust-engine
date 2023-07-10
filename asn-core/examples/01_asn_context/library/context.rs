@@ -1,4 +1,5 @@
 use crate::library::winapi_context::WinapiContext;
+use crate::library::winapi_trait::WinApiTrait;
 
 pub struct Context {
     winapi: WinapiContext,
