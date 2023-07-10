@@ -1,4 +1,4 @@
-use asn_core::{AsnContext, AsnContextBuilder, AsnContextTrait, AsnWinapiTrait, Size2D};
+use asn_core::{AsnWinapiTrait, Size2D};
 
 struct MyWinApi {}
 
@@ -12,7 +12,8 @@ type MyContextBuilder<'a> = AsnContextBuilder<'a, MyWinApi>;
 type MyContext = AsnContext<'static, MyWinApi>;
 
 fn get_context() -> MyContext {
-    let c = MyContextBuilder::new().build();
+    let win_api = MyWinApi {};
+    let c = MyContextBuilder::new().set_winapi(&win_api).build();
     c
 }
 

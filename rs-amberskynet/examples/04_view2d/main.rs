@@ -6,7 +6,6 @@ use std::time::{Duration, Instant};
 pub const TEXTURE_SOURCE: &[u8] = include_bytes!("./resource/tiles_mod.png");
 
 use crate::view_2d::View2D;
-// use asn_logger::AsnLogLevel;
 
 use rs_amberskynet::{AsnContext, ExtHandlerTrait};
 use rs_gfx_core::{AsnTextureFormat, AsnTextureTrait};
