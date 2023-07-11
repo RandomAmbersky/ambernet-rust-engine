@@ -5,7 +5,7 @@ use asn_core::{AsnWinapiTrait, Size2D};
 
 fn main() {
     let mut ctx = get_context();
-    let mut winapi = ctx.get_winapi();
+    let winapi = ctx.get_winapi();
     winapi.window_resize(Size2D {
         width: 10,
         height: 10,

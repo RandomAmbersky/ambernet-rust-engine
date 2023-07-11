@@ -1,6 +1,8 @@
 mod my_context;
 mod my_handler;
 
+mod library;
+
 use asn_core::{AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
 use asn_runner_winit::winapi_new;
 use my_handler::MyHandler;
