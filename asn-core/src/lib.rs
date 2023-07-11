@@ -1,15 +1,15 @@
 mod asn_context;
 mod asn_errors;
 mod asn_events;
-mod handler_trait;
+mod asn_handler_trait;
+mod asn_winapi_trait;
 mod pos2d;
 mod size2d;
 mod unsigned_num;
-mod winapi_trait;
 
 pub use asn_context::AsnContext;
-pub use handler_trait::AsnHandlerTrait;
-pub use winapi_trait::AsnWinapiTrait;
+pub use asn_handler_trait::AsnHandlerTrait;
+pub use asn_winapi_trait::AsnWinapiTrait;
 
 pub use asn_errors::*;
 pub use asn_events::*;
