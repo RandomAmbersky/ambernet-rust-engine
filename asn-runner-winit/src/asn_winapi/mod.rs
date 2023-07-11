@@ -3,6 +3,7 @@ mod asn_window;
 use crate::asn_winapi::asn_window::AsnWindow;
 use asn_core::{AsnWinapiTrait, Size2D};
 use wgpu::{InstanceDescriptor, Surface};
+use winit::event::Event;
 use winit::event_loop::EventLoop;
 
 pub struct AsnWgpuWinApi {
@@ -15,8 +16,7 @@ pub struct AsnWgpuWinApi {
 }
 
 impl AsnWgpuWinApi {
-    pub fn new() -> Self {
-        let event_loop = EventLoop::new();
+    pub fn new(event_loop: &EventLoop<()>) -> Self {
         let window = asn_window::new(&event_loop);
 
         let instance = wgpu::Instance::new(InstanceDescriptor {

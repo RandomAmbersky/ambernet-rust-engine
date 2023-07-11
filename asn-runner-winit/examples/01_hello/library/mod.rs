@@ -1,12 +1,13 @@
 use asn_core::AsnContext;
-use asn_runner_winit::asn_winapi::AsnWgpuWinApi;
+use asn_runner_winit::{Runner, WinApi};
 
 pub mod handler;
 
-pub type Context = AsnContext<AsnWgpuWinApi>;
+pub type Context = AsnContext<WinApi>;
 
 pub fn get_context() -> Context {
-    let winapi = AsnWgpuWinApi::new();
+    let runner = Runner::new();
+    let winapi = runner.new_winapi();
     let ctx = Context::new(winapi);
     ctx
 }
