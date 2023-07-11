@@ -15,7 +15,7 @@ pub fn get_handler() -> Handler {
 }
 
 impl AsnHandlerTrait<Context> for Handler {
-    fn proceed(&mut self, mut ctx: &mut Context, evt: &AsnEvent) -> Option<AsnError> {
+    fn proceed(&mut self, ctx: &mut Context, evt: &AsnEvent) -> Option<AsnError> {
         info!("{:?}", evt);
         match evt {
             AsnEvent::Empty => None,
