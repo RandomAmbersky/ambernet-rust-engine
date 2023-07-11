@@ -12,5 +12,6 @@ impl WinApiTrait for WinapiContext {
     fn resize(&mut self, x: u32, y: u32) {
         self.x = x;
         self.y = y;
+        println!("{:} {:}", self.x, self.y);
     }
 }

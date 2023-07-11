@@ -1,15 +1,21 @@
 use crate::library::winapi_context::WinapiContext;
-use crate::library::winapi_trait::WinApiTrait;
+use crate::library::WinApiTrait;
 
-pub struct Context {
-    winapi: WinapiContext,
+pub struct Context<W>
+where
+    W: WinApiTrait,
+{
+    winapi: W,
 }
 
-impl Context {
-    pub fn new(winapi: WinapiContext) -> Self {
+impl<W> Context<W>
+where
+    W: WinApiTrait,
+{
+    pub fn new(winapi: W) -> Self {
         Self { winapi }
     }
-    pub fn get_winapi(&mut self) -> &mut WinapiContext {
+    pub fn get_winapi(&mut self) -> &mut W {
         &mut self.winapi
     }
 }
