@@ -1,8 +1,6 @@
 mod example;
-mod handler;
 
-use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
-use asn_logger::{info, AsnLogLevel};
+use asn_logger::info;
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;

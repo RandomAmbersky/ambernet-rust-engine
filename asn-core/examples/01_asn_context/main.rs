@@ -7,10 +7,3 @@ fn main() {
     let mut winapi = ctx.get_winapi();
     winapi.resize(10, 10);
 }
-
-// fn main() {
-//     let x = "abc";
-//     println!("{}", x);
-// let x = &mut x;
-// println!("{}", x);
-// }
