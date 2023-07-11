@@ -1,7 +1,6 @@
 use crate::library::Context;
-use asn_core::{AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
+use asn_core::{AsnError, AsnEvent, AsnHandlerTrait, AsnWinapiTrait, AsnWindowEvent};
 use asn_logger::info;
-use winit::event::VirtualKeyCode::N;
 
 pub struct Handler {}
 
@@ -21,7 +20,10 @@ impl AsnHandlerTrait<Context> for Handler {
         match evt {
             AsnEvent::Empty => None,
             AsnEvent::WindowEvent(w) => match w {
-                AsnWindowEvent::Resized(_) => None,
+                AsnWindowEvent::Resized(size) => {
+                    ctx.get_winapi().window_resize(size);
+                    None
+                }
                 AsnWindowEvent::RedrawRequested => None,
                 AsnWindowEvent::CloseRequested => {
                     ctx.set_need_exit();

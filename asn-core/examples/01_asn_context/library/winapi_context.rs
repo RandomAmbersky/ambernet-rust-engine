@@ -12,7 +12,7 @@ impl WinapiContext {
 }
 
 impl AsnWinapiTrait for WinapiContext {
-    fn window_resize(&mut self, size: Size2D<u32>) {
+    fn window_resize(&mut self, size: &Size2D<u32>) {
         self.x = size.width;
         self.y = size.height;
         println!("{:} {:}", self.x, self.y);
