@@ -1,22 +1,7 @@
-pub mod asn_winapi;
+// pub mod asn_winapi;
 // mod winit_event_processor;
 
-use winit::event_loop::EventLoop;
-pub use asn_winapi::{winapi_new, AsnWgpuWinApi};
-
-pub struct Runner {
-	winapi: AsnWgpuWinApi,
-	event_loop: EventLoop<()>
-}
-
-pub fn new() -> Runner {
-	let event_loop = EventLoop::new();
-	let winapi = asn_winapi::winapi_new(&event_loop);
-	Runner {
-		event_loop,
-		winapi
-	}
-}
+// pub use asn_winapi::{winapi_new, AsnWgpuWinApi};
 
 // use crate::winit_event_processor::convert_event;
 // use asn_core::{AsnContextTrait, AsnHandlerTrait, AsnWinapiTrait};
