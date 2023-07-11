@@ -1,4 +1,4 @@
-mod library;
+mod engine;
 mod wasm_utils;
 
 pub use wasm_utils::greet;
@@ -10,6 +10,6 @@ use asn_logger::info;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub fn start() {
-    library::init();
+    let e = engine::init();
     info!("It worked :)");
 }
