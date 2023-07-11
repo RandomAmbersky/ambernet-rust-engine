@@ -1,6 +1,11 @@
+mod context;
+
+use crate::engine::context::Context;
 use asn_logger::AsnLogLevel;
 
-pub struct Engine {}
+pub struct Engine {
+    ctx: Context,
+}
 
 impl Engine {
     pub fn run(&mut self) {}
@@ -9,5 +14,6 @@ impl Engine {
 pub fn init() -> Engine {
     let l: AsnLogLevel = AsnLogLevel::Trace;
     asn_logger::init_log(l);
-    Engine {}
+    let ctx = context::get_context();
+    Engine { ctx }
 }

@@ -1,15 +1,15 @@
-use crate::library::WinApiTrait;
+use crate::AsnWinapiTrait;
 
-pub struct Context<W>
+pub struct AsnContext<W>
 where
-    W: WinApiTrait,
+    W: AsnWinapiTrait,
 {
     winapi: W,
 }
 
-impl<W> Context<W>
+impl<W> AsnContext<W>
 where
-    W: WinApiTrait,
+    W: AsnWinapiTrait,
 {
     pub fn new(winapi: W) -> Self {
         Self { winapi }
