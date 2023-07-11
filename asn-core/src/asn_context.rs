@@ -18,10 +18,10 @@ where
             is_need_exit: false,
         }
     }
-    fn is_need_exit(&self) -> bool {
+    pub fn is_need_exit(&self) -> bool {
         self.is_need_exit
     }
-    fn set_need_exit(&mut self) {
+    pub fn set_need_exit(&mut self) {
         self.is_need_exit = true;
     }
     pub fn get_winapi(&mut self) -> &mut W {

@@ -1,13 +1,13 @@
-use asn_core::AsnContext;
+use asn_core::{AsnContext, AsnEvent, AsnHandlerTrait};
 use asn_runner_winit::{Runner, WinApi};
 
-pub mod handler;
+mod handler;
+pub use handler::get_handler;
 
 pub type Context = AsnContext<WinApi>;
-
-pub fn get_context() -> Context {
+pub fn get_context() -> (Runner, Context) {
     let runner = Runner::new();
     let winapi = runner.new_winapi();
     let ctx = Context::new(winapi);
-    ctx
+    (runner, ctx)
 }
