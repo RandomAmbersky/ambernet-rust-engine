@@ -1,5 +1,5 @@
 use crate::{AsnError, AsnEvent};
 
-pub trait AsnHandlerTrait {
-    fn proceed(&mut self, evt: &AsnEvent) -> Option<AsnError>;
+pub trait AsnHandlerTrait<C> {
+    fn proceed(&mut self, ctx: &mut C, evt: &AsnEvent) -> Option<AsnError>;
 }

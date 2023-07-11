@@ -17,9 +17,9 @@ impl Runner {
         let winapi = AsnWgpuWinApi::new(&self.event_loop);
         winapi
     }
-    pub fn run<H: 'static>(self, ctx: AsnContext<AsnWgpuWinApi>, mut h: H)
+    pub fn run<H: 'static>(self, mut ctx: AsnContext<AsnWgpuWinApi>, mut h: H)
     where
-        H: AsnHandlerTrait,
+        H: AsnHandlerTrait<AsnContext<AsnWgpuWinApi>>,
     {
         self.event_loop
             .run(move |event, _event_loop_window_target, control_flow| {
@@ -31,7 +31,7 @@ impl Runner {
                 *control_flow = ControlFlow::Poll;
                 let evt = convert_event(&event);
                 if let Some(e) = evt {
-                    h.proceed(&e);
+                    h.proceed(&mut ctx, &e);
                 }
             })
     }
