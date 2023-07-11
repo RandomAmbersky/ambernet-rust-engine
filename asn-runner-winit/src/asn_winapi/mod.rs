@@ -14,65 +14,68 @@ pub struct AsnWgpuWinApi {
     queue: wgpu::Queue,
 }
 
-pub fn winapi_new(event_loop: &EventLoop<()>) -> AsnWgpuWinApi {
-    let window = asn_window::new(event_loop);
+impl AsnWgpuWinApi {
+    pub fn new() -> Self {
+        let event_loop = EventLoop::new();
+        let window = asn_window::new(&event_loop);
 
-    let instance = wgpu::Instance::new(InstanceDescriptor {
-        backends: wgpu::Backends::all(),
-        dx12_shader_compiler: Default::default(),
-    });
+        let instance = wgpu::Instance::new(InstanceDescriptor {
+            backends: wgpu::Backends::all(),
+            dx12_shader_compiler: Default::default(),
+        });
 
-    let surface = unsafe { instance.create_surface(&window.get_window()).unwrap() };
+        let surface = unsafe { instance.create_surface(&window.get_window()).unwrap() };
 
-    let adapter = instance
-        .enumerate_adapters(wgpu::Backends::all())
-        .find(|adapter| adapter.is_surface_supported(&surface))
+        let adapter = instance
+            .enumerate_adapters(wgpu::Backends::all())
+            .find(|adapter| adapter.is_surface_supported(&surface))
+            .unwrap();
+
+        let (device, queue) = pollster::block_on(adapter.request_device(
+            &wgpu::DeviceDescriptor {
+                features: wgpu::Features::empty(),
+                // WebGL doesn't support all of wgpu's features, so if
+                // we're building for the web we'll have to disable some.
+                limits: if cfg!(target_arch = "wasm32") {
+                    wgpu::Limits::downlevel_webgl2_defaults()
+                } else {
+                    wgpu::Limits::default()
+                },
+                label: None,
+            },
+            None, // Trace path
+        ))
         .unwrap();
 
-    let (device, queue) = pollster::block_on(adapter.request_device(
-        &wgpu::DeviceDescriptor {
-            features: wgpu::Features::empty(),
-            // WebGL doesn't support all of wgpu's features, so if
-            // we're building for the web we'll have to disable some.
-            limits: if cfg!(target_arch = "wasm32") {
-                wgpu::Limits::downlevel_webgl2_defaults()
-            } else {
-                wgpu::Limits::default()
-            },
-            label: None,
-        },
-        None, // Trace path
-    ))
-    .unwrap();
+        let surface_caps = surface.get_capabilities(&adapter);
+        // Shader code in this tutorial assumes an Srgb surface texture. Using a different
+        // one will result all the colors comming out darker. If you want to support non
+        // Srgb surfaces, you'll need to account for that when drawing to the frame.
+        let surface_format = surface_caps
+            .formats
+            .iter()
+            .copied()
+            .find(|f| f.is_srgb())
+            .unwrap_or(surface_caps.formats[0]);
+        let config = wgpu::SurfaceConfiguration {
+            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+            format: surface_format,
+            width: window.get_size().width,
+            height: window.get_size().height,
+            present_mode: surface_caps.present_modes[0],
+            alpha_mode: surface_caps.alpha_modes[0],
+            view_formats: vec![],
+        };
+        surface.configure(&device, &config);
 
-    let surface_caps = surface.get_capabilities(&adapter);
-    // Shader code in this tutorial assumes an Srgb surface texture. Using a different
-    // one will result all the colors comming out darker. If you want to support non
-    // Srgb surfaces, you'll need to account for that when drawing to the frame.
-    let surface_format = surface_caps
-        .formats
-        .iter()
-        .copied()
-        .find(|f| f.is_srgb())
-        .unwrap_or(surface_caps.formats[0]);
-    let config = wgpu::SurfaceConfiguration {
-        usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-        format: surface_format,
-        width: window.get_size().width,
-        height: window.get_size().height,
-        present_mode: surface_caps.present_modes[0],
-        alpha_mode: surface_caps.alpha_modes[0],
-        view_formats: vec![],
-    };
-    surface.configure(&device, &config);
-
-    AsnWgpuWinApi {
-        window,
-        surface,
-        config,
-        adapter,
-        device,
-        queue,
+        AsnWgpuWinApi {
+            window,
+            surface,
+            config,
+            adapter,
+            device,
+            queue,
+        }
     }
 }
 
