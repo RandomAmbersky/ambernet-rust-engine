@@ -4,7 +4,6 @@ members = [
     "asn-logger",
     "asn-engine",
     "asn-core",
-    "asn-runner-winit",
     "rs-amberskynet",
     "rs-core",
     "rs-gfx-core",

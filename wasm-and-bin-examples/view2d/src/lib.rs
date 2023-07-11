@@ -10,6 +10,7 @@ use asn_logger::info;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub fn start() {
-    let e = engine::init();
+    let mut e = engine::init();
     info!("It worked :)");
+    e.run()
 }
