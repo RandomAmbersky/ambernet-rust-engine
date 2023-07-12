@@ -24,7 +24,7 @@ impl AsnHandlerTrait<Context> for Handler {
                     ctx.get_winapi().window_resize(size);
                     None
                 }
-                AsnWindowEvent::RedrawRequested => None,
+                AsnWindowEvent::RedrawRequested => ctx.get_winapi().redraw(),
                 AsnWindowEvent::CloseRequested => {
                     ctx.set_need_exit();
                     None

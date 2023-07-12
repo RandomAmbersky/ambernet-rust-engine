@@ -1,7 +1,8 @@
 mod asn_window;
 
 use crate::asn_winapi::asn_window::AsnWindow;
-use asn_core::{AsnWinapiTrait, Size2D};
+use asn_core::AsnRenderError::CustomError;
+use asn_core::{AsnError, AsnWinapiTrait, Size2D};
 use wgpu::{InstanceDescriptor, Surface};
 use winit::event::Event;
 use winit::event_loop::EventLoop;
@@ -79,12 +80,63 @@ impl AsnWgpuWinApi {
     }
 }
 
+impl AsnWgpuWinApi {
+    pub fn update(&mut self) {}
+    pub fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
+        let output = self.surface.get_current_texture()?;
+        let view = output
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+        let mut encoder = self
+            .device
+            .create_command_encoder(&wgpu::CommandEncoderDescriptor {
+                label: Some("Render Encoder"),
+            });
+        {
+            let _render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+                label: Some("Render Pass"),
+                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+                    view: &view,
+                    resolve_target: None,
+                    ops: wgpu::Operations {
+                        load: wgpu::LoadOp::Clear(wgpu::Color {
+                            r: 0.1,
+                            g: 0.2,
+                            b: 0.3,
+                            a: 1.0,
+                        }),
+                        store: true,
+                    },
+                })],
+                depth_stencil_attachment: None,
+            });
+        }
+
+        // submit will accept anything that implements IntoIter
+        self.queue.submit(std::iter::once(encoder.finish()));
+        output.present();
+
+        Ok(())
+    }
+}
+
 impl AsnWinapiTrait for AsnWgpuWinApi {
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
         if new_size.width > 0 && new_size.height > 0 {
+            self.config.width = new_size.width;
             self.config.height = new_size.height;
             self.surface.configure(&self.device, &self.config);
-            self.surface.configure(&self.device, &self.config);
+        }
+    }
+    fn redraw(&mut self) -> Option<AsnError> {
+        self.update();
+        let res = self.render();
+        match res {
+            Ok(_) => None,
+            Err(e) => {
+                let err = e.to_string();
+                Some(AsnError::RenderError(CustomError(err)))
+            }
         }
     }
 }
