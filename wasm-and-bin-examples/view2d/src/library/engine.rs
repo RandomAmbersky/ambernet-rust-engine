@@ -26,6 +26,7 @@ impl Engine {
         let ctx = self.ctx.take().unwrap();
         let handler = self.handler.take().unwrap();
         let runner = self.runner.take().unwrap();
+        println!("self.ctx.is_some: {:#?}", self.ctx.is_some());
         runner.run(ctx, handler);
     }
 }
