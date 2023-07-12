@@ -3,9 +3,9 @@ use asn_core::AsnContext;
 use asn_runner_winit::{Runner, WinApi};
 
 pub struct Engine {
-    runner: Runner,
-    ctx: Context,
-    handler: Handler,
+    runner: Option<Runner>,
+    ctx: Option<Context>,
+    handler: Option<Handler>,
 }
 
 pub type Context = AsnContext<WinApi>;
@@ -17,12 +17,15 @@ impl Engine {
         let ctx = Context::new(winapi);
         let handler = Handler::new();
         Engine {
-            runner,
-            ctx,
-            handler,
+            runner: Some(runner),
+            ctx: Some(ctx),
+            handler: Some(handler),
         }
     }
     pub fn run(&mut self) {
-        self.runner.run(&self.ctx, &self.handler);
+        let ctx = self.ctx.take().unwrap();
+        let handler = self.handler.take().unwrap();
+        let runner = self.runner.take().unwrap();
+        runner.run(ctx, handler);
     }
 }
