@@ -1,4 +1,4 @@
-use crate::engine::handler::Handler;
+use crate::library::handler::Handler;
 use asn_core::AsnContext;
 use asn_runner_winit::{Runner, WinApi};
 
@@ -22,7 +22,7 @@ impl Engine {
             handler: Some(handler),
         }
     }
-    pub fn run(&mut self) {
+    pub fn do_infinite_loop(&mut self) {
         let ctx = self.ctx.take().unwrap();
         let handler = self.handler.take().unwrap();
         let runner = self.runner.take().unwrap();
