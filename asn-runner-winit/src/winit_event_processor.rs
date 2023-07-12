@@ -25,6 +25,16 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
             };
             Some(AsnEvent::WindowEvent(Resized(w_size)))
         }
+        WindowEvent::ScaleFactorChanged {
+            new_inner_size: size,
+            ..
+        } => {
+            let w_size: Size2D<u32> = Size2D {
+                width: size.width,
+                height: size.height,
+            };
+            Some(AsnEvent::WindowEvent(Resized(w_size)))
+        }
         _ => None,
     }
 }
