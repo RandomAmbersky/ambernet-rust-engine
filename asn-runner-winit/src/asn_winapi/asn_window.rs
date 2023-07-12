@@ -23,8 +23,8 @@ pub fn new(event_loop: &EventLoop<()>) -> AsnWindow {
     let window = WindowBuilder::new().build(event_loop).unwrap();
 
     let size = Size2D {
-        width: 450_u32,
-        height: 400_u32,
+        width: 1024_u32,
+        height: 768_u32,
     };
 
     #[cfg(target_arch = "wasm32")]
