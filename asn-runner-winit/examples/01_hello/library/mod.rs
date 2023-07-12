@@ -5,6 +5,7 @@ mod handler;
 pub use handler::get_handler;
 
 pub type Context = AsnContext<WinApi>;
+
 pub fn get_context() -> (Runner, Context) {
     let runner = Runner::new();
     let winapi = runner.new_winapi();
