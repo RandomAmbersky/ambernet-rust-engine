@@ -1,6 +1,7 @@
 use crate::engine::handler::Handler;
-use asn_core::AsnContext;
+use asn_core::{AsnContext, AsnEvent, AsnHandlerTrait};
 use asn_runner_winit::{Runner, WinApi};
+use std::borrow::Borrow;
 
 pub struct Engine {
     runner: Runner,
@@ -23,6 +24,8 @@ impl Engine {
         }
     }
     pub fn run(&mut self) {
-        self.runner.run(&self.ctx, &self.handler);
+        let runner = &self.runner;
+        // runner.run(&mut self.ctx, &mut self.handler);
+        // self.handler.proceed(&mut self.ctx, &AsnEvent::Empty);
     }
 }
