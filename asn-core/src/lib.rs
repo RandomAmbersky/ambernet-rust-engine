@@ -2,6 +2,7 @@ mod asn_context;
 mod asn_errors;
 mod asn_events;
 mod asn_handler_trait;
+mod asn_view_scene_trait;
 mod asn_winapi_trait;
 mod pos2d;
 mod size2d;

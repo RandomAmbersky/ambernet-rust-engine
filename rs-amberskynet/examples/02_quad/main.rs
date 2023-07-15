@@ -43,7 +43,7 @@ impl Handler {
             });
 
         let texture =
-            AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgb8).unwrap();
+            AsnTexture::from_raw_image(&ctx.gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgba8).unwrap();
 
         let texture_bind_group_layout =
             ctx.gfx
