@@ -1,6 +1,5 @@
 use crate::asn_winapi::AsnWgpuWinApi;
 use asn_scene_view_core::AsnSceneViewNodeTrait;
-use uuid::Uuid;
 
 pub struct AsnView2d {}
 
