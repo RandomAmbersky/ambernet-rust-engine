@@ -1,14 +1,9 @@
+use crate::asn_scene_view2d_trait::AsnSceneView2dTrait;
 use crate::AsnWinapiTrait;
 use uuid::Uuid;
 
 pub trait AsnWinapiSceneTrait {
+    type View2d;
     fn delete(id: Uuid);
-}
-
-pub trait AsnWinapiSceneNode<W>
-where
-    W: AsnWinapiTrait,
-{
-    fn update();
-    fn draw(api: &W);
+    fn new_view2d() -> View2d;
 }
