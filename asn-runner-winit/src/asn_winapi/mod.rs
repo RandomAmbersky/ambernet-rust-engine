@@ -1,4 +1,5 @@
 mod asn_scene;
+mod asn_view2d;
 mod asn_window;
 
 use crate::asn_winapi::asn_scene::AsnScene;

@@ -1,3 +1,5 @@
+extern crate core;
+
 mod asn_winapi;
 mod runner;
 mod winit_event_processor;

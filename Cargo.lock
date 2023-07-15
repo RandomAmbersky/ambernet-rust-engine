@@ -145,6 +145,7 @@ dependencies = [
  "asn-logger",
  "asn-scene-view-core",
  "pollster",
+ "uuid",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",

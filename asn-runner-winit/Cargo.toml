@@ -9,6 +9,7 @@ asn-core = { path = "../asn-core" }
 asn-logger = { path = "../asn-logger" }
 asn-scene-view-core = { path = "../asn-scene-view-core" }
 wgpu = { version = "0.16" }
+uuid = { version="1.3.3", features = ['wasm-bindgen', 'v4'] }
 pollster = "0.3"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
