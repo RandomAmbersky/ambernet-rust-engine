@@ -105,13 +105,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "96d30a06541fbafbc7f82ed10c06164cfbd2c401138f6addd8404629c4b16711"
 
 [[package]]
-name = "asc-scene-view-core"
-version = "0.1.0"
-dependencies = [
- "asn-core",
-]
-
-[[package]]
 name = "ash"
 version = "0.37.3+1.3.251"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -123,9 +116,6 @@ dependencies = [
 [[package]]
 name = "asn-core"
 version = "0.1.0"
-dependencies = [
- "uuid",
-]
 
 [[package]]
 name = "asn-engine"
@@ -153,12 +143,21 @@ version = "0.1.0"
 dependencies = [
  "asn-core",
  "asn-logger",
+ "asn-scene-view-core",
  "pollster",
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
  "wgpu",
  "winit",
+]
+
+[[package]]
+name = "asn-scene-view-core"
+version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "uuid",
 ]
 
 [[package]]
