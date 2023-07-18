@@ -8,5 +8,5 @@ where
 {
     type View2d: AsnSceneViewNodeTrait<W>;
     fn delete(id: Uuid);
-    fn new_view2d() -> Self::View2d;
+    fn new_view2d(&mut self, api: &W) -> Self::View2d;
 }

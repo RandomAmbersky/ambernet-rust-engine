@@ -16,6 +16,7 @@ impl Engine {
         let winapi = runner.new_winapi();
         let ctx = Context::new(winapi);
         let handler = Handler::new();
+
         Engine {
             runner: Some(runner),
             ctx: Some(ctx),
