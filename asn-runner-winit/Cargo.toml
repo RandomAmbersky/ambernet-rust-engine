@@ -7,7 +7,7 @@ edition = "2021"
 winit = "0.28.6"
 asn-core = { path = "../asn-core" }
 asn-logger = { path = "../asn-logger" }
-asn-scene-view-core = { path = "../asn-scene-view-core" }
+asn-scenegraph-core = { path = "../asn-scenegraph-core" }
 wgpu = { version = "0.16" }
 uuid = { version="1.3.3", features = ['wasm-bindgen', 'v4'] }
 pollster = "0.3"

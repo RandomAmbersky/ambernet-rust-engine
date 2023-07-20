@@ -1,5 +1,5 @@
 [package]
-name = "asn-scene-view-core"
+name = "asn-scenegraph-core"
 version = "0.1.0"
 edition = "2021"
 
