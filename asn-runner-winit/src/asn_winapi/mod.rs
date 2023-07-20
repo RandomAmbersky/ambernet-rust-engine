@@ -1,6 +1,6 @@
 mod asn_window;
 
-use crate::asn_winapi::asn_window::AsnWindow;
+use crate::asn_winapi::asn_window::{new, AsnWindow};
 use asn_core::AsnRenderError::CustomError;
 use asn_core::{AsnError, AsnWinapiTrait, Size2D};
 use wgpu::{InstanceDescriptor, Surface};
@@ -80,8 +80,8 @@ impl AsnWgpuWinApi {
 }
 
 impl AsnWgpuWinApi {
-    pub fn update(&mut self) {}
-    pub fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
+    fn update(&mut self) {}
+    fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
         let output = self.surface.get_current_texture()?;
         let view = output
             .texture
@@ -121,6 +121,7 @@ impl AsnWgpuWinApi {
 
 impl AsnWinapiTrait for AsnWgpuWinApi {
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
+        println!("{:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
             self.config.width = new_size.width;
             self.config.height = new_size.height;

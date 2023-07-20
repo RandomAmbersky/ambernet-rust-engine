@@ -22,6 +22,7 @@ impl AsnHandlerTrait<Context> for Handler {
             AsnEvent::WindowEvent(w) => match w {
                 AsnWindowEvent::Resized(size) => {
                     ctx.get_winapi().window_resize(size);
+                    ctx.get_winapi().redraw();
                     None
                 }
                 AsnWindowEvent::RedrawRequested => ctx.get_winapi().redraw(),
