@@ -18,7 +18,6 @@ impl AsnScenegraphTrait<AsnWgpuWinApi> for AsnWgpuScene {
     fn delete(_id: uuid::Uuid) {
         todo!()
     }
-
     fn new_view2d(&mut self, api: &AsnWgpuWinApi) -> Self::View2d {
         AsnView2d::new(api)
     }
