@@ -1,6 +1,6 @@
 use crate::asn_scene::asn_view2d::AsnView2d;
 use crate::asn_winapi::AsnWgpuWinApi;
-use asn_scene_view_core::{AsnSceneViewNodeTrait, AsnSceneViewTrait};
+use asn_scenegraph_core::AsnSceneViewTrait;
 
 pub mod asn_view2d;
 

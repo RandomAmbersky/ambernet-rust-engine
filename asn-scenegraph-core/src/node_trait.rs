@@ -1,6 +1,6 @@
 use asn_core::AsnWinapiTrait;
 
-pub trait AsnSceneViewNodeTrait<W>
+pub trait AsnScenegraphNodeTrait<W>
 where
     W: AsnWinapiTrait,
 {
