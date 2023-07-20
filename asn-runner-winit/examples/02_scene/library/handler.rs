@@ -4,20 +4,12 @@ use asn_logger::info;
 use asn_runner_winit::AsnScene;
 use asn_scenegraph_core::AsnScenegraphTrait;
 
-pub struct Handler {
-    node: AsnView2d,
-}
+pub struct Handler {}
 
 impl Handler {
-    pub fn new(node: AsnView2d) -> Self {
-        Handler { node }
+    pub fn new() -> Self {
+        Handler {}
     }
-}
-
-pub fn get_handler(scene: &mut AsnScene, ctx: &mut Context) -> Handler {
-    let winapi = ctx.get_winapi();
-    let node = scene.new_view2d(winapi);
-    Handler { node }
 }
 
 impl AsnHandlerTrait<Context> for Handler {

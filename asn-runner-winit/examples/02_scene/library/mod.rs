@@ -1,8 +1,8 @@
-use asn_core::{AsnContext, AsnEvent, AsnHandlerTrait};
+use crate::library::handler::Handler;
+use asn_core::AsnContext;
 use asn_runner_winit::{AsnScene, Runner, WinApi};
 
 mod handler;
-pub use handler::get_handler;
 
 pub type Context = AsnContext<WinApi>;
 pub type Scene = AsnScene;
@@ -13,4 +13,8 @@ pub fn get_context() -> (Runner, Context, Scene) {
     let scene = AsnScene::new();
     let ctx = Context::new(winapi);
     (runner, ctx, scene)
+}
+
+pub fn get_handler() -> Handler {
+    Handler::new()
 }
