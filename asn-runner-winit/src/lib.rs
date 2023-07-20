@@ -1,5 +1,6 @@
 extern crate core;
 
+mod asn_scene;
 mod asn_winapi;
 mod runner;
 mod winit_event_processor;

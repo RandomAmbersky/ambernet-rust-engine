@@ -1,17 +1,12 @@
-mod asn_scene;
-mod asn_view2d;
 mod asn_window;
 
-use crate::asn_winapi::asn_scene::AsnScene;
 use crate::asn_winapi::asn_window::AsnWindow;
 use asn_core::AsnRenderError::CustomError;
 use asn_core::{AsnError, AsnWinapiTrait, Size2D};
 use wgpu::{InstanceDescriptor, Surface};
-use winit::event::Event;
 use winit::event_loop::EventLoop;
 
 pub struct AsnWgpuWinApi {
-    scene: AsnScene,
     window: AsnWindow,
     surface: Surface,
     config: wgpu::SurfaceConfiguration,
@@ -23,8 +18,6 @@ pub struct AsnWgpuWinApi {
 impl AsnWgpuWinApi {
     pub fn new(event_loop: &EventLoop<()>) -> Self {
         let window = asn_window::new(&event_loop);
-
-        let scene = AsnScene::new();
 
         let instance = wgpu::Instance::new(InstanceDescriptor {
             backends: wgpu::Backends::all(),
@@ -76,7 +69,6 @@ impl AsnWgpuWinApi {
         surface.configure(&device, &config);
 
         AsnWgpuWinApi {
-            scene,
             window,
             surface,
             config,
