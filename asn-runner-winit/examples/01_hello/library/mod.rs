@@ -1,4 +1,4 @@
-use asn_core::{AsnContext, AsnEvent, AsnHandlerTrait};
+use asn_core::AsnContext;
 use asn_runner_winit::{Runner, WinApi};
 
 mod handler;
