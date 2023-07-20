@@ -1,4 +1,4 @@
-use asn_core::{AsnWinapiTrait, Size2D};
+use asn_core::{AsnError, AsnWinapiTrait, Size2D};
 
 pub struct WinapiContext {
     x: u32,
@@ -16,5 +16,9 @@ impl AsnWinapiTrait for WinapiContext {
         self.x = size.width;
         self.y = size.height;
         println!("{:} {:}", self.x, self.y);
+    }
+
+    fn redraw(&mut self) -> Option<AsnError> {
+        todo!()
     }
 }

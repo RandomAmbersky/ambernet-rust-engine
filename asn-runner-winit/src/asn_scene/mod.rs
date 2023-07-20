@@ -1,6 +1,6 @@
 use crate::asn_scene::asn_view2d::AsnView2d;
 use crate::asn_winapi::AsnWgpuWinApi;
-use asn_scenegraph_core::AsnSceneViewTrait;
+use asn_scenegraph_core::{AsnScenegraphNodeTrait, AsnScenegraphTrait};
 
 pub mod asn_view2d;
 
@@ -12,7 +12,7 @@ impl AsnWgpuScene {
     }
 }
 
-impl AsnSceneViewTrait<AsnWgpuWinApi> for AsnWgpuScene {
+impl AsnScenegraphTrait<AsnWgpuWinApi> for AsnWgpuScene {
     type View2d = AsnView2d;
 
     fn delete(_id: uuid::Uuid) {

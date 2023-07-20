@@ -1,12 +1,12 @@
 use crate::asn_winapi::AsnWgpuWinApi;
-use asn_scene_view_core::AsnSceneViewNodeTrait;
+use asn_scenegraph_core::AsnScenegraphNodeTrait;
 use uuid::Uuid;
 
 pub struct AsnView2d {
     id: Uuid,
 }
 
-impl AsnSceneViewNodeTrait<AsnWgpuWinApi> for AsnView2d {
+impl AsnScenegraphNodeTrait<AsnWgpuWinApi> for AsnView2d {
     fn new(api: &AsnWgpuWinApi) -> Self {
         let id = Uuid::new_v4();
         AsnView2d { id }
