@@ -1,11 +1,16 @@
-use asn_core::AsnEngineTrait;
-use asn_logger::info;
+use asn_core::{AsnContext, AsnEngineTrait};
+use asn_runner_winit::AsnRunner;
 
-pub struct Engine {}
+pub struct Engine {
+    ctx: AsnContext,
+    runner: AsnRunner,
+}
 
 impl Engine {
     pub fn new() -> Self {
-        Engine {}
+        let ctx = AsnContext::new();
+        let runner = AsnRunner::new();
+        Engine { ctx, runner }
     }
 }
 
@@ -27,6 +32,6 @@ impl<'a> AsnEngineTrait<'a> for Engine {
     }
 
     fn run(&mut self) {
-        info!("Engine run")
+        self.runner.r
     }
 }
