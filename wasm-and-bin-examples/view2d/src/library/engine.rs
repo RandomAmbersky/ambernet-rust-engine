@@ -1,33 +1,32 @@
-use crate::library::handler::Handler;
-use asn_core::AsnContext;
-use asn_runner_winit::{Runner, WinApi};
+use asn_core::AsnEngineTrait;
+use asn_logger::info;
 
-pub struct Engine {
-    runner: Option<Runner>,
-    ctx: Option<Context>,
-    handler: Option<Handler>,
-}
-
-pub type Context = AsnContext<WinApi>;
+pub struct Engine {}
 
 impl Engine {
     pub fn new() -> Self {
-        let runner = Runner::new();
-        let winapi = runner.new_winapi();
-        let ctx = Context::new(winapi);
-        let handler = Handler::new();
-
-        Engine {
-            runner: Some(runner),
-            ctx: Some(ctx),
-            handler: Some(handler),
-        }
+        Engine {}
     }
-    pub fn do_infinite_loop(&mut self) {
-        let ctx = self.ctx.take().unwrap();
-        let handler = self.handler.take().unwrap();
-        let runner = self.runner.take().unwrap();
-        println!("self.ctx.is_some: {:#?}", self.ctx.is_some());
-        runner.run(ctx, handler);
+}
+
+impl<'a> AsnEngineTrait<'a> for Engine {
+    type WinApi = ();
+    type Context = ();
+    type Scene = ();
+
+    fn get_winapi(&mut self) -> &'a mut Self::WinApi {
+        todo!()
+    }
+
+    fn get_context(&mut self) -> &'a mut Self::Context {
+        todo!()
+    }
+
+    fn get_scene(&mut self) -> &'a mut Self::Scene {
+        todo!()
+    }
+
+    fn run(&mut self) {
+        info!("Engine run")
     }
 }
