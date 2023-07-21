@@ -6,5 +6,5 @@ pub trait AsnEngineTrait<'a> {
     fn get_context() -> &'a mut Self::Context;
     fn get_scene() -> &'a mut Self::Scene;
 
-    fn run();
+    fn run(&mut self);
 }

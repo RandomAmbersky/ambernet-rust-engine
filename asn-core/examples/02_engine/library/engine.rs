@@ -1,4 +1,4 @@
-use asn_core::AsnEngineTrait;
+pub use asn_core::AsnEngineTrait;
 
 pub struct Engine {}
 
@@ -25,7 +25,7 @@ impl<'a> AsnEngineTrait<'a> for Engine {
         todo!()
     }
 
-    fn run() {
-        todo!()
+    fn run(&mut self) {
+        println!("Engine::run");
     }
 }
