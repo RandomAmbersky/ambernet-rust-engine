@@ -1,4 +1,4 @@
-use asn_core::AsnWinapiTrait;
+use crate::AsnWinapiTrait;
 
 pub trait AsnScenegraphNodeTrait<W>
 where

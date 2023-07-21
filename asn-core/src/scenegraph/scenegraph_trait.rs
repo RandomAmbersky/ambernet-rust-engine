@@ -1,6 +1,6 @@
-use crate::node_trait::AsnScenegraphNodeTrait;
-use asn_core::AsnWinapiTrait;
+use crate::AsnWinapiTrait;
 use uuid::Uuid;
+use crate::scenegraph::node_trait::AsnScenegraphNodeTrait;
 
 pub trait AsnScenegraphTrait<W>
 where

@@ -116,6 +116,9 @@ dependencies = [
 [[package]]
 name = "asn-core"
 version = "0.1.0"
+dependencies = [
+ "uuid",
+]
 
 [[package]]
 name = "asn-logger"
@@ -136,7 +139,6 @@ version = "0.1.0"
 dependencies = [
  "asn-core",
  "asn-logger",
- "asn-scenegraph-core",
  "pollster",
  "uuid",
  "wasm-bindgen",
@@ -144,14 +146,6 @@ dependencies = [
  "web-sys",
  "wgpu",
  "winit",
-]
-
-[[package]]
-name = "asn-scenegraph-core"
-version = "0.1.0"
-dependencies = [
- "asn-core",
- "uuid",
 ]
 
 [[package]]

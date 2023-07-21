@@ -1,4 +1,5 @@
 mod asn_context;
+mod asn_engine_trait;
 mod asn_errors;
 mod asn_events;
 mod asn_handler_trait;
@@ -6,6 +7,8 @@ mod asn_winapi_trait;
 mod math;
 mod scenegraph;
 mod unsigned_num;
+
+pub use asn_engine_trait::AsnEngineTrait;
 
 pub use asn_context::AsnContext;
 pub use asn_handler_trait::AsnHandlerTrait;

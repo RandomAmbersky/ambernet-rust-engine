@@ -1,8 +1,0 @@
-[package]
-name = "asn-scenegraph-core"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-asn-core = { path = "../asn-core" }
-uuid = { version="1.3.3", features = ['wasm-bindgen', 'v4'] }
