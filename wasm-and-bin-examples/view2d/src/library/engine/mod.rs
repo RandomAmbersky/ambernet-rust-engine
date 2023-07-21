@@ -1,5 +1,6 @@
 use asn_core::{AsnContext, AsnEngineTrait};
 use asn_runner_winit::{AsnRunner, AsnRunnerTrait};
+use std::ops::Deref;
 
 pub struct Engine {
     ctx: AsnContext,
@@ -16,15 +17,14 @@ impl Engine {
 
 impl<'a> AsnEngineTrait<'a> for Engine {
     type WinApi = ();
-    type Context = ();
     type Scene = ();
 
     fn get_winapi(&mut self) -> &'a mut Self::WinApi {
         todo!()
     }
 
-    fn get_context(&mut self) -> &'a mut Self::Context {
-        todo!()
+    fn get_context(&mut self) -> &'a mut AsnContext {
+        &mut self.ctx
     }
 
     fn get_scene(&mut self) -> &'a mut Self::Scene {
@@ -32,6 +32,6 @@ impl<'a> AsnEngineTrait<'a> for Engine {
     }
 
     fn run(&mut self) {
-        self.runner.run();
+        self.runner.run(self.ctx);
     }
 }

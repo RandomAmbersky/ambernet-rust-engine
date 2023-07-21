@@ -1,5 +1,6 @@
+use asn_core::AsnContext;
+
 pub trait AsnRunnerTrait {
-    type AsnContext;
     type AsnHandler;
-    fn run(&mut self);
+    fn run(self, ctx: &mut AsnContext);
 }
