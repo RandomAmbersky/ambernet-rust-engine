@@ -12,7 +12,7 @@ impl AsnRunnerTrait for AsnRunner {
     type AsnContext = ();
     type AsnHandler = ();
 
-    fn run(self, _ctx: Self::AsnContext, _h: Self::AsnHandler) {
-        todo!()
+    fn run(&mut self) {
+        println!("AsnRunner: run()")
     }
 }

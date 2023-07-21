@@ -1,5 +1,5 @@
 use asn_core::{AsnContext, AsnEngineTrait};
-use asn_runner_winit::AsnRunner;
+use asn_runner_winit::{AsnRunner, AsnRunnerTrait};
 
 pub struct Engine {
     ctx: AsnContext,
@@ -32,6 +32,6 @@ impl<'a> AsnEngineTrait<'a> for Engine {
     }
 
     fn run(&mut self) {
-        self.runner.r
+        self.runner.run();
     }
 }
