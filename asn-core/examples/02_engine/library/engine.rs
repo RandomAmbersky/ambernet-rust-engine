@@ -13,15 +13,13 @@ impl<'a> AsnEngineTrait<'a> for Engine {
     type Context = ();
     type Scene = ();
 
-    fn get_winapi() -> &'a mut Self::WinApi {
+    fn get_winapi(&mut self) -> &'a mut Self::WinApi {
         todo!()
     }
-
-    fn get_context() -> &'a mut Self::Context {
+    fn get_context(&mut self) -> &'a mut Self::Context {
         todo!()
     }
-
-    fn get_scene() -> &'a mut Self::Scene {
+    fn get_scene(&mut self) -> &'a mut Self::Scene {
         todo!()
     }
 
