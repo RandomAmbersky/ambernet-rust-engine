@@ -30,6 +30,7 @@ impl<T: UnsignedNum> Size2D<T> {
 
 #[cfg(test)]
 mod tests {
+    use crate::math::size2d::Size2D;
     use crate::*;
 
     type MySize2D = Size2D<u32>;

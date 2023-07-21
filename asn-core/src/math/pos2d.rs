@@ -8,7 +8,7 @@ pub struct Pos2D<T: UnsignedNum> {
 
 #[cfg(test)]
 mod tests {
-    use crate::pos2d::Pos2D;
+    use crate::math::pos2d::Pos2D;
 
     #[test]
     fn check_pos_2d() {

@@ -1,4 +1,4 @@
-use crate::Size2D;
+use crate::math::Size2D;
 
 #[derive(Debug)]
 pub enum AsnWindowEvent {
