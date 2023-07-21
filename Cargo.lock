@@ -118,13 +118,6 @@ name = "asn-core"
 version = "0.1.0"
 
 [[package]]
-name = "asn-engine"
-version = "0.1.0"
-dependencies = [
- "asn-core",
-]
-
-[[package]]
 name = "asn-logger"
 version = "0.1.0"
 dependencies = [

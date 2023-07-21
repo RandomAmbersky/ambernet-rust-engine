@@ -2,7 +2,6 @@
 resolver = "2"
 members = [
     "asn-logger",
-    "asn-engine",
     "asn-scenegraph-core",
     "asn-core",
     "rs-amberskynet",
