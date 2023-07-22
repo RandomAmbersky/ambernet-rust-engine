@@ -1,3 +1,5 @@
+extern crate core;
+
 mod library;
 mod wasm_utils;
 

@@ -1,21 +1,20 @@
-use asn_core::{AsnContext, AsnEngineTrait};
-use asn_runner_winit::{AsnRunner, AsnRunnerTrait};
-use std::ops::Deref;
+mod handler;
 
-pub struct Engine {
-    ctx: AsnContext,
-    runner: AsnRunner,
+use crate::library::engine::handler::Handler;
+use asn_core::{AsnContext, AsnEngineTrait};
+use asn_runner_winit::{run, WinapiPreset};
+
+pub struct Engine<'a> {
+    ctx: Option<&'a AsnContext>,
 }
 
-impl Engine {
+impl<'a> Engine<'a> {
     pub fn new() -> Self {
-        let ctx = AsnContext::new();
-        let runner = AsnRunner::new();
-        Engine { ctx, runner }
+        Engine { ctx: None }
     }
 }
 
-impl<'a> AsnEngineTrait<'a> for Engine {
+impl<'a> AsnEngineTrait<'a> for Engine<'a> {
     type WinApi = ();
     type Scene = ();
 
@@ -24,7 +23,7 @@ impl<'a> AsnEngineTrait<'a> for Engine {
     }
 
     fn get_context(&mut self) -> &'a mut AsnContext {
-        &mut self.ctx
+        todo!()
     }
 
     fn get_scene(&mut self) -> &'a mut Self::Scene {
@@ -32,6 +31,11 @@ impl<'a> AsnEngineTrait<'a> for Engine {
     }
 
     fn run(&mut self) {
-        self.runner.run(self.ctx);
+        let mut preset: WinapiPreset<Handler> = WinapiPreset::new();
+        let ctx = AsnContext::new();
+        let handler = Handler::new();
+        preset.set_ctx(ctx);
+        preset.set_handler(handler);
+        run(preset);
     }
 }
