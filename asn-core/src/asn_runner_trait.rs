@@ -1,4 +1,4 @@
-use asn_core::AsnContext;
+use crate::AsnContext;
 
 pub trait AsnRunnerTrait {
     type AsnHandler;
