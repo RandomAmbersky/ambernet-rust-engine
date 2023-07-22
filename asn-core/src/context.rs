@@ -1,3 +1,4 @@
+#[derive(Default)]
 pub struct AsnContext {
     is_need_exit: bool,
 }
