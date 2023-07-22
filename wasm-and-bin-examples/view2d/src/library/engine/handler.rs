@@ -1,4 +1,4 @@
-use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait};
+use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
 
 pub struct Handler {}
 
@@ -10,6 +10,20 @@ impl Handler {
 
 impl AsnHandlerTrait for Handler {
     fn proceed(&mut self, ctx: &mut AsnContext, evt: &AsnEvent) -> Option<AsnError> {
-        None
+        println!("{:?}", evt);
+        match evt {
+            AsnEvent::Empty => None,
+            AsnEvent::WindowEvent(w) => match w {
+                AsnWindowEvent::Resized(size) => {
+                    // ctx.get_winapi().window_resize(size);
+                    None
+                }
+                AsnWindowEvent::RedrawRequested => None,
+                AsnWindowEvent::CloseRequested => {
+                    ctx.set_need_exit();
+                    None
+                }
+            },
+        }
     }
 }
