@@ -1,4 +1,6 @@
-use asn_core::{AsnContext, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent};
+use asn_core::{
+    AsnBaseContextTrait, AsnContext, AsnError, AsnEvent, AsnHandlerTrait, AsnWindowEvent,
+};
 
 pub struct Handler {}
 
@@ -16,6 +18,7 @@ impl AsnHandlerTrait for Handler {
             AsnEvent::WindowEvent(w) => match w {
                 AsnWindowEvent::Resized(size) => {
                     // ctx.get_winapi().window_resize(size);
+                    ctx.get_winapi().window_resize(size);
                     None
                 }
                 AsnWindowEvent::RedrawRequested => None,

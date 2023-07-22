@@ -1,3 +1,5 @@
+use crate::asn_context_trait::{AsnApiTrait, AsnBaseContextTrait};
+
 #[derive(Default)]
 pub struct AsnContext {
     is_need_exit: bool,
@@ -9,10 +11,14 @@ impl AsnContext {
             is_need_exit: false,
         }
     }
-    pub fn is_need_exit(&self) -> bool {
+}
+
+impl AsnBaseContextTrait for AsnContext {
+    fn is_need_exit(&self) -> bool {
         self.is_need_exit
     }
-    pub fn set_need_exit(&mut self) {
-        self.is_need_exit = true;
+
+    fn set_need_exit(&mut self) {
+        self.is_need_exit = true
     }
 }

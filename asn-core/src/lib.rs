@@ -1,3 +1,4 @@
+mod asn_context_trait;
 mod asn_engine_trait;
 mod asn_errors;
 mod asn_events;
@@ -9,6 +10,8 @@ mod math;
 mod scenegraph;
 mod unsigned_num;
 
+pub use asn_context_trait::AsnApiTrait;
+pub use asn_context_trait::AsnBaseContextTrait;
 pub use asn_engine_trait::AsnEngineTrait;
 pub use asn_handler_trait::AsnHandlerTrait;
 pub use asn_runner_trait::AsnRunnerTrait;

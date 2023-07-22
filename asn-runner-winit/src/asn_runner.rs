@@ -1,6 +1,6 @@
 use crate::asn_winapi::AsnWgpuWinApi;
 use crate::winit_event_processor::convert_event;
-use asn_core::{AsnContext, AsnHandlerTrait};
+use asn_core::{AsnApiTrait, AsnBaseContextTrait, AsnContext, AsnHandlerTrait};
 use winit::event_loop::{ControlFlow, EventLoop};
 
 #[derive(Default)]
@@ -34,11 +34,6 @@ where
     pub fn set_handler(&mut self, handler: H) {
         self.handler = Some(handler)
     }
-}
-
-struct Storage {
-    pub ctx: AsnContext,
-    pub winapi: AsnWgpuWinApi,
 }
 
 pub fn run<H: 'static>(mut preset: WinapiPreset<H>)
