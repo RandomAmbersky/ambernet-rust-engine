@@ -1,6 +1,7 @@
 use crate::asn_winapi::AsnWgpuWinApi;
 use crate::winit_event_processor::convert_event;
 use asn_core::{AsnContext, AsnHandlerTrait};
+use std::borrow::{Borrow, BorrowMut};
 use winit::event_loop::{ControlFlow, EventLoop};
 
 #[derive(Default)]
@@ -36,6 +37,11 @@ where
     }
 }
 
+struct Storage {
+    pub ctx: AsnContext,
+    pub winapi: AsnWgpuWinApi,
+}
+
 pub fn run<H: 'static>(mut preset: WinapiPreset<H>)
 where
     H: AsnHandlerTrait,
@@ -46,12 +52,13 @@ where
     let mut winapi = preset.winapi.take().unwrap();
 
     event_loop.run(move |event, _event_loop_window_target, control_flow| {
+        *control_flow = ControlFlow::Poll;
+
         if ctx.is_need_exit() {
             *control_flow = ControlFlow::Exit;
             return;
         }
 
-        *control_flow = ControlFlow::Poll;
         let evt = convert_event(&event);
         if let Some(e) = evt {
             hanlder.proceed(&mut ctx, &e);
