@@ -4,32 +4,15 @@ use crate::library::engine::handler::Handler;
 use asn_core::{AsnContext, AsnEngineTrait};
 use asn_runner_winit::{run, WinapiPreset};
 
-pub struct Engine<'a> {
-    ctx: Option<&'a AsnContext>,
-}
+pub struct Engine {}
 
-impl<'a> Engine<'a> {
+impl Engine {
     pub fn new() -> Self {
-        Engine { ctx: None }
+        Engine {}
     }
 }
 
-impl<'a> AsnEngineTrait<'a> for Engine<'a> {
-    type WinApi = ();
-    type Scene = ();
-
-    fn get_winapi(&mut self) -> &'a mut Self::WinApi {
-        todo!()
-    }
-
-    fn get_context(&mut self) -> &'a mut AsnContext {
-        todo!()
-    }
-
-    fn get_scene(&mut self) -> &'a mut Self::Scene {
-        todo!()
-    }
-
+impl AsnEngineTrait for Engine {
     fn run(&mut self) {
         let mut preset: WinapiPreset<Handler> = WinapiPreset::new();
         let ctx = AsnContext::new();
