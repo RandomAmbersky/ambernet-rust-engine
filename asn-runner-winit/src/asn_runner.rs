@@ -1,7 +1,6 @@
 use crate::asn_winapi::AsnWgpuWinApi;
 use crate::winit_event_processor::convert_event;
 use asn_core::{AsnContext, AsnHandlerTrait};
-use std::borrow::{Borrow, BorrowMut};
 use winit::event_loop::{ControlFlow, EventLoop};
 
 #[derive(Default)]
