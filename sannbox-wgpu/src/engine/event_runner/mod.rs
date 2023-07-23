@@ -1,6 +1,8 @@
 mod asn_window;
+mod winit_event_processor;
 
 use crate::engine::event_runner::asn_window::AsnWindow;
+use crate::engine::event_runner::winit_event_processor::convert_event;
 use winit::event_loop::{ControlFlow, EventLoop};
 
 pub struct EventRunner {
@@ -25,39 +27,10 @@ pub fn run(mut e: EventRunner) {
     event_loop.run(move |event, _event_loop_window_target, control_flow| {
         *control_flow = ControlFlow::Poll;
 
-        // if ctx.is_need_exit {
-        //     *control_flow = ControlFlow::Exit;
-        //     return;
-        // }
-
-        // process_event(&mut ctx, &event);
-
-        // match event {
-        //     Event::NewEvents(_) => {}
-        //     Event::WindowEvent { .. } => {}
-        //     Event::DeviceEvent { .. } => {}
-        //     Event::UserEvent(_) => {}
-        //     Event::Suspended => {}
-        //     Event::Resumed => {}
-        //     Event::MainEventsCleared => {
-        //         ext.update(&mut ctx);
-        //         match ctx.gfx.begin_frame() {
-        //             Ok(_) => {}
-        //             Err(_) => {
-        //                 println!("Error");
-        //             }
-        //         }
-        //         ext.draw(&mut ctx);
-        //         match ctx.gfx.end_frame() {
-        //             Ok(_) => {}
-        //             Err(_) => {
-        //                 println!("Error");
-        //             }
-        //         }
-        //     }
-        //     Event::RedrawRequested(_) => {}
-        //     Event::RedrawEventsCleared => {}
-        //     Event::LoopDestroyed => {}
-        // }
+        let evt = convert_event(&event);
+        if let Some(e) = evt {
+            println!("event: {:?}", e);
+            // hanlder.proceed(&mut ctx, &e);
+        }
     })
 }
