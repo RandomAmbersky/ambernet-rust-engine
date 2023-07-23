@@ -1,8 +1,8 @@
 mod asn_window;
-mod winit_event_processor;
+mod event_converter;
 
 use crate::engine::event_runner::asn_window::AsnWindow;
-use crate::engine::event_runner::winit_event_processor::convert_event;
+use crate::engine::event_runner::event_converter::convert_event;
 use winit::event_loop::{ControlFlow, EventLoop};
 
 pub struct EventRunner {
