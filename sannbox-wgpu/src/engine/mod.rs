@@ -15,7 +15,8 @@ impl Engine {
     pub fn init(&mut self) {
         println!("Engine:init")
     }
-    pub fn run(&mut self) -> ! {
-        event_runner::run()
+    pub fn run(self) {
+        let e = self.event_runner;
+        event_runner::run(e);
     }
 }
