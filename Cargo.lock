@@ -1385,6 +1385,10 @@ dependencies = [
 [[package]]
 name = "sannbox-wgpu"
 version = "0.1.0"
+dependencies = [
+ "wgpu",
+ "winit",
+]
 
 [[package]]
 name = "scoped-tls"
