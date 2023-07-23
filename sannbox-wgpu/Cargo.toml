@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 wgpu = { version = "0.16" }
 winit = "0.28"
+pollster = "0.3"
