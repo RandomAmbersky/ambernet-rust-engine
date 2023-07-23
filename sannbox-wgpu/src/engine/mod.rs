@@ -15,7 +15,7 @@ impl Engine {
     pub fn init(&mut self) {
         println!("Engine:init")
     }
-    pub fn run(&mut self) {
-        println!("Engine:run")
+    pub fn run(&mut self) -> ! {
+        event_runner::run()
     }
 }
