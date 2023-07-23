@@ -1,4 +1,4 @@
-use crate::library::core::math::{Pos2D, UnsignedNum};
+use super::{Pos2D, UnsignedNum};
 
 #[derive(Default, Debug, Copy, Clone)]
 pub struct Size2D<T: UnsignedNum> {
@@ -30,7 +30,7 @@ impl<T: UnsignedNum> Size2D<T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::library::core::math::{Pos2D, Size2D};
+    use crate::engine::core::math::{Pos2D, Size2D};
 
     type MySize2D = Size2D<u32>;
 

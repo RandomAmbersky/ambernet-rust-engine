@@ -1,4 +1,4 @@
-use crate::library::core::math::UnsignedNum;
+use super::UnsignedNum;
 
 #[derive(Default, Debug)]
 pub struct Pos2D<T: UnsignedNum> {
@@ -8,7 +8,7 @@ pub struct Pos2D<T: UnsignedNum> {
 
 #[cfg(test)]
 mod tests {
-    use crate::library::core::math::Pos2D;
+    use crate::engine::core::math::Pos2D;
 
     #[test]
     fn check_pos_2d() {
