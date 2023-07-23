@@ -8,7 +8,8 @@ members = [
     "rs-gfx-core",
     "rs-gfx-wgpu",
     "rs-amberskynet",
-    "wasm-and-bin-examples/*"
+    "wasm-and-bin-examples/*",
+    "sannbox-wgpu"
 ]
 
 #exclude = []

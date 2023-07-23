@@ -1383,6 +1383,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "sannbox-wgpu"
+version = "0.1.0"
+
+[[package]]
 name = "scoped-tls"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
