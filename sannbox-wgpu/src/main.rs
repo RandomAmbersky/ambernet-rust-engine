@@ -1,6 +1,8 @@
-mod library;
+mod engine;
 
 fn main() {
     println!("Hello, world!");
-    library::run();
+    let mut e = engine::Engine::new();
+    e.init();
+    e.run();
 }
