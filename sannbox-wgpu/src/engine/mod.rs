@@ -1,5 +1,7 @@
 use crate::engine::event_runner::EventRunner;
 
+pub use crate::engine::core::traits::AsnEngine;
+
 mod core;
 mod event_runner;
 
@@ -12,10 +14,13 @@ impl Engine {
         let event_runner = EventRunner::new();
         Engine { event_runner }
     }
-    pub fn init(&mut self) {
+}
+
+impl AsnEngine for Engine {
+    fn init(&mut self) {
         println!("Engine:init")
     }
-    pub fn run(self) {
+    fn run(self) {
         let e = self.event_runner;
         event_runner::run(e);
     }
