@@ -13,18 +13,5 @@ impl Handler {
 impl TAsnHandler<Engine> for Handler {
     fn handle(&mut self, evt: &AsnEvent, e: &mut Engine) {
         println!("handle {:?} event", &evt);
-        match evt {
-            AsnEvent::Empty => {}
-            AsnEvent::WindowEvent(w) => match w {
-                AsnWindowEvent::Resized(size) => {
-                    e.get_winapi().window_resize(size);
-                    e.get_winapi().redraw();
-                }
-                AsnWindowEvent::RedrawRequested => {}
-                AsnWindowEvent::CloseRequested => {
-                    e.set_need_exit();
-                }
-            },
-        }
     }
 }

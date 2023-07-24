@@ -1,6 +1,7 @@
 mod event_converter;
 mod winapi;
 
+use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
 use crate::engine::core::traits::{TAsnEngine, TAsnHandler, TAsnWinapi};
 use crate::engine::event_runner::event_converter::convert_event;
 use crate::engine::event_runner::winapi::AsnWgpuWinApi;
@@ -39,7 +40,27 @@ pub fn run<E: 'static + TAsnEngine, H: 'static + TAsnHandler<E>>(
         let evt = convert_event(&event);
         if let Some(e) = evt {
             println!("event: {:?}", e);
+            handle_default(&e, &mut eng);
             h.handle(&e, &mut eng)
         }
     })
+}
+
+fn handle_default<E: TAsnEngine>(evt: &AsnEvent, e: &mut E) {
+    println!("base handle {:?} event", &evt);
+    match evt {
+        AsnEvent::Empty => {}
+        AsnEvent::WindowEvent(w) => match w {
+            AsnWindowEvent::Resized(size) => {
+                e.get_winapi().window_resize(size);
+                e.get_winapi().redraw();
+            }
+            AsnWindowEvent::RedrawRequested => {
+                e.get_winapi().redraw();
+            }
+            AsnWindowEvent::CloseRequested => {
+                e.set_need_exit();
+            }
+        },
+    }
 }
