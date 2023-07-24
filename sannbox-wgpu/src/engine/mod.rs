@@ -18,18 +18,18 @@ impl Engine {
             preset: Some(preset),
         }
     }
+    pub fn init(&mut self) {
+        println!("Engine:init")
+    }
+    pub fn run(mut self) {
+        let preset = self.preset.take().unwrap();
+        event_runner::run(preset);
+    }
 }
 
 impl TAsnEngine for Engine {
     type WinApi = WinApi;
 
-    fn init(&mut self) {
-        println!("Engine:init")
-    }
-    fn run(mut self) {
-        let preset = self.preset.take().unwrap();
-        event_runner::run(preset);
-    }
     fn get_winapi(&mut self) -> &mut Self::WinApi {
         &mut self.winapi
     }
