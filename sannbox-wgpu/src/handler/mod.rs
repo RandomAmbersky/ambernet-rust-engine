@@ -12,6 +12,7 @@ impl Handler {
 
 impl TAsnHandler<Engine> for Handler {
     fn handle(&mut self, evt: &AsnEvent, engine: &mut Engine) {
+        println!("handle {:?} event", &evt);
         engine.get_winapi().redraw();
     }
 }

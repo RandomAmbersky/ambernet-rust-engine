@@ -21,9 +21,9 @@ impl Engine {
     pub fn init(&mut self) {
         println!("Engine:init")
     }
-    pub fn run(mut self) {
+    pub fn run<H: 'static + TAsnHandler<Self>>(mut self, mut h: H) {
         let preset = self.preset.take().unwrap();
-        event_runner::run(preset);
+        event_runner::run(preset, self, h);
     }
 }
 
