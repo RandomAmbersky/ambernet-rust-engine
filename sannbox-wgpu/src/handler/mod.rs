@@ -1,11 +1,12 @@
 use crate::engine::core::events::AsnEvent;
 use crate::engine::core::traits::TAsnHandler;
-use crate::engine::Engine;
+use crate::engine::{Engine, TAsnEngine};
 
 pub struct Handler {}
 
 impl Handler {
-    pub fn new() -> Self {
+    pub fn new(e: &mut Engine) -> Self {
+        e.get_winapi();
         Handler {}
     }
 }
