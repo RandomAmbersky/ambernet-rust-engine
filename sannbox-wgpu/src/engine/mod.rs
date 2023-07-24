@@ -26,7 +26,7 @@ impl TAsnEngine for Engine {
     fn init(&mut self) {
         println!("Engine:init")
     }
-    fn run(mut self, mut h: H) {
+    fn run<H: 'static + TAsnHandler>(mut self, mut h: H) {
         let preset = self.preset.take().unwrap();
         event_runner::run(preset, h);
     }

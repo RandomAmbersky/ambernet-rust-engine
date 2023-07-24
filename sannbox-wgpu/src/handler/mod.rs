@@ -12,6 +12,6 @@ impl Handler {
 
 impl TAsnHandler for Handler {
     fn handle(&mut self, evt: &AsnEvent) {
-        todo!()
+        println!("{:?}", evt)
     }
 }
