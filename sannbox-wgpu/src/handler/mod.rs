@@ -1,5 +1,5 @@
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
-use crate::engine::core::traits::{TAsnHandler, TAsnWinapi};
+use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler, TAsnWinapi};
 use crate::engine::{Engine, TAsnEngine};
 
 pub struct Handler {}
@@ -22,7 +22,7 @@ impl TAsnHandler<Engine> for Handler {
                 }
                 AsnWindowEvent::RedrawRequested => {}
                 AsnWindowEvent::CloseRequested => {
-                    // ctx.set_need_exit();
+                    e.set_need_exit();
                 }
             },
         }
