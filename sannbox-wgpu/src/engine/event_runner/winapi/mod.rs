@@ -1,10 +1,12 @@
 mod asn_window;
+mod scene;
 
 use crate::engine::core::errors::AsnError;
 use crate::engine::core::errors::AsnRenderError::CustomError;
 use crate::engine::core::math::Size2D;
 
 use crate::engine::core::traits::TAsnWinapi;
+use crate::engine::event_runner::winapi::scene::AsnWgpuNodeQuad;
 use asn_window::AsnWindow;
 use wgpu::{InstanceDescriptor, Surface};
 use winit::event_loop::EventLoop;
@@ -123,6 +125,8 @@ impl AsnWgpuWinApi {
 }
 
 impl TAsnWinapi for AsnWgpuWinApi {
+    type NodeQuad = AsnWgpuNodeQuad;
+
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
         println!("{:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
@@ -141,5 +145,9 @@ impl TAsnWinapi for AsnWgpuWinApi {
                 Some(AsnError::RenderError(CustomError(err)))
             }
         }
+    }
+
+    fn new_quad(&mut self) -> Self::NodeQuad {
+        AsnWgpuNodeQuad::new()
     }
 }
