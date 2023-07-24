@@ -1,15 +1,11 @@
-mod asn_window;
-pub mod event_converter;
-pub mod scene;
-
 use crate::engine::core::errors::AsnError;
 use crate::engine::core::errors::AsnRenderError::CustomError;
 use crate::engine::core::math::Size2D;
 
 use crate::engine::core::traits::TAsnWinapi;
-use crate::engine::event_runner::NodeQuad;
-use asn_window::AsnWindow;
-use scene::AsnWgpuNodeQuad;
+use crate::engine::winapi::asn_window::AsnWindow;
+use crate::engine::winapi::scene::AsnWgpuNodeQuad;
+use crate::engine::winapi::NodeQuad;
 use wgpu::{InstanceDescriptor, Surface};
 use winit::event_loop::EventLoop;
 

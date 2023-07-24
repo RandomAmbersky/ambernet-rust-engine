@@ -1,9 +1,9 @@
 pub mod core;
-mod event_runner;
+mod winapi;
 
 pub use crate::engine::core::traits::TAsnEngine;
 use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler};
-use crate::engine::event_runner::{RunnerPreset, WinApi};
+use crate::engine::winapi::{RunnerPreset, WinApi};
 
 pub struct Engine {
     is_need_exit: bool,
@@ -13,7 +13,7 @@ pub struct Engine {
 
 impl Engine {
     pub fn new() -> Self {
-        let (preset, winapi) = event_runner::build();
+        let (preset, winapi) = winapi::build();
         Engine {
             is_need_exit: false,
             winapi,
@@ -25,7 +25,7 @@ impl Engine {
     }
     pub fn run<H: 'static + TAsnHandler<Self>>(mut self, h: H) {
         let preset = self.preset.take().unwrap();
-        event_runner::run(preset, self, h);
+        winapi::run(preset, self, h);
     }
 }
 

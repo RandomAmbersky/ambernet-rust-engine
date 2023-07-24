@@ -1,18 +1,22 @@
-mod winapi;
-
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
-use crate::engine::core::traits::{TAsnEngine, TAsnHandler, TAsnWinapi};
-use crate::engine::event_runner::winapi::AsnWgpuWinApi;
-use winapi::event_converter::convert_event;
-use winapi::scene::AsnWgpuNodeQuad;
+use crate::engine::core::traits::{TAsnHandler, TAsnWinapi};
+use crate::engine::winapi::event_converter::convert_event;
+use crate::engine::winapi::scene::AsnWgpuNodeQuad;
+use crate::engine::winapi::wgpu::AsnWgpuWinApi;
+use crate::engine::TAsnEngine;
 use winit::event_loop::{ControlFlow, EventLoop};
+
+mod asn_window;
+mod event_converter;
+mod scene;
+mod wgpu;
+
+pub type WinApi = AsnWgpuWinApi;
+pub type NodeQuad = AsnWgpuNodeQuad;
 
 pub struct RunnerPreset {
     event_loop: Option<EventLoop<()>>,
 }
-
-pub type WinApi = AsnWgpuWinApi;
-pub type NodeQuad = AsnWgpuNodeQuad;
 
 pub fn build() -> (RunnerPreset, WinApi) {
     let event_loop = EventLoop::new();
