@@ -3,7 +3,8 @@ mod asn_window;
 use crate::engine::core::errors::AsnError;
 use crate::engine::core::errors::AsnRenderError::CustomError;
 use crate::engine::core::math::Size2D;
-use crate::engine::core::traits::AsnWinapiTrait;
+
+use crate::engine::core::traits::TAsnWinapi;
 use asn_window::AsnWindow;
 use wgpu::{InstanceDescriptor, Surface};
 use winit::event_loop::EventLoop;
@@ -121,7 +122,7 @@ impl AsnWgpuWinApi {
     }
 }
 
-impl AsnWinapiTrait for AsnWgpuWinApi {
+impl TAsnWinapi for AsnWgpuWinApi {
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
         println!("{:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
