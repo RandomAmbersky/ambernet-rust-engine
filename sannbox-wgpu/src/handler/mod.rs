@@ -1,4 +1,4 @@
-use crate::engine::core::events::AsnEvent;
+use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
 use crate::engine::core::traits::{TAsnHandler, TAsnWinapi};
 use crate::engine::{Engine, TAsnEngine};
 
@@ -11,8 +11,20 @@ impl Handler {
 }
 
 impl TAsnHandler<Engine> for Handler {
-    fn handle(&mut self, evt: &AsnEvent, engine: &mut Engine) {
+    fn handle(&mut self, evt: &AsnEvent, e: &mut Engine) {
         println!("handle {:?} event", &evt);
-        engine.get_winapi().redraw();
+        match evt {
+            AsnEvent::Empty => {}
+            AsnEvent::WindowEvent(w) => match w {
+                AsnWindowEvent::Resized(size) => {
+                    e.get_winapi().window_resize(size);
+                    e.get_winapi().redraw();
+                }
+                AsnWindowEvent::RedrawRequested => {}
+                AsnWindowEvent::CloseRequested => {
+                    // ctx.set_need_exit();
+                }
+            },
+        }
     }
 }

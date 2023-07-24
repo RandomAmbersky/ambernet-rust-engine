@@ -21,7 +21,7 @@ impl Engine {
     pub fn init(&mut self) {
         println!("Engine:init")
     }
-    pub fn run<H: 'static + TAsnHandler<Self>>(mut self, mut h: H) {
+    pub fn run<H: 'static + TAsnHandler<Self>>(mut self, h: H) {
         let preset = self.preset.take().unwrap();
         event_runner::run(preset, self, h);
     }
@@ -29,7 +29,6 @@ impl Engine {
 
 impl TAsnEngine for Engine {
     type WinApi = WinApi;
-
     fn get_winapi(&mut self) -> &mut Self::WinApi {
         &mut self.winapi
     }
