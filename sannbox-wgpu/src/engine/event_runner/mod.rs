@@ -31,6 +31,11 @@ pub fn run<E: 'static + TAsnEngine, H: 'static + TAsnHandler<E>>(
     event_loop.run(move |event, _event_loop_window_target, control_flow| {
         *control_flow = ControlFlow::Poll;
 
+        if eng.is_need_exit() {
+            *control_flow = ControlFlow::Exit;
+            return;
+        }
+
         let evt = convert_event(&event);
         if let Some(e) = evt {
             println!("event: {:?}", e);
