@@ -1,6 +1,6 @@
 use crate::engine::core::events::AsnEvent;
-use crate::engine::core::traits::TAsnHandler;
-use crate::engine::Engine;
+use crate::engine::core::traits::{TAsnHandler, TAsnWinapi};
+use crate::engine::{Engine, TAsnEngine};
 
 pub struct Handler {}
 
@@ -10,8 +10,8 @@ impl Handler {
     }
 }
 
-impl TAsnHandler for Handler {
-    fn handle(&mut self, evt: &AsnEvent) {
-        println!("{:?}", evt)
+impl TAsnHandler<Engine> for Handler {
+    fn handle(&mut self, evt: &AsnEvent, engine: &mut Engine) {
+        engine.get_winapi().redraw();
     }
 }

@@ -22,10 +22,7 @@ pub fn build() -> (RunnerPreset, WinApi) {
     (preset, winapi)
 }
 
-pub fn run<H: 'static>(mut p: RunnerPreset, mut h: H)
-where
-    H: TAsnHandler,
-{
+pub fn run(mut p: RunnerPreset) {
     let event_loop = p.event_loop.take().unwrap();
     event_loop.run(move |event, _event_loop_window_target, control_flow| {
         *control_flow = ControlFlow::Poll;
@@ -33,7 +30,7 @@ where
         let evt = convert_event(&event);
         if let Some(e) = evt {
             println!("event: {:?}", e);
-            h.handle(&e);
+            // h.handle(&e);
         }
     })
 }

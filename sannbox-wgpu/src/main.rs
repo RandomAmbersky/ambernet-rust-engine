@@ -7,7 +7,7 @@ mod handler;
 fn main() {
     println!("Hello, world!");
     let mut e = engine::Engine::new();
-    let handler = handler::Handler::new();
+    let mut h = handler::Handler::new();
     e.init();
-    e.run(handler);
+    e.run();
 }

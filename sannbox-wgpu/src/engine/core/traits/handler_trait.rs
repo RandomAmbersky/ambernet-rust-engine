@@ -1,5 +1,9 @@
 use crate::engine::core::events::AsnEvent;
+use crate::engine::TAsnEngine;
 
-pub trait TAsnHandler {
-    fn handle(&mut self, evt: &AsnEvent);
+pub trait TAsnHandler<E>
+where
+    E: TAsnEngine,
+{
+    fn handle(&mut self, evt: &AsnEvent, engine: &mut E);
 }
