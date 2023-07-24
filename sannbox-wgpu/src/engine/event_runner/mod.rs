@@ -1,10 +1,9 @@
-mod event_converter;
 mod winapi;
 
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
 use crate::engine::core::traits::{TAsnEngine, TAsnHandler, TAsnWinapi};
-use crate::engine::event_runner::event_converter::convert_event;
 use crate::engine::event_runner::winapi::AsnWgpuWinApi;
+use winapi::event_converter::convert_event;
 use winapi::scene::AsnWgpuNodeQuad;
 use winit::event_loop::{ControlFlow, EventLoop};
 
