@@ -1,7 +1,7 @@
 mod event_converter;
 mod winapi;
 
-use crate::engine::core::traits::{TAsnEngine, TAsnWinapi};
+use crate::engine::core::traits::{TAsnEngine, TAsnHandler, TAsnWinapi};
 use crate::engine::event_runner::event_converter::convert_event;
 use crate::engine::event_runner::winapi::AsnWgpuWinApi;
 use winit::event_loop::{ControlFlow, EventLoop};
@@ -22,9 +22,9 @@ pub fn build() -> (RunnerPreset, WinApi) {
     (preset, winapi)
 }
 
-pub fn run<E: 'static>(mut p: RunnerPreset, mut engine: E)
+pub fn run<H: 'static>(mut p: RunnerPreset, mut h: H)
 where
-    E: TAsnEngine,
+    H: TAsnHandler,
 {
     let event_loop = p.event_loop.take().unwrap();
     event_loop.run(move |event, _event_loop_window_target, control_flow| {
@@ -33,8 +33,7 @@ where
         let evt = convert_event(&event);
         if let Some(e) = evt {
             println!("event: {:?}", e);
-            engine.get_winapi().redraw();
-            // hanlder.proceed(&mut ctx, &e);
+            h.handle(&e);
         }
     })
 }
