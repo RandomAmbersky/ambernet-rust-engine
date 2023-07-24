@@ -1,15 +1,15 @@
 use crate::engine::core::events::AsnEvent;
 use crate::engine::core::traits::{TAsnHandler, TAsnWinapi};
-use crate::engine::{Engine, TAsnEngine};
+use crate::engine::{Engine, NodeQuad, TAsnEngine};
 
 pub struct Handler {
-    // quad: NodeQuad,
+    quad: NodeQuad,
 }
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
         let quad = e.get_winapi().new_quad();
-        Handler {}
+        Handler { quad }
     }
 }
 
