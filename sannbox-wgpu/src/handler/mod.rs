@@ -6,7 +6,7 @@ pub struct Handler {}
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
-        e.get_winapi().new_quad();
+        let quad = e.get_winapi().new_quad();
         Handler {}
     }
 }

@@ -1,4 +1,5 @@
 mod event_converter;
+mod scene;
 mod winapi;
 
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
@@ -12,6 +13,8 @@ pub struct RunnerPreset {
 }
 
 pub type WinApi = AsnWgpuWinApi;
+pub type NodeQuad = scene::AsnWgpuNodeQuad;
+
 pub fn build() -> (RunnerPreset, WinApi) {
     let event_loop = EventLoop::new();
 
