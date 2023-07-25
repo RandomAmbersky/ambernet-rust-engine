@@ -21,6 +21,7 @@ impl TAsnHandler<Engine> for Handler {
             AsnEvent::WindowEvent(w) => match w {
                 AsnWindowEvent::RedrawRequested => {
                     self.quad.draw(e.get_winapi());
+                    // e.get_winapi().redraw();
                 }
                 _ => {}
             },

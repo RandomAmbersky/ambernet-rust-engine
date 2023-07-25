@@ -61,12 +61,13 @@ fn handle_default<E: TAsnEngine>(evt: &AsnEvent, e: &mut E) {
                 e.get_winapi().window_resize(size);
                 e.get_winapi().redraw();
             }
-            AsnWindowEvent::RedrawRequested => {
-                e.get_winapi().redraw();
-            }
+            // AsnWindowEvent::RedrawRequested => {
+            //     e.get_winapi().redraw();
+            // }
             AsnWindowEvent::CloseRequested => {
                 e.set_need_exit();
             }
+            _ => {}
         },
     }
 }
