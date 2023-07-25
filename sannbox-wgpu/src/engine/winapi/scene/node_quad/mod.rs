@@ -1,6 +1,6 @@
 mod resource;
 
-use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::core::winapi::{AsnTextureFormat, TNodeBase, TNodeQuad};
 use crate::engine::winapi::scene::node_quad::resource::{
     Vertex, INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES,
 };
@@ -150,7 +150,7 @@ impl AsnWgpuNodeQuad {
             diffuse_bind_group,
         }
     }
-    fn draw(&mut self, gfx: &mut AsnWgpuWinApi) {
+    fn draw_me(&mut self, gfx: &mut AsnWgpuWinApi) {
         let frame = gfx.get_window().get_current_texture();
 
         let mut encoder =
@@ -193,3 +193,12 @@ impl AsnWgpuNodeQuad {
         frame.present();
     }
 }
+
+impl TNodeBase for AsnWgpuNodeQuad {
+    type WinApi = AsnWgpuWinApi;
+    fn draw(&mut self, gfx: &mut AsnWgpuWinApi) {
+        self.draw_me(gfx);
+    }
+}
+
+impl TNodeQuad for AsnWgpuNodeQuad {}
