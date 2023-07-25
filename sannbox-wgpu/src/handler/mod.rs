@@ -1,5 +1,5 @@
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
-use crate::engine::core::traits::{TAsnHandler, TAsnWinapi};
+use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler, TAsnWinapi};
 use crate::engine::core::winapi::TNodeBase;
 use crate::engine::{Engine, NodeQuad, TAsnEngine};
 
@@ -9,7 +9,7 @@ pub struct Handler {
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
-        let mut quad = e.get_winapi().new_quad();
+        let quad = e.get_winapi().new_quad();
         Handler { quad }
     }
     fn draw(&mut self, e: &mut Engine) {
@@ -23,11 +23,17 @@ impl TAsnHandler<Engine> for Handler {
     fn handle(&mut self, evt: &AsnEvent, e: &mut Engine) {
         println!("handle {:?} event", &evt);
         match evt {
+            AsnEvent::Empty => {}
             AsnEvent::WindowEvent(w) => match w {
+                AsnWindowEvent::Resized(size) => {
+                    e.get_winapi().window_resize(size);
+                    self.draw(e);
+                }
+                AsnWindowEvent::CloseRequested => {
+                    e.set_need_exit();
+                }
                 AsnWindowEvent::RedrawRequested => {
                     self.draw(e);
-                    // self.quad.draw(e.get_winapi());
-                    // e.get_winapi().redraw();
                 }
                 _ => {}
             },

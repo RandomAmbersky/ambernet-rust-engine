@@ -152,19 +152,6 @@ impl AsnWgpuNodeQuad {
         }
     }
     fn draw_me(&mut self, fcx: &mut AsnWgpuFrameContext) {
-        // let frame = gfx.get_window().get_current_texture();
-        //
-        // let mut encoder =
-        //     gfx.get_device()
-        //         .create_command_encoder(&wgpu::CommandEncoderDescriptor {
-        //             label: Some("Render Encoder View2D"),
-        //         });
-        //
-        // let view = frame
-        //     .texture
-        //     .create_view(&wgpu::TextureViewDescriptor::default());
-        //
-        // {
         let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("Render Pass"),
             color_attachments: &[Some(wgpu::RenderPassColorAttachment {
@@ -187,11 +174,6 @@ impl AsnWgpuNodeQuad {
         render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
         render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
         render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
-        // }
-        //
-        // gfx.get_queue().submit(iter::once(encoder.finish()));
-        //
-        // frame.present();
     }
 }
 
