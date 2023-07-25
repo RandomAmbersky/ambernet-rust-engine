@@ -1,5 +1,4 @@
 use crate::engine::core::errors::AsnError;
-use crate::engine::core::errors::AsnRenderError::CustomError;
 use crate::engine::core::math::Size2D;
 use std::iter;
 
@@ -87,54 +86,12 @@ impl AsnWgpuWinApi {
             queue,
         }
     }
-    fn update(&mut self) {}
-    // fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
-    //     let output = self.window.get_current_texture();
-    //     let view = output
-    //         .texture
-    //         .create_view(&wgpu::TextureViewDescriptor::default());
-    //     let mut encoder = self
-    //         .device
-    //         .create_command_encoder(&wgpu::CommandEncoderDescriptor {
-    //             label: Some("Render Encoder"),
-    //         });
-    //     {
-    //         let _render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-    //             label: Some("Render Pass"),
-    //             color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-    //                 view: &view,
-    //                 resolve_target: None,
-    //                 ops: wgpu::Operations {
-    //                     load: wgpu::LoadOp::Clear(wgpu::Color {
-    //                         r: 0.1,
-    //                         g: 0.2,
-    //                         b: 0.3,
-    //                         a: 1.0,
-    //                     }),
-    //                     store: true,
-    //                 },
-    //             })],
-    //             depth_stencil_attachment: None,
-    //         });
-    //     }
-    //
-    //     // submit will accept anything that implements IntoIter
-    //     self.queue.submit(std::iter::once(encoder.finish()));
-    //     output.present();
-    //
-    //     Ok(())
-    // }
-    pub fn get_adapter(&mut self) -> &Adapter {
-        &self.adapter
-    }
+
     pub fn get_device(&mut self) -> &Device {
         &self.device
     }
     pub fn get_window(&mut self) -> &AsnWindow {
         &self.window
-    }
-    pub fn get_queue(&mut self) -> &Queue {
-        &self.queue
     }
 }
 
@@ -153,22 +110,8 @@ impl TAsnWinapi for AsnWgpuWinApi {
         if new_size.width > 0 && new_size.height > 0 {
             self.window.resize(new_size);
             self.window.configure_surface(&self.adapter, &self.device);
-            // self.config.width = new_size.width;
-            // self.config.height = new_size.height;
-            // self.window.surface.configure(&self.device, &self.config);
         }
     }
-    // fn redraw(&mut self) -> Option<AsnError> {
-    //     self.update();
-    //     let res = self.render();
-    //     match res {
-    //         Ok(_) => None,
-    //         Err(e) => {
-    //             let err = e.to_string();
-    //             Some(AsnError::RenderError(CustomError(err)))
-    //         }
-    //     }
-    // }
 
     fn begin_frame(&mut self) -> Result<AsnWgpuFrameContext, AsnError> {
         let frame = self.window.get_current_texture();
