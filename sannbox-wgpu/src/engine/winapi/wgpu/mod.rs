@@ -90,9 +90,6 @@ impl AsnWgpuWinApi {
     pub fn get_device(&mut self) -> &Device {
         &self.device
     }
-    pub fn get_window(&mut self) -> &AsnWindow {
-        &self.window
-    }
 }
 
 pub struct AsnWgpuFrameContext {
