@@ -1366,6 +1366,8 @@ dependencies = [
 name = "sannbox-wgpu"
 version = "0.1.0"
 dependencies = [
+ "bytemuck",
+ "image",
  "pollster",
  "wgpu",
  "winit",

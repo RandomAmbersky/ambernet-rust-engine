@@ -6,13 +6,16 @@ use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::winapi::asn_window::AsnWindow;
 use crate::engine::winapi::scene::AsnWgpuNodeQuad;
 use crate::engine::winapi::NodeQuad;
-use wgpu::{InstanceDescriptor, Surface};
+use wgpu::{Adapter, Device, Instance, InstanceDescriptor, Queue, Surface};
 use winit::event_loop::EventLoop;
+use winit::window::Window;
+
+pub mod defines;
+pub mod texture;
 
 pub struct AsnWgpuWinApi {
+    instance: Instance,
     window: AsnWindow,
-    surface: Surface,
-    config: wgpu::SurfaceConfiguration,
     adapter: wgpu::Adapter,
     device: wgpu::Device,
     queue: wgpu::Queue,
@@ -20,19 +23,20 @@ pub struct AsnWgpuWinApi {
 
 impl AsnWgpuWinApi {
     pub fn new(event_loop: &EventLoop<()>) -> Self {
-        let window = AsnWindow::new(&event_loop);
-
         let instance = wgpu::Instance::new(InstanceDescriptor {
             backends: wgpu::Backends::all(),
             dx12_shader_compiler: Default::default(),
         });
 
-        let surface = unsafe { instance.create_surface(&window.get_window()).unwrap() };
+        let window = AsnWindow::new(&event_loop, &instance);
 
-        let adapter = instance
-            .enumerate_adapters(wgpu::Backends::all())
-            .find(|adapter| adapter.is_surface_supported(&surface))
-            .unwrap();
+        // let surface = unsafe { instance.create_surface(&window.get_window()).unwrap() };
+
+        let adapter = window.get_adapter(&instance);
+        // instance
+        //     .enumerate_adapters(wgpu::Backends::all())
+        //     .find(|adapter| adapter.is_surface_supported(&surface))
+        //     .unwrap();
 
         let (device, queue) = pollster::block_on(adapter.request_device(
             &wgpu::DeviceDescriptor {
@@ -50,42 +54,38 @@ impl AsnWgpuWinApi {
         ))
         .unwrap();
 
-        let surface_caps = surface.get_capabilities(&adapter);
+        // let surface_caps = surface.get_capabilities(&adapter);
         // Shader code in this tutorial assumes an Srgb surface texture. Using a different
         // one will result all the colors comming out darker. If you want to support non
         // Srgb surfaces, you'll need to account for that when drawing to the frame.
-        let surface_format = surface_caps
-            .formats
-            .iter()
-            .copied()
-            .find(|f| f.is_srgb())
-            .unwrap_or(surface_caps.formats[0]);
-        let config = wgpu::SurfaceConfiguration {
-            usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
-            format: surface_format,
-            width: window.get_size().width,
-            height: window.get_size().height,
-            present_mode: surface_caps.present_modes[0],
-            alpha_mode: surface_caps.alpha_modes[0],
-            view_formats: vec![],
-        };
-        surface.configure(&device, &config);
+        // let surface_format = surface_caps
+        //     .formats
+        //     .iter()
+        //     .copied()
+        //     .find(|f| f.is_srgb())
+        //     .unwrap_or(surface_caps.formats[0]);
+        // let config = wgpu::SurfaceConfiguration {
+        //     usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
+        //     format: surface_format,
+        //     width: window.get_size().width,
+        //     height: window.get_size().height,
+        //     present_mode: surface_caps.present_modes[0],
+        //     alpha_mode: surface_caps.alpha_modes[0],
+        //     view_formats: vec![],
+        // };
+        // surface.configure(&device, &config);
 
         AsnWgpuWinApi {
+            instance,
             window,
-            surface,
-            config,
             adapter,
             device,
             queue,
         }
     }
-}
-
-impl AsnWgpuWinApi {
     fn update(&mut self) {}
     fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
-        let output = self.surface.get_current_texture()?;
+        let output = self.window.get_current_texture();
         let view = output
             .texture
             .create_view(&wgpu::TextureViewDescriptor::default());
@@ -120,6 +120,18 @@ impl AsnWgpuWinApi {
 
         Ok(())
     }
+    pub fn get_adapter(&mut self) -> &Adapter {
+        &self.adapter
+    }
+    pub fn get_device(&mut self) -> &Device {
+        &self.device
+    }
+    pub fn get_window(&mut self) -> &AsnWindow {
+        &self.window
+    }
+    pub fn get_queue(&mut self) -> &Queue {
+        &self.queue
+    }
 }
 
 impl TAsnWinapi for AsnWgpuWinApi {
@@ -128,9 +140,11 @@ impl TAsnWinapi for AsnWgpuWinApi {
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
         println!("{:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
-            self.config.width = new_size.width;
-            self.config.height = new_size.height;
-            self.surface.configure(&self.device, &self.config);
+            self.window.resize(new_size);
+            self.window.configure_surface(&self.adapter, &self.device);
+            // self.config.width = new_size.width;
+            // self.config.height = new_size.height;
+            // self.window.surface.configure(&self.device, &self.config);
         }
     }
     fn redraw(&mut self) -> Option<AsnError> {
@@ -145,6 +159,6 @@ impl TAsnWinapi for AsnWgpuWinApi {
         }
     }
     fn new_quad(&mut self) -> Self::NodeQuad {
-        AsnWgpuNodeQuad::new()
+        AsnWgpuNodeQuad::new(self)
     }
 }
