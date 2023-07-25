@@ -74,6 +74,7 @@ impl AsnWgpuWinApi {
         //     view_formats: vec![],
         // };
         // surface.configure(&device, &config);
+        window.configure_surface(&adapter, &device);
 
         AsnWgpuWinApi {
             instance,
