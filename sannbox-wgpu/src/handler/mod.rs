@@ -12,6 +12,11 @@ impl Handler {
         let mut quad = e.get_winapi().new_quad();
         Handler { quad }
     }
+    fn draw(&mut self, e: &mut Engine) {
+        let mut fcx = e.get_winapi().begin_frame().unwrap();
+        self.quad.draw(&mut fcx);
+        e.get_winapi().end_frame(fcx).unwrap();
+    }
 }
 
 impl TAsnHandler<Engine> for Handler {
@@ -20,7 +25,8 @@ impl TAsnHandler<Engine> for Handler {
         match evt {
             AsnEvent::WindowEvent(w) => match w {
                 AsnWindowEvent::RedrawRequested => {
-                    self.quad.draw(e.get_winapi());
+                    self.draw(e);
+                    // self.quad.draw(e.get_winapi());
                     // e.get_winapi().redraw();
                 }
                 _ => {}

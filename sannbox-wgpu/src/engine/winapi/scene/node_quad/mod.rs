@@ -5,7 +5,7 @@ use crate::engine::winapi::scene::node_quad::resource::{
     Vertex, INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES,
 };
 use crate::engine::winapi::wgpu::texture::AsnTexture;
-use crate::engine::winapi::wgpu::AsnWgpuWinApi;
+use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
 use std::iter;
 use wgpu::util::DeviceExt;
 use wgpu::TextureFormat;
@@ -151,53 +151,53 @@ impl AsnWgpuNodeQuad {
             diffuse_bind_group,
         }
     }
-    fn draw_me(&mut self, gfx: &mut AsnWgpuWinApi) {
-        let frame = gfx.get_window().get_current_texture();
-
-        let mut encoder =
-            gfx.get_device()
-                .create_command_encoder(&wgpu::CommandEncoderDescriptor {
-                    label: Some("Render Encoder View2D"),
-                });
-
-        let view = frame
-            .texture
-            .create_view(&wgpu::TextureViewDescriptor::default());
-
-        {
-            let mut render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-                label: Some("Render Pass"),
-                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-                    view: &view,
-                    resolve_target: None,
-                    ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.1,
-                            g: 0.2,
-                            b: 0.3,
-                            a: 1.0,
-                        }),
-                        store: true,
-                    },
-                })],
-                depth_stencil_attachment: None,
-            });
-            render_pass.set_pipeline(&self.render_pipeline);
-            render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
-            render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-            render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
-            render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
-        }
-
-        gfx.get_queue().submit(iter::once(encoder.finish()));
-
-        frame.present();
+    fn draw_me(&mut self, fcx: &mut AsnWgpuFrameContext) {
+        // let frame = gfx.get_window().get_current_texture();
+        //
+        // let mut encoder =
+        //     gfx.get_device()
+        //         .create_command_encoder(&wgpu::CommandEncoderDescriptor {
+        //             label: Some("Render Encoder View2D"),
+        //         });
+        //
+        // let view = frame
+        //     .texture
+        //     .create_view(&wgpu::TextureViewDescriptor::default());
+        //
+        // {
+        let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+            label: Some("Render Pass"),
+            color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+                view: &fcx.view,
+                resolve_target: None,
+                ops: wgpu::Operations {
+                    load: wgpu::LoadOp::Clear(wgpu::Color {
+                        r: 0.1,
+                        g: 0.2,
+                        b: 0.3,
+                        a: 1.0,
+                    }),
+                    store: true,
+                },
+            })],
+            depth_stencil_attachment: None,
+        });
+        render_pass.set_pipeline(&self.render_pipeline);
+        render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
+        render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
+        render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+        render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
+        // }
+        //
+        // gfx.get_queue().submit(iter::once(encoder.finish()));
+        //
+        // frame.present();
     }
 }
 
 impl TNodeBase for AsnWgpuNodeQuad {
-    type WinApi = AsnWgpuWinApi;
-    fn draw(&mut self, gfx: &mut AsnWgpuWinApi) {
+    type FrameContext = AsnWgpuFrameContext;
+    fn draw(&mut self, gfx: &mut Self::FrameContext) {
         self.draw_me(gfx);
     }
 }

@@ -1,14 +1,17 @@
 use crate::engine::core::errors::AsnError;
 use crate::engine::core::errors::AsnRenderError::CustomError;
 use crate::engine::core::math::Size2D;
+use std::iter;
 
 use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::winapi::asn_window::AsnWindow;
 use crate::engine::winapi::scene::AsnWgpuNodeQuad;
 use crate::engine::winapi::NodeQuad;
-use wgpu::{Adapter, Device, Instance, InstanceDescriptor, Queue, Surface};
+use wgpu::{
+    Adapter, CommandEncoder, Device, Instance, InstanceDescriptor, Queue, Surface, SurfaceTexture,
+    TextureView,
+};
 use winit::event_loop::EventLoop;
-use winit::window::Window;
 
 pub mod defines;
 pub mod texture;
@@ -85,42 +88,42 @@ impl AsnWgpuWinApi {
         }
     }
     fn update(&mut self) {}
-    fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
-        let output = self.window.get_current_texture();
-        let view = output
-            .texture
-            .create_view(&wgpu::TextureViewDescriptor::default());
-        let mut encoder = self
-            .device
-            .create_command_encoder(&wgpu::CommandEncoderDescriptor {
-                label: Some("Render Encoder"),
-            });
-        {
-            let _render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-                label: Some("Render Pass"),
-                color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-                    view: &view,
-                    resolve_target: None,
-                    ops: wgpu::Operations {
-                        load: wgpu::LoadOp::Clear(wgpu::Color {
-                            r: 0.1,
-                            g: 0.2,
-                            b: 0.3,
-                            a: 1.0,
-                        }),
-                        store: true,
-                    },
-                })],
-                depth_stencil_attachment: None,
-            });
-        }
-
-        // submit will accept anything that implements IntoIter
-        self.queue.submit(std::iter::once(encoder.finish()));
-        output.present();
-
-        Ok(())
-    }
+    // fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
+    //     let output = self.window.get_current_texture();
+    //     let view = output
+    //         .texture
+    //         .create_view(&wgpu::TextureViewDescriptor::default());
+    //     let mut encoder = self
+    //         .device
+    //         .create_command_encoder(&wgpu::CommandEncoderDescriptor {
+    //             label: Some("Render Encoder"),
+    //         });
+    //     {
+    //         let _render_pass = encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+    //             label: Some("Render Pass"),
+    //             color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+    //                 view: &view,
+    //                 resolve_target: None,
+    //                 ops: wgpu::Operations {
+    //                     load: wgpu::LoadOp::Clear(wgpu::Color {
+    //                         r: 0.1,
+    //                         g: 0.2,
+    //                         b: 0.3,
+    //                         a: 1.0,
+    //                     }),
+    //                     store: true,
+    //                 },
+    //             })],
+    //             depth_stencil_attachment: None,
+    //         });
+    //     }
+    //
+    //     // submit will accept anything that implements IntoIter
+    //     self.queue.submit(std::iter::once(encoder.finish()));
+    //     output.present();
+    //
+    //     Ok(())
+    // }
     pub fn get_adapter(&mut self) -> &Adapter {
         &self.adapter
     }
@@ -135,8 +138,15 @@ impl AsnWgpuWinApi {
     }
 }
 
+pub struct AsnWgpuFrameContext {
+    pub frame: SurfaceTexture,
+    pub encoder: CommandEncoder,
+    pub view: TextureView,
+}
+
 impl TAsnWinapi for AsnWgpuWinApi {
     type NodeQuad = NodeQuad;
+    type FrameContext = AsnWgpuFrameContext;
 
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
         println!("{:?}", new_size);
@@ -148,17 +158,45 @@ impl TAsnWinapi for AsnWgpuWinApi {
             // self.window.surface.configure(&self.device, &self.config);
         }
     }
-    fn redraw(&mut self) -> Option<AsnError> {
-        self.update();
-        let res = self.render();
-        match res {
-            Ok(_) => None,
-            Err(e) => {
-                let err = e.to_string();
-                Some(AsnError::RenderError(CustomError(err)))
-            }
-        }
+    // fn redraw(&mut self) -> Option<AsnError> {
+    //     self.update();
+    //     let res = self.render();
+    //     match res {
+    //         Ok(_) => None,
+    //         Err(e) => {
+    //             let err = e.to_string();
+    //             Some(AsnError::RenderError(CustomError(err)))
+    //         }
+    //     }
+    // }
+
+    fn begin_frame(&mut self) -> Result<AsnWgpuFrameContext, AsnError> {
+        let frame = self.window.get_current_texture();
+
+        let encoder = self
+            .device
+            .create_command_encoder(&wgpu::CommandEncoderDescriptor {
+                label: Some("Render Encoder View2D"),
+            });
+
+        let view = frame
+            .texture
+            .create_view(&wgpu::TextureViewDescriptor::default());
+
+        let fcx = AsnWgpuFrameContext {
+            encoder,
+            frame,
+            view,
+        };
+
+        Ok(fcx)
     }
+    fn end_frame(&mut self, fcx: AsnWgpuFrameContext) -> Result<(), AsnError> {
+        self.queue.submit(iter::once(fcx.encoder.finish()));
+        fcx.frame.present();
+        Ok(())
+    }
+
     fn new_quad(&mut self) -> Self::NodeQuad {
         AsnWgpuNodeQuad::new(self)
     }

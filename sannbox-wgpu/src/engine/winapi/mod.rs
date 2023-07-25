@@ -59,7 +59,6 @@ fn handle_default<E: TAsnEngine>(evt: &AsnEvent, e: &mut E) {
         AsnEvent::WindowEvent(w) => match w {
             AsnWindowEvent::Resized(size) => {
                 e.get_winapi().window_resize(size);
-                e.get_winapi().redraw();
             }
             // AsnWindowEvent::RedrawRequested => {
             //     e.get_winapi().redraw();
