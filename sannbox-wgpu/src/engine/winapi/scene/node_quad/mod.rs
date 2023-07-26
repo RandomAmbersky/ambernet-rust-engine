@@ -9,6 +9,7 @@ use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
 use std::iter;
 use wgpu::util::DeviceExt;
 use wgpu::TextureFormat;
+use crate::engine::core::traits::TAsnWinapi;
 
 pub struct AsnWgpuNodeQuad {
     vertex_buffer: wgpu::Buffer,
@@ -110,7 +111,7 @@ impl AsnWgpuNodeQuad {
                         module: &shader,
                         entry_point: "fs_main",
                         targets: &[Some(wgpu::ColorTargetState {
-                            format: TextureFormat::Rgba8UnormSrgb,
+                            format: TextureFormat::Bgra8UnormSrgb,
                             blend: Some(wgpu::BlendState {
                                 color: wgpu::BlendComponent::REPLACE,
                                 alpha: wgpu::BlendComponent::REPLACE,

@@ -23,26 +23,18 @@ impl AsnWindow {
             .find(|adapter| adapter.is_surface_supported(&self.surface))
             .unwrap()
     }
-    pub fn get_format(&self, adapter: &Adapter) -> TextureFormat {
-        let surface_caps = self.surface.get_capabilities(&adapter);
-        let surface_format = surface_caps
-            .formats
-            .iter()
-            .copied()
-            // .filter(|f| f.is_srgb)
-            .next()
-            .unwrap_or(surface_caps.formats[0]);
-        surface_format
-    }
     fn get_config(&self, adapter: &Adapter, size: &PhysicalSize<u32>) -> SurfaceConfiguration {
         let surface_caps = self.surface.get_capabilities(adapter);
         let surface_format = surface_caps
             .formats
             .iter()
             .copied()
-            // .filter(|f| f.is_srgb)
-            .next()
+            .find(|f| f.is_srgb())
             .unwrap_or(surface_caps.formats[0]);
+
+        println!("get_config: {:?} ", surface_format);
+
+        // let surface_format = TextureFormat::Rgba8UnormSrgb;
 
         SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
@@ -57,7 +49,7 @@ impl AsnWindow {
 }
 
 impl AsnWindow {
-    pub fn new(event_loop: &EventLoop<()>, instance: &Instance) -> Self {
+    pub fn new(event_loop: &EventLoop<()>, instance: &Instance, size: &Size2D<u32>) -> Self {
         let window = WindowBuilder::new().build(event_loop).unwrap();
 
         #[cfg(target_arch = "wasm32")]
@@ -81,10 +73,10 @@ impl AsnWindow {
 
         let surface = unsafe { instance.create_surface(&window).unwrap() };
 
-        let size = Size2D {
-            width: 1024_u32,
-            height: 768_u32,
-        };
+        // let size = Size2D {
+        //     width: 1024_u32,
+        //     height: 768_u32,
+        // };
 
         // let surface_caps = surface.get_capabilities(&adapter);
         // Shader code in this tutorial assumes an Srgb surface texture. Using a different
@@ -111,7 +103,7 @@ impl AsnWindow {
         AsnWindow {
             window,
             surface,
-            size,
+            size: *size,
         }
     }
     pub fn get_size(&self) -> Size2D<u32> {

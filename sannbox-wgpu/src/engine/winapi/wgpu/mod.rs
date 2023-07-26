@@ -2,13 +2,13 @@ use crate::engine::core::errors::AsnError;
 use crate::engine::core::math::Size2D;
 use std::iter;
 
-use crate::engine::core::traits::TAsnWinapi;
+use crate::engine::core::traits::{AsnWinapiConfig, TAsnWinapi};
 use crate::engine::winapi::asn_window::AsnWindow;
 use crate::engine::winapi::scene::AsnWgpuNodeQuad;
 use crate::engine::winapi::NodeQuad;
 use wgpu::{
     Adapter, CommandEncoder, Device, Instance, InstanceDescriptor, Queue, Surface, SurfaceTexture,
-    TextureView,
+    TextureFormat, TextureView, TextureViewDescriptor,
 };
 use winit::event_loop::EventLoop;
 
@@ -16,6 +16,7 @@ pub mod defines;
 pub mod texture;
 
 pub struct AsnWgpuWinApi {
+    config: AsnWinapiConfig,
     instance: Instance,
     window: AsnWindow,
     adapter: wgpu::Adapter,
@@ -25,12 +26,23 @@ pub struct AsnWgpuWinApi {
 
 impl AsnWgpuWinApi {
     pub fn new(event_loop: &EventLoop<()>) -> Self {
+        let size = Size2D {
+            width: 1024_u32,
+            height: 768_u32,
+        };
+
+        let config = AsnWinapiConfig {
+            size,
+            ..Default::default()
+        };
+
         let instance = wgpu::Instance::new(InstanceDescriptor {
             backends: wgpu::Backends::all(),
             dx12_shader_compiler: Default::default(),
         });
 
-        let window = AsnWindow::new(event_loop, &instance);
+        let window = AsnWindow::new(event_loop, &instance, &config.size);
+
         let adapter = window.get_adapter(&instance);
 
         let (device, queue) = pollster::block_on(adapter.request_device(
@@ -52,6 +64,7 @@ impl AsnWgpuWinApi {
         window.configure_surface(&adapter, &device);
 
         AsnWgpuWinApi {
+            config,
             instance,
             window,
             adapter,
@@ -75,6 +88,10 @@ impl TAsnWinapi for AsnWgpuWinApi {
     type NodeQuad = NodeQuad;
     type FrameContext = AsnWgpuFrameContext;
 
+    fn get_config(&self) -> &AsnWinapiConfig {
+        &self.config
+    }
+
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
         println!("{:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
@@ -86,15 +103,23 @@ impl TAsnWinapi for AsnWgpuWinApi {
     fn begin_frame(&mut self) -> Result<AsnWgpuFrameContext, AsnError> {
         let frame = self.window.get_current_texture();
 
+        let texture_format = frame.texture.format();
+
         let encoder = self
             .device
             .create_command_encoder(&wgpu::CommandEncoderDescriptor {
                 label: Some("Render Encoder View2D"),
             });
 
-        let view = frame
-            .texture
-            .create_view(&wgpu::TextureViewDescriptor::default());
+        let texture_view_descriptor = wgpu::TextureViewDescriptor {
+            // format: Some(TextureFormat::Rgba8UnormSrgb),
+            // format: Some(texture_format),
+            ..Default::default()
+        };
+
+        let view = frame.texture.create_view(&texture_view_descriptor);
+
+        // Bgra8UnormSrgb
 
         let fcx = AsnWgpuFrameContext {
             encoder,

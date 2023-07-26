@@ -4,4 +4,4 @@ mod winapi_trait;
 
 pub use engine_trait::{TAsnBaseEngine, TAsnEngine};
 pub use handler_trait::TAsnHandler;
-pub use winapi_trait::TAsnWinapi;
+pub use winapi_trait::{AsnWinapiConfig, TAsnWinapi};

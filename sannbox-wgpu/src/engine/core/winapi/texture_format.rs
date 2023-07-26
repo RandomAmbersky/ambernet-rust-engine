@@ -1,6 +1,6 @@
-#[derive(Debug, Clone, Copy)]
+#[derive(Default, Debug, Clone, Copy)]
 pub enum AsnTextureFormat {
-    #[allow(dead_code)]
+    #[default]
     Rgba8,
     Rgba16,
     Rgba32,
