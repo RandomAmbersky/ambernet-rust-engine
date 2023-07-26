@@ -1,5 +1,6 @@
 use crate::engine::core::errors::AsnRenderError;
 use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::defines::BytesArray;
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use image::{DynamicImage, GenericImageView};
@@ -9,20 +10,6 @@ pub struct AsnTexture {
     pub texture: wgpu::Texture,
     pub view: wgpu::TextureView,
     pub sampler: wgpu::Sampler,
-}
-
-trait ToWgpuFormat {
-    fn to_wgpu_format(self) -> wgpu::TextureFormat;
-}
-
-impl ToWgpuFormat for AsnTextureFormat {
-    fn to_wgpu_format(self) -> wgpu::TextureFormat {
-        match self {
-            AsnTextureFormat::Rgba8 => wgpu::TextureFormat::Rgba8Unorm,
-            AsnTextureFormat::Rgba16 => wgpu::TextureFormat::Rgba16Unorm,
-            AsnTextureFormat::Rgba32 => wgpu::TextureFormat::Rgba32Uint,
-        }
-    }
 }
 
 impl AsnTexture {

@@ -1,15 +1,16 @@
 mod resource;
 
+use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::core::winapi::{AsnTextureFormat, TNodeBase, TNodeQuad};
 use crate::engine::winapi::scene::node_quad::resource::{
     Vertex, INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES,
 };
+use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
 use std::iter;
 use wgpu::util::DeviceExt;
 use wgpu::TextureFormat;
-use crate::engine::core::traits::TAsnWinapi;
 
 pub struct AsnWgpuNodeQuad {
     vertex_buffer: wgpu::Buffer,
@@ -21,6 +22,8 @@ pub struct AsnWgpuNodeQuad {
 
 impl AsnWgpuNodeQuad {
     pub fn new(gfx: &mut AsnWgpuWinApi) -> Self {
+        let texture_format = gfx.get_config().texture_format.to_wgpu_format();
+
         let shader = gfx
             .get_device()
             .create_shader_module(wgpu::ShaderModuleDescriptor {
@@ -111,7 +114,7 @@ impl AsnWgpuNodeQuad {
                         module: &shader,
                         entry_point: "fs_main",
                         targets: &[Some(wgpu::ColorTargetState {
-                            format: TextureFormat::Bgra8UnormSrgb,
+                            format: texture_format,
                             blend: Some(wgpu::BlendState {
                                 color: wgpu::BlendComponent::REPLACE,
                                 alpha: wgpu::BlendComponent::REPLACE,

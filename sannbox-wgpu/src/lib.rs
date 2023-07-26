@@ -9,8 +9,8 @@ mod handler;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub fn start() {
-    // println!("Hello, world!");
-    // asn_logger::init_log(AsnLogLevel::Debug);
+    println!("Hello, world!");
+    asn_logger::init_log(AsnLogLevel::Trace);
 
     let mut e = engine::Engine::new();
     e.init();

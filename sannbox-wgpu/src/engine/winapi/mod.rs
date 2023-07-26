@@ -9,7 +9,10 @@ use winit::event_loop::{ControlFlow, EventLoop};
 mod asn_window;
 mod event_converter;
 mod scene;
+mod utils;
 mod wgpu;
+
+use utils::ToWgpuFormat;
 
 pub type WinApi = AsnWgpuWinApi;
 pub type NodeQuad = AsnWgpuNodeQuad;
