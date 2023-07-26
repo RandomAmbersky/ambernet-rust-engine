@@ -1,4 +1,3 @@
-use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
 use crate::engine::core::traits::{TAsnHandler, TAsnWinapi};
 use crate::engine::winapi::event_converter::convert_event;
 use crate::engine::winapi::scene::AsnWgpuNodeQuad;
@@ -11,8 +10,6 @@ mod event_converter;
 mod scene;
 mod utils;
 mod wgpu;
-
-use utils::ToWgpuFormat;
 
 pub type WinApi = AsnWgpuWinApi;
 pub type NodeQuad = AsnWgpuNodeQuad;
