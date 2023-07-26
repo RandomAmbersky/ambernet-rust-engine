@@ -23,6 +23,7 @@ pub struct AsnWgpuNodeQuad {
 impl AsnWgpuNodeQuad {
     pub fn new(gfx: &mut AsnWgpuWinApi) -> Self {
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
+        println!("texure format: {:?}", texture_format);
 
         let shader = gfx
             .get_device()

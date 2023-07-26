@@ -34,8 +34,6 @@ impl AsnWindow {
 
         println!("get_config: {:?} ", surface_format);
 
-        // let surface_format = TextureFormat::Rgba8UnormSrgb;
-
         SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: surface_format,

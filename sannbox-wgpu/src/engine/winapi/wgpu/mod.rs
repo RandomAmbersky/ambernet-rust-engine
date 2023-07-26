@@ -3,8 +3,10 @@ use crate::engine::core::math::Size2D;
 use std::iter;
 
 use crate::engine::core::traits::{AsnWinapiConfig, TAsnWinapi};
+use crate::engine::core::winapi::AsnTextureFormat;
 use crate::engine::winapi::asn_window::AsnWindow;
 use crate::engine::winapi::scene::AsnWgpuNodeQuad;
+use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::NodeQuad;
 use wgpu::{
     Adapter, CommandEncoder, Device, Instance, InstanceDescriptor, Queue, Surface, SurfaceTexture,
@@ -31,7 +33,7 @@ impl AsnWgpuWinApi {
             height: 768_u32,
         };
 
-        let config = AsnWinapiConfig {
+        let mut config = AsnWinapiConfig {
             size,
             ..Default::default()
         };
@@ -62,6 +64,8 @@ impl AsnWgpuWinApi {
         .unwrap();
 
         window.configure_surface(&adapter, &device);
+        let surface_texture_format = window.get_current_texture().texture.format();
+        config.texture_format = AsnTextureFormat::get_from(surface_texture_format);
 
         AsnWgpuWinApi {
             config,
