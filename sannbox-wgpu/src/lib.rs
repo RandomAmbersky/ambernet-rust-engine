@@ -1,4 +1,5 @@
 use crate::handler::Handler;
+use asn_logger::AsnLogLevel;
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
@@ -8,7 +9,9 @@ mod handler;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub fn start() {
-    println!("Hello, world!");
+    // println!("Hello, world!");
+    asn_logger::init_log(AsnLogLevel::Debug);
+
     let mut e = engine::Engine::new();
     e.init();
 
