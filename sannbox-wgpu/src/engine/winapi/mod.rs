@@ -7,6 +7,7 @@ use winit::event_loop::{ControlFlow, EventLoop};
 
 mod asn_window;
 mod event_converter;
+mod resources;
 mod scene;
 mod utils;
 mod wgpu;

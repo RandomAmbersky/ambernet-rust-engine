@@ -3,6 +3,7 @@ mod resource;
 use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad};
 use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::winapi::scene::node_quad::resource::{
     Vertex, INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES,
 };
@@ -31,8 +32,8 @@ impl AsnWgpuNodeQuad {
                 source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
             });
 
-        let texture =
-            AsnTexture::from_raw_image(gfx, TEXTURE_SOURCE, AsnTextureFormat::Rgba8).unwrap();
+        let texture = AsnTexture::new(gfx);
+        // AsnTexture::from_raw_image(gfx, &ONE_BLUE_PIXEL, AsnTextureFormat::Rgba8).unwrap();
 
         let texture_bind_group_layout =
             gfx.get_device()
