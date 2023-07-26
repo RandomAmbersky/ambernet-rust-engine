@@ -110,8 +110,7 @@ impl AsnWgpuNodeQuad {
                         module: &shader,
                         entry_point: "fs_main",
                         targets: &[Some(wgpu::ColorTargetState {
-                            // format: TextureFormat::R8Unorm,
-                            format: TextureFormat::Bgra8UnormSrgb,
+                            format: TextureFormat::Rgba8UnormSrgb,
                             blend: Some(wgpu::BlendState {
                                 color: wgpu::BlendComponent::REPLACE,
                                 alpha: wgpu::BlendComponent::REPLACE,
