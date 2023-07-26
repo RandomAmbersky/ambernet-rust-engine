@@ -1,6 +1,6 @@
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
 use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler, TAsnWinapi};
-use crate::engine::core::winapi::TNodeBase;
+use crate::engine::core::winapi::scene::TNodeBase;
 use crate::engine::{Engine, NodeQuad, TAsnEngine};
 
 pub struct Handler {

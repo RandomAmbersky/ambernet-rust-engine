@@ -1,7 +1,8 @@
 mod resource;
 
 use crate::engine::core::traits::TAsnWinapi;
-use crate::engine::core::winapi::{AsnTextureFormat, TNodeBase, TNodeQuad};
+use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad};
+use crate::engine::core::winapi::AsnTextureFormat;
 use crate::engine::winapi::scene::node_quad::resource::{
     Vertex, INDICES, SHADER_SOURCE, TEXTURE_SOURCE, VERTICES,
 };
