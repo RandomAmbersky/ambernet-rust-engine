@@ -8,9 +8,7 @@ use crate::engine::winapi::scene::node_quad::resource::{
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
-use std::iter;
 use wgpu::util::DeviceExt;
-use wgpu::TextureFormat;
 
 pub struct AsnWgpuNodeQuad {
     vertex_buffer: wgpu::Buffer,
