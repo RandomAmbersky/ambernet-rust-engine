@@ -9,3 +9,4 @@ target/
 /yarn-error.log
 web_build/
 /www/pkg/
+/sannbox-wgpu/pkg/
