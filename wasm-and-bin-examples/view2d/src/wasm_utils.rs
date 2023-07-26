@@ -13,7 +13,7 @@ extern "C" {
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub fn greet(name: &str) {
     #[cfg(target_arch = "wasm32")]
-    {
+    unsafe {
         alert(&format!("Hello, {}!", name));
     }
     info!("Hello {:}", name);

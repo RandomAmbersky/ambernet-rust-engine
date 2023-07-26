@@ -17,7 +17,6 @@ impl AsnHandlerTrait for Handler {
             AsnEvent::Empty => None,
             AsnEvent::WindowEvent(w) => match w {
                 AsnWindowEvent::Resized(size) => {
-                    // ctx.get_winapi().window_resize(size);
                     ctx.get_winapi().window_resize(size);
                     None
                 }

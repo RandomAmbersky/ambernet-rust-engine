@@ -59,19 +59,13 @@ impl AsnWindow {
 impl AsnWindow {
     pub fn new(event_loop: &EventLoop<()>, instance: &Instance) -> Self {
         let window = WindowBuilder::new().build(event_loop).unwrap();
-        let surface = unsafe { instance.create_surface(&window).unwrap() };
-
-        let size = Size2D {
-            width: 1024_u32,
-            height: 768_u32,
-        };
 
         #[cfg(target_arch = "wasm32")]
         {
             // Winit prevents sizing with CSS, so we have to set
             // the size manually when on web.
-            use winit::dpi::PhysicalSize;
-            window.set_inner_size(PhysicalSize::new(size.width, size.height));
+            // use winit::dpi::PhysicalSize;
+            // window.set_inner_size(PhysicalSize::new(size.width, size.height));
 
             use winit::platform::web::WindowExtWebSys;
             web_sys::window()
@@ -84,6 +78,13 @@ impl AsnWindow {
                 })
                 .expect("Couldn't append canvas to document body.");
         }
+
+        let surface = unsafe { instance.create_surface(&window).unwrap() };
+
+        let size = Size2D {
+            width: 1024_u32,
+            height: 768_u32,
+        };
 
         // let surface_caps = surface.get_capabilities(&adapter);
         // Shader code in this tutorial assumes an Srgb surface texture. Using a different

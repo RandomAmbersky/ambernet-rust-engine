@@ -11,7 +11,7 @@ name = "sannbox-wgpu"
 path = "src/main.rs"
 
 [dependencies]
-asn-logger = { path = "./crates/asn-logger" }
+asn-logger = { path = "../asn-logger" }
 bytemuck = { version = "1.12", features = [ "derive" ] }
 wgpu = { version = "0.16" }
 winit = "0.28"
