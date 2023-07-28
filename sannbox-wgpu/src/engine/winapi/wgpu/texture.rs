@@ -72,22 +72,24 @@ impl AsnTexture {
             sampler,
         }
     }
-    pub(crate) fn from_raw_image(
+    pub fn update_from_raw_image(
+        &mut self,
         gfx: &AsnWgpuWinApi,
         bytes: &[u8],
         f: AsnTextureFormat,
-    ) -> Result<AsnTexture, AsnRenderError> {
+    ) -> Result<(), AsnRenderError> {
         let img = image::load_from_memory(bytes);
         match img {
             Err(_) => Err(AsnRenderError::CustomError("image import faut".into())),
-            Ok(t) => Self::from_image(gfx, &t, f),
+            Ok(t) => Self::update_from_image(self, gfx, &t, f),
         }
     }
-    fn from_image(
+    fn update_from_image(
+        &mut self,
         gfx: &AsnWgpuWinApi,
         img: &DynamicImage,
         f: AsnTextureFormat,
-    ) -> Result<AsnTexture, AsnRenderError> {
+    ) -> Result<(), AsnRenderError> {
         let texture_format = f.to_wgpu_format();
 
         let rgba = img.to_rgba8();
@@ -98,21 +100,21 @@ impl AsnTexture {
             height: dimensions.1,
             depth_or_array_layers: 1,
         };
-        let texture = gfx.device.create_texture(&wgpu::TextureDescriptor {
-            label: None,
-            size,
-            mip_level_count: 1,
-            sample_count: 1,
-            dimension: wgpu::TextureDimension::D2,
-            format: texture_format,
-            usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
-            view_formats: &[],
-        });
+        // let texture = gfx.device.create_texture(&wgpu::TextureDescriptor {
+        //     label: None,
+        //     size,
+        //     mip_level_count: 1,
+        //     sample_count: 1,
+        //     dimension: wgpu::TextureDimension::D2,
+        //     format: texture_format,
+        //     usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
+        //     view_formats: &[],
+        // });
 
         gfx.queue.write_texture(
             wgpu::ImageCopyTexture {
                 aspect: wgpu::TextureAspect::All,
-                texture: &texture,
+                texture: &self.texture,
                 mip_level: 0,
                 origin: wgpu::Origin3d::ZERO,
             },
@@ -125,23 +127,24 @@ impl AsnTexture {
             size,
         );
 
-        let view = texture.create_view(&wgpu::TextureViewDescriptor::default());
-        let sampler = gfx.device.create_sampler(&wgpu::SamplerDescriptor {
-            address_mode_u: wgpu::AddressMode::ClampToEdge,
-            address_mode_v: wgpu::AddressMode::ClampToEdge,
-            address_mode_w: wgpu::AddressMode::ClampToEdge,
-            mag_filter: wgpu::FilterMode::Nearest,
-            min_filter: wgpu::FilterMode::Nearest,
-            mipmap_filter: wgpu::FilterMode::Nearest,
-            ..Default::default()
-        });
-
-        Ok(Self {
-            texture_format: f,
-            texture,
-            view,
-            sampler,
-        })
+        // let view = selftexture.create_view(&wgpu::TextureViewDescriptor::default());
+        // let sampler = gfx.device.create_sampler(&wgpu::SamplerDescriptor {
+        //     address_mode_u: wgpu::AddressMode::ClampToEdge,
+        //     address_mode_v: wgpu::AddressMode::ClampToEdge,
+        //     address_mode_w: wgpu::AddressMode::ClampToEdge,
+        //     mag_filter: wgpu::FilterMode::Nearest,
+        //     min_filter: wgpu::FilterMode::Nearest,
+        //     mipmap_filter: wgpu::FilterMode::Nearest,
+        //     ..Default::default()
+        // });
+        //
+        // Ok(Self {
+        //     texture_format: f,
+        //     texture,
+        //     view,
+        //     sampler,
+        // })
+        Ok(())
     }
 
     fn update_from_array(

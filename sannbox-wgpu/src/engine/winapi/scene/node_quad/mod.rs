@@ -1,5 +1,6 @@
 mod resource;
 
+use crate::engine::core::errors::AsnRenderError;
 use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad};
 use crate::engine::core::winapi::AsnTextureFormat;
@@ -18,6 +19,7 @@ pub struct AsnWgpuNodeQuad {
     num_indices: u32,
     diffuse_bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
+    texture: AsnTexture,
 }
 
 impl AsnWgpuNodeQuad {
@@ -148,6 +150,7 @@ impl AsnWgpuNodeQuad {
                 });
 
         Self {
+            texture,
             render_pipeline,
             vertex_buffer,
             index_buffer,
@@ -188,4 +191,15 @@ impl TNodeBase for AsnWgpuNodeQuad {
     }
 }
 
-impl TNodeQuad for AsnWgpuNodeQuad {}
+impl TNodeQuad for AsnWgpuNodeQuad {
+    type WinApi = AsnWgpuWinApi;
+
+    fn set_texture(
+        &mut self,
+        gfx: &Self::WinApi,
+        bytes: &[u8],
+        f: AsnTextureFormat,
+    ) -> Result<(), AsnRenderError> {
+        self.texture.update_from_raw_image(gfx, bytes, f)
+    }
+}
