@@ -46,7 +46,6 @@ pub fn run<E: 'static + TAsnEngine, H: 'static + TAsnHandler<E>>(
 
         let evt = convert_event(&event);
         if let Some(e) = evt {
-            println!("event: {:?}", e);
             h.handle(&e, &mut eng)
         }
     })
