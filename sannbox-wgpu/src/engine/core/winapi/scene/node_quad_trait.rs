@@ -7,7 +7,7 @@ pub trait TNodeQuad: TNodeBase {
     type WinApi: TAsnWinapi;
     fn set_texture(
         &mut self,
-        gfx: &Self::WinApi,
+        gfx: &mut Self::WinApi,
         bytes: &[u8],
         f: AsnTextureFormat,
     ) -> Result<(), AsnRenderError>;
