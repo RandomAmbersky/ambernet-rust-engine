@@ -2,22 +2,24 @@ mod resources;
 
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
 use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler, TAsnWinapi};
-use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad};
+use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::AsnTextureFormat;
-use crate::engine::{Engine, NodeQuad, TAsnEngine};
+use crate::engine::{Engine, NodeQuad, NodeView2d, TAsnEngine};
 use crate::handler::resources::TEXTURE_SOURCE;
 
 pub struct Handler {
     quad: NodeQuad,
+    view: NodeView2d,
 }
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
         let w = e.get_winapi();
         let mut quad = w.new_quad();
+        let mut view = w.new_view2d();
         quad.set_texture(w, TEXTURE_SOURCE, AsnTextureFormat::Rgba8)
             .unwrap();
-        Handler { quad }
+        Handler { quad, view }
     }
     fn draw(&mut self, e: &mut Engine) {
         let mut fcx = e.get_winapi().begin_frame().unwrap();

@@ -10,6 +10,8 @@ pub struct AsnWinapiConfig {
 
 pub trait TAsnWinapi {
     type NodeQuad;
+    type NodeView2d;
+
     type FrameContext;
 
     fn get_config(&self) -> &AsnWinapiConfig;
@@ -19,4 +21,5 @@ pub trait TAsnWinapi {
     fn end_frame(&mut self, fcx: Self::FrameContext) -> Result<(), AsnError>;
 
     fn new_quad(&mut self) -> Self::NodeQuad;
+    fn new_view2d(&mut self) -> Self::NodeView2d;
 }

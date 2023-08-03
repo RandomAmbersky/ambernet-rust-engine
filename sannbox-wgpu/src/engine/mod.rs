@@ -6,6 +6,7 @@ use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler};
 use crate::engine::winapi::{RunnerPreset, WinApi};
 
 pub use crate::engine::winapi::NodeQuad;
+pub use crate::engine::winapi::NodeView2d;
 
 pub struct Engine {
     is_need_exit: bool,
@@ -35,7 +36,6 @@ impl TAsnBaseEngine for Engine {
     fn is_need_exit(&self) -> bool {
         self.is_need_exit
     }
-
     fn set_need_exit(&mut self) {
         self.is_need_exit = true
     }
