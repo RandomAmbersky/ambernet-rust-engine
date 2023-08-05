@@ -1,26 +1,33 @@
 mod resource;
 
 use crate::engine::core::errors::AsnRenderError;
+use crate::engine::core::math::Array2D;
 use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
-use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::core::winapi::{AsnTextureFormat, Mesh};
 use crate::engine::winapi::scene::node_view2d::resource::{
     Vertex, INDICES, SHADER_SOURCE, VERTICES,
 };
 use crate::engine::winapi::utils::ToWgpuFormat;
+use crate::engine::winapi::wgpu::defines::{BytesArray, Size2d, SizeDimension};
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
-use wgpu::util::DeviceExt;
 use wgpu::{BindGroup, RenderPipeline, ShaderModule, TextureFormat};
 
 pub struct AsnWgpuNodeView2d {
-    shader: ShaderModule,
-    vertex_buffer: wgpu::Buffer,
-    index_buffer: wgpu::Buffer,
-    num_indices: u32,
-    diffuse_bind_group: wgpu::BindGroup,
-    render_pipeline: wgpu::RenderPipeline,
+    tile_texture: AsnTexture,
     texture: AsnTexture,
+    view: BytesArray,
+    mesh: Mesh,
+    bind_group: wgpu::BindGroup,
+    render_pipeline: wgpu::RenderPipeline,
+    is_need_update: bool,
+    // rng: SmallRng,
+    shader: ShaderModule,
+    // vertex_buffer: wgpu::Buffer,
+    // index_buffer: wgpu::Buffer,
+    // num_indices: u32,
+    // diffuse_bind_group: wgpu::BindGroup,
 }
 
 fn create_node_view2d_set(
@@ -136,34 +143,32 @@ impl AsnWgpuNodeView2d {
                 source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
             });
 
-        let vertex_buffer =
-            gfx.get_device()
-                .create_buffer_init(&wgpu::util::BufferInitDescriptor {
-                    label: Some("Vertex Buffer"),
-                    contents: bytemuck::cast_slice(VERTICES),
-                    usage: wgpu::BufferUsages::VERTEX,
-                });
-
-        let index_buffer = gfx
-            .get_device()
-            .create_buffer_init(&wgpu::util::BufferInitDescriptor {
-                label: Some("Index Buffer"),
-                contents: bytemuck::cast_slice(INDICES),
-                usage: wgpu::BufferUsages::INDEX,
-            });
-        let num_indices = INDICES.len() as u32;
-
-        let (texture, render_pipeline, diffuse_bind_group) =
+        let (texture, render_pipeline, bind_group) =
             create_node_view2d_set(gfx, AsnTexture::new(gfx), texture_format, &shader);
+        let tile_texture = AsnTexture::new(gfx);
+
+        let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
+
+        let texture_size_w: u32 = 32;
+        let texture_size_h: u32 = 32;
+
+        let view = Array2D {
+            size: Size2d {
+                width: texture_size_w as SizeDimension,
+                height: texture_size_h as SizeDimension,
+            },
+            bytes: vec![0; (texture_size_w * texture_size_h * 4) as usize],
+        };
 
         Self {
+            tile_texture,
             shader,
             texture,
             render_pipeline,
-            vertex_buffer,
-            index_buffer,
-            num_indices,
-            diffuse_bind_group,
+            view,
+            mesh,
+            bind_group,
+            is_need_update: false,
         }
     }
     fn draw_me(&mut self, fcx: &mut AsnWgpuFrameContext) {
@@ -185,10 +190,10 @@ impl AsnWgpuNodeView2d {
             depth_stencil_attachment: None,
         });
         render_pass.set_pipeline(&self.render_pipeline);
-        render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
-        render_pass.set_vertex_buffer(0, self.vertex_buffer.slice(..));
-        render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
-        render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
+        render_pass.set_bind_group(0, &self.bind_group, &[]);
+        render_pass.set_vertex_buffer(0, self.mesh.vertex_buffer.slice(..));
+        render_pass.set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+        render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
 }
 
@@ -216,7 +221,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
 
         self.texture = texture;
         self.render_pipeline = render_pipeline;
-        self.diffuse_bind_group = diffuse_bind_group;
+        self.bind_group = diffuse_bind_group;
         Ok(())
     }
 }
