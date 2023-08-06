@@ -29,10 +29,11 @@ pub struct AsnWgpuNodeView2d {
 
 fn create_node_view2d_set(
     gfx: &mut AsnWgpuWinApi,
-    texture: AsnTexture,
+    texture: &AsnTexture,
+    tile_texture: &AsnTexture,
     texture_format: TextureFormat,
     shader: &ShaderModule,
-) -> (AsnTexture, RenderPipeline, BindGroup) {
+) -> (RenderPipeline, BindGroup) {
     let group_layout_builder = BindGroupLayoutBuilder::new()
         .texture()
         .sampler()
@@ -46,100 +47,27 @@ fn create_node_view2d_set(
         .get_device()
         .create_bind_group_layout(&group_layout_desc);
     let bind_group_layouts = &[&diffuse_bind_group_layout];
+    let render_pipeline = get_render_pipeline(
+        &gfx.get_device(),
+        texture_format,
+        &shader,
+        bind_group_layouts,
+    );
 
-    let texture_bind_group_layout =
-        gfx.get_device()
-            .create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
-                entries: &[
-                    wgpu::BindGroupLayoutEntry {
-                        binding: 0,
-                        visibility: wgpu::ShaderStages::FRAGMENT,
-                        ty: wgpu::BindingType::Texture {
-                            multisampled: false,
-                            view_dimension: wgpu::TextureViewDimension::D2,
-                            sample_type: wgpu::TextureSampleType::Float { filterable: true },
-                        },
-                        count: None,
-                    },
-                    wgpu::BindGroupLayoutEntry {
-                        binding: 1,
-                        visibility: wgpu::ShaderStages::FRAGMENT,
-                        ty: wgpu::BindingType::Sampler(wgpu::SamplerBindingType::Filtering),
-                        count: None,
-                    },
-                ],
-                label: Some("texture_bind_group_layout"),
-            });
-    let diffuse_bind_group = gfx
-        .get_device()
-        .create_bind_group(&wgpu::BindGroupDescriptor {
-            layout: &texture_bind_group_layout,
-            entries: &[
-                wgpu::BindGroupEntry {
-                    binding: 0,
-                    resource: wgpu::BindingResource::TextureView(&texture.view),
-                },
-                wgpu::BindGroupEntry {
-                    binding: 1,
-                    resource: wgpu::BindingResource::Sampler(&texture.sampler),
-                },
-            ],
-            label: Some("diffuse_bind_group"),
-        });
-    let render_pipeline_layout =
-        gfx.get_device()
-            .create_pipeline_layout(&wgpu::PipelineLayoutDescriptor {
-                label: Some("Render Pipeline Layout"),
-                bind_group_layouts: &[&texture_bind_group_layout],
-                push_constant_ranges: &[],
-            });
-    let render_pipeline =
-        gfx.get_device()
-            .create_render_pipeline(&wgpu::RenderPipelineDescriptor {
-                label: Some("Render Pipeline"),
-                layout: Some(&render_pipeline_layout),
-                vertex: wgpu::VertexState {
-                    module: &shader,
-                    entry_point: "vs_main",
-                    buffers: &[Vertex::desc()],
-                },
-                fragment: Some(wgpu::FragmentState {
-                    module: &shader,
-                    entry_point: "fs_main",
-                    targets: &[Some(wgpu::ColorTargetState {
-                        format: texture_format,
-                        blend: Some(wgpu::BlendState {
-                            color: wgpu::BlendComponent::REPLACE,
-                            alpha: wgpu::BlendComponent::REPLACE,
-                        }),
-                        write_mask: wgpu::ColorWrites::ALL,
-                    })],
-                }),
-                primitive: wgpu::PrimitiveState {
-                    topology: wgpu::PrimitiveTopology::TriangleList,
-                    strip_index_format: None,
-                    front_face: wgpu::FrontFace::Ccw,
-                    cull_mode: Some(wgpu::Face::Back),
-                    // Setting this to anything other than Fill requires Features::POLYGON_MODE_LINE
-                    // or Features::POLYGON_MODE_POINT
-                    polygon_mode: wgpu::PolygonMode::Fill,
-                    // Requires Features::DEPTH_CLIP_CONTROL
-                    unclipped_depth: false,
-                    // Requires Features::CONSERVATIVE_RASTERIZATION
-                    conservative: false,
-                },
-                depth_stencil: None,
-                multisample: wgpu::MultisampleState {
-                    count: 1,
-                    mask: !0,
-                    alpha_to_coverage_enabled: false,
-                },
-                // If the pipeline will be used with a multiview render pass, this
-                // indicates how many array layers the attachments will have.
-                multiview: None,
-            });
+    let group_entry_builder = BindGroupEntryBuilder::default()
+        .texture(&texture.view)
+        .sampler(&texture.sampler)
+        .texture(&tile_texture.view)
+        .sampler(&tile_texture.sampler);
 
-    (texture, render_pipeline, diffuse_bind_group)
+    let group_desc = wgpu::BindGroupDescriptor {
+        layout: &diffuse_bind_group_layout,
+        entries: group_entry_builder.entries(),
+        label: Some("diffuse_bind_group"),
+    };
+    let bind_group = gfx.get_device().create_bind_group(&group_desc);
+
+    (render_pipeline, bind_group)
 }
 
 impl AsnWgpuNodeView2d {
@@ -161,39 +89,41 @@ impl AsnWgpuNodeView2d {
         let texture = AsnTexture::new(gfx);
         let tile_texture = AsnTexture::new(gfx);
 
-        let group_layout_builder = BindGroupLayoutBuilder::new()
-            .texture()
-            .sampler()
-            .texture()
-            .sampler();
-        let group_layout_desc = wgpu::BindGroupLayoutDescriptor {
-            entries: group_layout_builder.entries(),
-            label: Some("texture_bind_group_layout"),
-        };
-        let diffuse_bind_group_layout = gfx
-            .get_device()
-            .create_bind_group_layout(&group_layout_desc);
-        let bind_group_layouts = &[&diffuse_bind_group_layout];
-        let render_pipeline = get_render_pipeline(
-            &gfx.get_device(),
-            texture_format,
-            &shader,
-            bind_group_layouts,
-        );
+        // let group_layout_builder = BindGroupLayoutBuilder::new()
+        //     .texture()
+        //     .sampler()
+        //     .texture()
+        //     .sampler();
+        // let group_layout_desc = wgpu::BindGroupLayoutDescriptor {
+        //     entries: group_layout_builder.entries(),
+        //     label: Some("texture_bind_group_layout"),
+        // };
+        // let diffuse_bind_group_layout = gfx
+        //     .get_device()
+        //     .create_bind_group_layout(&group_layout_desc);
+        // let bind_group_layouts = &[&diffuse_bind_group_layout];
+        // let render_pipeline = get_render_pipeline(
+        //     &gfx.get_device(),
+        //     texture_format,
+        //     &shader,
+        //     bind_group_layouts,
+        // );
 
-        let group_entry_builder = BindGroupEntryBuilder::default()
-            .texture(&texture.view)
-            .sampler(&texture.sampler)
-            .texture(&tile_texture.view)
-            .sampler(&tile_texture.sampler);
+        // let group_entry_builder = BindGroupEntryBuilder::default()
+        //     .texture(&texture.view)
+        //     .sampler(&texture.sampler)
+        //     .texture(&tile_texture.view)
+        //     .sampler(&tile_texture.sampler);
+        //
+        // let group_desc = wgpu::BindGroupDescriptor {
+        //     layout: &diffuse_bind_group_layout,
+        //     entries: group_entry_builder.entries(),
+        //     label: Some("diffuse_bind_group"),
+        // };
+        // let bind_group = gfx.get_device().create_bind_group(&group_desc);
 
-        let group_desc = wgpu::BindGroupDescriptor {
-            layout: &diffuse_bind_group_layout,
-            entries: group_entry_builder.entries(),
-            label: Some("diffuse_bind_group"),
-        };
-        let bind_group = gfx.get_device().create_bind_group(&group_desc);
-
+        let (render_pipeline, bind_group) =
+            create_node_view2d_set(gfx, &texture, &tile_texture, texture_format, &shader);
         let texture_size_w: u32 = 1;
         let texture_size_h: u32 = 1;
 
@@ -258,15 +188,23 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         f: AsnTextureFormat,
     ) -> Result<(), AsnRenderError> {
         println!("AsnWgpuNodeView2d set_texture");
-        let texture = AsnTexture::from_raw_image(gfx, bytes, f)?;
+        let tile_texture = AsnTexture::from_raw_image(gfx, bytes, f)?;
 
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
-        let (texture, render_pipeline, diffuse_bind_group) =
-            create_node_view2d_set(gfx, texture, texture_format, &self.shader);
+        let (render_pipeline, bind_group) = create_node_view2d_set(
+            gfx,
+            &self.texture,
+            &tile_texture,
+            texture_format,
+            &self.shader,
+        );
 
-        self.tile_texture = texture;
+        // let (texture, render_pipeline, diffuse_bind_group) =
+        //     create_node_view2d_set(gfx, texture, texture_format, &self.shader);
+
+        self.tile_texture = tile_texture;
         self.render_pipeline = render_pipeline;
-        self.bind_group = diffuse_bind_group;
+        self.bind_group = bind_group;
         Ok(())
     }
 
