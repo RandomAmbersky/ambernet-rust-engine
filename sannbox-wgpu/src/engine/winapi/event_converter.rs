@@ -24,6 +24,14 @@ pub fn convert_event(e: &Event<CustomEvent>) -> Option<AsnEvent> {
             ref event,
             window_id,
         } => process_window_event(window_id, event),
+        Event::UserEvent(T) => process_custom_event(T),
+        _ => None,
+    }
+}
+
+fn process_custom_event(e: &CustomEvent) -> Option<AsnEvent> {
+    match e {
+        CustomEvent::UpdateEvent => Some(AsnEvent::UpdateEvent),
         _ => None,
     }
 }

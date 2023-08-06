@@ -27,6 +27,7 @@ impl Handler {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
         // self.quad.draw(&mut fcx);
         self.view.draw(&mut fcx);
+        e.get_winapi().send_event(&AsnEvent::UpdateEvent);
         e.get_winapi().end_frame(fcx).unwrap();
     }
     fn update(&mut self, e: &mut Engine) {
