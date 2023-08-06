@@ -1,4 +1,5 @@
 use crate::engine::core::math::Size2D;
+use crate::engine::winapi::event_converter::CustomEvent;
 use wgpu::{Adapter, Device, Instance, Surface, SurfaceConfiguration, TextureFormat};
 use winit::dpi::PhysicalSize;
 use winit::event_loop::EventLoop;
@@ -47,7 +48,11 @@ impl AsnWindow {
 }
 
 impl AsnWindow {
-    pub fn new(event_loop: &EventLoop<()>, instance: &Instance, size: &Size2D<u32>) -> Self {
+    pub fn new(
+        event_loop: &EventLoop<CustomEvent>,
+        instance: &Instance,
+        size: &Size2D<u32>,
+    ) -> Self {
         let window = WindowBuilder::new().build(event_loop).unwrap();
 
         #[cfg(target_arch = "wasm32")]

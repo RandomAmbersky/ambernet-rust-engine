@@ -1,5 +1,6 @@
 use super::super::errors::AsnError;
 use super::super::math::Size2D;
+use crate::engine::core::events::AsnEvent;
 use crate::engine::core::winapi::AsnTextureFormat;
 
 #[derive(Default)]
@@ -15,6 +16,8 @@ pub trait TAsnWinapi {
     type FrameContext;
 
     fn get_config(&self) -> &AsnWinapiConfig;
+
+    fn send_event(&mut self, evt: &AsnEvent);
 
     fn window_resize(&mut self, size: &Size2D<u32>);
     fn begin_frame(&mut self) -> Result<Self::FrameContext, AsnError>;

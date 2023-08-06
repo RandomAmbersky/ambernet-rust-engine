@@ -2,9 +2,11 @@ use crate::engine::core::errors::AsnError;
 use crate::engine::core::math::Size2D;
 use std::iter;
 
+use crate::engine::core::events::AsnEvent;
 use crate::engine::core::traits::{AsnWinapiConfig, TAsnWinapi};
 use crate::engine::core::winapi::AsnTextureFormat;
 use crate::engine::winapi::asn_window::AsnWindow;
+use crate::engine::winapi::event_converter::{convert_asn_event, CustomEvent};
 use crate::engine::winapi::scene::{AsnWgpuNodeQuad, AsnWgpuNodeView2d};
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::{NodeQuad, NodeView2d};
@@ -12,7 +14,7 @@ use wgpu::{
     Adapter, CommandEncoder, Device, Instance, InstanceDescriptor, Queue, Surface, SurfaceTexture,
     TextureFormat, TextureView, TextureViewDescriptor,
 };
-use winit::event_loop::EventLoop;
+use winit::event_loop::{EventLoop, EventLoopProxy};
 
 pub mod bind_groups;
 pub mod defines;
@@ -25,10 +27,11 @@ pub struct AsnWgpuWinApi {
     adapter: wgpu::Adapter,
     device: wgpu::Device,
     queue: wgpu::Queue,
+    event_loop_proxy: EventLoopProxy<CustomEvent>,
 }
 
 impl AsnWgpuWinApi {
-    pub fn new(event_loop: &EventLoop<()>) -> Self {
+    pub fn new(event_loop: &EventLoop<CustomEvent>) -> Self {
         let size = Size2D {
             width: 1024_u32,
             height: 768_u32,
@@ -68,7 +71,10 @@ impl AsnWgpuWinApi {
         let surface_texture_format = window.get_current_texture().texture.format();
         config.texture_format = AsnTextureFormat::get_from(surface_texture_format);
 
+        let event_loop_proxy = event_loop.create_proxy();
+
         AsnWgpuWinApi {
+            event_loop_proxy,
             config,
             instance,
             window,
@@ -98,6 +104,10 @@ impl TAsnWinapi for AsnWgpuWinApi {
         &self.config
     }
 
+    fn send_event(&mut self, evt: &AsnEvent) {
+        let e = convert_asn_event(evt);
+        self.event_loop_proxy.send_event(e).ok();
+    }
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
         println!("{:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {

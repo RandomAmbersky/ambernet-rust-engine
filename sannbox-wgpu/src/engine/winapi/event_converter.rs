@@ -4,7 +4,19 @@ use crate::engine::core::math::Size2D;
 use winit::event::{Event, WindowEvent};
 use winit::window::WindowId;
 
-pub fn convert_event(e: &Event<()>) -> Option<AsnEvent> {
+#[derive(Debug, Clone, Copy)]
+pub enum CustomEvent {
+    UpdateEvent,
+}
+
+pub fn convert_asn_event(e: &AsnEvent) -> CustomEvent {
+    match e {
+        AsnEvent::UpdateEvent => CustomEvent::UpdateEvent,
+        _ => panic!("can't convert event {:?}", e),
+    }
+}
+
+pub fn convert_event(e: &Event<CustomEvent>) -> Option<AsnEvent> {
     // info!("{:?}", e);
     match e {
         Event::RedrawRequested(_window_id) => Some(AsnEvent::WindowEvent(RedrawRequested)),
