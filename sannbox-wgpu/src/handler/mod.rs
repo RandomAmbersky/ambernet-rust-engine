@@ -17,8 +17,8 @@ impl Handler {
         let w = e.get_winapi();
         let mut quad = w.new_quad();
         let mut view = w.new_view2d();
-        quad.set_texture(w, TEXTURE_SOURCE, AsnTextureFormat::Rgba8)
-            .unwrap();
+        // quad.set_texture(w, TEXTURE_SOURCE, AsnTextureFormat::Rgba8)
+        //     .unwrap();
         Handler { quad, view }
     }
     fn draw(&mut self, e: &mut Engine) {

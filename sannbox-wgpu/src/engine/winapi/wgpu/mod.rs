@@ -14,6 +14,7 @@ use wgpu::{
 };
 use winit::event_loop::EventLoop;
 
+pub mod bind_groups;
 pub mod defines;
 pub mod texture;
 
