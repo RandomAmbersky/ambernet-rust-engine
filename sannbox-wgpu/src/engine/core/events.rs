@@ -10,5 +10,6 @@ pub enum AsnWindowEvent {
 #[derive(Debug)]
 pub enum AsnEvent {
     Empty,
+    UpdateEvent,
     WindowEvent(AsnWindowEvent),
 }
