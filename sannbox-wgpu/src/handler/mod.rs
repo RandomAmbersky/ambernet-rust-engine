@@ -1,6 +1,7 @@
 mod resources;
 
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
+use crate::engine::core::math::Size2D;
 use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler, TAsnWinapi};
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::AsnTextureFormat;
@@ -21,6 +22,11 @@ impl Handler {
             .unwrap();
         view.set_tile_texture(w, TEXTURE_TIILES_SOURCE, AsnTextureFormat::Rgba8)
             .unwrap();
+        view.set_view_size(Size2D {
+            width: 10,
+            height: 10,
+        })
+        .unwrap();
         Handler { quad, view }
     }
     fn draw(&mut self, e: &mut Engine) {

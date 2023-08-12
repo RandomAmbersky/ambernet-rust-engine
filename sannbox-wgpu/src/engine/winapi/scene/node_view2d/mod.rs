@@ -1,7 +1,7 @@
 mod resource;
 
 use crate::engine::core::errors::AsnRenderError;
-use crate::engine::core::math::{Array2D, Size2D};
+use crate::engine::core::math::{Array2D, Pos2D, Size2D};
 use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::{AsnTextureFormat, Mesh};
@@ -83,56 +83,21 @@ impl AsnWgpuNodeView2d {
 
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         println!("texure format: {:?}", texture_format);
-        // let (texture, render_pipeline, bind_group) =
-        //     create_node_view2d_set(gfx, AsnTexture::new(gfx), texture_format, &shader);
 
         let texture = AsnTexture::new(gfx);
         let tile_texture = AsnTexture::new(gfx);
 
-        // let group_layout_builder = BindGroupLayoutBuilder::new()
-        //     .texture()
-        //     .sampler()
-        //     .texture()
-        //     .sampler();
-        // let group_layout_desc = wgpu::BindGroupLayoutDescriptor {
-        //     entries: group_layout_builder.entries(),
-        //     label: Some("texture_bind_group_layout"),
-        // };
-        // let diffuse_bind_group_layout = gfx
-        //     .get_device()
-        //     .create_bind_group_layout(&group_layout_desc);
-        // let bind_group_layouts = &[&diffuse_bind_group_layout];
-        // let render_pipeline = get_render_pipeline(
-        //     &gfx.get_device(),
-        //     texture_format,
-        //     &shader,
-        //     bind_group_layouts,
-        // );
-
-        // let group_entry_builder = BindGroupEntryBuilder::default()
-        //     .texture(&texture.view)
-        //     .sampler(&texture.sampler)
-        //     .texture(&tile_texture.view)
-        //     .sampler(&tile_texture.sampler);
-        //
-        // let group_desc = wgpu::BindGroupDescriptor {
-        //     layout: &diffuse_bind_group_layout,
-        //     entries: group_entry_builder.entries(),
-        //     label: Some("diffuse_bind_group"),
-        // };
-        // let bind_group = gfx.get_device().create_bind_group(&group_desc);
-
         let (render_pipeline, bind_group) =
             create_node_view2d_set(gfx, &texture, &tile_texture, texture_format, &shader);
-        let texture_size_w: u32 = 1;
-        let texture_size_h: u32 = 1;
+        let view_size_w: u32 = 1;
+        let view_size_h: u32 = 1;
 
         let view = Array2D {
             size: Size2d {
-                width: texture_size_w as SizeDimension,
-                height: texture_size_h as SizeDimension,
+                width: view_size_w as SizeDimension,
+                height: view_size_h as SizeDimension,
             },
-            bytes: vec![0; (texture_size_w * texture_size_h * 4) as usize],
+            bytes: vec![0; (view_size_w * view_size_h * 4) as usize],
         };
 
         Self {
@@ -181,6 +146,8 @@ impl TNodeBase for AsnWgpuNodeView2d {
 
 impl TNodeView2d for AsnWgpuNodeView2d {
     type WinApi = AsnWgpuWinApi;
+    type CellType = u8;
+
     fn set_tile_texture(
         &mut self,
         gfx: &mut Self::WinApi,
@@ -199,9 +166,6 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             &self.shader,
         );
 
-        // let (texture, render_pipeline, diffuse_bind_group) =
-        //     create_node_view2d_set(gfx, texture, texture_format, &self.shader);
-
         self.tile_texture = tile_texture;
         self.render_pipeline = render_pipeline;
         self.bind_group = bind_group;
@@ -215,6 +179,10 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         };
         self.view = view;
         Ok(())
+    }
+
+    fn set_cell(pos: Pos2D<u32>, c: Self::CellType) -> Result<(), AsnRenderError> {
+        todo!()
     }
 }
 
