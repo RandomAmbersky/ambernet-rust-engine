@@ -136,7 +136,9 @@ impl AsnWgpuNodeView2d {
         render_pass.set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
         render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
-    fn update_me(&mut self, gfx: &mut AsnWgpuWinApi) {}
+    fn update_me(&mut self, gfx: &mut AsnWgpuWinApi) {
+        self.is_need_update = false;
+    }
 }
 
 impl TNodeBase for AsnWgpuNodeView2d {
@@ -188,6 +190,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             bytes: vec![0; (size.width * size.height * 4) as usize],
         };
         self.view = view;
+        self.is_need_update = true;
         Ok(())
     }
 
@@ -197,6 +200,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         c: CellSize,
     ) -> Result<(), AsnRenderError> {
         self.view.set_point(pos, c).unwrap();
+        self.is_need_update = true;
         Ok(())
     }
 }
