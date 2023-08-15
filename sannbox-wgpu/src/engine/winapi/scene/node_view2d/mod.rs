@@ -139,14 +139,16 @@ impl AsnWgpuNodeView2d {
 }
 
 impl TNodeBase for AsnWgpuNodeView2d {
+    type WinApi = AsnWgpuWinApi;
     type FrameContext = AsnWgpuFrameContext;
     fn draw(&mut self, fcx: &mut Self::FrameContext) {
         self.draw_me(fcx);
     }
+
+    fn update(&mut self, gfx: &mut Self::WinApi) {}
 }
 
 impl TNodeView2d for AsnWgpuNodeView2d {
-    type WinApi = AsnWgpuWinApi;
     type CellType = defines::CellSize;
     type SizeDimension = defines::SizeDimension;
 

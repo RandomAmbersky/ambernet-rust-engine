@@ -37,7 +37,7 @@ impl Handler {
         e.get_winapi().end_frame(fcx).unwrap();
     }
     fn update(&mut self, e: &mut Engine) {
-        // self.view.set_cell()
+        self.view.update(e.get_winapi())
     }
 }
 

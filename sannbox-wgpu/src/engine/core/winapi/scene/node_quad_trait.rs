@@ -4,7 +4,6 @@ use crate::engine::core::winapi::scene::node_base_trait::TNodeBase;
 use crate::engine::core::winapi::AsnTextureFormat;
 
 pub trait TNodeQuad: TNodeBase {
-    type WinApi: TAsnWinapi;
     fn set_texture(
         &mut self,
         gfx: &mut Self::WinApi,
