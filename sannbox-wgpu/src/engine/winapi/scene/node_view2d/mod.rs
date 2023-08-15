@@ -140,8 +140,8 @@ impl AsnWgpuNodeView2d {
 
 impl TNodeBase for AsnWgpuNodeView2d {
     type FrameContext = AsnWgpuFrameContext;
-    fn draw(&mut self, gfx: &mut Self::FrameContext) {
-        self.draw_me(gfx);
+    fn draw(&mut self, fcx: &mut Self::FrameContext) {
+        self.draw_me(fcx);
     }
 }
 
