@@ -23,8 +23,8 @@ impl Handler {
         view.set_tile_texture(w, TEXTURE_TIILES_SOURCE, AsnTextureFormat::Rgba8)
             .unwrap();
         view.set_view_size(Size2D {
-            width: 10,
-            height: 10,
+            width: 1,
+            height: 1,
         })
         .unwrap();
         Handler { quad, view }
@@ -37,7 +37,7 @@ impl Handler {
         e.get_winapi().end_frame(fcx).unwrap();
     }
     fn update(&mut self, e: &mut Engine) {
-        self.view.set_cell(&Pos2D { x: 5, y: 5 }, 10).unwrap();
+        self.view.set_cell(&Pos2D { x: 0, y: 0 }, 10).unwrap();
         self.view.update(e.get_winapi())
     }
 }
