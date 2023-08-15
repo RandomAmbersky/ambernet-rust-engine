@@ -18,15 +18,15 @@ impl Handler {
         let w = e.get_winapi();
         let mut quad = w.new_quad();
         let mut view = w.new_view2d();
-        quad.set_texture(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8)
-            .unwrap();
+        // quad.set_texture(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8)
+        //     .unwrap();
         view.set_tile_texture(w, TEXTURE_TIILES_SOURCE, AsnTextureFormat::Rgba8)
             .unwrap();
-        view.set_view_size(Size2D {
-            width: 10,
-            height: 10,
-        })
-        .unwrap();
+        // view.set_view_size(Size2D {
+        //     width: 2,
+        //     height: 2,
+        // })
+        // .unwrap();
         Handler { quad, view }
     }
     fn draw(&mut self, e: &mut Engine) {
@@ -37,7 +37,7 @@ impl Handler {
         e.get_winapi().end_frame(fcx).unwrap();
     }
     fn update(&mut self, e: &mut Engine) {
-        println!("Handler update");
+        // self.view.set_cell()
     }
 }
 

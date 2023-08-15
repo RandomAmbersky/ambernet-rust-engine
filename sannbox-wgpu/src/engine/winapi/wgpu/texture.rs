@@ -1,8 +1,8 @@
 use crate::engine::core::errors::AsnRenderError;
 use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::winapi::defines::BytesArray;
 use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::winapi::utils::ToWgpuFormat;
-use crate::engine::winapi::wgpu::defines::BytesArray;
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use image::flat::View;
 use image::{DynamicImage, GenericImageView};

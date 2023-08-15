@@ -6,6 +6,7 @@ use crate::engine::TAsnEngine;
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopBuilder, EventLoopProxy};
 
 mod asn_window;
+pub mod defines;
 mod event_converter;
 mod resources;
 mod scene;

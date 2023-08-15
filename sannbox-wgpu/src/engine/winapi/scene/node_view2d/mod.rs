@@ -1,16 +1,17 @@
 mod resource;
 
 use crate::engine::core::errors::AsnRenderError;
-use crate::engine::core::math::Pos2D;
+use crate::engine::core::math::{Pos2D, Size2D};
 use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::{AsnTextureFormat, Mesh};
+use crate::engine::winapi::defines;
+use crate::engine::winapi::defines::{BytesArray, CellSize, SizeDimension};
 use crate::engine::winapi::scene::node_view2d::resource::{
     Vertex, INDICES, SHADER_SOURCE, VERTICES,
 };
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::bind_groups::{BindGroupEntryBuilder, BindGroupLayoutBuilder};
-use crate::engine::winapi::wgpu::defines::{BytesArray, CellSize, Position, Size2d, SizeDimension};
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
 use wgpu::{BindGroup, BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat};
@@ -93,7 +94,7 @@ impl AsnWgpuNodeView2d {
         let view_size_h: u32 = 1;
 
         let view = BytesArray {
-            size: Size2d {
+            size: Size2D {
                 width: view_size_w as SizeDimension,
                 height: view_size_h as SizeDimension,
             },
@@ -146,9 +147,8 @@ impl TNodeBase for AsnWgpuNodeView2d {
 
 impl TNodeView2d for AsnWgpuNodeView2d {
     type WinApi = AsnWgpuWinApi;
-    type Size2d = Size2d;
-    type CellSize = CellSize;
-    type Position = Position;
+    type CellType = defines::CellSize;
+    type SizeDimension = defines::SizeDimension;
 
     fn set_tile_texture(
         &mut self,
@@ -174,7 +174,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         Ok(())
     }
 
-    fn set_view_size(&mut self, size: Self::Size2d) -> Result<(), AsnRenderError> {
+    fn set_view_size(&mut self, size: Size2D<Self::SizeDimension>) -> Result<(), AsnRenderError> {
         let view = BytesArray {
             size,
             bytes: vec![0; (size.width * size.height * 4) as usize],
@@ -183,7 +183,11 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         Ok(())
     }
 
-    fn set_cell(pos: Position, c: CellSize) -> Result<(), AsnRenderError> {
+    fn set_cell(
+        &mut self,
+        pos: Pos2D<Self::SizeDimension>,
+        c: CellSize,
+    ) -> Result<(), AsnRenderError> {
         todo!()
     }
 }

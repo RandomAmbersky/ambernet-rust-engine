@@ -17,7 +17,6 @@ use wgpu::{
 use winit::event_loop::{EventLoop, EventLoopProxy};
 
 pub mod bind_groups;
-pub mod defines;
 pub mod texture;
 
 pub struct AsnWgpuWinApi {
