@@ -1,4 +1,5 @@
-use crate::engine::core::traits::{TAsnHandler, TAsnWinapi};
+use crate::engine::core::traits::TAsnHandler;
+use crate::engine::core::winapi::TAsnWinapi;
 use crate::engine::winapi::event_converter::{convert_event, CustomEvent};
 use crate::engine::winapi::scene::{AsnWgpuNodeQuad, AsnWgpuNodeView2d};
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;

@@ -1,4 +1,4 @@
-use crate::engine::core::traits::TAsnWinapi;
+use crate::engine::core::winapi::TAsnWinapi;
 
 pub trait TNodeBase {
     type FrameContext;

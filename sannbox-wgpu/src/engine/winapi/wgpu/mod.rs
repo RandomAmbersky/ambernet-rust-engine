@@ -3,8 +3,7 @@ use crate::engine::core::math::Size2D;
 use std::iter;
 
 use crate::engine::core::events::AsnEvent;
-use crate::engine::core::traits::{AsnWinapiConfig, TAsnWinapi};
-use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::core::winapi::{AsnTextureFormat, AsnWinapiConfig, TAsnWinapi};
 use crate::engine::winapi::asn_window::AsnWindow;
 use crate::engine::winapi::event_converter::{convert_asn_event, CustomEvent};
 use crate::engine::winapi::scene::{AsnWgpuNodeQuad, AsnWgpuNodeView2d};

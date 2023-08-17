@@ -2,9 +2,9 @@ mod resources;
 
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
 use crate::engine::core::math::{Pos2D, Size2D};
-use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler, TAsnWinapi};
+use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler};
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
-use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::core::winapi::{AsnTextureFormat, TAsnWinapi};
 use crate::engine::{Engine, NodeQuad, NodeView2d, TAsnEngine};
 use crate::handler::resources::{TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 
@@ -33,8 +33,8 @@ impl Handler {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
         // self.quad.draw(&mut fcx);
         self.view.draw(&mut fcx);
-        e.get_winapi().send_event(&AsnEvent::UpdateEvent);
         e.get_winapi().end_frame(fcx).unwrap();
+        e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
     fn update(&mut self, e: &mut Engine) {
         self.view.set_cell(&Pos2D { x: 0, y: 0 }, 10).unwrap();

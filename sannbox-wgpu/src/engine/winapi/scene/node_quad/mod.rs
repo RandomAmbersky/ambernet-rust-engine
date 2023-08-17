@@ -1,9 +1,9 @@
 mod resource;
 
 use crate::engine::core::errors::AsnRenderError;
-use crate::engine::core::traits::TAsnWinapi;
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad};
 use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::core::winapi::TAsnWinapi;
 use crate::engine::winapi::scene::node_quad::resource::{Vertex, INDICES, SHADER_SOURCE, VERTICES};
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::texture::AsnTexture;
@@ -191,8 +191,8 @@ impl AsnWgpuNodeQuad {
 }
 
 impl TNodeBase for AsnWgpuNodeQuad {
-    type WinApi = AsnWgpuWinApi;
     type FrameContext = AsnWgpuFrameContext;
+    type WinApi = AsnWgpuWinApi;
     fn draw(&mut self, gfx: &mut Self::FrameContext) {
         self.draw_me(gfx);
     }

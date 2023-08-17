@@ -1,6 +1,6 @@
-use super::super::errors::AsnError;
-use super::super::math::Size2D;
+use crate::engine::core::errors::AsnError;
 use crate::engine::core::events::AsnEvent;
+use crate::engine::core::math::Size2D;
 use crate::engine::core::winapi::AsnTextureFormat;
 
 #[derive(Default)]
