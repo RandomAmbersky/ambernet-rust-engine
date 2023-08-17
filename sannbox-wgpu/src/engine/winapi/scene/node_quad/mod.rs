@@ -8,6 +8,8 @@ use crate::engine::winapi::scene::node_quad::resource::{Vertex, INDICES, SHADER_
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
+use std::ops::Deref;
+use std::sync::Arc;
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroup, RenderPipeline, ShaderModule, TextureFormat};
 
@@ -18,15 +20,15 @@ pub struct AsnWgpuNodeQuad {
     num_indices: u32,
     diffuse_bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
-    texture: AsnTexture,
+    texture: Arc<AsnTexture>,
 }
 
 fn create_node_quad_set(
     gfx: &mut AsnWgpuWinApi,
-    texture: AsnTexture,
+    texture: &AsnTexture,
     texture_format: TextureFormat,
     shader: &ShaderModule,
-) -> (AsnTexture, RenderPipeline, BindGroup) {
+) -> (RenderPipeline, BindGroup) {
     let texture_bind_group_layout =
         gfx.get_device()
             .create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
@@ -119,7 +121,7 @@ fn create_node_quad_set(
                 multiview: None,
             });
 
-    (texture, render_pipeline, diffuse_bind_group)
+    (render_pipeline, diffuse_bind_group)
 }
 
 impl AsnWgpuNodeQuad {
@@ -151,12 +153,14 @@ impl AsnWgpuNodeQuad {
             });
         let num_indices = INDICES.len() as u32;
 
-        let (texture, render_pipeline, diffuse_bind_group) =
-            create_node_quad_set(gfx, AsnTexture::new(gfx), texture_format, &shader);
+        let texture = AsnTexture::new(gfx);
+
+        let (render_pipeline, diffuse_bind_group) =
+            create_node_quad_set(gfx, &texture, texture_format, &shader);
 
         Self {
             shader,
-            texture,
+            texture: Arc::new(texture),
             render_pipeline,
             vertex_buffer,
             index_buffer,
@@ -208,15 +212,13 @@ impl TNodeQuad for AsnWgpuNodeQuad {
     fn set_texture(
         &mut self,
         gfx: &mut Self::WinApi,
-        bytes: &[u8],
-        f: AsnTextureFormat,
+        texture: Arc<Self::AsnTexture>,
     ) -> Result<(), AsnRenderError> {
         println!("AsnWgpuNodeQuad set_texture");
-        let texture = AsnTexture::from_raw_image(gfx, bytes, f)?;
 
-        let texture_format = gfx.get_config().texture_format.to_wgpu_format();
-        let (texture, render_pipeline, diffuse_bind_group) =
-            create_node_quad_set(gfx, texture, texture_format, &self.shader);
+        let texture_format = texture.texture_format.to_wgpu_format(); //gfx.get_config().texture_format.to_wgpu_format();
+        let (render_pipeline, diffuse_bind_group) =
+            create_node_quad_set(gfx, texture.deref(), texture_format, &self.shader);
 
         self.texture = texture;
         self.render_pipeline = render_pipeline;

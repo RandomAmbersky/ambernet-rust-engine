@@ -145,8 +145,9 @@ impl AsnWgpuNodeView2d {
 }
 
 impl TNodeBase for AsnWgpuNodeView2d {
-    type WinApi = AsnWgpuWinApi;
     type FrameContext = AsnWgpuFrameContext;
+    type WinApi = AsnWgpuWinApi;
+    type AsnTexture = AsnTexture;
     fn draw(&mut self, fcx: &mut Self::FrameContext) {
         self.draw_me(fcx);
     }
