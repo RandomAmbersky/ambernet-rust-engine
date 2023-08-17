@@ -1,6 +1,7 @@
 use crate::engine::core::errors::AsnError;
 use crate::engine::core::events::AsnEvent;
 use crate::engine::core::math::Size2D;
+use crate::engine::core::winapi::scene::{TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::AsnTextureFormat;
 
 #[derive(Default)]
@@ -10,8 +11,8 @@ pub struct AsnWinapiConfig {
 }
 
 pub trait TAsnWinapi {
-    type NodeQuad;
-    type NodeView2d;
+    type NodeQuad: TNodeQuad;
+    type NodeView2d: TNodeView2d;
 
     type FrameContext;
 
