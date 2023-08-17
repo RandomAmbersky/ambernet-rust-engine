@@ -1,5 +1,5 @@
 use crate::engine::core::errors::AsnRenderError;
-use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::core::winapi::{AsnTextureFormat, TTexture};
 use crate::engine::winapi::defines::BytesArray;
 use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::winapi::utils::ToWgpuFormat;
@@ -66,6 +66,8 @@ fn create_texture_set(
 
     (texture, view, sampler)
 }
+
+impl TTexture for AsnTexture {}
 
 impl AsnTexture {
     pub fn new(gfx: &AsnWgpuWinApi) -> Self {

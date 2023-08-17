@@ -193,6 +193,8 @@ impl AsnWgpuNodeQuad {
 impl TNodeBase for AsnWgpuNodeQuad {
     type FrameContext = AsnWgpuFrameContext;
     type WinApi = AsnWgpuWinApi;
+    type AsnTexture = AsnTexture;
+
     fn draw(&mut self, gfx: &mut Self::FrameContext) {
         self.draw_me(gfx);
     }
