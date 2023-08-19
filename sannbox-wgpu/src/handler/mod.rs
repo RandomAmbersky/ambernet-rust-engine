@@ -49,8 +49,8 @@ impl Handler {
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
     fn update(&mut self, e: &mut Engine) {
-        // self.view.set_cell(&Pos2D { x: 0, y: 0 }, 10).unwrap();
-        // self.view.update(e.get_winapi())
+        self.view.set_cell(&Pos2D { x: 0, y: 0 }, 10).unwrap();
+        self.view.update(e.get_winapi())
     }
 }
 
