@@ -7,6 +7,7 @@ use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use image::flat::View;
 use image::{DynamicImage, GenericImageView};
 use wgpu::{Sampler, Texture, TextureFormat, TextureView};
+use crate::engine::core::math::Size2D;
 
 pub struct AsnTexture {
     pub texture_format: AsnTextureFormat,
@@ -77,6 +78,26 @@ impl TTexture for AsnTexture {
             Err(_) => Err(AsnRenderError::CustomError("image import faut".into())),
             Ok(t) => Self::from_image(gfx, &t, f),
         }
+    }
+
+    fn from_raw(gfx: &Self::WinApi, bytes: &[u8], size: Size2D<u32>, f: AsnTextureFormat) -> Result<Self::AsnTexture, AsnRenderError> {
+        let texture_size = wgpu::Extent3d {
+            width: size.width,
+            height: size.height,
+            depth_or_array_layers: 1,
+        };
+        let (texture, view, sampler) = create_texture_set(
+            gfx,
+            &bytes,
+            texture_size,
+            f.to_wgpu_format(),
+        );
+        Ok(Self {
+            texture_format: f,
+            texture,
+            view,
+            sampler,
+        })
     }
 }
 
