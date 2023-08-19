@@ -1,8 +1,9 @@
 mod resource;
 
 use crate::engine::core::errors::AsnRenderError;
+use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad};
-use crate::engine::core::winapi::AsnTextureFormat;
+use crate::engine::core::winapi::{AsnTextureFormat, TTexture};
 use crate::engine::core::winapi::TAsnWinapi;
 use crate::engine::winapi::scene::node_quad::resource::{Vertex, INDICES, SHADER_SOURCE, VERTICES};
 use crate::engine::winapi::utils::ToWgpuFormat;
@@ -12,6 +13,7 @@ use std::ops::Deref;
 use std::sync::Arc;
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroup, RenderPipeline, ShaderModule, TextureFormat};
+use winit::event::VirtualKeyCode::O;
 
 pub struct AsnWgpuNodeQuad {
     shader: ShaderModule,
@@ -153,14 +155,15 @@ impl AsnWgpuNodeQuad {
             });
         let num_indices = INDICES.len() as u32;
 
-        let texture = AsnTexture::new(gfx);
+        let texture = AsnTexture::from_raw(gfx, &ONE_BLUE_PIXEL.bytes, ONE_BLUE_PIXEL.size, ONE_BLUE_PIXEL.texture_format).unwrap();
+        let arc_texture = Arc::new(texture);
 
         let (render_pipeline, diffuse_bind_group) =
             create_node_quad_set(gfx, &texture, texture_format, &shader);
 
         Self {
             shader,
-            texture: Arc::new(texture),
+            texture: arc_texture,
             render_pipeline,
             vertex_buffer,
             index_buffer,

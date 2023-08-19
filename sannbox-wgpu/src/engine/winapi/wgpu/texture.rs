@@ -102,44 +102,33 @@ impl TTexture for AsnTexture {
 }
 
 impl AsnTexture {
-    pub fn new(gfx: &AsnWgpuWinApi) -> Self {
-        let base_texture_data = ONE_BLUE_PIXEL;
+    // pub fn new(gfx: &AsnWgpuWinApi) -> Self {
+    //     let base_texture_data = ONE_BLUE_PIXEL;
+    //
+    //     let texture_format = base_texture_data.texture_format;
+    //     let bpp = texture_format.bytes_per_pixel();
+    //
+    //     let dimensions: (u32, u32) = (base_texture_data.size.width, base_texture_data.size.height);
+    //     let size = wgpu::Extent3d {
+    //         width: dimensions.0,
+    //         height: dimensions.1,
+    //         depth_or_array_layers: 1,
+    //     };
+    //
+    //     let (texture, view, sampler) = create_texture_set(
+    //         gfx,
+    //         &base_texture_data.bytes,
+    //         size,
+    //         texture_format.to_wgpu_format(),
+    //     );
+    //     Self {
+    //         texture_format,
+    //         texture,
+    //         view,
+    //         sampler,
+    //     }
+    // }
 
-        let texture_format = base_texture_data.texture_format;
-        let bpp = texture_format.bytes_per_pixel();
-
-        let dimensions: (u32, u32) = (base_texture_data.size.width, base_texture_data.size.height);
-        let size = wgpu::Extent3d {
-            width: dimensions.0,
-            height: dimensions.1,
-            depth_or_array_layers: 1,
-        };
-
-        let (texture, view, sampler) = create_texture_set(
-            gfx,
-            &base_texture_data.bytes,
-            size,
-            texture_format.to_wgpu_format(),
-        );
-        Self {
-            texture_format,
-            texture,
-            view,
-            sampler,
-        }
-    }
-
-    pub fn from_raw_image(
-        gfx: &AsnWgpuWinApi,
-        bytes: &[u8],
-        f: AsnTextureFormat,
-    ) -> Result<Self, AsnRenderError> {
-        let img = image::load_from_memory(bytes);
-        match img {
-            Err(_) => Err(AsnRenderError::CustomError("image import faut".into())),
-            Ok(t) => Self::from_image(gfx, &t, f),
-        }
-    }
     fn from_image(
         gfx: &AsnWgpuWinApi,
         img: &DynamicImage,
