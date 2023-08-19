@@ -216,7 +216,7 @@ impl TNodeQuad for AsnWgpuNodeQuad {
     ) -> Result<(), AsnRenderError> {
         println!("AsnWgpuNodeQuad set_texture");
 
-        let texture_format = texture.texture_format.to_wgpu_format(); //gfx.get_config().texture_format.to_wgpu_format();
+        let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         let (render_pipeline, diffuse_bind_group) =
             create_node_quad_set(gfx, texture.deref(), texture_format, &self.shader);
 

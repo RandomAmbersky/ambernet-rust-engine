@@ -11,6 +11,7 @@ use crate::handler::resources::{TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 
 pub struct Handler {
     quad: NodeQuad,
+    quad2: NodeQuad,
     // view: NodeView2d,
 }
 
@@ -18,9 +19,14 @@ impl Handler {
     pub fn new(e: &mut Engine) -> Self {
         let w = e.get_winapi();
         let mut quad = w.new_quad();
+        let mut quad2 = w.new_quad();
 
         let texture = AsnTexture::from_memory(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8).unwrap();
-        quad.set_texture(w, Arc::new(texture)).unwrap();
+        let arc_texture = Arc::new(texture);
+
+        quad.set_texture(w, Arc::clone(&arc_texture)).unwrap();
+        quad2.set_texture(w, Arc::clone(&arc_texture)).unwrap();
+
         // let mut view = w.new_view2d();
         // quad.set_texture(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8)
         //     .unwrap();
@@ -31,11 +37,12 @@ impl Handler {
         //     height: 1,
         // })
         // .unwrap();
-        Handler { quad }
+        Handler { quad, quad2 }
     }
     fn draw(&mut self, e: &mut Engine) {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
         self.quad.draw(&mut fcx);
+        self.quad2.draw(&mut fcx);
         // self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
