@@ -67,7 +67,18 @@ fn create_texture_set(
     (texture, view, sampler)
 }
 
-impl TTexture for AsnTexture {}
+impl TTexture for AsnTexture {
+    type WinApi = AsnWgpuWinApi;
+    type AsnTexture = AsnTexture;
+
+    fn from_memory(gfx: &Self::WinApi, bytes: &[u8], f: AsnTextureFormat) -> Result<Self, AsnRenderError> {
+        let img = image::load_from_memory(bytes);
+        match img {
+            Err(_) => Err(AsnRenderError::CustomError("image import faut".into())),
+            Ok(t) => Self::from_image(gfx, &t, f),
+        }
+    }
+}
 
 impl AsnTexture {
     pub fn new(gfx: &AsnWgpuWinApi) -> Self {

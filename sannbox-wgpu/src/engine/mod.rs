@@ -7,6 +7,7 @@ use crate::engine::winapi::{RunnerPreset, WinApi};
 
 pub use crate::engine::winapi::NodeQuad;
 pub use crate::engine::winapi::NodeView2d;
+pub use crate::engine::winapi::AsnTexture;
 
 pub struct Engine {
     is_need_exit: bool,
