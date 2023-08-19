@@ -12,7 +12,7 @@ use crate::handler::resources::{TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 pub struct Handler {
     quad: NodeQuad,
     quad2: NodeQuad,
-    // view: NodeView2d,
+    view: NodeView2d
 }
 
 impl Handler {
@@ -27,23 +27,24 @@ impl Handler {
         quad.set_texture(w, Arc::clone(&arc_texture)).unwrap();
         quad2.set_texture(w, Arc::clone(&arc_texture)).unwrap();
 
-        // let mut view = w.new_view2d();
-        // quad.set_texture(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8)
-        //     .unwrap();
-        // view.set_tile_texture(w, TEXTURE_TIILES_SOURCE, AsnTextureFormat::Rgba8)
-        //     .unwrap();
-        // view.set_view_size(Size2D {
-        //     width: 1,
-        //     height: 1,
-        // })
-        // .unwrap();
-        Handler { quad, quad2 }
+        let mut view = w.new_view2d();
+        let tile_texture = AsnTexture::from_memory(w, TEXTURE_TIILES_SOURCE, AsnTextureFormat::Rgba8).unwrap();
+        let arc_tile_texture = Arc::new(tile_texture);
+
+        view.set_tile_texture(w, Arc::clone(&arc_tile_texture)).unwrap();
+        view.set_view_size(Size2D {
+            width: 1,
+            height: 1,
+        })
+        .unwrap();
+
+        Handler { quad, quad2, view  }
     }
     fn draw(&mut self, e: &mut Engine) {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
-        self.quad.draw(&mut fcx);
-        self.quad2.draw(&mut fcx);
-        // self.view.draw(&mut fcx);
+        // self.quad.draw(&mut fcx);
+        // self.quad2.draw(&mut fcx);
+        self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
