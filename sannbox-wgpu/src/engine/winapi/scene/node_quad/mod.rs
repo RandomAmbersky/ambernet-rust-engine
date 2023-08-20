@@ -217,7 +217,7 @@ impl TNodeQuad for AsnWgpuNodeQuad {
         gfx: &mut Self::WinApi,
         texture: &Self::AsnTexture,
     ) -> Result<(), AsnRenderError> {
-        println!("AsnWgpuNodeQuad set_texture");
+        // println!("AsnWgpuNodeQuad set_texture");
 
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         let (render_pipeline, diffuse_bind_group) =

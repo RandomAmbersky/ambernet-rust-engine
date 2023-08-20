@@ -3,6 +3,7 @@ use crate::engine::core::events::AsnWindowEvent::{CloseRequested, RedrawRequeste
 use crate::engine::core::math::Size2D;
 use winit::event::{Event, WindowEvent};
 use winit::window::WindowId;
+use asn_logger::info;
 
 #[derive(Debug, Clone, Copy)]
 pub enum CustomEvent {
@@ -17,9 +18,10 @@ pub fn convert_asn_event(e: &AsnEvent) -> CustomEvent {
 }
 
 pub fn convert_event(e: &Event<CustomEvent>) -> Option<AsnEvent> {
-    // info!("{:?}", e);
+    // println!("{:?}", e);
     match e {
         Event::RedrawRequested(_window_id) => Some(AsnEvent::WindowEvent(RedrawRequested)),
+        Event::MainEventsCleared => Some(AsnEvent::WindowEvent(RedrawRequested)),
         Event::WindowEvent {
             ref event,
             window_id,

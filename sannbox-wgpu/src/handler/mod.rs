@@ -1,5 +1,7 @@
 mod resources;
 
+use std::borrow::BorrowMut;
+use std::os::unix::raw::blkcnt_t;
 use std::sync::{Arc, Mutex};
 use image::{GenericImageView};
 use rand::prelude::SmallRng;
@@ -19,7 +21,8 @@ pub struct Handler {
     raw_texture: Array2D<u32, u8>,
     quad: NodeQuad,
     quad2: NodeQuad,
-    view: NodeView2d
+    view: NodeView2d,
+    rng: SmallRng
 }
 
 impl Handler {
@@ -46,10 +49,11 @@ impl Handler {
         // })
         // .unwrap();
 
-        Handler { raw_texture, arc_texture: Arc::new(Mutex::new(texture)), quad, quad2, view  }
+        let mut rng = SmallRng::seed_from_u64(RNG_SEED);
+        Handler { rng, raw_texture, arc_texture: Arc::new(Mutex::new(texture)), quad, quad2, view  }
     }
     fn draw(&mut self, e: &mut Engine) {
-        println!("draw");
+        // println!("draw");
 
         let mut fcx = e.get_winapi().begin_frame().unwrap();
         self.quad.draw(&mut fcx);
@@ -59,12 +63,15 @@ impl Handler {
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
     fn update(&mut self, e: &mut Engine) {
-        self.raw_texture.bytes[10] = 5;
+        // let mut rng = SmallRng::seed_from_u64(RNG_SEED);
 
-        println!("update");
+        let mut rng = self.rng.clone();
 
-        let rng = SmallRng::seed_from_u64(RNG_SEED);
-        randomize_array(rng, &mut self.raw_texture);
+        for _ in 0..10000 {
+            rng = randomize_array(rng, &mut self.raw_texture);
+        }
+
+        self.rng = rng;
 
         let mut texture = self.arc_texture.lock().unwrap();
         texture.update_from_raw(e.get_winapi(), &self.raw_texture.bytes).unwrap();
@@ -77,7 +84,7 @@ impl Handler {
 
 impl TAsnHandler<Engine> for Handler {
     fn handle(&mut self, evt: &AsnEvent, e: &mut Engine) {
-        println!("handle {:?} event", &evt);
+        // println!("handle {:?} event", &evt);
         match evt {
             AsnEvent::Empty => {}
             AsnEvent::UpdateEvent => {
@@ -116,14 +123,23 @@ fn load_texture(bytes: &[u8]) -> Array2D<u32, u8> {
 }
 
 fn randomize_array(mut rng: SmallRng, a: &mut Array2D<u32, u8>) -> SmallRng {
-    for x in 0..a.size.width {
-        for y in 0..a.size.height {
-            let index = ((y * a.size.width + x) * 4) as usize;
-            a.bytes[index] = rng.gen_range(0..128);
-            a.bytes[index+1] = rng.gen_range(0..128);
-            a.bytes[index+2] = rng.gen_range(0..128);
-            a.bytes[index+3] = rng.gen_range(0..128);
-        }
-    }
+    let x = rng.gen_range(0..a.size.width);
+    let y = rng.gen_range(0..a.size.height);
+
+    let byte = rng.gen_range(0..3);
+
+    let index = y * a.size.width * 4 + x * 4 + byte;
+
+    let cell: u8 = rng.gen_range(0..255);
+    a.bytes[index as usize] = cell;
+    // for x in 0..a.size.width {
+    //     for y in 0..a.size.height {
+    //         let index = ((y * a.size.width + x) * 4) as usize;
+    //         a.bytes[index] = rng.gen_range(0..128);
+    //         a.bytes[index+1] = rng.gen_range(0..128);
+    //         a.bytes[index+2] = rng.gen_range(0..128);
+    //         a.bytes[index+3] = rng.gen_range(0..128);
+    //     }
+    // }
     rng
 }
