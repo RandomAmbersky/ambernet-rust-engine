@@ -22,7 +22,7 @@ pub struct AsnWgpuNodeQuad {
     num_indices: u32,
     diffuse_bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
-    texture: Arc<AsnTexture>,
+    // texture: Arc<AsnTexture>,
 }
 
 fn create_node_quad_set(
@@ -163,7 +163,7 @@ impl AsnWgpuNodeQuad {
 
         Self {
             shader,
-            texture: arc_texture,
+            // texture: arc_texture,
             render_pipeline,
             vertex_buffer,
             index_buffer,
@@ -215,7 +215,7 @@ impl TNodeQuad for AsnWgpuNodeQuad {
     fn set_texture(
         &mut self,
         gfx: &mut Self::WinApi,
-        texture: Arc<Self::AsnTexture>,
+        texture: &Self::AsnTexture,
     ) -> Result<(), AsnRenderError> {
         println!("AsnWgpuNodeQuad set_texture");
 
@@ -223,7 +223,6 @@ impl TNodeQuad for AsnWgpuNodeQuad {
         let (render_pipeline, diffuse_bind_group) =
             create_node_quad_set(gfx, &texture, texture_format, &self.shader);
 
-        self.texture = texture;
         self.render_pipeline = render_pipeline;
         self.diffuse_bind_group = diffuse_bind_group;
         Ok(())

@@ -6,6 +6,6 @@ pub trait TNodeQuad: TNodeBase {
     fn set_texture(
         &mut self,
         gfx: &mut Self::WinApi,
-        texture: Arc<Self::AsnTexture>,
+        texture: &Self::AsnTexture,
     ) -> Result<(), AsnRenderError>;
 }
