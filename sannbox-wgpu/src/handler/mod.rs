@@ -58,7 +58,7 @@ impl Handler {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
         self.quad.draw(&mut fcx);
         // self.quad2.draw(&mut fcx);
-        self.view.draw(&mut fcx);
+        // self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
