@@ -33,8 +33,8 @@ impl Handler {
 
         view.set_tile_texture(w, Arc::clone(&arc_tile_texture)).unwrap();
         view.set_view_size(Size2D {
-            width: 1,
-            height: 1,
+            width: 10,
+            height: 10,
         })
         .unwrap();
 
@@ -49,7 +49,7 @@ impl Handler {
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
     fn update(&mut self, e: &mut Engine) {
-        self.view.set_cell(&Pos2D { x: 0, y: 0 }, 10).unwrap();
+        // self.view.set_cell(&Pos2D { x: 0, y: 0 }, 10).unwrap();
         self.view.update(e.get_winapi())
     }
 }

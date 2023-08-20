@@ -12,6 +12,7 @@ path = "src/main.rs"
 
 [dependencies]
 asn-logger = { path = "../asn-logger" }
+rand = { version = "0.8.5", default-features = false, features = ["small_rng"] }
 bytemuck = { version = "1.13.1", features = [ "derive" ] }
 wgpu = { version = "0.17.0" }
 winit = "0.28.6"
