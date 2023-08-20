@@ -25,7 +25,7 @@ impl Handler {
         let arc_texture = Arc::new(texture);
 
         quad.set_texture(w, Arc::clone(&arc_texture)).unwrap();
-        // quad2.set_texture(w, Arc::clone(&arc_texture)).unwrap();
+        quad2.set_texture(w, Arc::clone(&arc_texture)).unwrap();
 
         let mut view = w.new_view2d();
         let tile_texture = AsnTexture::from_memory(w, TEXTURE_TIILES_SOURCE, AsnTextureFormat::Rgba8).unwrap();
@@ -42,9 +42,9 @@ impl Handler {
     }
     fn draw(&mut self, e: &mut Engine) {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
-        self.quad.draw(&mut fcx);
+        // self.quad.draw(&mut fcx);
         // self.quad2.draw(&mut fcx);
-        // self.view.draw(&mut fcx);
+        self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }

@@ -125,48 +125,8 @@ impl TTexture for AsnTexture {
         })
     }
 
-    fn update_from_raw(&mut self, gfx: &Self::WinApi, bytes: &[u8], size: &Size2D<u32>) -> Result<(), AsnRenderError> {
-        let texture_size = wgpu::Extent3d {
-            width: size.width,
-            height: size.height,
-            depth_or_array_layers: 1,
-        };
-
-        let (texture, view, sampler) = create_texture_set(
-            gfx,
-            &bytes,
-            texture_size,
-            self.texture_format.to_wgpu_format(),
-        );
-
-        self.texture = texture;
-        self.view = view;
-        self.sampler = sampler;
+    fn update_from_raw(&mut self, gfx: &Self::WinApi, bytes: &[u8]) -> Result<(), AsnRenderError> {
+        write_texure(&gfx.queue, &self.texture, bytes, &self.texture.size());
         Ok(())
-    }
-}
-
-impl AsnTexture {
-    fn from_image(
-        gfx: &AsnWgpuWinApi,
-        img: &DynamicImage,
-        f: AsnTextureFormat,
-    ) -> Result<Self, AsnRenderError> {
-        let rgba = img.to_rgba8();
-        let dimensions = img.dimensions();
-
-        let size = wgpu::Extent3d {
-            width: dimensions.0,
-            height: dimensions.1,
-            depth_or_array_layers: 1,
-        };
-
-        let (texture, view, sampler) = create_texture_set(gfx, &rgba, size, f.to_wgpu_format());
-        Ok(Self {
-            texture_format: f,
-            texture,
-            view,
-            sampler,
-        })
     }
 }

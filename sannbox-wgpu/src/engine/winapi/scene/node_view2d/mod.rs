@@ -143,7 +143,7 @@ impl AsnWgpuNodeView2d {
     fn update_me(&mut self, gfx: &mut AsnWgpuWinApi) {
         self.is_need_update = false;
         self.view_texture
-            .update_from_raw(gfx, &self.view.bytes, &self.view.size)
+            .update_from_raw(gfx, &self.view.bytes)
             .expect("TODO: panic message");
     }
 }
