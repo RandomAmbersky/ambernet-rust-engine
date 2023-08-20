@@ -42,12 +42,12 @@ impl Handler {
         let mut view = w.new_view2d();
         let tile_texture = AsnTexture::from_memory(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8).unwrap();
 
-        // view.set_tile_texture(w, Arc::clone(&arc_tile_texture)).unwrap();
-        // view.set_view_size(&Size2D {
-        //     width: 100,
-        //     height: 100,
-        // })
-        // .unwrap();
+        view.set_tile_texture(w, Arc::new(tile_texture)).unwrap();
+        view.set_view_size(&Size2D {
+            width: 100,
+            height: 100,
+        })
+        .unwrap();
 
         let mut rng = SmallRng::seed_from_u64(RNG_SEED);
         Handler { rng, raw_texture, arc_texture: Arc::new(Mutex::new(texture)), quad, quad2, view  }
@@ -58,7 +58,7 @@ impl Handler {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
         self.quad.draw(&mut fcx);
         // self.quad2.draw(&mut fcx);
-        // self.view.draw(&mut fcx);
+        self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
@@ -73,9 +73,6 @@ impl Handler {
 
         let mut texture = self.arc_texture.lock().unwrap();
         texture.update_from_raw(e.get_winapi(), &self.raw_texture.bytes).unwrap();
-        self.quad.set_texture(e.get_winapi(), &texture);
-        // texture.update_from_raw();
-        // self.view.set_cell(&Pos2D { x: 0, y: 0 }, 10).unwrap();
         self.view.update(e.get_winapi())
     }
 }
