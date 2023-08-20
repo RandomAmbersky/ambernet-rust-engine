@@ -28,13 +28,13 @@ impl Handler {
         quad2.set_texture(w, Arc::clone(&arc_texture)).unwrap();
 
         let mut view = w.new_view2d();
-        let tile_texture = AsnTexture::from_memory(w, TEXTURE_TIILES_SOURCE, AsnTextureFormat::Rgba8).unwrap();
+        let tile_texture = AsnTexture::from_memory(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8).unwrap();
         let arc_tile_texture = Arc::new(tile_texture);
 
         view.set_tile_texture(w, Arc::clone(&arc_tile_texture)).unwrap();
-        view.set_view_size(Size2D {
-            width: 10,
-            height: 10,
+        view.set_view_size(&Size2D {
+            width: 100,
+            height: 100,
         })
         .unwrap();
 

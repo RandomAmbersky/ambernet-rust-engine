@@ -11,7 +11,7 @@ pub trait TNodeView2d: TNodeBase {
         gfx: &mut Self::WinApi,
         texture: Arc<Self::AsnTexture>,
     ) -> Result<(), AsnRenderError>;
-    fn set_view_size(&mut self, size: Size2D<Self::SizeDimension>) -> Result<(), AsnRenderError>;
+    fn set_view_size(&mut self, size: &Size2D<Self::SizeDimension>) -> Result<(), AsnRenderError>;
     fn set_cell(
         &mut self,
         pos: &Pos2D<Self::SizeDimension>,

@@ -166,18 +166,18 @@ impl TNodeBase for AsnWgpuNodeView2d {
         // if !self.is_need_update {
         //     return;
         // }
-        for x in 0..self.view.size.width {
-            for y in 0..self.view.size.height {
-                let value: u8 = self.rng.gen_range(0..128);
-                let cell_y = value / 16;
-                let cell_x = value - cell_y * 16;
-
-                let index = ((y * self.view.size.width + x) * 4) as usize;
-
-                self.view.bytes[index] = cell_x;
-                self.view.bytes[index + 1] = cell_y;
-            }
-        }
+        // for x in 0..self.view.size.width {
+        //     for y in 0..self.view.size.height {
+        //         let value: u8 = self.rng.gen_range(0..128);
+        //         let cell_y = value / 16;
+        //         let cell_x = value - cell_y * 16;
+        //
+        //         let index = ((y * self.view.size.width + x) * 4) as usize;
+        //
+        //         self.view.bytes[index] = cell_x;
+        //         self.view.bytes[index + 1] = cell_y;
+        //     }
+        // }
         self.is_need_update = true;
         self.update_me(gfx)
     }
@@ -209,9 +209,9 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         Ok(())
     }
 
-    fn set_view_size(&mut self, size: Size2D<Self::SizeDimension>) -> Result<(), AsnRenderError> {
+    fn set_view_size(&mut self, size: &Size2D<Self::SizeDimension>) -> Result<(), AsnRenderError> {
         let view = BytesArray {
-            size,
+            size: *size,
             bytes: vec![0; (size.width * size.height * 4) as usize],
         };
         self.view = view;
