@@ -93,7 +93,15 @@ impl TTexture for AsnTexture {
         let img = image::load_from_memory(bytes);
         match img {
             Err(_) => Err(AsnRenderError::CustomError("image import faut".into())),
-            Ok(t) => Self::from_image(gfx, &t, f),
+            Ok(img) => {
+                let rgba = img.to_rgba8();
+                let dimensions = img.dimensions();
+                let size = Size2D::<u32>{
+                    width: dimensions.0,
+                    height: dimensions.1
+                };
+                Self::from_raw(gfx, &rgba, size, f)
+            },
         }
     }
 
@@ -161,44 +169,4 @@ impl AsnTexture {
             sampler,
         })
     }
-
-    // pub fn update_from_array(
-    //     &mut self,
-    //     gfx: &AsnWgpuWinApi,
-    //     array: &BytesArray,
-    // ) -> Result<(), AsnRenderError> {
-    //     let dimensions: (u32, u32) = (array.size.width, array.size.height);
-    //     let size = wgpu::Extent3d {
-    //         width: dimensions.0,
-    //         height: dimensions.1,
-    //         depth_or_array_layers: 1,
-    //     };
-    //
-    //     let f = self.texture_format;
-    //
-    //     if self.texture.size() != size {
-    //         let (texture, view, sampler) =
-    //             create_texture_set(gfx, &array.bytes, size, f.to_wgpu_format());
-    //         self.texture = texture;
-    //         self.view = view;
-    //         self.sampler = sampler;
-    //     } else {
-    //         gfx.queue.write_texture(
-    //             wgpu::ImageCopyTexture {
-    //                 aspect: wgpu::TextureAspect::All,
-    //                 texture: &self.texture,
-    //                 mip_level: 0,
-    //                 origin: wgpu::Origin3d::ZERO,
-    //             },
-    //             &array.bytes,
-    //             wgpu::ImageDataLayout {
-    //                 offset: 0,
-    //                 bytes_per_row: Some(4 * dimensions.0),
-    //                 rows_per_image: Some(dimensions.1),
-    //             },
-    //             size,
-    //         );
-    //     }
-    //     Ok(())
-    // }
 }
