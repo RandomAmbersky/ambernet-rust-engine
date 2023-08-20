@@ -4,7 +4,7 @@ use std::sync::Arc;
 use crate::engine::core::errors::AsnRenderError;
 use crate::engine::core::math::{Pos2D, Size2D};
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
-use crate::engine::core::winapi::TAsnWinapi;
+use crate::engine::core::winapi::{TAsnWinapi, TTexture};
 use crate::engine::core::winapi::{Mesh};
 use crate::engine::winapi::defines;
 use crate::engine::winapi::defines::{BytesArray, CellSize, SizeDimension};
@@ -16,10 +16,11 @@ use crate::engine::winapi::wgpu::bind_groups::{BindGroupEntryBuilder, BindGroupL
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
 use wgpu::{BindGroup, BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat};
+use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 
 pub struct AsnWgpuNodeView2d {
     tile_texture: Arc<AsnTexture>,
-    texture: AsnTexture,
+    view_texture: AsnTexture,
     view: BytesArray,
     mesh: Mesh,
     bind_group: wgpu::BindGroup,
@@ -86,11 +87,13 @@ impl AsnWgpuNodeView2d {
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         println!("texure format: {:?}", texture_format);
 
-        let texture = AsnTexture::new(gfx);
-        let tile_texture = Arc::new(AsnTexture::new(gfx));
+        let tile_texture = AsnTexture::from_raw(gfx, &ONE_BLUE_PIXEL.bytes, ONE_BLUE_PIXEL.size, ONE_BLUE_PIXEL.texture_format).unwrap();
+        let arc_tile_texture = Arc::new(tile_texture);
+
+        let view_texture = AsnTexture::from_raw(gfx, &ONE_BLUE_PIXEL.bytes, ONE_BLUE_PIXEL.size, ONE_BLUE_PIXEL.texture_format).unwrap();
 
         let (render_pipeline, bind_group) =
-            create_node_view2d_set(gfx, &texture, &tile_texture, texture_format, &shader);
+            create_node_view2d_set(gfx, &view_texture, &arc_tile_texture, texture_format, &shader);
         let view_size_w: u32 = 1;
         let view_size_h: u32 = 1;
 
@@ -103,9 +106,9 @@ impl AsnWgpuNodeView2d {
         };
 
         Self {
-            tile_texture,
+            tile_texture: arc_tile_texture,
+            view_texture,
             shader,
-            texture,
             render_pipeline,
             view,
             mesh,
@@ -139,7 +142,7 @@ impl AsnWgpuNodeView2d {
     }
     fn update_me(&mut self, gfx: &mut AsnWgpuWinApi) {
         self.is_need_update = false;
-        self.texture
+        self.view_texture
             .update_from_array(gfx, &self.view)
             .expect("TODO: panic message");
     }
@@ -175,7 +178,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         let (render_pipeline, bind_group) = create_node_view2d_set(
             gfx,
-            &self.texture,
+            &self.view_texture,
             &texture,
             texture_format,
             &self.shader,

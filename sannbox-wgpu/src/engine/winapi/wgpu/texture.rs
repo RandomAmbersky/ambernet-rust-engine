@@ -1,10 +1,8 @@
 use crate::engine::core::errors::AsnRenderError;
 use crate::engine::core::winapi::{AsnTextureFormat, TTexture};
 use crate::engine::winapi::defines::BytesArray;
-use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
-use image::flat::View;
 use image::{DynamicImage, GenericImageView};
 use wgpu::{Sampler, Texture, TextureFormat, TextureView};
 use crate::engine::core::math::Size2D;
@@ -23,13 +21,12 @@ impl Drop for AsnTexture {
     }
 }
 
-fn create_texture_set(
-    gfx: &AsnWgpuWinApi,
-    bytes: &[u8],
+fn create_texture(
+    device: &wgpu::Device,
     size: wgpu::Extent3d,
-    texture_format: TextureFormat,
-) -> (Texture, TextureView, Sampler) {
-    let texture = gfx.device.create_texture(&wgpu::TextureDescriptor {
+    texture_format: TextureFormat
+) -> wgpu::Texture {
+    let texture = device.create_texture(&wgpu::TextureDescriptor {
         label: None,
         size,
         mip_level_count: 1,
@@ -39,7 +36,10 @@ fn create_texture_set(
         usage: wgpu::TextureUsages::TEXTURE_BINDING | wgpu::TextureUsages::COPY_DST,
         view_formats: &[],
     });
-    gfx.queue.write_texture(
+    texture
+}
+fn write_texure (queue: &wgpu::Queue, texture: &wgpu::Texture, bytes: &[u8], size: &wgpu::Extent3d) {
+    queue.write_texture(
         wgpu::ImageCopyTexture {
             aspect: wgpu::TextureAspect::All,
             texture: &texture,
@@ -52,10 +52,15 @@ fn create_texture_set(
             bytes_per_row: Some(4 * size.width),
             rows_per_image: Some(size.height),
         },
-        size,
+        *size,
     );
+}
+fn create_view (texture: &Texture) -> wgpu::TextureView {
     let view = texture.create_view(&wgpu::TextureViewDescriptor::default());
-    let sampler = gfx.device.create_sampler(&wgpu::SamplerDescriptor {
+    view
+}
+fn create_sampler (device: &wgpu::Device,) -> wgpu::Sampler {
+    let sampler = device.create_sampler(&wgpu::SamplerDescriptor {
         address_mode_u: wgpu::AddressMode::ClampToEdge,
         address_mode_v: wgpu::AddressMode::ClampToEdge,
         address_mode_w: wgpu::AddressMode::ClampToEdge,
@@ -64,7 +69,19 @@ fn create_texture_set(
         mipmap_filter: wgpu::FilterMode::Nearest,
         ..Default::default()
     });
+    sampler
+}
 
+fn create_texture_set(
+    gfx: &AsnWgpuWinApi,
+    bytes: &[u8],
+    size: wgpu::Extent3d,
+    texture_format: TextureFormat,
+) -> (Texture, TextureView, Sampler) {
+    let texture = create_texture(&gfx.device, size, texture_format);
+    write_texure(&gfx.queue, &texture, bytes, &size);
+    let view = create_view(&texture);
+    let sampler = create_sampler(&gfx.device);
     (texture, view, sampler)
 }
 
@@ -99,36 +116,29 @@ impl TTexture for AsnTexture {
             sampler,
         })
     }
+
+    fn update_from_raw(&mut self, gfx: &Self::WinApi, bytes: &[u8], size: Size2D<u32>) -> Result<(), AsnRenderError> {
+        let texture_size = wgpu::Extent3d {
+            width: size.width,
+            height: size.height,
+            depth_or_array_layers: 1,
+        };
+
+        let (texture, view, sampler) = create_texture_set(
+            gfx,
+            &bytes,
+            texture_size,
+            self.texture_format.to_wgpu_format(),
+        );
+
+        self.texture = texture;
+        self.view = view;
+        self.sampler = sampler;
+        Ok(())
+    }
 }
 
 impl AsnTexture {
-    // pub fn new(gfx: &AsnWgpuWinApi) -> Self {
-    //     let base_texture_data = ONE_BLUE_PIXEL;
-    //
-    //     let texture_format = base_texture_data.texture_format;
-    //     let bpp = texture_format.bytes_per_pixel();
-    //
-    //     let dimensions: (u32, u32) = (base_texture_data.size.width, base_texture_data.size.height);
-    //     let size = wgpu::Extent3d {
-    //         width: dimensions.0,
-    //         height: dimensions.1,
-    //         depth_or_array_layers: 1,
-    //     };
-    //
-    //     let (texture, view, sampler) = create_texture_set(
-    //         gfx,
-    //         &base_texture_data.bytes,
-    //         size,
-    //         texture_format.to_wgpu_format(),
-    //     );
-    //     Self {
-    //         texture_format,
-    //         texture,
-    //         view,
-    //         sampler,
-    //     }
-    // }
-
     fn from_image(
         gfx: &AsnWgpuWinApi,
         img: &DynamicImage,

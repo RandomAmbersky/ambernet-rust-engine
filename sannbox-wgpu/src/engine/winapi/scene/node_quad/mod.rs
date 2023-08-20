@@ -159,7 +159,7 @@ impl AsnWgpuNodeQuad {
         let arc_texture = Arc::new(texture);
 
         let (render_pipeline, diffuse_bind_group) =
-            create_node_quad_set(gfx, &texture, texture_format, &shader);
+            create_node_quad_set(gfx, &arc_texture, texture_format, &shader);
 
         Self {
             shader,
