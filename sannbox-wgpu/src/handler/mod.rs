@@ -63,8 +63,6 @@ impl Handler {
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
     fn update(&mut self, e: &mut Engine) {
-        // let mut rng = SmallRng::seed_from_u64(RNG_SEED);
-
         let mut rng = self.rng.clone();
 
         for _ in 0..10000 {
