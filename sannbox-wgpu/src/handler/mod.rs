@@ -1,7 +1,5 @@
 mod resources;
 
-use std::borrow::BorrowMut;
-use std::os::unix::raw::blkcnt_t;
 use std::sync::{Arc, Mutex};
 use image::{GenericImageView};
 use rand::prelude::SmallRng;
