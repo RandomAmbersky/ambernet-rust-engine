@@ -1,11 +1,11 @@
 use crate::engine::core::errors::AsnRenderError;
+use crate::engine::core::math::Size2D;
 use crate::engine::core::winapi::{AsnTextureFormat, TTexture};
 use crate::engine::winapi::defines::BytesArray;
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use image::{DynamicImage, GenericImageView};
 use wgpu::{Sampler, Texture, TextureFormat, TextureView};
-use crate::engine::core::math::Size2D;
 
 pub struct AsnTexture {
     pub texture_format: AsnTextureFormat,
@@ -24,7 +24,7 @@ impl Drop for AsnTexture {
 fn create_texture(
     device: &wgpu::Device,
     size: wgpu::Extent3d,
-    texture_format: TextureFormat
+    texture_format: TextureFormat,
 ) -> wgpu::Texture {
     let texture = device.create_texture(&wgpu::TextureDescriptor {
         label: None,
@@ -38,7 +38,7 @@ fn create_texture(
     });
     texture
 }
-fn write_texure (queue: &wgpu::Queue, texture: &wgpu::Texture, bytes: &[u8], size: &wgpu::Extent3d) {
+fn write_texure(queue: &wgpu::Queue, texture: &wgpu::Texture, bytes: &[u8], size: &wgpu::Extent3d) {
     queue.write_texture(
         wgpu::ImageCopyTexture {
             aspect: wgpu::TextureAspect::All,
@@ -55,11 +55,11 @@ fn write_texure (queue: &wgpu::Queue, texture: &wgpu::Texture, bytes: &[u8], siz
         *size,
     );
 }
-fn create_view (texture: &Texture) -> wgpu::TextureView {
+fn create_view(texture: &Texture) -> wgpu::TextureView {
     let view = texture.create_view(&wgpu::TextureViewDescriptor::default());
     view
 }
-fn create_sampler (device: &wgpu::Device,) -> wgpu::Sampler {
+fn create_sampler(device: &wgpu::Device) -> wgpu::Sampler {
     let sampler = device.create_sampler(&wgpu::SamplerDescriptor {
         address_mode_u: wgpu::AddressMode::ClampToEdge,
         address_mode_v: wgpu::AddressMode::ClampToEdge,
@@ -89,34 +89,39 @@ impl TTexture for AsnTexture {
     type WinApi = AsnWgpuWinApi;
     type AsnTexture = AsnTexture;
 
-    fn from_memory(gfx: &Self::WinApi, bytes: &[u8], f: AsnTextureFormat) -> Result<Self, AsnRenderError> {
+    fn from_memory(
+        gfx: &Self::WinApi,
+        bytes: &[u8],
+        f: AsnTextureFormat,
+    ) -> Result<Self, AsnRenderError> {
         let img = image::load_from_memory(bytes);
         match img {
             Err(_) => Err(AsnRenderError::CustomError("image import faut".into())),
             Ok(img) => {
                 let rgba = img.to_rgba8();
                 let dimensions = img.dimensions();
-                let size = Size2D::<u32>{
+                let size = Size2D::<u32> {
                     width: dimensions.0,
-                    height: dimensions.1
+                    height: dimensions.1,
                 };
-                Self::from_raw(gfx, &rgba, size, f)
-            },
+                Self::from_raw(gfx, &rgba, &size, f)
+            }
         }
     }
 
-    fn from_raw(gfx: &Self::WinApi, bytes: &[u8], size: Size2D<u32>, f: AsnTextureFormat) -> Result<Self::AsnTexture, AsnRenderError> {
+    fn from_raw(
+        gfx: &Self::WinApi,
+        bytes: &[u8],
+        size: &Size2D<u32>,
+        f: AsnTextureFormat,
+    ) -> Result<Self::AsnTexture, AsnRenderError> {
         let texture_size = wgpu::Extent3d {
             width: size.width,
             height: size.height,
             depth_or_array_layers: 1,
         };
-        let (texture, view, sampler) = create_texture_set(
-            gfx,
-            &bytes,
-            texture_size,
-            f.to_wgpu_format(),
-        );
+        let (texture, view, sampler) =
+            create_texture_set(gfx, &bytes, texture_size, f.to_wgpu_format());
         Ok(Self {
             texture_format: f,
             texture,

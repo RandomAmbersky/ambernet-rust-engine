@@ -88,7 +88,7 @@ impl AsnWgpuNodeView2d {
         let tile_texture = AsnTexture::from_raw(
             gfx,
             &ONE_BLUE_PIXEL.bytes,
-            ONE_BLUE_PIXEL.size,
+            &ONE_BLUE_PIXEL.size,
             ONE_BLUE_PIXEL.texture_format,
         )
         .unwrap();
@@ -104,7 +104,7 @@ impl AsnWgpuNodeView2d {
             bytes: vec![0; (view_size_w * view_size_h * 4) as usize],
         };
         let view_texture =
-            AsnTexture::from_raw(gfx, &view.bytes, view.size, AsnTextureFormat::Rgba8).unwrap();
+            AsnTexture::from_raw(gfx, &view.bytes, &view.size, AsnTextureFormat::Rgba8).unwrap();
 
         let (render_pipeline, bind_group) = create_node_view2d_set(
             gfx,
@@ -225,7 +225,16 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         pos: &Pos2D<Self::SizeDimension>,
         c: CellSize,
     ) -> Result<(), AsnRenderError> {
-        self.view.set_point(pos, c).unwrap();
+        // self.view.set_point(pos, c).unwrap();
+
+        let cell_y = c / 16;
+        let cell_x = c - cell_y * 16;
+
+        let index = ((pos.y * self.view.size.width + pos.x) * 4) as usize;
+
+        self.view.bytes[index] = cell_x;
+        self.view.bytes[index + 1] = cell_y;
+
         self.is_need_update = true;
         Ok(())
     }

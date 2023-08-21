@@ -34,7 +34,7 @@ impl Handler {
         let mut texture = AsnTexture::from_raw(
             w,
             &raw_texture.bytes,
-            raw_texture.size,
+            &raw_texture.size,
             AsnTextureFormat::Rgba8,
         )
         .unwrap();
@@ -68,9 +68,9 @@ impl Handler {
         // println!("draw");
 
         let mut fcx = e.get_winapi().begin_frame().unwrap();
-        self.quad.draw(&mut fcx);
+        // self.quad.draw(&mut fcx);
         // self.quad2.draw(&mut fcx);
-        // self.view.draw(&mut fcx);
+        self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }

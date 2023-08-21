@@ -1,10 +1,10 @@
 mod resource;
 
 use crate::engine::core::errors::AsnRenderError;
-use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad};
-use crate::engine::core::winapi::{AsnTextureFormat, TTexture};
 use crate::engine::core::winapi::TAsnWinapi;
+use crate::engine::core::winapi::{AsnTextureFormat, TTexture};
+use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::winapi::scene::node_quad::resource::{Vertex, INDICES, SHADER_SOURCE, VERTICES};
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::texture::AsnTexture;
@@ -155,7 +155,13 @@ impl AsnWgpuNodeQuad {
             });
         let num_indices = INDICES.len() as u32;
 
-        let texture = AsnTexture::from_raw(gfx, &ONE_BLUE_PIXEL.bytes, ONE_BLUE_PIXEL.size, ONE_BLUE_PIXEL.texture_format).unwrap();
+        let texture = AsnTexture::from_raw(
+            gfx,
+            &ONE_BLUE_PIXEL.bytes,
+            &ONE_BLUE_PIXEL.size,
+            ONE_BLUE_PIXEL.texture_format,
+        )
+        .unwrap();
         let arc_texture = Arc::new(texture);
 
         let (render_pipeline, diffuse_bind_group) =
