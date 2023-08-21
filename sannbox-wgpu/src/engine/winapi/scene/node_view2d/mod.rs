@@ -94,12 +94,12 @@ impl AsnWgpuNodeView2d {
         .unwrap();
         let arc_tile_texture = Arc::new(tile_texture);
 
-        let view_size_w: u32 = 10;
-        let view_size_h: u32 = 10;
+        let view_size_w: u32 = 1;
+        let view_size_h: u32 = 1;
         let view = BytesArray {
             size: Size2D {
-                width: view_size_w as SizeDimension,
-                height: view_size_h as SizeDimension,
+                width: view_size_w,
+                height: view_size_h,
             },
             bytes: vec![0; (view_size_w * view_size_h * 4) as usize],
         };
@@ -148,12 +148,6 @@ impl AsnWgpuNodeView2d {
         render_pass.set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
         render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
     }
-    fn update_me(&mut self, gfx: &mut AsnWgpuWinApi) {
-        self.is_need_update = false;
-        self.view_texture
-            .update_from_raw(gfx, &self.view.bytes)
-            .expect("TODO: panic message");
-    }
 }
 
 impl TNodeBase for AsnWgpuNodeView2d {
@@ -169,23 +163,13 @@ impl TNodeBase for AsnWgpuNodeView2d {
             return;
         }
 
+        println!("update");
+
         self.view_texture
             .update_from_raw(gfx, &self.view.bytes)
             .unwrap();
-        // for x in 0..self.view.size.width {
-        //     for y in 0..self.view.size.height {
-        //         let value: u8 = self.rng.gen_range(0..128);
-        //         let cell_y = value / 16;
-        //         let cell_x = value - cell_y * 16;
-        //
-        //         let index = ((y * self.view.size.width + x) * 4) as usize;
-        //
-        //         self.view.bytes[index] = cell_x;
-        //         self.view.bytes[index + 1] = cell_y;
-        //     }
-        // }
-        self.is_need_update = true;
-        self.update_me(gfx)
+
+        self.is_need_update = false;
     }
 }
 
@@ -204,7 +188,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         let (render_pipeline, bind_group) = create_node_view2d_set(
             gfx,
             &self.view_texture,
-            &texture,
+            texture,
             texture_format,
             &self.shader,
         );
@@ -241,6 +225,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         self.view.bytes[index] = cell_x;
         self.view.bytes[index + 1] = cell_y;
 
+        println!("set cell {:?} {:?} {:?} {:?}", pos, cell_y, cell_x, c);
         self.is_need_update = true;
         Ok(())
     }

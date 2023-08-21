@@ -54,11 +54,11 @@ impl Handler {
         .unwrap();
 
         view.set_tile_texture(w, &tile_texture).unwrap();
-        view.set_view_size(&Size2D {
-            width: 10,
-            height: 10,
-        })
-        .unwrap();
+        // view.set_view_size(&Size2D {
+        //     width: 10,
+        //     height: 10,
+        // })
+        // .unwrap();
 
         let mut rng = SmallRng::seed_from_u64(RNG_SEED);
 
@@ -82,20 +82,20 @@ impl Handler {
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
     fn update(&mut self, e: &mut Engine) {
-        let mut rng = self.rng.clone();
+        // let mut rng = self.rng.clone();
+        //
+        // for _ in 0..10 {
+        //     rng = randomize_array(rng, &mut self.raw_texture);
+        // }
+        //
+        // self.rng = rng;
 
-        for _ in 0..10 {
-            rng = randomize_array(rng, &mut self.raw_texture);
-        }
+        // let mut texture = self.arc_texture.lock().unwrap();
+        // texture
+        //     .update_from_raw(e.get_winapi(), &self.raw_texture.bytes)
+        //     .unwrap();
 
-        self.rng = rng;
-
-        let mut texture = self.arc_texture.lock().unwrap();
-        texture
-            .update_from_raw(e.get_winapi(), &self.raw_texture.bytes)
-            .unwrap();
-
-        self.view.set_cell(&Pos2D { x: 5, y: 5 }, 17).unwrap();
+        self.view.set_cell(&Pos2D { x: 0, y: 0 }, 17).unwrap();
         self.view.update(e.get_winapi())
     }
 }
