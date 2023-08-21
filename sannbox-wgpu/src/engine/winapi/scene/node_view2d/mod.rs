@@ -2,7 +2,6 @@ mod resource;
 
 use std::sync::Arc;
 use rand::rngs::SmallRng;
-use rand::{Rng, SeedableRng};
 use crate::engine::core::errors::AsnRenderError;
 use crate::engine::core::math::{Pos2D, Size2D};
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
@@ -30,7 +29,6 @@ pub struct AsnWgpuNodeView2d {
     bind_group: wgpu::BindGroup,
     render_pipeline: wgpu::RenderPipeline,
     is_need_update: bool,
-    rng: SmallRng,
     shader: ShaderModule,
 }
 
@@ -108,8 +106,6 @@ impl AsnWgpuNodeView2d {
         let (render_pipeline, bind_group) =
             create_node_view2d_set(gfx, &view_texture, &arc_tile_texture, texture_format, &shader);
 
-        let mut rng = SmallRng::seed_from_u64(RNG_SEED);
-
         Self {
             tile_texture: arc_tile_texture,
             view_texture,
@@ -118,8 +114,7 @@ impl AsnWgpuNodeView2d {
             view,
             mesh,
             bind_group,
-            is_need_update: false,
-            rng
+            is_need_update: false
         }
     }
     fn draw_me(&mut self, fcx: &mut AsnWgpuFrameContext) {
@@ -163,21 +158,21 @@ impl TNodeBase for AsnWgpuNodeView2d {
     }
 
     fn update(&mut self, gfx: &mut Self::WinApi) {
-        // if !self.is_need_update {
-        //     return;
-        // }
-        // for x in 0..self.view.size.width {
-        //     for y in 0..self.view.size.height {
-        //         let value: u8 = self.rng.gen_range(0..128);
-        //         let cell_y = value / 16;
-        //         let cell_x = value - cell_y * 16;
-        //
-        //         let index = ((y * self.view.size.width + x) * 4) as usize;
-        //
-        //         self.view.bytes[index] = cell_x;
-        //         self.view.bytes[index + 1] = cell_y;
-        //     }
-        // }
+        if !self.is_need_update {
+            return;
+        }
+        for x in 0..self.view.size.width {
+            for y in 0..self.view.size.height {
+                let value: u8 = self.rng.gen_range(0..128);
+                let cell_y = value / 16;
+                let cell_x = value - cell_y * 16;
+
+                let index = ((y * self.view.size.width + x) * 4) as usize;
+
+                self.view.bytes[index] = cell_x;
+                self.view.bytes[index + 1] = cell_y;
+            }
+        }
         self.is_need_update = true;
         self.update_me(gfx)
     }
