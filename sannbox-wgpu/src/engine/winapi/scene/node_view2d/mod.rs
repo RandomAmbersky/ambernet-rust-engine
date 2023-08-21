@@ -168,6 +168,10 @@ impl TNodeBase for AsnWgpuNodeView2d {
         if !self.is_need_update {
             return;
         }
+
+        self.view_texture
+            .update_from_raw(gfx, &self.view.bytes)
+            .unwrap();
         // for x in 0..self.view.size.width {
         //     for y in 0..self.view.size.height {
         //         let value: u8 = self.rng.gen_range(0..128);
@@ -225,7 +229,9 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         pos: &Pos2D<Self::SizeDimension>,
         c: CellSize,
     ) -> Result<(), AsnRenderError> {
-        // self.view.set_point(pos, c).unwrap();
+        if !self.view.size.is_pos_into(pos) {
+            panic!("Pos {:?} not in view size {:?}", pos, self.view.size)
+        }
 
         let cell_y = c / 16;
         let cell_x = c - cell_y * 16;

@@ -1,7 +1,7 @@
 mod resources;
 
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
-use crate::engine::core::math::{Array2D, Size2D};
+use crate::engine::core::math::{Array2D, Pos2D, Size2D};
 use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler};
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
@@ -44,17 +44,24 @@ impl Handler {
         quad2.set_texture(w, &texture).unwrap();
 
         let mut view = w.new_view2d();
-        let tile_texture =
-            AsnTexture::from_memory(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8).unwrap();
+        let raw_tile_texture = load_texture(TEXTURE_TIILES_SOURCE);
+        let tile_texture = AsnTexture::from_raw(
+            w,
+            &raw_tile_texture.bytes,
+            &raw_tile_texture.size,
+            AsnTextureFormat::Rgba8,
+        )
+        .unwrap();
 
         view.set_tile_texture(w, &tile_texture).unwrap();
         view.set_view_size(&Size2D {
-            width: 100,
-            height: 100,
+            width: 10,
+            height: 10,
         })
         .unwrap();
 
         let mut rng = SmallRng::seed_from_u64(RNG_SEED);
+
         Handler {
             rng,
             raw_texture,
@@ -87,6 +94,8 @@ impl Handler {
         texture
             .update_from_raw(e.get_winapi(), &self.raw_texture.bytes)
             .unwrap();
+
+        self.view.set_cell(&Pos2D { x: 5, y: 5 }, 17).unwrap();
         self.view.update(e.get_winapi())
     }
 }

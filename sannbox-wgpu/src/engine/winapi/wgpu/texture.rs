@@ -89,26 +89,6 @@ impl TTexture for AsnTexture {
     type WinApi = AsnWgpuWinApi;
     type AsnTexture = AsnTexture;
 
-    fn from_memory(
-        gfx: &Self::WinApi,
-        bytes: &[u8],
-        f: AsnTextureFormat,
-    ) -> Result<Self, AsnRenderError> {
-        let img = image::load_from_memory(bytes);
-        match img {
-            Err(_) => Err(AsnRenderError::CustomError("image import faut".into())),
-            Ok(img) => {
-                let rgba = img.to_rgba8();
-                let dimensions = img.dimensions();
-                let size = Size2D::<u32> {
-                    width: dimensions.0,
-                    height: dimensions.1,
-                };
-                Self::from_raw(gfx, &rgba, &size, f)
-            }
-        }
-    }
-
     fn from_raw(
         gfx: &Self::WinApi,
         bytes: &[u8],
