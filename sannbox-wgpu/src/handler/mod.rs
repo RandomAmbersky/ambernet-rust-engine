@@ -63,7 +63,7 @@ impl Handler {
     fn update(&mut self, e: &mut Engine) {
         let mut rng = self.rng.clone();
 
-        for _ in 0..10000 {
+        for _ in 0..10 {
             rng = randomize_array(rng, &mut self.raw_texture);
         }
 
