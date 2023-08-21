@@ -1,14 +1,13 @@
 mod resource;
 
-use std::sync::Arc;
-use rand::rngs::SmallRng;
 use crate::engine::core::errors::AsnRenderError;
 use crate::engine::core::math::{Pos2D, Size2D};
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
+use crate::engine::core::winapi::Mesh;
 use crate::engine::core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
-use crate::engine::core::winapi::{Mesh};
 use crate::engine::winapi::defines;
 use crate::engine::winapi::defines::{BytesArray, CellSize, SizeDimension};
+use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::winapi::scene::node_view2d::resource::{
     Vertex, INDICES, SHADER_SOURCE, VERTICES,
 };
@@ -16,13 +15,10 @@ use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::bind_groups::{BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
+use std::sync::Arc;
 use wgpu::{BindGroup, BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat};
-use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
-
-const RNG_SEED: u64 = 11;
 
 pub struct AsnWgpuNodeView2d {
-    tile_texture: Arc<AsnTexture>,
     view_texture: AsnTexture,
     view: BytesArray,
     mesh: Mesh,
@@ -89,7 +85,13 @@ impl AsnWgpuNodeView2d {
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         println!("texure format: {:?}", texture_format);
 
-        let tile_texture = AsnTexture::from_raw(gfx, &ONE_BLUE_PIXEL.bytes, ONE_BLUE_PIXEL.size, ONE_BLUE_PIXEL.texture_format).unwrap();
+        let tile_texture = AsnTexture::from_raw(
+            gfx,
+            &ONE_BLUE_PIXEL.bytes,
+            ONE_BLUE_PIXEL.size,
+            ONE_BLUE_PIXEL.texture_format,
+        )
+        .unwrap();
         let arc_tile_texture = Arc::new(tile_texture);
 
         let view_size_w: u32 = 10;
@@ -101,20 +103,25 @@ impl AsnWgpuNodeView2d {
             },
             bytes: vec![0; (view_size_w * view_size_h * 4) as usize],
         };
-        let view_texture = AsnTexture::from_raw(gfx, &view.bytes, view.size, AsnTextureFormat::Rgba8).unwrap();
+        let view_texture =
+            AsnTexture::from_raw(gfx, &view.bytes, view.size, AsnTextureFormat::Rgba8).unwrap();
 
-        let (render_pipeline, bind_group) =
-            create_node_view2d_set(gfx, &view_texture, &arc_tile_texture, texture_format, &shader);
+        let (render_pipeline, bind_group) = create_node_view2d_set(
+            gfx,
+            &view_texture,
+            &arc_tile_texture,
+            texture_format,
+            &shader,
+        );
 
         Self {
-            tile_texture: arc_tile_texture,
             view_texture,
             shader,
             render_pipeline,
             view,
             mesh,
             bind_group,
-            is_need_update: false
+            is_need_update: false,
         }
     }
     fn draw_me(&mut self, fcx: &mut AsnWgpuFrameContext) {
@@ -161,18 +168,18 @@ impl TNodeBase for AsnWgpuNodeView2d {
         if !self.is_need_update {
             return;
         }
-        for x in 0..self.view.size.width {
-            for y in 0..self.view.size.height {
-                let value: u8 = self.rng.gen_range(0..128);
-                let cell_y = value / 16;
-                let cell_x = value - cell_y * 16;
-
-                let index = ((y * self.view.size.width + x) * 4) as usize;
-
-                self.view.bytes[index] = cell_x;
-                self.view.bytes[index + 1] = cell_y;
-            }
-        }
+        // for x in 0..self.view.size.width {
+        //     for y in 0..self.view.size.height {
+        //         let value: u8 = self.rng.gen_range(0..128);
+        //         let cell_y = value / 16;
+        //         let cell_x = value - cell_y * 16;
+        //
+        //         let index = ((y * self.view.size.width + x) * 4) as usize;
+        //
+        //         self.view.bytes[index] = cell_x;
+        //         self.view.bytes[index + 1] = cell_y;
+        //     }
+        // }
         self.is_need_update = true;
         self.update_me(gfx)
     }
@@ -185,7 +192,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
     fn set_tile_texture(
         &mut self,
         gfx: &mut Self::WinApi,
-        texture: Arc<Self::AsnTexture>
+        texture: &Self::AsnTexture,
     ) -> Result<(), AsnRenderError> {
         println!("AsnWgpuNodeView2d set_texture");
 
@@ -198,7 +205,6 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             &self.shader,
         );
 
-        self.tile_texture = texture;
         self.render_pipeline = render_pipeline;
         self.bind_group = bind_group;
         Ok(())

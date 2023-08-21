@@ -1,9 +1,5 @@
 mod resources;
 
-use std::sync::{Arc, Mutex};
-use image::{GenericImageView};
-use rand::prelude::SmallRng;
-use rand::{Rng, SeedableRng};
 use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
 use crate::engine::core::math::{Array2D, Size2D};
 use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler};
@@ -11,6 +7,10 @@ use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use crate::engine::{AsnTexture, Engine, NodeQuad, NodeView2d, TAsnEngine};
 use crate::handler::resources::{TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
+use image::GenericImageView;
+use rand::prelude::SmallRng;
+use rand::{Rng, SeedableRng};
+use std::sync::{Arc, Mutex};
 
 const RNG_SEED: u64 = 11;
 
@@ -20,7 +20,7 @@ pub struct Handler {
     quad: NodeQuad,
     quad2: NodeQuad,
     view: NodeView2d,
-    rng: SmallRng
+    rng: SmallRng,
 }
 
 impl Handler {
@@ -31,16 +31,23 @@ impl Handler {
 
         let raw_texture = load_texture(TEXTURE_QUAD_SOURCE);
 
-        let mut texture = AsnTexture::from_raw(w, &raw_texture.bytes, raw_texture.size, AsnTextureFormat::Rgba8).unwrap();
+        let mut texture = AsnTexture::from_raw(
+            w,
+            &raw_texture.bytes,
+            raw_texture.size,
+            AsnTextureFormat::Rgba8,
+        )
+        .unwrap();
         texture.update_from_raw(w, &raw_texture.bytes).unwrap();
 
         quad.set_texture(w, &texture).unwrap();
         quad2.set_texture(w, &texture).unwrap();
 
         let mut view = w.new_view2d();
-        let tile_texture = AsnTexture::from_memory(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8).unwrap();
+        let tile_texture =
+            AsnTexture::from_memory(w, TEXTURE_QUAD_SOURCE, AsnTextureFormat::Rgba8).unwrap();
 
-        view.set_tile_texture(w, Arc::new(tile_texture)).unwrap();
+        view.set_tile_texture(w, &tile_texture).unwrap();
         view.set_view_size(&Size2D {
             width: 100,
             height: 100,
@@ -48,7 +55,14 @@ impl Handler {
         .unwrap();
 
         let mut rng = SmallRng::seed_from_u64(RNG_SEED);
-        Handler { rng, raw_texture, arc_texture: Arc::new(Mutex::new(texture)), quad, quad2, view  }
+        Handler {
+            rng,
+            raw_texture,
+            arc_texture: Arc::new(Mutex::new(texture)),
+            quad,
+            quad2,
+            view,
+        }
     }
     fn draw(&mut self, e: &mut Engine) {
         // println!("draw");
@@ -70,7 +84,9 @@ impl Handler {
         self.rng = rng;
 
         let mut texture = self.arc_texture.lock().unwrap();
-        texture.update_from_raw(e.get_winapi(), &self.raw_texture.bytes).unwrap();
+        texture
+            .update_from_raw(e.get_winapi(), &self.raw_texture.bytes)
+            .unwrap();
         self.view.update(e.get_winapi())
     }
 }
@@ -105,13 +121,13 @@ fn load_texture(bytes: &[u8]) -> Array2D<u32, u8> {
     let img = image::load_from_memory(bytes).unwrap();
     let rgba = img.to_rgba8();
     let dimensions = img.dimensions();
-    let size = Size2D::<u32>{
+    let size = Size2D::<u32> {
         width: dimensions.0,
-        height: dimensions.1
+        height: dimensions.1,
     };
     Array2D {
         size,
-        bytes: rgba.to_vec()
+        bytes: rgba.to_vec(),
     }
 }
 
