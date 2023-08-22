@@ -163,7 +163,7 @@ impl TNodeBase for AsnWgpuNodeView2d {
             return;
         }
 
-        self.view_texture.resize(gfx, &self.view.size).unwrap();
+        // self.view_texture.resize(gfx, &self.view.size).unwrap();
 
         // println!("update");
         // self.view.bytes[0] = 1;

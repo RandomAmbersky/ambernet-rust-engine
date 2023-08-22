@@ -110,40 +110,15 @@ impl TTexture for AsnTexture {
         })
     }
 
-    fn resize(&mut self, gfx: &Self::WinApi, size: &Size2D<u32>) -> Result<(), AsnRenderError> {
-        if (self.texture.width() == size.width) && (self.texture.height() == size.height) {
-            return Ok(());
-        }
-        let texture_size = wgpu::Extent3d {
-            width: size.width,
-            height: size.height,
-            depth_or_array_layers: 1,
-        };
-
-        let texture = create_texture(
-            &gfx.device,
-            texture_size,
-            self.texture_format.to_wgpu_format(),
-        );
-        // write_texure(&gfx.queue, &texture, bytes, &size);
-        let view = create_view(&texture);
-        let sampler = create_sampler(&gfx.device);
-
-        self.texture = texture;
-        self.view = view;
-        self.sampler = sampler;
-        Ok(())
-    }
-
     fn update_from_raw(&mut self, gfx: &Self::WinApi, bytes: &[u8]) -> Result<(), AsnRenderError> {
-        let checking_size = self.texture.size().width * self.texture.size().height;
-        println!(
-            "update from raw {:?} {:?} {:?} {:?}",
-            self.texture.size(),
-            self.texture.format(),
-            checking_size,
-            bytes.len()
-        );
+        // let checking_size = self.texture.size().width * self.texture.size().height;
+        // println!(
+        //     "update from raw {:?} {:?} {:?} {:?}",
+        //     self.texture.size(),
+        //     self.texture.format(),
+        //     checking_size,
+        //     bytes.len()
+        // );
         write_texure(&gfx.queue, &self.texture, bytes, &self.texture.size());
         Ok(())
     }
