@@ -134,9 +134,6 @@ impl AsnWgpuNodeView2d {
         Self {
             render_state,
             view_state,
-            // view_texture,
-            // shader,
-            // view,
             is_need_update: false,
         }
     }
