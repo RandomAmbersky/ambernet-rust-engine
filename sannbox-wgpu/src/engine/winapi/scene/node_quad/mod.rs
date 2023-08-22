@@ -169,7 +169,6 @@ impl AsnWgpuNodeQuad {
 
         Self {
             shader,
-            // texture: arc_texture,
             render_pipeline,
             vertex_buffer,
             index_buffer,
@@ -177,7 +176,14 @@ impl AsnWgpuNodeQuad {
             diffuse_bind_group,
         }
     }
-    fn draw_me(&mut self, fcx: &mut AsnWgpuFrameContext) {
+}
+
+impl TNodeBase for AsnWgpuNodeQuad {
+    type FrameContext = AsnWgpuFrameContext;
+    type WinApi = AsnWgpuWinApi;
+    type AsnTexture = AsnTexture;
+
+    fn draw(&mut self, fcx: &mut Self::FrameContext) {
         let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
             label: Some("Render Pass"),
             color_attachments: &[Some(wgpu::RenderPassColorAttachment {
@@ -201,17 +207,6 @@ impl AsnWgpuNodeQuad {
         render_pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
         render_pass.draw_indexed(0..self.num_indices, 0, 0..1);
     }
-}
-
-impl TNodeBase for AsnWgpuNodeQuad {
-    type FrameContext = AsnWgpuFrameContext;
-    type WinApi = AsnWgpuWinApi;
-    type AsnTexture = AsnTexture;
-
-    fn draw(&mut self, gfx: &mut Self::FrameContext) {
-        self.draw_me(gfx);
-    }
-
     fn update(&mut self, gfx: &mut Self::WinApi) {
         todo!()
     }
@@ -227,7 +222,7 @@ impl TNodeQuad for AsnWgpuNodeQuad {
 
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         let (render_pipeline, diffuse_bind_group) =
-            create_node_quad_set(gfx, &texture, texture_format, &self.shader);
+            create_node_quad_set(gfx, texture, texture_format, &self.shader);
 
         self.render_pipeline = render_pipeline;
         self.diffuse_bind_group = diffuse_bind_group;
