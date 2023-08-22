@@ -1,2 +1,0 @@
-mod grass;
-mod sand;

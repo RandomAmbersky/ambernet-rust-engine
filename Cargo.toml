@@ -1,13 +1,6 @@
 [workspace]
 resolver = "2"
 members = [
-#    "asn-core",
-#    "rs-amberskynet",
-#    "rs-core",
-#    "rs-gfx-core",
-#    "rs-gfx-wgpu",
-#    "rs-amberskynet",
-#    "wasm-and-bin-examples/*",
     "sannbox-wgpu"
 ]
 
