@@ -37,14 +37,16 @@ fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     var uMapSize = 32.0;
     var uTileSize = 16.0;
     var uSheetSize = vec2<f32>(256.0, 192.0);
-    var MAX_COLOR_VALUE_256 = 256.0; //  color 0..1 * 256.0 => 0..256
+    var MAX_COLOR_VALUE = 256.0 * 2.0 * 2.0 * 2.0 * 2.0; //  color 0..1 * MAX_COLOR_VALUE => 0..MAX_COLOR_VALUE
 
     var tex_coords = in.tex_coords; // 0..1
 
 //  https://thebookofshaders.com/glossary/?search=floor
     var map_coord = floor( tex_coords * uMapSize ) / uMapSize; // координаты нарезаны на uMapSize кусков
 
-    var tile_XY = floor( MAX_COLOR_VALUE_256 * textureSample(t_map, s_map, tex_coords).xy); // x and y on tile map in cells
+    var tile_XY = floor( MAX_COLOR_VALUE * textureSample(t_map, s_map, tex_coords).xy); // x and y on tile map in cells
+//    isOk.x = tile_XY.x;
+//    isOk.y = tile_XY.y;
 
     tile_XY = tile_XY * uTileSize; // x and y on tile map in pixels
     tile_XY = tile_XY / uSheetSize; // 0..1 normalize
@@ -58,4 +60,6 @@ fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     var sheet_Coord = tile_XY + tile_Offset / uTileSize;
 
     return textureSample(t_texture, s_texture, sheet_Coord);
+//    return isOk;
 }
+

@@ -136,8 +136,6 @@ impl TAsnWinapi for AsnWgpuWinApi {
 
         let view = frame.texture.create_view(&texture_view_descriptor);
 
-        // Bgra8UnormSrgb
-
         let fcx = AsnWgpuFrameContext {
             encoder,
             frame,

@@ -49,7 +49,7 @@ fn create_node_view2d_set(
         .create_bind_group_layout(&group_layout_desc);
     let bind_group_layouts = &[&diffuse_bind_group_layout];
     let render_pipeline = get_render_pipeline(
-        &gfx.get_device(),
+        gfx.get_device(),
         texture_format,
         &shader,
         bind_group_layouts,
@@ -94,14 +94,14 @@ impl AsnWgpuNodeView2d {
         .unwrap();
         let arc_tile_texture = Arc::new(tile_texture);
 
-        let view_size_w: u32 = 1;
-        let view_size_h: u32 = 1;
+        let view_size_w: u32 = 32;
+        let view_size_h: u32 = 32;
         let view = BytesArray {
             size: Size2D {
                 width: view_size_w,
                 height: view_size_h,
             },
-            bytes: vec![0; (view_size_w * view_size_h * 4) as usize],
+            bytes: vec![0_u8; (view_size_w * view_size_h * 4) as usize],
         };
         let view_texture =
             AsnTexture::from_raw(gfx, &view.bytes, &view.size, AsnTextureFormat::Rgba8).unwrap();
@@ -163,7 +163,15 @@ impl TNodeBase for AsnWgpuNodeView2d {
             return;
         }
 
-        println!("update");
+        self.view_texture.resize(gfx, &self.view.size).unwrap();
+
+        // println!("update");
+        // self.view.bytes[0] = 1;
+        // self.view.bytes[1] = 1;
+        // self.view.bytes[2] = 16;
+        // self.view.bytes[3] = 16;
+        // self.view.bytes[4] = 1;
+        // self.view.bytes[5] = 1;
 
         self.view_texture
             .update_from_raw(gfx, &self.view.bytes)
@@ -222,8 +230,8 @@ impl TNodeView2d for AsnWgpuNodeView2d {
 
         let index = ((pos.y * self.view.size.width + pos.x) * 4) as usize;
 
-        self.view.bytes[index] = 14; //cell_x;
-        self.view.bytes[index + 1] = 0; //cell_y;
+        self.view.bytes[index] = cell_x;
+        self.view.bytes[index + 1] = cell_y;
 
         println!("set cell {:?} {:?} {:?} {:?}", pos, cell_y, cell_x, c);
         self.is_need_update = true;

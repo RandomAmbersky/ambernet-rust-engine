@@ -30,7 +30,6 @@ impl Handler {
         let mut quad2 = w.new_quad();
 
         let raw_texture = load_texture(TEXTURE_QUAD_SOURCE);
-
         let mut texture = AsnTexture::from_raw(
             w,
             &raw_texture.bytes,
@@ -54,13 +53,13 @@ impl Handler {
         .unwrap();
 
         view.set_tile_texture(w, &tile_texture).unwrap();
-        view.set_view_size(&Size2D {
-            width: 32,
-            height: 32,
-        })
-        .unwrap();
+        // view.set_view_size(&Size2D {
+        //     width: 32,
+        //     height: 32,
+        // })
+        // .unwrap();
 
-        let mut rng = SmallRng::seed_from_u64(RNG_SEED);
+        let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         Handler {
             rng,
@@ -96,6 +95,7 @@ impl Handler {
         //     .unwrap();
 
         self.view.set_cell(&Pos2D { x: 0, y: 0 }, 1).unwrap();
+        self.view.set_cell(&Pos2D { x: 1, y: 1 }, 16).unwrap();
         self.view.update(e.get_winapi())
     }
 }
@@ -150,14 +150,14 @@ fn randomize_array(mut rng: SmallRng, a: &mut Array2D<u32, u8>) -> SmallRng {
 
     let cell: u8 = rng.gen_range(0..255);
     a.bytes[index as usize] = cell;
-    // for x in 0..a.size.width {
-    //     for y in 0..a.size.height {
-    //         let index = ((y * a.size.width + x) * 4) as usize;
-    //         a.bytes[index] = rng.gen_range(0..128);
-    //         a.bytes[index+1] = rng.gen_range(0..128);
-    //         a.bytes[index+2] = rng.gen_range(0..128);
-    //         a.bytes[index+3] = rng.gen_range(0..128);
-    //     }
-    // }
+    for x in 0..a.size.width {
+        for y in 0..a.size.height {
+            let index = ((y * a.size.width + x) * 4) as usize;
+            a.bytes[index] = rng.gen_range(0..128);
+            a.bytes[index + 1] = rng.gen_range(0..128);
+            a.bytes[index + 2] = rng.gen_range(0..128);
+            a.bytes[index + 3] = rng.gen_range(0..128);
+        }
+    }
     rng
 }
