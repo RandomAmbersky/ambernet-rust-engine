@@ -96,6 +96,7 @@ impl Handler {
 
         self.view.set_cell(&Pos2D { x: 0, y: 0 }, 1).unwrap();
         self.view.set_cell(&Pos2D { x: 1, y: 1 }, 16).unwrap();
+        self.view.set_cell(&Pos2D { x: 2, y: 2 }, 32).unwrap();
         self.view.update(e.get_winapi())
     }
 }
