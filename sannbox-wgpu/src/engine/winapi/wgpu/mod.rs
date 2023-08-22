@@ -8,7 +8,6 @@ use crate::engine::winapi::asn_window::AsnWindow;
 use crate::engine::winapi::event_converter::{convert_asn_event, CustomEvent};
 use crate::engine::winapi::scene::{AsnWgpuNodeQuad, AsnWgpuNodeView2d};
 use crate::engine::winapi::utils::ToWgpuFormat;
-use crate::engine::winapi::{NodeQuad, NodeView2d};
 use wgpu::{
     Adapter, CommandEncoder, Device, Instance, InstanceDescriptor, Queue, Surface, SurfaceTexture,
     TextureFormat, TextureView, TextureViewDescriptor,
@@ -94,8 +93,6 @@ pub struct AsnWgpuFrameContext {
 }
 
 impl TAsnWinapi for AsnWgpuWinApi {
-    type NodeQuad = NodeQuad;
-    type NodeView2d = NodeView2d;
     type FrameContext = AsnWgpuFrameContext;
 
     fn get_config(&self) -> &AsnWinapiConfig {
@@ -148,13 +145,5 @@ impl TAsnWinapi for AsnWgpuWinApi {
         self.queue.submit(iter::once(fcx.encoder.finish()));
         fcx.frame.present();
         Ok(())
-    }
-
-    fn new_quad(&mut self) -> Self::NodeQuad {
-        AsnWgpuNodeQuad::new(self)
-    }
-
-    fn new_view2d(&mut self) -> Self::NodeView2d {
-        AsnWgpuNodeView2d::new(self)
     }
 }

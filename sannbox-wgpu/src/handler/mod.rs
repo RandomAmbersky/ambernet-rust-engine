@@ -5,7 +5,7 @@ use crate::engine::core::math::{Array2D, Pos2D, Size2D};
 use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler};
 use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
-use crate::engine::{AsnTexture, Engine, NodeQuad, NodeView2d, TAsnEngine};
+use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine, TAsnEngine};
 use crate::handler::resources::{TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 use image::GenericImageView;
 use rand::prelude::SmallRng;
@@ -17,17 +17,17 @@ const RNG_SEED: u64 = 11;
 pub struct Handler {
     arc_texture: Arc<Mutex<AsnTexture>>,
     raw_texture: Array2D<u32, u8>,
-    quad: NodeQuad,
-    quad2: NodeQuad,
-    view: NodeView2d,
+    quad: AsnNodeQuad,
+    quad2: AsnNodeQuad,
+    view: AsnNodeView2d,
     rng: SmallRng,
 }
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
         let w = e.get_winapi();
-        let mut quad = w.new_quad();
-        let mut quad2 = w.new_quad();
+        let mut quad = AsnNodeQuad::new(w);
+        let mut quad2 = AsnNodeQuad::new(w);
 
         let raw_texture = load_texture(TEXTURE_QUAD_SOURCE);
         let mut texture = AsnTexture::from_raw(
@@ -42,7 +42,7 @@ impl Handler {
         quad.set_texture(w, &texture).unwrap();
         quad2.set_texture(w, &texture).unwrap();
 
-        let mut view = w.new_view2d();
+        let mut view = AsnNodeView2d::new(w);
         let raw_tile_texture = load_texture(TEXTURE_TIILES_SOURCE);
         let tile_texture = AsnTexture::from_raw(
             w,

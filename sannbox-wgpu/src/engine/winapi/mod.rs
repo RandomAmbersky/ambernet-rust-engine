@@ -1,9 +1,8 @@
 use crate::engine::core::traits::TAsnHandler;
 use crate::engine::winapi::event_converter::{convert_event, CustomEvent};
-use crate::engine::winapi::scene::{AsnWgpuNodeQuad, AsnWgpuNodeView2d};
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use crate::engine::TAsnEngine;
-use winit::event_loop::{ControlFlow, EventLoop, EventLoopBuilder, EventLoopProxy};
+use winit::event_loop::{ControlFlow, EventLoop, EventLoopBuilder};
 
 mod asn_window;
 pub mod defines;
@@ -14,8 +13,10 @@ mod utils;
 mod wgpu;
 
 pub type WinApi = AsnWgpuWinApi;
-pub type NodeQuad = AsnWgpuNodeQuad;
-pub type NodeView2d = AsnWgpuNodeView2d;
+
+pub type AsnNodeQuad = scene::AsnWgpuNodeQuad;
+pub type AsnNodeView2d = scene::AsnWgpuNodeView2d;
+
 pub type AsnTexture = wgpu::texture::AsnTexture;
 
 pub struct RunnerPreset {
