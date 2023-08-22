@@ -54,11 +54,11 @@ impl Handler {
         .unwrap();
 
         view.set_tile_texture(w, &tile_texture).unwrap();
-        // view.set_view_size(&Size2D {
-        //     width: 10,
-        //     height: 10,
-        // })
-        // .unwrap();
+        view.set_view_size(&Size2D {
+            width: 32,
+            height: 32,
+        })
+        .unwrap();
 
         let mut rng = SmallRng::seed_from_u64(RNG_SEED);
 
@@ -95,7 +95,7 @@ impl Handler {
         //     .update_from_raw(e.get_winapi(), &self.raw_texture.bytes)
         //     .unwrap();
 
-        self.view.set_cell(&Pos2D { x: 0, y: 0 }, 17).unwrap();
+        self.view.set_cell(&Pos2D { x: 0, y: 0 }, 1).unwrap();
         self.view.update(e.get_winapi())
     }
 }

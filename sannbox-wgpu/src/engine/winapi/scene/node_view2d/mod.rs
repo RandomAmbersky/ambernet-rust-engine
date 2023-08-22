@@ -217,13 +217,13 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             panic!("Pos {:?} not in view size {:?}", pos, self.view.size)
         }
 
-        let cell_y = c / 16;
-        let cell_x = c - cell_y * 16;
+        let cell_y: u8 = c / 16;
+        let cell_x: u8 = c - cell_y * 16;
 
         let index = ((pos.y * self.view.size.width + pos.x) * 4) as usize;
 
-        self.view.bytes[index] = cell_x;
-        self.view.bytes[index + 1] = cell_y;
+        self.view.bytes[index] = 14; //cell_x;
+        self.view.bytes[index + 1] = 0; //cell_y;
 
         println!("set cell {:?} {:?} {:?} {:?}", pos, cell_y, cell_x, c);
         self.is_need_update = true;
