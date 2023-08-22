@@ -18,14 +18,21 @@ use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
 use std::sync::Arc;
 use wgpu::{BindGroup, BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat};
 
-pub struct AsnWgpuNodeView2d {
+struct RenderState {
+    render_pipeline: wgpu::RenderPipeline,
+    bind_group: wgpu::BindGroup,
+    mesh: Mesh,
+}
+
+struct ViewState {
     view_texture: AsnTexture,
     view: BytesArray,
-    mesh: Mesh,
-    bind_group: wgpu::BindGroup,
-    render_pipeline: wgpu::RenderPipeline,
+}
+
+pub struct AsnWgpuNodeView2d {
+    render_state: RenderState,
+    view_state: ViewState,
     is_need_update: bool,
-    shader: ShaderModule,
 }
 
 fn create_node_view2d_set(
@@ -71,16 +78,19 @@ fn create_node_view2d_set(
     (render_pipeline, bind_group)
 }
 
+fn create_shader(d: &wgpu::Device) -> wgpu::ShaderModule {
+    let shader = d.create_shader_module(wgpu::ShaderModuleDescriptor {
+        label: Some("Shader"),
+        source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
+    });
+    shader
+}
+
 impl AsnWgpuNodeView2d {
     pub fn new(gfx: &mut AsnWgpuWinApi) -> Self {
         let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
 
-        let shader = gfx
-            .get_device()
-            .create_shader_module(wgpu::ShaderModuleDescriptor {
-                label: Some("Shader"),
-                source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
-            });
+        let shader = create_shader(gfx.get_device());
 
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         println!("texure format: {:?}", texture_format);
@@ -114,40 +124,70 @@ impl AsnWgpuNodeView2d {
             &shader,
         );
 
-        Self {
-            view_texture,
-            shader,
+        let render_state = RenderState {
             render_pipeline,
-            view,
-            mesh,
             bind_group,
+            mesh,
+        };
+        let view_state = ViewState { view, view_texture };
+
+        Self {
+            render_state,
+            view_state,
+            // view_texture,
+            // shader,
+            // view,
             is_need_update: false,
         }
     }
-    fn draw_me(&mut self, fcx: &mut AsnWgpuFrameContext) {
-        let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
-            label: Some("Render Pass"),
-            color_attachments: &[Some(wgpu::RenderPassColorAttachment {
-                view: &fcx.view,
-                resolve_target: None,
-                ops: wgpu::Operations {
-                    load: wgpu::LoadOp::Clear(wgpu::Color {
-                        r: 0.1,
-                        g: 0.2,
-                        b: 0.3,
-                        a: 1.0,
-                    }),
-                    store: true,
-                },
-            })],
-            depth_stencil_attachment: None,
-        });
-        render_pass.set_pipeline(&self.render_pipeline);
-        render_pass.set_bind_group(0, &self.bind_group, &[]);
-        render_pass.set_vertex_buffer(0, self.mesh.vertex_buffer.slice(..));
-        render_pass.set_index_buffer(self.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
-        render_pass.draw_indexed(0..self.mesh.num_indices, 0, 0..1);
+}
+
+fn draw_render_state(fcx: &mut AsnWgpuFrameContext, r: &RenderState) {
+    let mut render_pass = fcx.encoder.begin_render_pass(&wgpu::RenderPassDescriptor {
+        label: Some("Render Pass"),
+        color_attachments: &[Some(wgpu::RenderPassColorAttachment {
+            view: &fcx.view,
+            resolve_target: None,
+            ops: wgpu::Operations {
+                load: wgpu::LoadOp::Clear(wgpu::Color {
+                    r: 0.1,
+                    g: 0.2,
+                    b: 0.3,
+                    a: 1.0,
+                }),
+                store: true,
+            },
+        })],
+        depth_stencil_attachment: None,
+    });
+    render_pass.set_pipeline(&r.render_pipeline);
+    render_pass.set_bind_group(0, &r.bind_group, &[]);
+    render_pass.set_vertex_buffer(0, r.mesh.vertex_buffer.slice(..));
+    render_pass.set_index_buffer(r.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
+    render_pass.draw_indexed(0..r.mesh.num_indices, 0, 0..1);
+}
+
+fn map_view_to_texture(v: &mut ViewState, gfx: &mut <AsnWgpuNodeView2d as TNodeBase>::WinApi) {
+    v.view_texture.update_from_raw(gfx, &v.view.bytes).unwrap();
+}
+
+fn set_cell(
+    v: &mut ViewState,
+    pos: &Pos2D<<AsnWgpuNodeView2d as TNodeView2d>::SizeDimension>,
+    c: CellSize,
+) {
+    if !v.view.size.is_pos_into(pos) {
+        panic!("Pos {:?} not in view size {:?}", pos, v.view.size)
     }
+
+    let cell_y: u8 = c / 16;
+    let cell_x: u8 = c - cell_y * 16;
+
+    let index = ((pos.y * v.view.size.width + pos.x) * 4) as usize;
+
+    v.view.bytes[index] = cell_x;
+    v.view.bytes[index + 1] = cell_y;
+    // println!("set cell {:?} {:?} {:?} {:?}", pos, cell_y, cell_x, c);
 }
 
 impl TNodeBase for AsnWgpuNodeView2d {
@@ -155,7 +195,7 @@ impl TNodeBase for AsnWgpuNodeView2d {
     type WinApi = AsnWgpuWinApi;
     type AsnTexture = AsnTexture;
     fn draw(&mut self, fcx: &mut Self::FrameContext) {
-        self.draw_me(fcx);
+        draw_render_state(fcx, &self.render_state);
     }
 
     fn update(&mut self, gfx: &mut Self::WinApi) {
@@ -163,18 +203,9 @@ impl TNodeBase for AsnWgpuNodeView2d {
             return;
         }
 
-        // self.view_texture.resize(gfx, &self.view.size).unwrap();
-
-        // println!("update");
-        // self.view.bytes[0] = 1;
-        // self.view.bytes[1] = 1;
-        // self.view.bytes[2] = 16;
-        // self.view.bytes[3] = 16;
-        // self.view.bytes[4] = 1;
-        // self.view.bytes[5] = 1;
-
-        self.view_texture
-            .update_from_raw(gfx, &self.view.bytes)
+        self.view_state
+            .view_texture
+            .update_from_raw(gfx, &self.view_state.view.bytes)
             .unwrap();
 
         self.is_need_update = false;
@@ -192,17 +223,19 @@ impl TNodeView2d for AsnWgpuNodeView2d {
     ) -> Result<(), AsnRenderError> {
         println!("AsnWgpuNodeView2d set_texture");
 
+        let shader = create_shader(gfx.get_device());
+
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
         let (render_pipeline, bind_group) = create_node_view2d_set(
             gfx,
-            &self.view_texture,
+            &self.view_state.view_texture,
             texture,
             texture_format,
-            &self.shader,
+            &shader,
         );
 
-        self.render_pipeline = render_pipeline;
-        self.bind_group = bind_group;
+        self.render_state.render_pipeline = render_pipeline;
+        self.render_state.bind_group = bind_group;
         Ok(())
     }
 
@@ -211,7 +244,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             size: *size,
             bytes: vec![0; (size.width * size.height * 4) as usize],
         };
-        self.view = view;
+        self.view_state.view = view;
         self.is_need_update = true;
         Ok(())
     }
@@ -221,25 +254,28 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         pos: &Pos2D<Self::SizeDimension>,
         c: CellSize,
     ) -> Result<(), AsnRenderError> {
-        if !self.view.size.is_pos_into(pos) {
-            panic!("Pos {:?} not in view size {:?}", pos, self.view.size)
-        }
+        // if !self.view_state.view.size.is_pos_into(pos) {
+        //     panic!(
+        //         "Pos {:?} not in view size {:?}",
+        //         pos, self.view_state.view.size
+        //     )
+        // }
+        //
+        // let cell_y: u8 = c / 16;
+        // let cell_x: u8 = c - cell_y * 16;
+        //
+        // let index = ((pos.y * self.view_state.view.size.width + pos.x) * 4) as usize;
+        //
+        // self.view_state.view.bytes[index] = cell_x;
+        // self.view_state.view.bytes[index + 1] = cell_y;
 
-        let cell_y: u8 = c / 16;
-        let cell_x: u8 = c - cell_y * 16;
-
-        let index = ((pos.y * self.view.size.width + pos.x) * 4) as usize;
-
-        self.view.bytes[index] = cell_x;
-        self.view.bytes[index + 1] = cell_y;
-
-        println!("set cell {:?} {:?} {:?} {:?}", pos, cell_y, cell_x, c);
+        set_cell(&mut self.view_state, pos, c);
         self.is_need_update = true;
         Ok(())
     }
 }
 
-pub fn get_render_pipeline(
+fn get_render_pipeline(
     device: &Device,
     format: TextureFormat,
     shader: &ShaderModule,
