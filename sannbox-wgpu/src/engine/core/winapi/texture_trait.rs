@@ -12,5 +12,7 @@ pub trait TTexture {
         f: AsnTextureFormat,
     ) -> Result<Self::AsnTexture, AsnRenderError>;
 
+    fn get_size(&self) -> Size2D<u32>;
+
     fn update_from_raw(&mut self, gfx: &Self::WinApi, bytes: &[u8]) -> Result<(), AsnRenderError>;
 }

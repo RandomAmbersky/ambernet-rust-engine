@@ -110,6 +110,14 @@ impl TTexture for AsnTexture {
         })
     }
 
+    fn get_size(&self) -> Size2D<u32> {
+        let size = self.texture.size();
+        Size2D {
+            width: size.width,
+            height: size.height,
+        }
+    }
+
     fn update_from_raw(&mut self, gfx: &Self::WinApi, bytes: &[u8]) -> Result<(), AsnRenderError> {
         // let checking_size = self.texture.size().width * self.texture.size().height;
         // println!(

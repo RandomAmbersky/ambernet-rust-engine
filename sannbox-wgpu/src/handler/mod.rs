@@ -19,6 +19,11 @@ const MAP_VIEW_SIZE: Size2D<u32> = Size2D {
     height: 32,
 };
 
+const TILE_SIZE: Size2D<u32> = Size2D {
+    width: 16,
+    height: 16,
+};
+
 pub struct Handler {
     arc_texture: Arc<Mutex<AsnTexture>>,
     raw_texture: Array2D<u32, u8>,
@@ -55,7 +60,7 @@ impl Handler {
             AsnTextureFormat::Rgba8,
         )
         .unwrap();
-        let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE);
+        let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE, &TILE_SIZE);
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 

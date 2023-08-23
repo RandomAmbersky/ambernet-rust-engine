@@ -42,19 +42,31 @@ struct MapSetupUniform {
     u_tile_size: [f32; 2],
     u_sheet_size: [f32; 2],
     max_color_value: f32,
+    _padding: u32, // stupid manual aligned, look at https://sotrh.github.io/learn-wgpu/news/0.12/#multi-view-added
 }
 
-fn create_map_setup_bind_group(d: &wgpu::Device) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
+fn create_map_setup_bind_group(
+    d: &wgpu::Device,
+    tile_texture_size_in_pixels: &Size2D<u32>,
+    map_size_in_tiles: &Size2D<u32>,
+    tile_size_in_pixels: &Size2D<u32>,
+) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
     let map_setup_uniform = MapSetupUniform {
-        u_map_size: [32.0, 32.0],
-        u_tile_size: [16.0, 16.0],
-        u_sheet_size: [32.0, 32.0],
-        max_color_value: 256.0 * 2.0 * 2.0 * 2.0 * 2.0,
+        u_map_size: [32.0, 32.0],                       // 8
+        u_tile_size: [16.0, 16.0],                      // 8
+        u_sheet_size: [256.0, 192.0],                   //8
+        max_color_value: 256.0 * 2.0 * 2.0 * 2.0 * 2.0, // 4
+        _padding: 0,
     };
+
+    let var = bytemuck::bytes_of(&map_setup_uniform.max_color_value);
+    println!("VAR LENGTH: {:?}", var.len());
+    let var = bytemuck::bytes_of(&map_setup_uniform);
+    println!("VAR LENGTH: {:?}", var.len());
 
     let map_setup_buffer = d.create_buffer_init(&wgpu::util::BufferInitDescriptor {
         label: Some("map_setup_buffer"),
-        contents: bytemuck::cast_slice(&[map_setup_uniform]),
+        contents: bytemuck::bytes_of(&map_setup_uniform),
         usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
     });
 
@@ -62,7 +74,7 @@ fn create_map_setup_bind_group(d: &wgpu::Device) -> (wgpu::BindGroup, wgpu::Bind
         d.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
             entries: &[wgpu::BindGroupLayoutEntry {
                 binding: 0,
-                visibility: wgpu::ShaderStages::VERTEX,
+                visibility: wgpu::ShaderStages::FRAGMENT,
                 ty: wgpu::BindingType::Buffer {
                     ty: wgpu::BufferBindingType::Uniform,
                     has_dynamic_offset: false,
@@ -116,17 +128,6 @@ fn create_diffuse_bind_group(
     let diffuse_bind_group = d.create_bind_group(&group_desc);
     (diffuse_bind_group, diffuse_bind_group_layout)
 }
-
-// fn create_node_view2d_set(
-//     gfx: &mut AsnWgpuWinApi,
-//     texture_format: TextureFormat,
-//     shader: &ShaderModule,
-// ) -> (RenderPipeline, BindGroup) {
-//     let render_pipeline =
-//         get_render_pipeline(gfx.get_device(), texture_format, shader, bind_group_layouts);
-//
-//     (render_pipeline, bind_group)
-// }
 
 fn create_shader(d: &wgpu::Device) -> wgpu::ShaderModule {
     let shader = d.create_shader_module(wgpu::ShaderModuleDescriptor {
@@ -214,7 +215,8 @@ impl TNodeView2d for AsnWgpuNodeView2d {
     fn new(
         gfx: &mut Self::WinApi,
         tile_texture: &Self::AsnTexture,
-        view_size: &Size2D<u32>,
+        view_size_in_tiles: &Size2D<u32>,
+        tile_size_in_pixels: &Size2D<u32>,
     ) -> Self {
         let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
 
@@ -225,10 +227,10 @@ impl TNodeView2d for AsnWgpuNodeView2d {
 
         let view = BytesArray {
             size: Size2D {
-                width: view_size.width,
-                height: view_size.height,
+                width: view_size_in_tiles.width,
+                height: view_size_in_tiles.height,
             },
-            bytes: vec![0_u8; (view_size.get_size() * 4) as usize],
+            bytes: vec![0_u8; (view_size_in_tiles.get_size() * 4) as usize],
         };
         let view_texture =
             AsnTexture::from_raw(gfx, &view.bytes, &view.size, AsnTextureFormat::Rgba8).unwrap();
@@ -236,8 +238,12 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         let (diffuse_bind_group, diffuse_bind_group_layout) =
             create_diffuse_bind_group(gfx.get_device(), &view_texture, &tile_texture);
 
-        let (map_setup_bind_group, map_setup_bind_group_layout) =
-            create_map_setup_bind_group(gfx.get_device());
+        let (map_setup_bind_group, map_setup_bind_group_layout) = create_map_setup_bind_group(
+            gfx.get_device(),
+            &tile_texture.get_size(),
+            &view_size_in_tiles,
+            &tile_size_in_pixels,
+        );
 
         let bind_group_layouts = &[&diffuse_bind_group_layout, &map_setup_bind_group_layout];
 
