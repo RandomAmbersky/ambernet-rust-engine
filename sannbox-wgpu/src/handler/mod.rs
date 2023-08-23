@@ -42,7 +42,6 @@ impl Handler {
         quad.set_texture(w, &texture).unwrap();
         quad2.set_texture(w, &texture).unwrap();
 
-        let mut view = AsnNodeView2d::new(w);
         let raw_tile_texture = load_texture(TEXTURE_TIILES_SOURCE);
         let tile_texture = AsnTexture::from_raw(
             w,
@@ -51,13 +50,14 @@ impl Handler {
             AsnTextureFormat::Rgba8,
         )
         .unwrap();
-
-        view.set_tile_texture(w, &tile_texture).unwrap();
-        // view.set_view_size(&Size2D {
-        //     width: 32,
-        //     height: 32,
-        // })
-        // .unwrap();
+        let mut view = AsnNodeView2d::new(
+            w,
+            &tile_texture,
+            &Size2D {
+                width: 32,
+                height: 32,
+            },
+        );
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 

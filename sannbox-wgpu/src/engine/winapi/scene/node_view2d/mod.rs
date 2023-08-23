@@ -87,56 +87,56 @@ fn create_shader(d: &wgpu::Device) -> wgpu::ShaderModule {
 }
 
 impl AsnWgpuNodeView2d {
-    pub fn new(gfx: &mut AsnWgpuWinApi) -> Self {
-        let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
-
-        let shader = create_shader(gfx.get_device());
-
-        let texture_format = gfx.get_config().texture_format.to_wgpu_format();
-        println!("texure format: {:?}", texture_format);
-
-        let tile_texture = AsnTexture::from_raw(
-            gfx,
-            &ONE_BLUE_PIXEL.bytes,
-            &ONE_BLUE_PIXEL.size,
-            ONE_BLUE_PIXEL.texture_format,
-        )
-        .unwrap();
-        let arc_tile_texture = Arc::new(tile_texture);
-
-        let view_size_w: u32 = 32;
-        let view_size_h: u32 = 32;
-        let view = BytesArray {
-            size: Size2D {
-                width: view_size_w,
-                height: view_size_h,
-            },
-            bytes: vec![0_u8; (view_size_w * view_size_h * 4) as usize],
-        };
-        let view_texture =
-            AsnTexture::from_raw(gfx, &view.bytes, &view.size, AsnTextureFormat::Rgba8).unwrap();
-
-        let (render_pipeline, bind_group) = create_node_view2d_set(
-            gfx,
-            &view_texture,
-            &arc_tile_texture,
-            texture_format,
-            &shader,
-        );
-
-        let render_state = RenderState {
-            render_pipeline,
-            bind_group,
-            mesh,
-        };
-        let view_state = ViewState { view, view_texture };
-
-        Self {
-            render_state,
-            view_state,
-            is_need_update: false,
-        }
-    }
+    // pub fn new(gfx: &mut AsnWgpuWinApi) -> Self {
+    //     let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
+    //
+    //     let shader = create_shader(gfx.get_device());
+    //
+    //     let texture_format = gfx.get_config().texture_format.to_wgpu_format();
+    //     println!("texure format: {:?}", texture_format);
+    //
+    //     let tile_texture = AsnTexture::from_raw(
+    //         gfx,
+    //         &ONE_BLUE_PIXEL.bytes,
+    //         &ONE_BLUE_PIXEL.size,
+    //         ONE_BLUE_PIXEL.texture_format,
+    //     )
+    //     .unwrap();
+    //     let arc_tile_texture = Arc::new(tile_texture);
+    //
+    //     let view_size_w: u32 = 32;
+    //     let view_size_h: u32 = 32;
+    //     let view = BytesArray {
+    //         size: Size2D {
+    //             width: view_size_w,
+    //             height: view_size_h,
+    //         },
+    //         bytes: vec![0_u8; (view_size_w * view_size_h * 4) as usize],
+    //     };
+    //     let view_texture =
+    //         AsnTexture::from_raw(gfx, &view.bytes, &view.size, AsnTextureFormat::Rgba8).unwrap();
+    //
+    //     let (render_pipeline, bind_group) = create_node_view2d_set(
+    //         gfx,
+    //         &view_texture,
+    //         &arc_tile_texture,
+    //         texture_format,
+    //         &shader,
+    //     );
+    //
+    //     let render_state = RenderState {
+    //         render_pipeline,
+    //         bind_group,
+    //         mesh,
+    //     };
+    //     let view_state = ViewState { view, view_texture };
+    //
+    //     Self {
+    //         render_state,
+    //         view_state,
+    //         is_need_update: false,
+    //     }
+    // }
 }
 
 fn draw_render_state(fcx: &mut AsnWgpuFrameContext, r: &RenderState) {
@@ -213,6 +213,44 @@ impl TNodeView2d for AsnWgpuNodeView2d {
     type CellType = defines::CellSize;
     type SizeDimension = defines::SizeDimension;
 
+    fn new(
+        gfx: &mut Self::WinApi,
+        tile_texture: &Self::AsnTexture,
+        view_size: &Size2D<u32>,
+    ) -> Self {
+        let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
+
+        let shader = create_shader(gfx.get_device());
+
+        let texture_format = gfx.get_config().texture_format.to_wgpu_format();
+        println!("texure format: {:?}", texture_format);
+
+        let view = BytesArray {
+            size: Size2D {
+                width: view_size.width,
+                height: view_size.height,
+            },
+            bytes: vec![0_u8; (view_size.get_size() * 4) as usize],
+        };
+        let view_texture =
+            AsnTexture::from_raw(gfx, &view.bytes, &view.size, AsnTextureFormat::Rgba8).unwrap();
+        let (render_pipeline, bind_group) =
+            create_node_view2d_set(gfx, &view_texture, &tile_texture, texture_format, &shader);
+
+        let render_state = RenderState {
+            render_pipeline,
+            bind_group,
+            mesh,
+        };
+        let view_state = ViewState { view, view_texture };
+
+        Self {
+            render_state,
+            view_state,
+            is_need_update: false,
+        }
+    }
+
     fn set_tile_texture(
         &mut self,
         gfx: &mut Self::WinApi,
@@ -233,16 +271,6 @@ impl TNodeView2d for AsnWgpuNodeView2d {
 
         self.render_state.render_pipeline = render_pipeline;
         self.render_state.bind_group = bind_group;
-        Ok(())
-    }
-
-    fn set_view_size(&mut self, size: &Size2D<Self::SizeDimension>) -> Result<(), AsnRenderError> {
-        let view = BytesArray {
-            size: *size,
-            bytes: vec![0; (size.width * size.height * 4) as usize],
-        };
-        self.view_state.view = view;
-        self.is_need_update = true;
         Ok(())
     }
 
