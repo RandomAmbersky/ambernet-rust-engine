@@ -6,8 +6,7 @@ use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use crate::engine::core::winapi::Mesh;
 use crate::engine::core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use crate::engine::winapi::defines;
-use crate::engine::winapi::defines::{BytesArray, CellSize, SizeDimension};
-use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
+use crate::engine::winapi::defines::{BytesArray, CellSize};
 use crate::engine::winapi::scene::node_view2d::resource::{
     Vertex, INDICES, SHADER_SOURCE, VERTICES,
 };
@@ -15,7 +14,6 @@ use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::bind_groups::{BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
-use std::sync::Arc;
 use wgpu::{BindGroup, BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat};
 
 struct RenderState {
@@ -84,59 +82,6 @@ fn create_shader(d: &wgpu::Device) -> wgpu::ShaderModule {
         source: wgpu::ShaderSource::Wgsl(SHADER_SOURCE.into()),
     });
     shader
-}
-
-impl AsnWgpuNodeView2d {
-    // pub fn new(gfx: &mut AsnWgpuWinApi) -> Self {
-    //     let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
-    //
-    //     let shader = create_shader(gfx.get_device());
-    //
-    //     let texture_format = gfx.get_config().texture_format.to_wgpu_format();
-    //     println!("texure format: {:?}", texture_format);
-    //
-    //     let tile_texture = AsnTexture::from_raw(
-    //         gfx,
-    //         &ONE_BLUE_PIXEL.bytes,
-    //         &ONE_BLUE_PIXEL.size,
-    //         ONE_BLUE_PIXEL.texture_format,
-    //     )
-    //     .unwrap();
-    //     let arc_tile_texture = Arc::new(tile_texture);
-    //
-    //     let view_size_w: u32 = 32;
-    //     let view_size_h: u32 = 32;
-    //     let view = BytesArray {
-    //         size: Size2D {
-    //             width: view_size_w,
-    //             height: view_size_h,
-    //         },
-    //         bytes: vec![0_u8; (view_size_w * view_size_h * 4) as usize],
-    //     };
-    //     let view_texture =
-    //         AsnTexture::from_raw(gfx, &view.bytes, &view.size, AsnTextureFormat::Rgba8).unwrap();
-    //
-    //     let (render_pipeline, bind_group) = create_node_view2d_set(
-    //         gfx,
-    //         &view_texture,
-    //         &arc_tile_texture,
-    //         texture_format,
-    //         &shader,
-    //     );
-    //
-    //     let render_state = RenderState {
-    //         render_pipeline,
-    //         bind_group,
-    //         mesh,
-    //     };
-    //     let view_state = ViewState { view, view_texture };
-    //
-    //     Self {
-    //         render_state,
-    //         view_state,
-    //         is_need_update: false,
-    //     }
-    // }
 }
 
 fn draw_render_state(fcx: &mut AsnWgpuFrameContext, r: &RenderState) {
