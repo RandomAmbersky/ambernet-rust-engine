@@ -19,6 +19,7 @@ use wgpu::{BindGroup, BindGroupLayout, Device, RenderPipeline, ShaderModule, Tex
 struct RenderState {
     render_pipeline: wgpu::RenderPipeline,
     bind_group: wgpu::BindGroup,
+    // map_defines: wgpu::BindGroup,
     mesh: Mesh,
 }
 
@@ -32,6 +33,37 @@ pub struct AsnWgpuNodeView2d {
     view_state: ViewState,
     is_need_update: bool,
 }
+
+struct MapSetupUniform {
+    u_map_size: [u32; 2],
+    u_tile_size: [u32; 2],
+    u_sheet_size: [u32; 2],
+    max_color_value: u32,
+}
+
+// fn create_map_setup_bind_group(d: &wgpu::Device) -> wgpu::BindGroup {
+//     let map_setup_uniform = MapSetupUniform {
+//         max_color_value: 256 * 2 * 2 * 2 * 2,
+//         u_map_size: [32,32],
+//         u_tile_size: [16,16],
+//         u_sheet_size: [32,32],
+//     };
+//
+//     let map_setup_buffer = d.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+//         label: Some("Camera Buffer"),
+//         contents: bytemuck::cast_slice(&[map_setup_uniform]),
+//         usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+//     });
+//
+//     let group_desc = wgpu::BindGroupDescriptor {
+//         layout: &map_setup_bind_group_layout,
+//         entries: map_setup_entry_builder.entries(),
+//         label: Some("diffuse_bind_group"),
+//     };
+//
+//     let bind_group = d.create_bind_group(&group_desc);
+//     bind_group
+// }
 
 fn create_node_view2d_set(
     gfx: &mut AsnWgpuWinApi,
@@ -52,6 +84,7 @@ fn create_node_view2d_set(
     let diffuse_bind_group_layout = gfx
         .get_device()
         .create_bind_group_layout(&group_layout_desc);
+
     let bind_group_layouts = &[&diffuse_bind_group_layout];
     let render_pipeline = get_render_pipeline(
         gfx.get_device(),
