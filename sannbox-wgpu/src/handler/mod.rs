@@ -14,6 +14,11 @@ use std::sync::{Arc, Mutex};
 
 const RNG_SEED: u64 = 11;
 
+const MAP_VIEW_SIZE: Size2D<u32> = Size2D {
+    width: 32,
+    height: 32,
+};
+
 pub struct Handler {
     arc_texture: Arc<Mutex<AsnTexture>>,
     raw_texture: Array2D<u32, u8>,
@@ -50,14 +55,7 @@ impl Handler {
             AsnTextureFormat::Rgba8,
         )
         .unwrap();
-        let mut view = AsnNodeView2d::new(
-            w,
-            &tile_texture,
-            &Size2D {
-                width: 32,
-                height: 32,
-            },
-        );
+        let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE);
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
@@ -81,23 +79,28 @@ impl Handler {
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
     fn update(&mut self, e: &mut Engine) {
-        // let mut rng = self.rng.clone();
-        //
+        let mut rng = self.rng.clone();
+
         // for _ in 0..10 {
         //     rng = randomize_array(rng, &mut self.raw_texture);
         // }
         //
-        // self.rng = rng;
 
         // let mut texture = self.arc_texture.lock().unwrap();
         // texture
         //     .update_from_raw(e.get_winapi(), &self.raw_texture.bytes)
         //     .unwrap();
 
-        self.view.set_cell(&Pos2D { x: 0, y: 0 }, 1).unwrap();
-        self.view.set_cell(&Pos2D { x: 1, y: 1 }, 16).unwrap();
-        self.view.set_cell(&Pos2D { x: 2, y: 2 }, 32).unwrap();
-        self.view.update(e.get_winapi())
+        // self.view.set_cell(&Pos2D { x: 0, y: 0 }, 1).unwrap();
+        // self.view.set_cell(&Pos2D { x: 1, y: 1 }, 16).unwrap();
+        // self.view.set_cell(&Pos2D { x: 2, y: 2 }, 32).unwrap();
+
+        for _ in 0..1000 {
+            rng = randomize_view_cell(rng, &mut self.view);
+        }
+
+        self.view.update(e.get_winapi());
+        self.rng = rng;
     }
 }
 
@@ -139,6 +142,24 @@ fn load_texture(bytes: &[u8]) -> Array2D<u32, u8> {
         size,
         bytes: rgba.to_vec(),
     }
+}
+
+fn randomize_view_cell(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
+    let x: u32 = rng.gen_range(0..MAP_VIEW_SIZE.width);
+    let y: u32 = rng.gen_range(0..MAP_VIEW_SIZE.height);
+    let c: u8 = rng.gen_range(0..128);
+    v.set_cell(&Pos2D { x, y }, c).unwrap();
+    rng
+}
+
+fn randomize_view(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
+    for x in 0..MAP_VIEW_SIZE.width {
+        for y in 0..MAP_VIEW_SIZE.height {
+            let c: u8 = rng.gen_range(0..128);
+            v.set_cell(&Pos2D { x, y }, c).unwrap();
+        }
+    }
+    rng
 }
 
 fn randomize_array(mut rng: SmallRng, a: &mut Array2D<u32, u8>) -> SmallRng {
