@@ -14,12 +14,13 @@ use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::bind_groups::{BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
+use wgpu::util::DeviceExt;
 use wgpu::{BindGroup, BindGroupLayout, Device, RenderPipeline, ShaderModule, TextureFormat};
 
 struct RenderState {
     render_pipeline: wgpu::RenderPipeline,
     bind_group: wgpu::BindGroup,
-    // map_defines: wgpu::BindGroup,
+    map_setup_bind_group: wgpu::BindGroup,
     mesh: Mesh,
 }
 
@@ -34,44 +35,61 @@ pub struct AsnWgpuNodeView2d {
     is_need_update: bool,
 }
 
+#[repr(C)]
+#[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 struct MapSetupUniform {
-    u_map_size: [u32; 2],
-    u_tile_size: [u32; 2],
-    u_sheet_size: [u32; 2],
-    max_color_value: u32,
+    u_map_size: [f32; 2],
+    u_tile_size: [f32; 2],
+    u_sheet_size: [f32; 2],
+    max_color_value: f32,
 }
 
-// fn create_map_setup_bind_group(d: &wgpu::Device) -> wgpu::BindGroup {
-//     let map_setup_uniform = MapSetupUniform {
-//         max_color_value: 256 * 2 * 2 * 2 * 2,
-//         u_map_size: [32,32],
-//         u_tile_size: [16,16],
-//         u_sheet_size: [32,32],
-//     };
-//
-//     let map_setup_buffer = d.create_buffer_init(&wgpu::util::BufferInitDescriptor {
-//         label: Some("Camera Buffer"),
-//         contents: bytemuck::cast_slice(&[map_setup_uniform]),
-//         usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
-//     });
-//
-//     let group_desc = wgpu::BindGroupDescriptor {
-//         layout: &map_setup_bind_group_layout,
-//         entries: map_setup_entry_builder.entries(),
-//         label: Some("diffuse_bind_group"),
-//     };
-//
-//     let bind_group = d.create_bind_group(&group_desc);
-//     bind_group
-// }
+fn create_map_setup_bind_group(d: &wgpu::Device) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
+    let map_setup_uniform = MapSetupUniform {
+        u_map_size: [32.0, 32.0],
+        u_tile_size: [16.0, 16.0],
+        u_sheet_size: [32.0, 32.0],
+        max_color_value: 256.0 * 2.0 * 2.0 * 2.0 * 2.0,
+    };
 
-fn create_node_view2d_set(
-    gfx: &mut AsnWgpuWinApi,
+    let map_setup_buffer = d.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+        label: Some("map_setup_buffer"),
+        contents: bytemuck::cast_slice(&[map_setup_uniform]),
+        usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+    });
+
+    let map_setup_bind_group_layout =
+        d.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
+            entries: &[wgpu::BindGroupLayoutEntry {
+                binding: 0,
+                visibility: wgpu::ShaderStages::VERTEX,
+                ty: wgpu::BindingType::Buffer {
+                    ty: wgpu::BufferBindingType::Uniform,
+                    has_dynamic_offset: false,
+                    min_binding_size: None,
+                },
+                count: None,
+            }],
+            label: Some("map_setup_bind_group_layout"),
+        });
+
+    let map_setup_bind_group = d.create_bind_group(&wgpu::BindGroupDescriptor {
+        layout: &map_setup_bind_group_layout,
+        entries: &[wgpu::BindGroupEntry {
+            binding: 0,
+            resource: map_setup_buffer.as_entire_binding(),
+        }],
+        label: Some("map_setup_bind_group"),
+    });
+
+    (map_setup_bind_group, map_setup_bind_group_layout)
+}
+
+fn create_diffuse_bind_group(
+    d: &wgpu::Device,
     texture: &AsnTexture,
     tile_texture: &AsnTexture,
-    texture_format: TextureFormat,
-    shader: &ShaderModule,
-) -> (RenderPipeline, BindGroup) {
+) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
     let group_layout_builder = BindGroupLayoutBuilder::new()
         .texture()
         .sampler()
@@ -81,17 +99,8 @@ fn create_node_view2d_set(
         entries: group_layout_builder.entries(),
         label: Some("texture_bind_group_layout"),
     };
-    let diffuse_bind_group_layout = gfx
-        .get_device()
-        .create_bind_group_layout(&group_layout_desc);
-
-    let bind_group_layouts = &[&diffuse_bind_group_layout];
-    let render_pipeline = get_render_pipeline(
-        gfx.get_device(),
-        texture_format,
-        &shader,
-        bind_group_layouts,
-    );
+    let diffuse_bind_group_layout = d.create_bind_group_layout(&group_layout_desc);
+    // let bind_group_layouts = &[&diffuse_bind_group_layout];
 
     let group_entry_builder = BindGroupEntryBuilder::default()
         .texture(&texture.view)
@@ -104,10 +113,20 @@ fn create_node_view2d_set(
         entries: group_entry_builder.entries(),
         label: Some("diffuse_bind_group"),
     };
-    let bind_group = gfx.get_device().create_bind_group(&group_desc);
-
-    (render_pipeline, bind_group)
+    let diffuse_bind_group = d.create_bind_group(&group_desc);
+    (diffuse_bind_group, diffuse_bind_group_layout)
 }
+
+// fn create_node_view2d_set(
+//     gfx: &mut AsnWgpuWinApi,
+//     texture_format: TextureFormat,
+//     shader: &ShaderModule,
+// ) -> (RenderPipeline, BindGroup) {
+//     let render_pipeline =
+//         get_render_pipeline(gfx.get_device(), texture_format, shader, bind_group_layouts);
+//
+//     (render_pipeline, bind_group)
+// }
 
 fn create_shader(d: &wgpu::Device) -> wgpu::ShaderModule {
     let shader = d.create_shader_module(wgpu::ShaderModuleDescriptor {
@@ -137,6 +156,7 @@ fn draw_render_state(fcx: &mut AsnWgpuFrameContext, r: &RenderState) {
     });
     render_pass.set_pipeline(&r.render_pipeline);
     render_pass.set_bind_group(0, &r.bind_group, &[]);
+    render_pass.set_bind_group(1, &r.map_setup_bind_group, &[]);
     render_pass.set_vertex_buffer(0, r.mesh.vertex_buffer.slice(..));
     render_pass.set_index_buffer(r.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
     render_pass.draw_indexed(0..r.mesh.num_indices, 0, 0..1);
@@ -212,12 +232,29 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         };
         let view_texture =
             AsnTexture::from_raw(gfx, &view.bytes, &view.size, AsnTextureFormat::Rgba8).unwrap();
-        let (render_pipeline, bind_group) =
-            create_node_view2d_set(gfx, &view_texture, &tile_texture, texture_format, &shader);
+
+        let (diffuse_bind_group, diffuse_bind_group_layout) =
+            create_diffuse_bind_group(gfx.get_device(), &view_texture, &tile_texture);
+
+        let (map_setup_bind_group, map_setup_bind_group_layout) =
+            create_map_setup_bind_group(gfx.get_device());
+
+        let bind_group_layouts = &[&diffuse_bind_group_layout, &map_setup_bind_group_layout];
+
+        let render_pipeline = get_render_pipeline(
+            gfx.get_device(),
+            texture_format,
+            &shader,
+            &bind_group_layouts,
+        );
+
+        // let (render_pipeline, bind_group) =
+        //     create_node_view2d_set(gfx, &view_texture, &tile_texture, texture_format, &shader);
 
         let render_state = RenderState {
             render_pipeline,
-            bind_group,
+            bind_group: diffuse_bind_group,
+            map_setup_bind_group,
             mesh,
         };
         let view_state = ViewState { view, view_texture };
@@ -227,29 +264,6 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             view_state,
             is_need_update: false,
         }
-    }
-
-    fn set_tile_texture(
-        &mut self,
-        gfx: &mut Self::WinApi,
-        texture: &Self::AsnTexture,
-    ) -> Result<(), AsnRenderError> {
-        println!("AsnWgpuNodeView2d set_texture");
-
-        let shader = create_shader(gfx.get_device());
-
-        let texture_format = gfx.get_config().texture_format.to_wgpu_format();
-        let (render_pipeline, bind_group) = create_node_view2d_set(
-            gfx,
-            &self.view_state.view_texture,
-            texture,
-            texture_format,
-            &shader,
-        );
-
-        self.render_state.render_pipeline = render_pipeline;
-        self.render_state.bind_group = bind_group;
-        Ok(())
     }
 
     fn set_cell(
@@ -282,7 +296,7 @@ fn get_render_pipeline(
     device: &Device,
     format: TextureFormat,
     shader: &ShaderModule,
-    bind_group_layouts: &[&BindGroupLayout],
+    bind_group_layouts: &[&BindGroupLayout; 2],
 ) -> wgpu::RenderPipeline {
     let desc = wgpu::PipelineLayoutDescriptor {
         label: Some("Render Pipeline Layout"),
