@@ -52,10 +52,19 @@ fn create_map_setup_bind_group(
     tile_size_in_pixels: &Size2D<u32>,
 ) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
     let map_setup_uniform = MapSetupUniform {
-        u_map_size: [32.0, 32.0],                       // 8
-        u_tile_size: [16.0, 16.0],                      // 8
-        u_sheet_size: [256.0, 192.0],                   //8
-        max_color_value: 256.0 * 2.0 * 2.0 * 2.0 * 2.0, // 4
+        u_map_size: [
+            map_size_in_tiles.width as f32,
+            map_size_in_tiles.height as f32,
+        ], // 8
+        u_tile_size: [
+            tile_size_in_pixels.width as f32,
+            tile_size_in_pixels.height as f32,
+        ],
+        u_sheet_size: [
+            tile_texture_size_in_pixels.width as f32,
+            tile_texture_size_in_pixels.height as f32,
+        ],
+        max_color_value: 256.0 * 2.0 * 2.0 * 2.0 * 2.0,
         _padding: 0,
     };
 
