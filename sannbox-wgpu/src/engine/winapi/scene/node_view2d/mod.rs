@@ -64,7 +64,7 @@ fn create_map_setup_bind_group(
             tile_texture_size_in_pixels.width as f32,
             tile_texture_size_in_pixels.height as f32,
         ],
-        max_color_value: 256.0 * 2.0 * 2.0 * 2.0 * 2.0,
+        max_color_value: 255.0 * 2.0 * 2.0 * 2.0 * 2.0,
         _padding: 0,
     };
 

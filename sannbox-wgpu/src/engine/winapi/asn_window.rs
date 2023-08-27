@@ -35,6 +35,9 @@ impl AsnWindow {
 
         println!("get_config: {:?} ", surface_format);
 
+        let caps_info = surface_caps.formats;
+        println!("caps_info formats: {:?} ", caps_info);
+
         SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,
             format: surface_format,

@@ -16,8 +16,8 @@ use asn_tiled::load_tmx;
 const RNG_SEED: u64 = 11;
 
 const MAP_VIEW_SIZE: Size2D<u32> = Size2D {
-    width: 32,
-    height: 32,
+    width: 16,
+    height: 12,
 };
 
 const TILE_SIZE: Size2D<u32> = Size2D {
@@ -65,6 +65,7 @@ impl Handler {
         )
         .unwrap();
         let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE, &TILE_SIZE);
+        fill_by_index(&mut view);
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
@@ -104,9 +105,9 @@ impl Handler {
         // self.view.set_cell(&Pos2D { x: 1, y: 1 }, 16).unwrap();
         // self.view.set_cell(&Pos2D { x: 2, y: 2 }, 32).unwrap();
 
-        for _ in 0..1000 {
-            rng = randomize_view_cell(rng, &mut self.view);
-        }
+        // for _ in 0..1000 {
+        //     rng = randomize_view_cell(rng, &mut self.view);
+        // }
 
         self.view.update(e.get_winapi());
         self.rng = rng;
@@ -145,6 +146,16 @@ fn randomize_view_cell(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
     let c: u8 = rng.gen_range(0..128);
     v.set_cell(&Pos2D { x, y }, c).unwrap();
     rng
+}
+
+fn fill_by_index(v: &mut AsnNodeView2d){
+    let mut index: u8 = 0;
+    for y in 0..MAP_VIEW_SIZE.height {
+        for x in 0..MAP_VIEW_SIZE.width {
+            v.set_cell(&Pos2D { x, y }, index).unwrap();
+            index = index.wrapping_add(1);
+        }
+    }
 }
 
 fn randomize_view(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
