@@ -172,10 +172,6 @@ fn draw_render_state(fcx: &mut AsnWgpuFrameContext, r: &RenderState) {
     render_pass.draw_indexed(0..r.mesh.num_indices, 0, 0..1);
 }
 
-fn map_view_to_texture(v: &mut ViewState, gfx: &mut <AsnWgpuNodeView2d as TNodeBase>::WinApi) {
-    v.view_texture.update_from_raw(gfx, &v.view.bytes).unwrap();
-}
-
 fn set_cell(
     v: &mut ViewState,
     pos: &Pos2D<<AsnWgpuNodeView2d as TNodeView2d>::SizeDimension>,
@@ -304,6 +300,23 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         set_cell(&mut self.view_state, pos, c);
         self.is_need_update = true;
         Ok(())
+    }
+
+    fn update_from_raw(&mut self, bytes: &[u8]) -> Result<(), AsnRenderError> {
+        update_view_from_raw(&mut self.view_state, bytes);
+        self.is_need_update = true;
+        Ok(())
+    }
+}
+
+fn update_view_from_raw(v: &mut ViewState, buf: &[u8]) {
+    let mut index: usize = 0;
+    for y in 0..v.view.size.height {
+        for x in 0..v.view.size.width {
+            let c = buf[index] - 1;
+            set_cell(v, &Pos2D { x, y }, c);
+            index += 1;
+        }
     }
 }
 

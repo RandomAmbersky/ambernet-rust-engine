@@ -16,8 +16,8 @@ use asn_tiled::load_tmx;
 const RNG_SEED: u64 = 11;
 
 const MAP_VIEW_SIZE: Size2D<u32> = Size2D {
-    width: 16,
-    height: 12,
+    width: 32,
+    height: 32,
 };
 
 const TILE_SIZE: Size2D<u32> = Size2D {
@@ -61,11 +61,12 @@ impl Handler {
             w,
             &raw_tile_texture.bytes,
             &raw_tile_texture.size,
-            AsnTextureFormat::Rgba8,
+            AsnTextureFormat::Rgba8UnormSrgb
         )
         .unwrap();
         let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE, &TILE_SIZE);
-        fill_by_index(&mut view);
+        // fill_by_index(&mut view);
+        view.update_from_raw(&map.layers[0].bytes).unwrap();
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 

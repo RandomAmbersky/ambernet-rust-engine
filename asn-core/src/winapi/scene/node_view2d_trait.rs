@@ -16,4 +16,6 @@ pub trait TNodeView2d: TNodeBase {
         pos: &Pos2D<Self::SizeDimension>,
         c: Self::CellType,
     ) -> Result<(), AsnRenderError>;
+
+    fn update_from_raw(&mut self, bytes: &[u8]) -> Result<(), AsnRenderError>;
 }
