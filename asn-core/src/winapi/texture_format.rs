@@ -11,11 +11,11 @@ pub enum AsnTextureFormat {
 impl AsnTextureFormat {
     pub fn bytes_per_pixel(&self) -> u32 {
         match self {
-            AsnTextureFormat::Rgba8UnormSrgb => 4,
-            AsnTextureFormat::Bgra8UnormSrgb => 4,
             AsnTextureFormat::Rgba8 => 4,
             AsnTextureFormat::Rgba16 => 4 * 2,
             AsnTextureFormat::Rgba32 => 4 * 4,
+            AsnTextureFormat::Rgba8UnormSrgb => 4,
+            AsnTextureFormat::Bgra8UnormSrgb => 4,
         }
     }
 }
