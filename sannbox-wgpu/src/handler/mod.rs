@@ -1,7 +1,7 @@
 mod resources;
 
 use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
-use crate::handler::resources::{TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
+use crate::handler::resources::{MAP_TMX, TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 use rand::prelude::SmallRng;
 use rand::{Rng, SeedableRng};
 use std::sync::{Arc, Mutex};
@@ -11,6 +11,7 @@ use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use asn_image::load_texture;
+use asn_tiled::load_tmx;
 
 const RNG_SEED: u64 = 11;
 
@@ -38,6 +39,9 @@ impl Handler {
         let w = e.get_winapi();
         let mut quad = AsnNodeQuad::new(w);
         let mut quad2 = AsnNodeQuad::new(w);
+
+        let map = load_tmx(MAP_TMX).unwrap();
+        println!("{:?} ", map);
 
         let raw_texture = load_texture(TEXTURE_QUAD_SOURCE);
         let mut texture = AsnTexture::from_raw(
