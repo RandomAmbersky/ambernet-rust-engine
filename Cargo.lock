@@ -1353,7 +1353,6 @@ dependencies = [
  "asn-image",
  "asn-logger",
  "bytemuck",
- "image",
  "pollster",
  "rand",
  "wasm-bindgen",

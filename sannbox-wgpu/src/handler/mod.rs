@@ -2,7 +2,6 @@ mod resources;
 
 use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::resources::{TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
-use image::GenericImageView;
 use rand::prelude::SmallRng;
 use rand::{Rng, SeedableRng};
 use std::sync::{Arc, Mutex};

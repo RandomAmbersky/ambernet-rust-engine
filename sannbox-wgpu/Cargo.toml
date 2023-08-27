@@ -19,10 +19,10 @@ bytemuck = { version = "1.13.1", features = [ "derive" ] }
 wgpu = { version = "0.17.0" }
 winit = "0.28.6"
 pollster = "0.3.0"
-[dependencies.image]
-version = "0.24.7"
-default-features = false
-features = ["png", "jpeg"]
+#[dependencies.image]
+#version = "0.24.7"
+#default-features = false
+#features = ["png", "jpeg"]
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wgpu = { version = "0.17.0", features = ["webgl"]}
