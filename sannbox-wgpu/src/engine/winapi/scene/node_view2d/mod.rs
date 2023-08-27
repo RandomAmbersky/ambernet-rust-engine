@@ -310,12 +310,11 @@ impl TNodeView2d for AsnWgpuNodeView2d {
 }
 
 fn update_view_from_raw(v: &mut ViewState, buf: &[u8]) {
-    let mut index: usize = 0;
+    let mut index = buf.iter();
     for y in 0..v.view.size.height {
         for x in 0..v.view.size.width {
-            let c = buf[index] - 1;
+            let c = *index.next().unwrap() - 1;
             set_cell(v, &Pos2D { x, y }, c);
-            index += 1;
         }
     }
 }
