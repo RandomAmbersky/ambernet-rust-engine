@@ -9,3 +9,8 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+asn-core = { path = "../asn-core" }
+[dependencies.image]
+version = "0.24.7"
+default-features = false
+features = ["png", "jpeg"]

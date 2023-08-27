@@ -1,7 +1,7 @@
-use crate::engine::core::errors::AsnError;
-use crate::engine::core::events::AsnEvent;
-use crate::engine::core::math::Size2D;
-use crate::engine::core::winapi::AsnTextureFormat;
+use crate::errors::AsnError;
+use crate::events::AsnEvent;
+use crate::math::Size2D;
+use crate::winapi::AsnTextureFormat;
 
 #[derive(Default)]
 pub struct AsnWinapiConfig {

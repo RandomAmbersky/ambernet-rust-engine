@@ -1,5 +1,5 @@
-use crate::engine::core::math::cell_type::CellType;
-use crate::engine::core::math::{Pos2D, Size2D, UnsignedNum};
+use crate::math::cell_type::CellType;
+use crate::math::{Pos2D, Size2D, UnsignedNum};
 use std::mem;
 
 #[allow(dead_code)]

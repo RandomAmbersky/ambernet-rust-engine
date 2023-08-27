@@ -1,5 +1,5 @@
-use crate::engine::core::winapi::AsnTextureFormat;
 use wgpu::TextureFormat;
+use asn_core::winapi::AsnTextureFormat;
 
 pub trait ToWgpuFormat {
     fn to_wgpu_format(self) -> wgpu::TextureFormat;

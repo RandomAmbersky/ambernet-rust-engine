@@ -1,6 +1,5 @@
-use crate::engine::core::errors::AsnRenderError;
-use crate::engine::core::winapi::scene::node_base_trait::TNodeBase;
-use std::sync::Arc;
+use crate::errors::AsnRenderError;
+use crate::winapi::scene::node_base_trait::TNodeBase;
 
 pub trait TNodeQuad: TNodeBase {
     fn set_texture(

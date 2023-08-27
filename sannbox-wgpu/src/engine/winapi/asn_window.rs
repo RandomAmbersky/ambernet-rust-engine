@@ -1,9 +1,9 @@
-use crate::engine::core::math::Size2D;
 use crate::engine::winapi::event_converter::CustomEvent;
 use wgpu::{Adapter, Device, Instance, Surface, SurfaceConfiguration, TextureFormat};
 use winit::dpi::PhysicalSize;
 use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder, WindowId};
+use asn_core::math::Size2D;
 
 pub struct AsnWindow {
     window: Window,

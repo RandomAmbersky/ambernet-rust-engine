@@ -1,4 +1,4 @@
-use crate::engine::core::math::UnsignedNum;
+use crate::math::UnsignedNum;
 
 #[allow(dead_code)]
 pub struct PixelRGBA<E: UnsignedNum> {

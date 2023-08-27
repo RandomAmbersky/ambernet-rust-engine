@@ -1,9 +1,5 @@
 mod resource;
 
-use crate::engine::core::errors::AsnRenderError;
-use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad};
-use crate::engine::core::winapi::TAsnWinapi;
-use crate::engine::core::winapi::{AsnTextureFormat, TTexture};
 use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
 use crate::engine::winapi::scene::node_quad::resource::{Vertex, INDICES, SHADER_SOURCE, VERTICES};
 use crate::engine::winapi::utils::ToWgpuFormat;
@@ -14,6 +10,9 @@ use std::sync::Arc;
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroup, RenderPipeline, ShaderModule, TextureFormat};
 use winit::event::VirtualKeyCode::O;
+use asn_core::errors::AsnRenderError;
+use asn_core::winapi::scene::{TNodeBase, TNodeQuad};
+use asn_core::winapi::{TAsnWinapi, TTexture};
 
 pub struct AsnWgpuNodeQuad {
     shader: ShaderModule,

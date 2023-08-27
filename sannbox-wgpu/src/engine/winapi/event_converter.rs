@@ -1,8 +1,8 @@
-use crate::engine::core::events::AsnEvent;
-use crate::engine::core::events::AsnWindowEvent::{CloseRequested, RedrawRequested, Resized};
-use crate::engine::core::math::Size2D;
 use winit::event::{Event, WindowEvent};
 use winit::window::WindowId;
+use asn_core::events::AsnEvent;
+use asn_core::events::AsnWindowEvent::{CloseRequested, RedrawRequested, Resized};
+use asn_core::math::Size2D;
 use asn_logger::info;
 
 #[derive(Debug, Clone, Copy)]

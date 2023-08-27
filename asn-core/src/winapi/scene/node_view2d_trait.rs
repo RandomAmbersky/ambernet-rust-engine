@@ -1,6 +1,6 @@
-use crate::engine::core::errors::AsnRenderError;
-use crate::engine::core::math::{Pos2D, Size2D, UnsignedNum};
-use crate::engine::core::winapi::scene::node_base_trait::TNodeBase;
+use crate::errors::AsnRenderError;
+use crate::math::{Pos2D, Size2D, UnsignedNum};
+use crate::winapi::scene::node_base_trait::TNodeBase;
 
 pub trait TNodeView2d: TNodeBase {
     type CellType;

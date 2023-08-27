@@ -1,4 +1,4 @@
-use crate::engine::core::winapi::TAsnWinapi;
+use crate::winapi::TAsnWinapi;
 
 pub trait TAsnBaseEngine {
     fn is_need_exit(&self) -> bool;

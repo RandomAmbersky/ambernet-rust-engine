@@ -1,6 +1,6 @@
-use crate::engine::core::errors::AsnRenderError;
-use crate::engine::core::math::Size2D;
-use crate::engine::core::winapi::{AsnTextureFormat, TAsnWinapi};
+use crate::errors::AsnRenderError;
+use crate::math::Size2D;
+use crate::winapi::{AsnTextureFormat, TAsnWinapi};
 
 pub trait TTexture {
     type WinApi: TAsnWinapi;

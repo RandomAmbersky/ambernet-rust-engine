@@ -1,16 +1,17 @@
 mod resources;
 
-use crate::engine::core::events::{AsnEvent, AsnWindowEvent};
-use crate::engine::core::math::{Array2D, Pos2D, Size2D};
-use crate::engine::core::traits::{TAsnBaseEngine, TAsnHandler};
-use crate::engine::core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
-use crate::engine::core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
-use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine, TAsnEngine};
+use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::resources::{TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 use image::GenericImageView;
 use rand::prelude::SmallRng;
 use rand::{Rng, SeedableRng};
 use std::sync::{Arc, Mutex};
+use asn_core::events::{AsnEvent, AsnWindowEvent};
+use asn_core::math::{Array2D, Pos2D, Size2D};
+use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
+use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
+use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
+use asn_image::load_texture;
 
 const RNG_SEED: u64 = 11;
 
@@ -132,20 +133,6 @@ impl TAsnHandler<Engine> for Handler {
             },
             _ => {}
         }
-    }
-}
-
-fn load_texture(bytes: &[u8]) -> Array2D<u32, u8> {
-    let img = image::load_from_memory(bytes).unwrap();
-    let rgba = img.to_rgba8();
-    let dimensions = img.dimensions();
-    let size = Size2D::<u32> {
-        width: dimensions.0,
-        height: dimensions.1,
-    };
-    Array2D {
-        size,
-        bytes: rgba.to_vec(),
     }
 }
 

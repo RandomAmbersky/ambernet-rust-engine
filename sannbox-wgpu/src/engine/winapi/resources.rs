@@ -1,5 +1,5 @@
-use crate::engine::core::math::Size2D;
-use crate::engine::core::winapi::AsnTextureFormat;
+use asn_core::math::Size2D;
+use asn_core::winapi::AsnTextureFormat;
 
 pub struct DefaultTextureData {
     pub bytes: [u8; 4],
