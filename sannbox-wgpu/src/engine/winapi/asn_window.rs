@@ -79,11 +79,6 @@ impl AsnWindow {
 
         let surface = unsafe { instance.create_surface(&window).unwrap() };
 
-        // let size = Size2D {
-        //     width: 1024_u32,
-        //     height: 768_u32,
-        // };
-
         // let surface_caps = surface.get_capabilities(&adapter);
         // Shader code in this tutorial assumes an Srgb surface texture. Using a different
         // one will result all the colors comming out darker. If you want to support non
