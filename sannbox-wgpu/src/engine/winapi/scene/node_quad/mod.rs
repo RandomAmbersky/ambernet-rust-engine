@@ -5,14 +5,12 @@ use crate::engine::winapi::scene::node_quad::resource::{Vertex, INDICES, SHADER_
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
-use std::ops::Deref;
-use std::sync::Arc;
-use wgpu::util::DeviceExt;
-use wgpu::{BindGroup, RenderPipeline, ShaderModule, TextureFormat};
-use winit::event::VirtualKeyCode::O;
 use asn_core::errors::AsnRenderError;
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad};
 use asn_core::winapi::{TAsnWinapi, TTexture};
+use std::sync::Arc;
+use wgpu::util::DeviceExt;
+use wgpu::{BindGroup, RenderPipeline, ShaderModule, TextureFormat};
 
 pub struct AsnWgpuNodeQuad {
     shader: ShaderModule,

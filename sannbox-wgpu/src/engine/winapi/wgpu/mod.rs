@@ -2,17 +2,13 @@ use std::iter;
 
 use crate::engine::winapi::asn_window::AsnWindow;
 use crate::engine::winapi::event_converter::{convert_asn_event, CustomEvent};
-use crate::engine::winapi::scene::{AsnWgpuNodeQuad, AsnWgpuNodeView2d};
 use crate::engine::winapi::utils::ToWgpuFormat;
-use wgpu::{
-    Adapter, CommandEncoder, Device, Instance, InstanceDescriptor, Queue, Surface, SurfaceTexture,
-    TextureFormat, TextureView, TextureViewDescriptor,
-};
-use winit::event_loop::{EventLoop, EventLoopProxy};
 use asn_core::errors::AsnError;
 use asn_core::events::AsnEvent;
 use asn_core::math::Size2D;
 use asn_core::winapi::{AsnTextureFormat, AsnWinapiConfig, TAsnWinapi};
+use wgpu::{CommandEncoder, Device, Instance, InstanceDescriptor, SurfaceTexture, TextureView};
+use winit::event_loop::{EventLoop, EventLoopProxy};
 
 pub mod bind_groups;
 pub mod texture;
