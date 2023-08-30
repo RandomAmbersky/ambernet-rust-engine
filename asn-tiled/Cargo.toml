@@ -9,4 +9,4 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 asn-core = { path = "../asn-core" }
 asn-logger = { path= "../asn-logger" }
-xmlparser = "*"
+xmlparser = "0.13.5"
