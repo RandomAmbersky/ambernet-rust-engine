@@ -22,6 +22,7 @@ struct RenderState {
     render_pipeline: wgpu::RenderPipeline,
     bind_group: wgpu::BindGroup,
     map_setup_bind_group: wgpu::BindGroup,
+    node_base_bind_group: wgpu::BindGroup,
     mesh: Mesh,
 }
 
@@ -52,6 +53,46 @@ struct NodeBaseUniform {
     rot: Vector3<f32>,
     scale: Vector3<f32>,
     prs: Matrix4<f32>,
+}
+
+fn create_node_base_bind_group(
+    prs: &Matrix4<f32>,
+    d: &wgpu::Device,
+) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
+    let prs_ref: &[f32; 16] = prs.as_ref();
+
+    let node_base_buffer = d.create_buffer_init(&wgpu::util::BufferInitDescriptor {
+        label: Some("node_base_buffer"),
+        contents: bytemuck::bytes_of(prs_ref),
+        usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
+    });
+
+    let node_base_group_desc = wgpu::BindGroupLayoutDescriptor {
+        entries: &[wgpu::BindGroupLayoutEntry {
+            binding: 0,
+            visibility: wgpu::ShaderStages::VERTEX,
+            ty: wgpu::BindingType::Buffer {
+                ty: wgpu::BufferBindingType::Uniform,
+                has_dynamic_offset: false,
+                min_binding_size: None,
+            },
+            count: None,
+        }],
+        label: Some("node_base_group_layout"),
+    };
+    let node_base_group_layout = d.create_bind_group_layout(&node_base_group_desc);
+
+    let group_desc = wgpu::BindGroupDescriptor {
+        layout: &node_base_group_layout,
+        entries: &[wgpu::BindGroupEntry {
+            binding: 0,
+            resource: node_base_buffer.as_entire_binding(),
+        }],
+        label: Some("map_setup_bind_group"),
+    };
+    let node_base_bind_group = d.create_bind_group(&group_desc);
+
+    (node_base_bind_group, node_base_group_layout)
 }
 
 fn create_map_setup_uniform(
@@ -131,7 +172,6 @@ fn create_diffuse_bind_group(
         label: Some("texture_bind_group_layout"),
     };
     let diffuse_bind_group_layout = d.create_bind_group_layout(&group_layout_desc);
-    // let bind_group_layouts = &[&diffuse_bind_group_layout];
 
     let group_entry_builder = BindGroupEntryBuilder::default()
         .texture(&texture.view)
@@ -177,6 +217,7 @@ fn draw_render_state(fcx: &mut AsnWgpuFrameContext, r: &RenderState) {
     render_pass.set_pipeline(&r.render_pipeline);
     render_pass.set_bind_group(0, &r.bind_group, &[]);
     render_pass.set_bind_group(1, &r.map_setup_bind_group, &[]);
+    render_pass.set_bind_group(2, &r.node_base_bind_group, &[]);
     render_pass.set_vertex_buffer(0, r.mesh.vertex_buffer.slice(..));
     render_pass.set_index_buffer(r.mesh.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
     render_pass.draw_indexed(0..r.mesh.num_indices, 0, 0..1);
@@ -281,22 +322,27 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         let (map_setup_bind_group, map_setup_bind_group_layout) =
             create_map_setup_bind_group(&map_setup_uniform, gfx.get_device());
 
-        let bind_group_layouts = &[&diffuse_bind_group_layout, &map_setup_bind_group_layout];
+        let (node_base_bind_group, node_base_bind_group_layout) =
+            create_node_base_bind_group(&base_uniform.prs, gfx.get_device());
+
+        let bind_group_layouts = &[
+            &diffuse_bind_group_layout,
+            &map_setup_bind_group_layout,
+            &node_base_bind_group_layout,
+        ];
 
         let render_pipeline = get_render_pipeline(
             gfx.get_device(),
             texture_format,
             &shader,
-            &bind_group_layouts,
+            bind_group_layouts,
         );
-
-        // let (render_pipeline, bind_group) =
-        //     create_node_view2d_set(gfx, &view_texture, &tile_texture, texture_format, &shader);
 
         let render_state = RenderState {
             render_pipeline,
             bind_group: diffuse_bind_group,
             map_setup_bind_group,
+            node_base_bind_group,
             mesh,
         };
         let view_state = ViewState { view, view_texture };
@@ -357,7 +403,7 @@ fn get_render_pipeline(
     device: &Device,
     format: TextureFormat,
     shader: &ShaderModule,
-    bind_group_layouts: &[&BindGroupLayout; 2],
+    bind_group_layouts: &[&BindGroupLayout; 3],
 ) -> wgpu::RenderPipeline {
     let desc = wgpu::PipelineLayoutDescriptor {
         label: Some("Render Pipeline Layout"),
