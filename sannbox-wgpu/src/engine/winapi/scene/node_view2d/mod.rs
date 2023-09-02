@@ -1,5 +1,6 @@
 mod resource;
 
+use cgmath::{Matrix4, One, Vector3};
 use crate::engine::winapi::defines;
 use crate::engine::winapi::defines::{BytesArray, CellSize};
 use crate::engine::winapi::mesh::Mesh;
@@ -30,6 +31,7 @@ struct ViewState {
 }
 
 pub struct AsnWgpuNodeView2d {
+    base_uniform: NodeBaseUniform,
     render_state: RenderState,
     view_state: ViewState,
     is_need_update: bool,
@@ -43,6 +45,13 @@ struct MapSetupUniform {
     u_sheet_size: [f32; 2],
     max_color_value: f32,
     _padding: u32, // stupid manual aligned, look at https://sotrh.github.io/learn-wgpu/news/0.12/#multi-view-added
+}
+
+struct NodeBaseUniform {
+    pos: Vector3<f32>,
+    rot: Vector3<f32>,
+    scale: Vector3<f32>,
+    prs: Matrix4<f32>
 }
 
 fn create_map_setup_bind_group(
@@ -270,7 +279,17 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         };
         let view_state = ViewState { view, view_texture };
 
+        let base_uniform = NodeBaseUniform {
+            pos: Vector3 { x: 0.0, y: 0.0, z: 0.0 },
+            rot: Vector3 { x: 0.0, y: 0.0, z: 0.0 },
+            scale: Vector3 { x: 0.0, y: 0.0, z: 0.0 },
+            prs: Matrix4::one()
+        };
+
+        println!("{:?}", base_uniform.prs);
+
         Self {
+            base_uniform,
             render_state,
             view_state,
             is_need_update: false,

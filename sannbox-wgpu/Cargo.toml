@@ -11,6 +11,7 @@ name = "sannbox-wgpu"
 path = "src/main.rs"
 
 [dependencies]
+cgmath = "0.18.0"
 asn-logger = { path = "../asn-logger" }
 asn-core = { path = "../asn-core" }
 asn-image = { path = "../asn-image" }
