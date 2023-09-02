@@ -55,6 +55,28 @@ struct NodeBaseUniform {
     prs: Matrix4<f32>,
 }
 
+#[rustfmt::skip]
+#[allow(unused)]
+pub const OPENGL_TO_WGPU_MATRIX: Matrix4<f32> = Matrix4::new(
+    1.0, 0.0, 0.0, 0.0,
+    0.0, 1.0, 0.0, 0.0,
+    0.0, 0.0, 0.5, 0.0,
+    0.0, 0.0, 0.5, 1.0,
+);
+
+impl NodeBaseUniform {
+    fn matrix_calculated(&mut self) {
+        // let mat: Matrix4<f32> = Matrix4::one();
+        // let rotate_mat_x = Matrix4::from_angle_x(Rad(rotation[0]));
+        // let rotate_mat_y = Matrix4::from_angle_y(Rad(rotation[1]));
+        // let rotate_mat_z = Matrix4::from_angle_z(Rad(rotation[2]));
+        let trans_mat = Matrix4::from_translation(self.pos);
+        let scale_mat = Matrix4::from_nonuniform_scale(self.scale.x, self.scale.y, self.scale.z);
+        let model_mat = trans_mat * scale_mat;
+        self.prs = model_mat;
+    }
+}
+
 fn create_node_base_bind_group(
     prs: &Matrix4<f32>,
     d: &wgpu::Device,
@@ -274,7 +296,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         view_size_in_tiles: &Size2D<u32>,
         tile_size_in_pixels: &Size2D<u32>,
     ) -> Self {
-        let base_uniform = NodeBaseUniform {
+        let mut base_uniform = NodeBaseUniform {
             pos: Vector3 {
                 x: 0.0,
                 y: 0.0,
@@ -286,12 +308,14 @@ impl TNodeView2d for AsnWgpuNodeView2d {
                 z: 0.0,
             },
             scale: Vector3 {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
+                x: 1.0,
+                y: 1.0,
+                z: 1.0,
             },
             prs: Matrix4::one(),
         };
+
+        base_uniform.matrix_calculated();
 
         let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
 
