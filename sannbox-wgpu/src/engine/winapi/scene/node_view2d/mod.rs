@@ -1,6 +1,5 @@
 mod resource;
 
-use cgmath::{Matrix4, One, Vector3};
 use crate::engine::winapi::defines;
 use crate::engine::winapi::defines::{BytesArray, CellSize};
 use crate::engine::winapi::mesh::Mesh;
@@ -15,6 +14,7 @@ use asn_core::errors::AsnRenderError;
 use asn_core::math::{Pos2D, Size2D};
 use asn_core::winapi::scene::{TNodeBase, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
+use cgmath::{Matrix4, One, Vector3};
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat};
 
@@ -51,15 +51,14 @@ struct NodeBaseUniform {
     pos: Vector3<f32>,
     rot: Vector3<f32>,
     scale: Vector3<f32>,
-    prs: Matrix4<f32>
+    prs: Matrix4<f32>,
 }
 
-fn create_map_setup_bind_group(
-    d: &wgpu::Device,
+fn create_map_setup_uniform(
     tile_texture_size_in_pixels: &Size2D<u32>,
     map_size_in_tiles: &Size2D<u32>,
     tile_size_in_pixels: &Size2D<u32>,
-) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
+) -> MapSetupUniform {
     let map_setup_uniform = MapSetupUniform {
         u_map_size: [
             map_size_in_tiles.width as f32,
@@ -76,15 +75,16 @@ fn create_map_setup_bind_group(
         max_color_value: 255.0 * 2.0 * 2.0 * 2.0 * 2.0,
         _padding: 0,
     };
+    map_setup_uniform
+}
 
-    let var = bytemuck::bytes_of(&map_setup_uniform.max_color_value);
-    println!("VAR LENGTH: {:?}", var.len());
-    let var = bytemuck::bytes_of(&map_setup_uniform);
-    println!("VAR LENGTH: {:?}", var.len());
-
+fn create_map_setup_bind_group(
+    map_setup_uniform: &MapSetupUniform,
+    d: &wgpu::Device,
+) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
     let map_setup_buffer = d.create_buffer_init(&wgpu::util::BufferInitDescriptor {
         label: Some("map_setup_buffer"),
-        contents: bytemuck::bytes_of(&map_setup_uniform),
+        contents: bytemuck::bytes_of(map_setup_uniform),
         usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
     });
 
@@ -103,14 +103,15 @@ fn create_map_setup_bind_group(
             label: Some("map_setup_bind_group_layout"),
         });
 
-    let map_setup_bind_group = d.create_bind_group(&wgpu::BindGroupDescriptor {
+    let group_desc = wgpu::BindGroupDescriptor {
         layout: &map_setup_bind_group_layout,
         entries: &[wgpu::BindGroupEntry {
             binding: 0,
             resource: map_setup_buffer.as_entire_binding(),
         }],
         label: Some("map_setup_bind_group"),
-    });
+    };
+    let map_setup_bind_group = d.create_bind_group(&group_desc);
 
     (map_setup_bind_group, map_setup_bind_group_layout)
 }
@@ -232,6 +233,25 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         view_size_in_tiles: &Size2D<u32>,
         tile_size_in_pixels: &Size2D<u32>,
     ) -> Self {
+        let base_uniform = NodeBaseUniform {
+            pos: Vector3 {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0,
+            },
+            rot: Vector3 {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0,
+            },
+            scale: Vector3 {
+                x: 0.0,
+                y: 0.0,
+                z: 0.0,
+            },
+            prs: Matrix4::one(),
+        };
+
         let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
 
         let shader = create_shader(gfx.get_device());
@@ -252,12 +272,14 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         let (diffuse_bind_group, diffuse_bind_group_layout) =
             create_diffuse_bind_group(gfx.get_device(), &view_texture, &tile_texture);
 
-        let (map_setup_bind_group, map_setup_bind_group_layout) = create_map_setup_bind_group(
-            gfx.get_device(),
+        let map_setup_uniform = create_map_setup_uniform(
             &tile_texture.get_size(),
             &view_size_in_tiles,
             &tile_size_in_pixels,
         );
+
+        let (map_setup_bind_group, map_setup_bind_group_layout) =
+            create_map_setup_bind_group(&map_setup_uniform, gfx.get_device());
 
         let bind_group_layouts = &[&diffuse_bind_group_layout, &map_setup_bind_group_layout];
 
@@ -278,13 +300,6 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             mesh,
         };
         let view_state = ViewState { view, view_texture };
-
-        let base_uniform = NodeBaseUniform {
-            pos: Vector3 { x: 0.0, y: 0.0, z: 0.0 },
-            rot: Vector3 { x: 0.0, y: 0.0, z: 0.0 },
-            scale: Vector3 { x: 0.0, y: 0.0, z: 0.0 },
-            prs: Matrix4::one()
-        };
 
         println!("{:?}", base_uniform.prs);
 
