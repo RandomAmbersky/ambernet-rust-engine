@@ -17,6 +17,7 @@ pub trait TAsnWinapi {
     fn send_event(&mut self, evt: &AsnEvent);
 
     fn window_resize(&mut self, size: &Size2D<u32>);
+
     fn begin_frame(&mut self) -> Result<Self::FrameContext, AsnError>;
     fn end_frame(&mut self, fcx: Self::FrameContext) -> Result<(), AsnError>;
 }

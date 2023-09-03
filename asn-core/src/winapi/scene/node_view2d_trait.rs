@@ -17,5 +17,6 @@ pub trait TNodeView2d: TNodeBase {
         c: Self::CellType,
     ) -> Result<(), AsnRenderError>;
 
+    fn set_screen_size(&mut self, s: &Size2D<u32>);
     fn update_from_raw(&mut self, bytes: &[u8]) -> Result<(), AsnRenderError>;
 }

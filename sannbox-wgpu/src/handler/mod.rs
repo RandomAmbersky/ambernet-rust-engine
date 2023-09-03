@@ -2,16 +2,16 @@ mod resources;
 
 use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::resources::{MAP_TMX, TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
-use rand::prelude::SmallRng;
-use rand::{Rng, SeedableRng};
-use std::sync::{Arc, Mutex};
 use asn_core::events::{AsnEvent, AsnWindowEvent};
 use asn_core::math::{Array2D, Pos2D, Size2D};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
-use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
+use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use asn_image::load_texture;
 use asn_tiled::load_tmx;
+use rand::prelude::SmallRng;
+use rand::{Rng, SeedableRng};
+use std::sync::{Arc, Mutex};
 
 const RNG_SEED: u64 = 11;
 
@@ -61,7 +61,7 @@ impl Handler {
             w,
             &raw_tile_texture.bytes,
             &raw_tile_texture.size,
-            AsnTextureFormat::Rgba8UnormSrgb
+            AsnTextureFormat::Rgba8UnormSrgb,
         )
         .unwrap();
         let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE, &TILE_SIZE);
@@ -126,6 +126,7 @@ impl TAsnHandler<Engine> for Handler {
             AsnEvent::WindowEvent(w) => match w {
                 AsnWindowEvent::Resized(size) => {
                     e.get_winapi().window_resize(size);
+                    self.view.set_screen_size(size);
                     self.draw(e);
                 }
                 AsnWindowEvent::CloseRequested => {
@@ -149,7 +150,7 @@ fn randomize_view_cell(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
     rng
 }
 
-fn fill_by_index(v: &mut AsnNodeView2d){
+fn fill_by_index(v: &mut AsnNodeView2d) {
     let mut index: u8 = 0;
     for y in 0..MAP_VIEW_SIZE.height {
         for x in 0..MAP_VIEW_SIZE.width {

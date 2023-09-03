@@ -33,6 +33,7 @@ struct ViewState {
 
 pub struct AsnWgpuNodeView2d {
     base_uniform: NodeBaseUniform,
+    map_setup_uniform: MapSetupUniform,
     render_state: RenderState,
     view_state: ViewState,
     is_need_update: bool,
@@ -41,9 +42,9 @@ pub struct AsnWgpuNodeView2d {
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
 struct MapSetupUniform {
-    u_map_size: [f32; 2],
-    u_tile_size: [f32; 2],
-    u_sheet_size: [f32; 2],
+    u_map_size: [f32; 2],   // 32.0, 32.0
+    u_tile_size: [f32; 2],  // 16.0, 16.0
+    u_sheet_size: [f32; 2], // 256.0, 192.0
     max_color_value: f32,
     _padding: u32, // stupid manual aligned, look at https://sotrh.github.io/learn-wgpu/news/0.12/#multi-view-added
 }
@@ -277,6 +278,11 @@ impl TNodeBase for AsnWgpuNodeView2d {
             return;
         }
 
+        self.base_uniform.scale.x = 0.1;
+        println!("{:?}", self.base_uniform.prs);
+        self.base_uniform.matrix_calculated();
+        println!("{:?}", self.base_uniform.prs);
+
         self.view_state
             .view_texture
             .update_from_raw(gfx, &self.view_state.view.bytes)
@@ -375,6 +381,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
 
         Self {
             base_uniform,
+            map_setup_uniform,
             render_state,
             view_state,
             is_need_update: false,
@@ -404,6 +411,38 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         set_cell(&mut self.view_state, pos, c);
         self.is_need_update = true;
         Ok(())
+    }
+
+    fn set_screen_size(&mut self, screen_size: &Size2D<u32>) {
+        let virtual_screen_width =
+            self.map_setup_uniform.u_tile_size[0] * self.map_setup_uniform.u_map_size[0];
+
+        let virtual_screen_height =
+            self.map_setup_uniform.u_tile_size[1] * self.map_setup_uniform.u_map_size[1];
+
+        let mut scale_x = virtual_screen_width / screen_size.width as f32;
+        let mut scale_y = virtual_screen_height / screen_size.height as f32;
+
+        if scale_x > scale_y {
+            scale_x = scale_y
+        } else {
+            scale_y = scale_x
+        }
+        self.base_uniform.scale = Vector3 {
+            x: scale_x,
+            y: scale_y,
+            z: 1.0,
+        };
+        println!("scale: {:?}", self.base_uniform.scale);
+        self.base_uniform.matrix_calculated();
+
+        self.base_uniform.scale = Vector3 {
+            x: 0.5,
+            y: 0.5,
+            z: 1.0,
+        };
+        println!("scale: {:?}", self.base_uniform.scale);
+        self.base_uniform.matrix_calculated();
     }
 
     fn update_from_raw(&mut self, bytes: &[u8]) -> Result<(), AsnRenderError> {

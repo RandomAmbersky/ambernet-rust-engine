@@ -7,7 +7,9 @@ use asn_core::errors::AsnError;
 use asn_core::events::AsnEvent;
 use asn_core::math::Size2D;
 use asn_core::winapi::{AsnTextureFormat, AsnWinapiConfig, TAsnWinapi};
-use wgpu::{CommandEncoder, Device, Instance, InstanceDescriptor, SurfaceTexture, TextureView};
+use wgpu::{
+    CommandEncoder, Device, Instance, InstanceDescriptor, Queue, SurfaceTexture, TextureView,
+};
 use winit::event_loop::{EventLoop, EventLoopProxy};
 
 pub mod bind_groups;
@@ -76,7 +78,6 @@ impl AsnWgpuWinApi {
             queue,
         }
     }
-
     pub fn get_device(&mut self) -> &Device {
         &self.device
     }
@@ -99,6 +100,7 @@ impl TAsnWinapi for AsnWgpuWinApi {
         let e = convert_asn_event(evt);
         self.event_loop_proxy.send_event(e).ok();
     }
+
     fn window_resize(&mut self, new_size: &Size2D<u32>) {
         println!("{:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
