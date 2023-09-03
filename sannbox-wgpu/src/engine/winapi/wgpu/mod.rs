@@ -7,9 +7,7 @@ use asn_core::errors::AsnError;
 use asn_core::events::AsnEvent;
 use asn_core::math::Size2D;
 use asn_core::winapi::{AsnTextureFormat, AsnWinapiConfig, TAsnWinapi};
-use wgpu::{
-    CommandEncoder, Device, Instance, InstanceDescriptor, Queue, SurfaceTexture, TextureView,
-};
+use wgpu::{Device, Instance, InstanceDescriptor};
 use winit::event_loop::{EventLoop, EventLoopProxy};
 
 pub mod bind_groups;
@@ -84,9 +82,9 @@ impl AsnWgpuWinApi {
 }
 
 pub struct AsnWgpuFrameContext {
-    pub frame: SurfaceTexture,
-    pub encoder: CommandEncoder,
-    pub view: TextureView,
+    pub frame: wgpu::SurfaceTexture,
+    pub encoder: wgpu::CommandEncoder,
+    pub view: wgpu::TextureView,
 }
 
 impl TAsnWinapi for AsnWgpuWinApi {

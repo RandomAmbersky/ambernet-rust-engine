@@ -90,7 +90,7 @@ fn create_node_base_bind_group(
         usage: wgpu::BufferUsages::UNIFORM | wgpu::BufferUsages::COPY_DST,
     });
 
-    let node_base_group_desc = wgpu::BindGroupLayoutDescriptor {
+    let node_base_group_layout = d.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor {
         entries: &[wgpu::BindGroupLayoutEntry {
             binding: 0,
             visibility: wgpu::ShaderStages::VERTEX,
@@ -102,8 +102,7 @@ fn create_node_base_bind_group(
             count: None,
         }],
         label: Some("node_base_group_layout"),
-    };
-    let node_base_group_layout = d.create_bind_group_layout(&node_base_group_desc);
+    });
 
     let group_desc = wgpu::BindGroupDescriptor {
         layout: &node_base_group_layout,
