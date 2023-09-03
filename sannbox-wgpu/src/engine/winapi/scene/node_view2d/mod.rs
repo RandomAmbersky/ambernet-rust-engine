@@ -281,11 +281,6 @@ impl TNodeBase for AsnWgpuNodeView2d {
             return;
         }
 
-        self.base_uniform.scale.x = 0.1;
-        println!("{:?}", self.base_uniform.prs);
-        self.base_uniform.matrix_calculated();
-        println!("{:?}", self.base_uniform.prs);
-
         let prs_ref: &[f32; 16] = self.base_uniform.prs.as_ref();
         gfx.write_buffer(&self.base_uniform.buffer, 0, bytemuck::bytes_of(prs_ref));
 
@@ -422,35 +417,24 @@ impl TNodeView2d for AsnWgpuNodeView2d {
     }
 
     fn set_screen_size(&mut self, screen_size: &Size2D<u32>) {
-        let virtual_screen_width =
-            self.map_setup_uniform.u_tile_size[0] * self.map_setup_uniform.u_map_size[0];
+        // TODO now for quad size only =(
+        let mut scale_x = screen_size.height as f32 / screen_size.width as f32;
+        let mut scale_y = screen_size.width as f32 / screen_size.height as f32;
 
-        let virtual_screen_height =
-            self.map_setup_uniform.u_tile_size[1] * self.map_setup_uniform.u_map_size[1];
-
-        let mut scale_x = virtual_screen_width / screen_size.width as f32;
-        let mut scale_y = virtual_screen_height / screen_size.height as f32;
-
-        if scale_x > scale_y {
-            scale_x = scale_y
+        if scale_x < scale_y {
+            scale_y = 1.0;
         } else {
-            scale_y = scale_x
+            scale_x = 1.0;
         }
+
         self.base_uniform.scale = Vector3 {
             x: scale_x,
             y: scale_y,
             z: 1.0,
         };
-        println!("scale: {:?}", self.base_uniform.scale);
+        // println!("scale: {:?}", self.base_uniform.scale);
         self.base_uniform.matrix_calculated();
-
-        self.base_uniform.scale = Vector3 {
-            x: 0.5,
-            y: 0.5,
-            z: 1.0,
-        };
-        println!("scale: {:?}", self.base_uniform.scale);
-        self.base_uniform.matrix_calculated();
+        self.is_need_update = true;
     }
 
     fn update_from_raw(&mut self, bytes: &[u8]) -> Result<(), AsnRenderError> {
