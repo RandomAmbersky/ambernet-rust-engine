@@ -396,21 +396,6 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         pos: &Pos2D<Self::SizeDimension>,
         c: CellSize,
     ) -> Result<(), AsnRenderError> {
-        // if !self.view_state.view.size.is_pos_into(pos) {
-        //     panic!(
-        //         "Pos {:?} not in view size {:?}",
-        //         pos, self.view_state.view.size
-        //     )
-        // }
-        //
-        // let cell_y: u8 = c / 16;
-        // let cell_x: u8 = c - cell_y * 16;
-        //
-        // let index = ((pos.y * self.view_state.view.size.width + pos.x) * 4) as usize;
-        //
-        // self.view_state.view.bytes[index] = cell_x;
-        // self.view_state.view.bytes[index + 1] = cell_y;
-
         set_cell(&mut self.view_state, pos, c);
         self.is_need_update = true;
         Ok(())
@@ -432,7 +417,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             y: scale_y,
             z: 1.0,
         };
-        // println!("scale: {:?}", self.base_uniform.scale);
+
         self.base_uniform.matrix_calculated();
         self.is_need_update = true;
     }
