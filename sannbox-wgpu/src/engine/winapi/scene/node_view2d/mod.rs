@@ -14,7 +14,7 @@ use asn_core::errors::AsnRenderError;
 use asn_core::math::{Pos2D, Size2D};
 use asn_core::winapi::scene::{TNodeBase, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
-use cgmath::{Matrix4, One, Vector3};
+use cgmath::{Matrix4, One, Rad, Vector3};
 use wgpu::util::DeviceExt;
 use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat};
 
@@ -67,12 +67,12 @@ pub const OPENGL_TO_WGPU_MATRIX: Matrix4<f32> = Matrix4::new(
 impl NodeBaseUniform {
     fn matrix_calculated(&mut self) {
         // let mat: Matrix4<f32> = Matrix4::one();
-        // let rotate_mat_x = Matrix4::from_angle_x(Rad(rotation[0]));
-        // let rotate_mat_y = Matrix4::from_angle_y(Rad(rotation[1]));
-        // let rotate_mat_z = Matrix4::from_angle_z(Rad(rotation[2]));
+        let rotate_mat_x = Matrix4::from_angle_x(Rad(self.rot.x));
+        let rotate_mat_y = Matrix4::from_angle_y(Rad(self.rot.y));
+        let rotate_mat_z = Matrix4::from_angle_z(Rad(self.rot.z));
         let trans_mat = Matrix4::from_translation(self.pos);
         let scale_mat = Matrix4::from_nonuniform_scale(self.scale.x, self.scale.y, self.scale.z);
-        let model_mat = trans_mat * scale_mat;
+        let model_mat = trans_mat * rotate_mat_z * rotate_mat_y * rotate_mat_x * scale_mat;
         self.prs = model_mat;
     }
 }
