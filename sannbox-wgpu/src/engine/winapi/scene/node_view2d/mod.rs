@@ -54,6 +54,7 @@ struct NodeBaseUniform {
     rot: Vector3<f32>,
     scale: Vector3<f32>,
     prs: Matrix4<f32>,
+    buffer: wgpu::Buffer,
 }
 
 #[rustfmt::skip]
@@ -81,7 +82,7 @@ impl NodeBaseUniform {
 fn create_node_base_bind_group(
     prs: &Matrix4<f32>,
     d: &wgpu::Device,
-) -> (wgpu::BindGroup, wgpu::BindGroupLayout) {
+) -> (wgpu::Buffer, wgpu::BindGroup, wgpu::BindGroupLayout) {
     let prs_ref: &[f32; 16] = prs.as_ref();
 
     let node_base_buffer = d.create_buffer_init(&wgpu::util::BufferInitDescriptor {
@@ -104,17 +105,20 @@ fn create_node_base_bind_group(
         label: Some("node_base_group_layout"),
     });
 
-    let group_desc = wgpu::BindGroupDescriptor {
+    let node_base_bind_group = d.create_bind_group(&wgpu::BindGroupDescriptor {
         layout: &node_base_group_layout,
         entries: &[wgpu::BindGroupEntry {
             binding: 0,
             resource: node_base_buffer.as_entire_binding(),
         }],
         label: Some("map_setup_bind_group"),
-    };
-    let node_base_bind_group = d.create_bind_group(&group_desc);
+    });
 
-    (node_base_bind_group, node_base_group_layout)
+    (
+        node_base_buffer,
+        node_base_bind_group,
+        node_base_group_layout,
+    )
 }
 
 fn create_map_setup_uniform(
@@ -282,6 +286,9 @@ impl TNodeBase for AsnWgpuNodeView2d {
         self.base_uniform.matrix_calculated();
         println!("{:?}", self.base_uniform.prs);
 
+        let prs_ref: &[f32; 16] = self.base_uniform.prs.as_ref();
+        gfx.write_buffer(&self.base_uniform.buffer, 0, bytemuck::bytes_of(prs_ref));
+
         self.view_state
             .view_texture
             .update_from_raw(gfx, &self.view_state.view.bytes)
@@ -301,6 +308,10 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         view_size_in_tiles: &Size2D<u32>,
         tile_size_in_pixels: &Size2D<u32>,
     ) -> Self {
+        let prs = Matrix4::one();
+        let (node_base_buffer, node_base_bind_group, node_base_bind_group_layout) =
+            create_node_base_bind_group(&prs, gfx.get_device());
+
         let mut base_uniform = NodeBaseUniform {
             pos: Vector3 {
                 x: 0.0,
@@ -317,7 +328,8 @@ impl TNodeView2d for AsnWgpuNodeView2d {
                 y: 1.0,
                 z: 1.0,
             },
-            prs: Matrix4::one(),
+            buffer: node_base_buffer,
+            prs,
         };
 
         base_uniform.matrix_calculated();
@@ -350,9 +362,6 @@ impl TNodeView2d for AsnWgpuNodeView2d {
 
         let (map_setup_bind_group, map_setup_bind_group_layout) =
             create_map_setup_bind_group(&map_setup_uniform, gfx.get_device());
-
-        let (node_base_bind_group, node_base_bind_group_layout) =
-            create_node_base_bind_group(&base_uniform.prs, gfx.get_device());
 
         let bind_group_layouts = &[
             &diffuse_bind_group_layout,

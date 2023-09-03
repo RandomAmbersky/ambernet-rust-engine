@@ -23,6 +23,7 @@ pub struct AsnWgpuWinApi {
     event_loop_proxy: EventLoopProxy<CustomEvent>,
 }
 
+//  WGPU-specific function for internal wgpu node purpouse
 impl AsnWgpuWinApi {
     pub fn new(event_loop: &EventLoop<CustomEvent>) -> Self {
         let size = Size2D {
@@ -76,8 +77,17 @@ impl AsnWgpuWinApi {
             queue,
         }
     }
-    pub fn get_device(&mut self) -> &Device {
+    pub fn get_device(&mut self) -> &wgpu::Device {
         &self.device
+    }
+
+    pub fn write_buffer(
+        &mut self,
+        buffer: &wgpu::Buffer,
+        offset: wgpu::BufferAddress,
+        data: &[u8],
+    ) {
+        self.queue.write_buffer(buffer, offset, data);
     }
 }
 
