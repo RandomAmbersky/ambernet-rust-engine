@@ -12,7 +12,7 @@ use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
 use asn_core::cgmath::{Matrix4, One, Rad, Vector3};
 use asn_core::errors::AsnRenderError;
-use asn_core::math::{Pos2D, Size2D};
+use asn_core::math::{Pos2D, Size2D, TransformSet};
 use asn_core::winapi::scene::{TNodeBase, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use wgpu::util::DeviceExt;
@@ -50,9 +50,7 @@ struct MapSetupUniform {
 }
 
 struct NodeBaseUniform {
-    pos: Vector3<f32>,
-    rot: Vector3<f32>,
-    scale: Vector3<f32>,
+    transform: TransformSet,
     prs: Matrix4<f32>,
     buffer: wgpu::Buffer,
 }
@@ -65,19 +63,6 @@ pub const OPENGL_TO_WGPU_MATRIX: Matrix4<f32> = Matrix4::new(
     0.0, 0.0, 0.5, 0.0,
     0.0, 0.0, 0.5, 1.0,
 );
-
-impl NodeBaseUniform {
-    fn matrix_calculated(&mut self) {
-        // let mat: Matrix4<f32> = Matrix4::one();
-        let rotate_mat_x = Matrix4::from_angle_x(Rad(self.rot.x));
-        let rotate_mat_y = Matrix4::from_angle_y(Rad(self.rot.y));
-        let rotate_mat_z = Matrix4::from_angle_z(Rad(self.rot.z));
-        let trans_mat = Matrix4::from_translation(self.pos);
-        let scale_mat = Matrix4::from_nonuniform_scale(self.scale.x, self.scale.y, self.scale.z);
-        let model_mat = trans_mat * rotate_mat_z * rotate_mat_y * rotate_mat_x * scale_mat;
-        self.prs = model_mat;
-    }
-}
 
 fn create_node_base_bind_group(
     prs: &Matrix4<f32>,
@@ -307,27 +292,14 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         let (node_base_buffer, node_base_bind_group, node_base_bind_group_layout) =
             create_node_base_bind_group(&prs, gfx.get_device());
 
+        let transform_set = TransformSet::default();
+        let prs = transform_set.matrix_calculated();
+
         let mut base_uniform = NodeBaseUniform {
-            pos: Vector3 {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
-            },
-            rot: Vector3 {
-                x: 0.0,
-                y: 0.0,
-                z: 0.0,
-            },
-            scale: Vector3 {
-                x: 1.0,
-                y: 1.0,
-                z: 1.0,
-            },
+            transform: transform_set,
             buffer: node_base_buffer,
             prs,
         };
-
-        base_uniform.matrix_calculated();
 
         let mesh = Mesh::build(bytemuck::cast_slice(VERTICES), INDICES, gfx.get_device());
 
@@ -412,13 +384,13 @@ impl TNodeView2d for AsnWgpuNodeView2d {
             scale_x = 1.0;
         }
 
-        self.base_uniform.scale = Vector3 {
+        self.base_uniform.transform.scale = Vector3 {
             x: scale_x,
             y: scale_y,
             z: 1.0,
         };
 
-        self.base_uniform.matrix_calculated();
+        self.base_uniform.prs = self.base_uniform.transform.matrix_calculated();
         self.is_need_update = true;
     }
 
