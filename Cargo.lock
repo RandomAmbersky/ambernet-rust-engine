@@ -252,7 +252,7 @@ checksum = "965ab7eb5f8f97d2a083c799f3a1b994fc397b2fe2da5d1da1626ce15a39f2b1"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.31",
+ "syn 2.0.32",
 ]
 
 [[package]]
@@ -552,7 +552,7 @@ checksum = "1a5c6c585bc94aaf2c7b51dd4c2ba22680844aba4c687be581871a6f518c5742"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.31",
+ "syn 2.0.32",
 ]
 
 [[package]]
@@ -1101,7 +1101,7 @@ dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "syn 2.0.31",
+ "syn 2.0.32",
 ]
 
 [[package]]
@@ -1361,9 +1361,9 @@ checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 
 [[package]]
 name = "rustix"
-version = "0.38.12"
+version = "0.38.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bdf14a7a466ce88b5eac3da815b53aefc208ce7e74d1c263aabb04d88c4abeb1"
+checksum = "d7db8590df6dfcd144d22afd1b83b36c21a18d7cbc1dc4bb5295a8712e9eb662"
 dependencies = [
  "bitflags 2.4.0",
  "errno",
@@ -1491,9 +1491,9 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "2.0.31"
+version = "2.0.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "718fa2415bcb8d8bd775917a1bf12a7931b6dfa890753378538118181e0cb398"
+checksum = "239814284fd6f1a4ffe4ca893952cdd93c224b6a1571c9a9eadd670295c0c9e2"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1526,7 +1526,7 @@ checksum = "49922ecae66cc8a249b77e68d1d0623c1b2c514f0060c27cdc68bd62a1219d35"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.31",
+ "syn 2.0.32",
 ]
 
 [[package]]
@@ -1634,7 +1634,7 @@ dependencies = [
  "once_cell",
  "proc-macro2",
  "quote",
- "syn 2.0.31",
+ "syn 2.0.32",
  "wasm-bindgen-shared",
 ]
 
@@ -1668,7 +1668,7 @@ checksum = "54681b18a46765f095758388f2d0cf16eb8d4169b639ab575a8f5693af210c7b"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.31",
+ "syn 2.0.32",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
