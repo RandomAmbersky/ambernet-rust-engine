@@ -1,3 +1,5 @@
+pub use cgmath;
+
 pub mod errors;
 pub mod events;
 pub mod math;
