@@ -22,8 +22,6 @@ empty_trait_impl!(UnsignedNum for u8 u16 u32 u64);
 
 #[cfg(test)]
 mod tests {
-    use crate::UnsignedNum;
-
     type MyCoolNum = u8;
 
     #[test]

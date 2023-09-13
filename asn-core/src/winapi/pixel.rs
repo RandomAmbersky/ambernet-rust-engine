@@ -10,18 +10,18 @@ pub struct PixelRGBA<E: UnsignedNum> {
 
 #[cfg(test)]
 mod tests {
-    use crate::engine::core::winapi::PixelRGBA;
-    use crate::*;
+    use crate::winapi::PixelRGBA;
+
 
     #[test]
     fn it_works() {
-        let myPixel = PixelRGBA {
+        let my_pixel = PixelRGBA {
             r: 10_u8,
             g: 10_u8,
             b: 10_u8,
             a: 10_u8,
         };
 
-        assert_eq!(myPixel.r, 10_u8);
+        assert_eq!(my_pixel.r, 10_u8);
     }
 }
