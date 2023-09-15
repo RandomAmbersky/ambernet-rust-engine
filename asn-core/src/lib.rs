@@ -5,4 +5,3 @@ pub mod events;
 pub mod math;
 pub mod traits;
 pub mod winapi;
-pub mod map;

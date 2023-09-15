@@ -8,6 +8,7 @@ use wasm_bindgen::prelude::*;
 
 mod engine;
 mod handler;
+mod map;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub fn start() {
