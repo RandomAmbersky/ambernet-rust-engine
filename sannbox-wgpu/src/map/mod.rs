@@ -1,5 +1,8 @@
 use asn_core::math::Size2D;
 
+type CellDimension = u8;
+type MapDimension = u32;
+
 // layers: (TODO)
 // Ground
 // Walls
@@ -7,11 +10,20 @@ use asn_core::math::Size2D;
 
 pub struct AsnLayer {
     pub name: String,
-    pub size: Size2D<u32>,
-    pub bytes: Vec<u8>,
+    pub size: Size2D<MapDimension>,
+    pub bytes: Vec<CellDimension>,
 }
 
 pub struct AsnMap {
-    size: Size2D<u32>,
+    size: Size2D<MapDimension>,
     layers: Vec<AsnLayer>,
+}
+
+impl AsnMap {
+    pub fn new(s: &Size2D<MapDimension>) -> Self {
+        Self {
+            size: *s,
+            layers: vec![],
+        }
+    }
 }
