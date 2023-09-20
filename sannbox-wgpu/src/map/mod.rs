@@ -9,8 +9,6 @@ type MapDimension = u32;
 // items
 
 pub struct AsnLayer {
-    pub name: String,
-    pub size: Size2D<MapDimension>,
     pub bytes: Vec<CellDimension>,
 }
 
@@ -25,5 +23,8 @@ impl AsnMap {
             size: *s,
             layers: vec![],
         }
+    }
+    pub fn add_layer(&mut self, l: &[u8]) {
+        self.layers.push(l);
     }
 }
