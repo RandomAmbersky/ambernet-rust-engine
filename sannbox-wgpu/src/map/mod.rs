@@ -1,4 +1,4 @@
-use asn_core::math::Size2D;
+use asn_core::math::{Size3D, UnsignedNum};
 
 type CellDimension = u8;
 type MapDimension = u32;
@@ -8,23 +8,17 @@ type MapDimension = u32;
 // Walls
 // items
 
-pub struct AsnLayer {
-    pub bytes: Vec<CellDimension>,
-}
-
 pub struct AsnMap {
-    size: Size2D<MapDimension>,
-    layers: Vec<AsnLayer>,
+    size: Size3D<MapDimension>,
+    layers: Vec<CellDimension>,
 }
 
 impl AsnMap {
-    pub fn new(s: &Size2D<MapDimension>) -> Self {
+    pub fn new(s: &Size3D<MapDimension>) -> Self {
+        let map_size: usize = (s.width * s.height * s.depth) as usize;
         Self {
             size: *s,
-            layers: vec![],
+            layers: vec![0; map_size],
         }
-    }
-    pub fn add_layer(&mut self, l: &[u8]) {
-        self.layers.push(l);
     }
 }
