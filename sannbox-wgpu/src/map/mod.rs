@@ -1,4 +1,4 @@
-use asn_core::math::{Size3D, UnsignedNum};
+use asn_core::math::{Array3D, Size3D, UnsignedNum};
 
 type CellDimension = u8;
 type MapDimension = u32;
@@ -9,16 +9,12 @@ type MapDimension = u32;
 // items
 
 pub struct AsnMap {
-    size: Size3D<MapDimension>,
-    layers: Vec<CellDimension>,
+    map: Array3D<MapDimension, CellDimension>,
 }
 
 impl AsnMap {
     pub fn new(s: &Size3D<MapDimension>) -> Self {
-        let map_size: usize = (s.width * s.height * s.depth) as usize;
-        Self {
-            size: *s,
-            layers: vec![0; map_size],
-        }
+        let map = Array3D::new(s);
+        Self { map }
     }
 }

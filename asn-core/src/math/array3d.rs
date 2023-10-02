@@ -10,15 +10,11 @@ pub struct Array3D<S: UnsignedNum, T: CellType> {
 
 impl<S: UnsignedNum, T: CellType> Array3D<S, T> {
     #[allow(dead_code)]
-    pub fn new(width: S, height: S, depth: S) -> Self {
+    pub fn new(s: &Size3D<S>) -> Self {
         let cell_size = mem::size_of::<T>();
         Self {
-            size: Size3D {
-                width,
-                height,
-                depth,
-            },
-            bytes: vec![T::ZERO; (width * height).as_usize() * cell_size],
+            size: *s,
+            bytes: vec![T::ZERO; (s.get_size()).as_usize() * cell_size],
         }
     }
 
