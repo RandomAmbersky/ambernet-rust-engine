@@ -8,13 +8,19 @@ pub fn load_map(tmx_buf: &[u8]) -> AsnMap {
         height: map.size.height,
         depth: map.layers.len() as u32,
     };
-    let asn_map = AsnMap::new(&map_size);
-    for layer in map.layers.iter() {
+    let mut asn_map = AsnMap::new(&map_size);
+    for (mut layer_index, layer) in map.layers.iter().enumerate() {
+        println!("layer ------");
+        println!("layer_index: {:?}", layer_index);
         println!("{:?}", layer.name);
         println!("{:?}", layer.id);
         println!("{:?}", layer.size);
         println!("{:?}", layer.visible);
-        layer.bytes.len();
+        println!("{:?}", layer.bytes.len());
+        // let src = layer.bytes.as_slice();
+        // println!("{:?}", src.len());
+        // asn_map.copy_layer(layer_index, &layer.size, src);
+        layer_index += 1;
     }
     asn_map
 }
