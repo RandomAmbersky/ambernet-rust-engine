@@ -17,9 +17,9 @@ pub fn load_map(tmx_buf: &[u8]) -> AsnMap {
         println!("{:?}", layer.size);
         println!("{:?}", layer.visible);
         println!("{:?}", layer.bytes.len());
-        // let src = layer.bytes.as_slice();
-        // println!("{:?}", src.len());
-        // asn_map.copy_layer(layer_index, &layer.size, src);
+        let src = layer.bytes.as_slice();
+        println!("{:?}", src.len());
+        asn_map.copy_layer(layer_index, &layer.size, src);
         layer_index += 1;
     }
     asn_map
