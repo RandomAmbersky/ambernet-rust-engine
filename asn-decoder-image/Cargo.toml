@@ -1,5 +1,5 @@
 [package]
-name = "asn-image"
+name = "asn-decoder-image"
 version = "0.1.0"
 edition = "2021"
 

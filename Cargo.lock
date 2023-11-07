@@ -137,20 +137,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "asn-decoder-image"
+version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "image",
+]
+
+[[package]]
 name = "asn-decoder-tiled"
 version = "0.1.0"
 dependencies = [
  "asn-core",
  "asn-logger",
  "xmlparser",
-]
-
-[[package]]
-name = "asn-image"
-version = "0.1.0"
-dependencies = [
- "asn-core",
- "image",
 ]
 
 [[package]]
@@ -1386,8 +1386,8 @@ name = "sannbox-wgpu"
 version = "0.1.0"
 dependencies = [
  "asn-core",
+ "asn-decoder-image",
  "asn-decoder-tiled",
- "asn-image",
  "asn-logger",
  "bytemuck",
  "pollster",

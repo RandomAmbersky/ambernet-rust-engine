@@ -13,7 +13,7 @@ path = "src/main.rs"
 [dependencies]
 asn-logger = { path = "../asn-logger" }
 asn-core = { path = "../asn-core" }
-asn-image = { path = "../asn-image" }
+asn-decoder-image = { path = "../asn-decoder-image" }
 asn-decoder-tiled = { path = "../asn-decoder-tiled" }
 rand = { version = "0.8.5", default-features = false, features = ["small_rng"] }
 bytemuck = { version = "1.13.1", features = [ "derive" ] }
