@@ -2,7 +2,7 @@ use crate::map::AsnMap;
 use asn_core::math::Size3D;
 
 pub fn load_map(tmx_buf: &[u8]) -> AsnMap {
-    let map = asn_tiled::load_tmx(tmx_buf).unwrap();
+    let map = asn_decoder_tiled::load_tmx(tmx_buf).unwrap();
     let map_size = Size3D {
         width: map.size.width,
         height: map.size.height,

@@ -14,7 +14,7 @@ path = "src/main.rs"
 asn-logger = { path = "../asn-logger" }
 asn-core = { path = "../asn-core" }
 asn-image = { path = "../asn-image" }
-asn-tiled = { path = "../asn-tiled" }
+asn-decoder-tiled = { path = "../asn-decoder-tiled" }
 rand = { version = "0.8.5", default-features = false, features = ["small_rng"] }
 bytemuck = { version = "1.13.1", features = [ "derive" ] }
 wgpu = { version = "0.17.0" }
