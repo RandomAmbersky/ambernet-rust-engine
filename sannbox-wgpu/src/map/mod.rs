@@ -1,4 +1,4 @@
-use asn_core::math::{Array3D, Size2D, Size3D, UnsignedNum};
+use asn_core::math::{Array3D, Pos2D, Size2D, Size3D, UnsignedNum};
 use std::cell::Cell;
 use std::ops::Range;
 
@@ -63,5 +63,9 @@ impl AsnMap {
 impl AsnMap {
     pub fn get_size(&self) -> Size3D<MapDimension> {
         self.map.size
+    }
+    pub fn get_cell(&self, layer_index: usize, pos: &Pos2D<MapDimension>) -> CellDimension {
+        let index = self.calc_start(layer_index) + (pos.y * self.map.size.width + pos.x).as_usize();
+        self.map.bytes[index]
     }
 }

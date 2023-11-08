@@ -80,8 +80,16 @@ impl Handler {
         // fill_by_index(&mut view);
         // view.update_from_raw(&decoded_map.layers[0].bytes).unwrap();
 
-        for row_index in 0..map.get_size().height.as_usize() {
-            let slice = map.get_row_ptr(0, row_index);
+        // for row_index in 0..map.get_size().height.as_usize() {
+        //     let slice = map.get_row_ptr(0, row_index);
+        // }
+
+        for y in 0..map.get_size().height {
+            for x in 0..map.get_size().width {
+                let pos = Pos2D { x, y };
+                let cell = map.get_cell(0, &pos) - 1;
+                view.set_cell(&pos, cell).unwrap();
+            }
         }
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
@@ -118,13 +126,13 @@ impl Handler {
         //     .update_from_raw(e.get_winapi(), &self.raw_texture.bytes)
         //     .unwrap();
 
-        self.view.set_cell(&Pos2D { x: 0, y: 0 }, 1).unwrap();
-        self.view.set_cell(&Pos2D { x: 1, y: 1 }, 16).unwrap();
-        self.view.set_cell(&Pos2D { x: 2, y: 2 }, 32).unwrap();
+        // self.view.set_cell(&Pos2D { x: 0, y: 0 }, 1).unwrap();
+        // self.view.set_cell(&Pos2D { x: 1, y: 1 }, 16).unwrap();
+        // self.view.set_cell(&Pos2D { x: 2, y: 2 }, 32).unwrap();
 
-        for _ in 0..10 {
-            rng = randomize_view_cell(rng, &mut self.view);
-        }
+        // for _ in 0..10 {
+        //     rng = randomize_view_cell(rng, &mut self.view);
+        // }
 
         self.view.update(e.get_winapi());
         self.rng = rng;
