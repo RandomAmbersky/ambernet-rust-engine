@@ -70,8 +70,8 @@ impl Handler {
         )
         .unwrap();
         let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE, &TILE_SIZE);
-        fill_by_index(&mut view);
-        view.update_from_raw(&decoded_map.layers[0].bytes).unwrap();
+        // fill_by_index(&mut view);
+        // view.update_from_raw(&decoded_map.layers[0].bytes).unwrap();
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
@@ -111,7 +111,7 @@ impl Handler {
         self.view.set_cell(&Pos2D { x: 1, y: 1 }, 16).unwrap();
         self.view.set_cell(&Pos2D { x: 2, y: 2 }, 32).unwrap();
 
-        for _ in 0..1000 {
+        for _ in 0..10 {
             rng = randomize_view_cell(rng, &mut self.view);
         }
 
