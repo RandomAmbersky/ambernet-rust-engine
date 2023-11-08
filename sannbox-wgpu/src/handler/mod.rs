@@ -76,13 +76,6 @@ impl Handler {
         };
 
         let mut view = AsnNodeView2d::new(w, &tile_texture, &view_size_in_tiles, &TILE_SIZE);
-        // let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE, &TILE_SIZE);
-        // fill_by_index(&mut view);
-        // view.update_from_raw(&decoded_map.layers[0].bytes).unwrap();
-
-        // for row_index in 0..map.get_size().height.as_usize() {
-        //     let slice = map.get_row_ptr(0, row_index);
-        // }
 
         for y in 0..map.get_size().height {
             for x in 0..map.get_size().width {
