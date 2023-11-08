@@ -6,7 +6,7 @@ use crate::handler::loaders::load_map;
 use crate::handler::resources::{MAP_TMX, TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;
 use asn_core::events::{AsnEvent, AsnWindowEvent};
-use asn_core::math::{Array2D, Pos2D, Size2D};
+use asn_core::math::{Array2D, Pos2D, Size2D, UnsignedNum};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
@@ -44,7 +44,7 @@ impl Handler {
         // let mut quad = AsnNodeQuad::new(w);
         // let mut quad2 = AsnNodeQuad::new(w);
 
-        let decoded_map = load_tmx(MAP_TMX).unwrap();
+        // let decoded_map = load_tmx(MAP_TMX).unwrap();
         // println!("{:?} ", decoded_map);
 
         let map = load_map(MAP_TMX);
@@ -69,9 +69,20 @@ impl Handler {
             AsnTextureFormat::Rgba8UnormSrgb,
         )
         .unwrap();
-        let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE, &TILE_SIZE);
+
+        let view_size_in_tiles = Size2D {
+            width: map.get_size().width,
+            height: map.get_size().height,
+        };
+
+        let mut view = AsnNodeView2d::new(w, &tile_texture, &view_size_in_tiles, &TILE_SIZE);
+        // let mut view = AsnNodeView2d::new(w, &tile_texture, &MAP_VIEW_SIZE, &TILE_SIZE);
         // fill_by_index(&mut view);
         // view.update_from_raw(&decoded_map.layers[0].bytes).unwrap();
+
+        for row_index in 0..map.get_size().height.as_usize() {
+            let slice = map.get_row_ptr(0, row_index);
+        }
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
