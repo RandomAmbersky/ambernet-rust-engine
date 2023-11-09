@@ -26,13 +26,13 @@ const RNG_SEED: u64 = 11;
 // };
 
 pub struct Handler {
-    config: AsnGameConfig,
     // arc_texture: Arc<Mutex<AsnTexture>>,
     // raw_texture: Array2D<u32, u8>,
     // quad: AsnNodeQuad,
     // quad2: AsnNodeQuad,
     view: AsnNodeView2d,
     map: AsnMap,
+    player_pos: Pos2D<u32>,
     tiles: AsnTileSet,
     rng: SmallRng,
 }
@@ -40,6 +40,8 @@ pub struct Handler {
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
         let config = get_config();
+        let player_pos = Pos2D { x: 1, y: 1 };
+
         let w = e.get_winapi();
         // let mut quad = AsnNodeQuad::new(w);
         // let mut quad2 = AsnNodeQuad::new(w);
@@ -73,13 +75,13 @@ impl Handler {
         let mut view =
             AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
 
-        fill_view(&map, &Pos2D { x: 2, y: 2 }, &mut view);
+        fill_view(&map, &player_pos, &mut view);
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         Handler {
-            config,
             rng,
+            player_pos,
             // raw_texture,
             // arc_texture: Arc::new(Mutex::new(texture)),
             map, // quad,
