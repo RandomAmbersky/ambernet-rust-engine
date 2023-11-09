@@ -1,5 +1,13 @@
+use crate::engine::AsnTexture;
 use crate::map::AsnMap;
+use crate::tileset::AsnTileSet;
 use asn_core::math::Size3D;
+
+pub fn load_tiles(tsx_buf: &[u8]) -> AsnTileSet {
+    let tiles = asn_decoder_tiled::load_tsx(tsx_buf).unwrap();
+    let mut asn_tileset = AsnTileSet {};
+    asn_tileset
+}
 
 pub fn load_map(tmx_buf: &[u8]) -> AsnMap {
     let map = asn_decoder_tiled::load_tmx(tmx_buf).unwrap();

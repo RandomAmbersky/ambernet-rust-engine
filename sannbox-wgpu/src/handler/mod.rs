@@ -2,9 +2,10 @@ mod loaders;
 mod resources;
 
 use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
-use crate::handler::loaders::load_map;
+use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{MAP_TMX, TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;
+use crate::tileset::AsnTileSet;
 use asn_core::events::{AsnEvent, AsnWindowEvent};
 use asn_core::math::{Array2D, Pos2D, Size2D, UnsignedNum};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
@@ -18,11 +19,6 @@ use std::sync::{Arc, Mutex};
 
 const RNG_SEED: u64 = 11;
 
-const MAP_VIEW_SIZE: Size2D<u32> = Size2D {
-    width: 32,
-    height: 32,
-};
-
 const TILE_SIZE: Size2D<u32> = Size2D {
     width: 16,
     height: 16,
@@ -35,6 +31,7 @@ pub struct Handler {
     // quad2: AsnNodeQuad,
     view: AsnNodeView2d,
     map: AsnMap,
+    tiles: AsnTileSet,
     rng: SmallRng,
 }
 
@@ -46,7 +43,7 @@ impl Handler {
 
         // let decoded_map = load_tmx(MAP_TMX).unwrap();
         // println!("{:?} ", decoded_map);
-
+        let tiles = load_tiles(MAP_TMX);
         let map = load_map(MAP_TMX);
         // let raw_texture = load_texture(TEXTURE_QUAD_SOURCE);
         // let mut texture = AsnTexture::from_raw(
@@ -92,6 +89,7 @@ impl Handler {
             // raw_texture,
             // arc_texture: Arc::new(Mutex::new(texture)),
             map, // quad,
+            tiles,
             // quad2,
             view,
         }
@@ -159,33 +157,33 @@ impl TAsnHandler<Engine> for Handler {
     }
 }
 
-fn randomize_view_cell(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
-    let x: u32 = rng.gen_range(0..MAP_VIEW_SIZE.width);
-    let y: u32 = rng.gen_range(0..MAP_VIEW_SIZE.height);
-    let c: u8 = rng.gen_range(0..128);
-    v.set_cell(&Pos2D { x, y }, c).unwrap();
-    rng
-}
+// fn randomize_view_cell(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
+//     let x: u32 = rng.gen_range(0..MAP_VIEW_SIZE.width);
+//     let y: u32 = rng.gen_range(0..MAP_VIEW_SIZE.height);
+//     let c: u8 = rng.gen_range(0..128);
+//     v.set_cell(&Pos2D { x, y }, c).unwrap();
+//     rng
+// }
 
-fn fill_by_index(v: &mut AsnNodeView2d) {
-    let mut index: u8 = 0;
-    for y in 0..MAP_VIEW_SIZE.height {
-        for x in 0..MAP_VIEW_SIZE.width {
-            v.set_cell(&Pos2D { x, y }, index).unwrap();
-            index = index.wrapping_add(1);
-        }
-    }
-}
+// fn fill_by_index(v: &mut AsnNodeView2d) {
+//     let mut index: u8 = 0;
+//     for y in 0..MAP_VIEW_SIZE.height {
+//         for x in 0..MAP_VIEW_SIZE.width {
+//             v.set_cell(&Pos2D { x, y }, index).unwrap();
+//             index = index.wrapping_add(1);
+//         }
+//     }
+// }
 
-fn randomize_view(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
-    for x in 0..MAP_VIEW_SIZE.width {
-        for y in 0..MAP_VIEW_SIZE.height {
-            let c: u8 = rng.gen_range(0..128);
-            v.set_cell(&Pos2D { x, y }, c).unwrap();
-        }
-    }
-    rng
-}
+// fn randomize_view(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
+//     for x in 0..MAP_VIEW_SIZE.width {
+//         for y in 0..MAP_VIEW_SIZE.height {
+//             let c: u8 = rng.gen_range(0..128);
+//             v.set_cell(&Pos2D { x, y }, c).unwrap();
+//         }
+//     }
+//     rng
+// }
 
 fn randomize_array(mut rng: SmallRng, a: &mut Array2D<u32, u8>) -> SmallRng {
     let x = rng.gen_range(0..a.size.width);
