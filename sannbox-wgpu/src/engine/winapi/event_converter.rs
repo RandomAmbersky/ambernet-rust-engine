@@ -1,9 +1,9 @@
-use winit::event::{Event, WindowEvent};
-use winit::window::WindowId;
 use asn_core::events::AsnEvent;
 use asn_core::events::AsnWindowEvent::{CloseRequested, RedrawRequested, Resized};
 use asn_core::math::Size2D;
 use asn_logger::info;
+use winit::event::{Event, WindowEvent};
+use winit::window::WindowId;
 
 #[derive(Debug, Clone, Copy)]
 pub enum CustomEvent {
@@ -57,6 +57,10 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
                 height: size.height,
             };
             Some(AsnEvent::WindowEvent(Resized(w_size)))
+        }
+        WindowEvent::KeyboardInput { input, .. } => {
+            println!("WindowEvent::KeyboardInput: {:?}", input);
+            Some(AsnEvent::Empty)
         }
         _ => None,
     }
