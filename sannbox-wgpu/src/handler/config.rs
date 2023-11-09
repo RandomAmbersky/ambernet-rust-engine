@@ -7,8 +7,8 @@ pub struct AsnGameConfig {
 pub fn get_config() -> AsnGameConfig {
     AsnGameConfig {
         view_size: Size2D {
-            width: 32,
-            height: 32,
+            width: 10,
+            height: 10,
         },
     }
 }

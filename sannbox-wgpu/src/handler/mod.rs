@@ -203,7 +203,7 @@ fn randomize_array(mut rng: SmallRng, a: &mut Array2D<u32, u8>) -> SmallRng {
 
 fn fill_view(map: &AsnMap, view: &mut AsnNodeView2d) {
     for y in 0..view.get_size().height {
-        for x in 0..map.get_size().width {
+        for x in 0..view.get_size().width {
             let pos = Pos2D { x, y };
             let cell = map.get_cell(0, &pos) - 1;
             view.set_cell(&pos, cell).unwrap();
