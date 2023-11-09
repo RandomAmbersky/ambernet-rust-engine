@@ -399,6 +399,10 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         self.is_need_update = true;
         Ok(())
     }
+
+    fn get_size(&mut self) -> Size2D<u32> {
+        self.view_state.view.size
+    }
 }
 
 fn update_view_from_raw(v: &mut ViewState, buf: &[u8]) {
