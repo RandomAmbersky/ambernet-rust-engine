@@ -33,6 +33,7 @@ pub struct Handler {
     view: AsnNodeView2d,
     map: AsnMap,
     player_pos: Pos2D<u32>,
+    new_player_pos: Pos2D<u32>,
     tiles: AsnTileSet,
     rng: SmallRng,
 }
@@ -75,13 +76,12 @@ impl Handler {
         let mut view =
             AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
 
-        fill_view(&map, &player_pos, &mut view);
-
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         Handler {
             rng,
             player_pos,
+            new_player_pos: Pos2D::default(),
             // raw_texture,
             // arc_texture: Arc::new(Mutex::new(texture)),
             map, // quad,
@@ -102,6 +102,11 @@ impl Handler {
     }
     fn update(&mut self, e: &mut Engine) {
         let mut rng = self.rng.clone();
+
+        if self.new_player_pos != self.player_pos {
+            self.player_pos = self.new_player_pos;
+            fill_view(&self.map, &self.player_pos, &mut self.view);
+        }
 
         // for _ in 0..10 {
         //     rng = randomize_array(rng, &mut self.raw_texture);

@@ -1,6 +1,6 @@
 use super::UnsignedNum;
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone, Copy, PartialEq)]
 pub struct Pos2D<T: UnsignedNum> {
     pub x: T,
     pub y: T,
