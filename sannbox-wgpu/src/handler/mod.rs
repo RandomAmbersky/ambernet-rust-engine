@@ -3,7 +3,7 @@ mod resources;
 
 use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::loaders::{load_map, load_tiles};
-use crate::handler::resources::{MAP_TMX, TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
+use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;
 use crate::tileset::AsnTileSet;
 use asn_core::events::{AsnEvent, AsnWindowEvent};
@@ -12,17 +12,16 @@ use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use asn_decoder_image::load_texture;
-use asn_decoder_tiled::load_tmx;
 use rand::prelude::SmallRng;
 use rand::{Rng, SeedableRng};
 use std::sync::{Arc, Mutex};
 
 const RNG_SEED: u64 = 11;
 
-const TILE_SIZE: Size2D<u32> = Size2D {
-    width: 16,
-    height: 16,
-};
+// const TILE_SIZE: Size2D<u32> = Size2D {
+//     width: 16,
+//     height: 16,
+// };
 
 pub struct Handler {
     // arc_texture: Arc<Mutex<AsnTexture>>,
@@ -43,7 +42,7 @@ impl Handler {
 
         // let decoded_map = load_tmx(MAP_TMX).unwrap();
         // println!("{:?} ", decoded_map);
-        let tiles = load_tiles(MAP_TMX);
+        let tiles = load_tiles(MAP_TSX);
         let map = load_map(MAP_TMX);
         // let raw_texture = load_texture(TEXTURE_QUAD_SOURCE);
         // let mut texture = AsnTexture::from_raw(
@@ -72,7 +71,12 @@ impl Handler {
             height: map.get_size().height,
         };
 
-        let mut view = AsnNodeView2d::new(w, &tile_texture, &view_size_in_tiles, &TILE_SIZE);
+        let mut view = AsnNodeView2d::new(
+            w,
+            &tile_texture,
+            &view_size_in_tiles,
+            &tiles.get_tile_size(),
+        );
 
         for y in 0..map.get_size().height {
             for x in 0..map.get_size().width {
