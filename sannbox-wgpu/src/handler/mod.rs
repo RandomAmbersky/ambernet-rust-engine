@@ -3,7 +3,7 @@ mod resources;
 
 use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::loaders::{load_map, load_tiles};
-use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_QUAD_SOURCE, TEXTURE_TIILES_SOURCE};
+use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;
 use crate::tileset::AsnTileSet;
 use asn_core::events::{AsnEvent, AsnWindowEvent};
