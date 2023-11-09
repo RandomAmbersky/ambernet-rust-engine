@@ -1,8 +1,9 @@
 use asn_core::events::AsnEvent;
+use asn_core::events::AsnKeyboardEvent::{Pressed, Released};
 use asn_core::events::AsnWindowEvent::{CloseRequested, RedrawRequested, Resized};
 use asn_core::math::Size2D;
 use asn_logger::info;
-use winit::event::{Event, WindowEvent};
+use winit::event::{ElementState, Event, KeyboardInput, WindowEvent};
 use winit::window::WindowId;
 
 #[derive(Debug, Clone, Copy)]
@@ -60,7 +61,10 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
         }
         WindowEvent::KeyboardInput { input, .. } => {
             println!("WindowEvent::KeyboardInput: {:?}", input);
-            Some(AsnEvent::Empty)
+            match input.state {
+                ElementState::Pressed => Some(AsnEvent::KeyboardEvent(Pressed(input.scancode))),
+                ElementState::Released => Some(AsnEvent::KeyboardEvent(Released(input.scancode))),
+            }
         }
         _ => None,
     }
