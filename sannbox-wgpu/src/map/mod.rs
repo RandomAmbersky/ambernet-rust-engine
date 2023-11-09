@@ -43,18 +43,6 @@ impl AsnMap {
         let range = Range { start, end };
         self.map.bytes[range].copy_from_slice(src);
     }
-    pub fn get_row_ptr(&self, layer_index: usize, row_index: usize) -> &[CellDimension] {
-        if self.map.size.height.as_usize() < row_index {
-            panic!(
-                "Dimension row_index error! {:?} < {:?}",
-                self.map.size.height, row_index
-            )
-        }
-        let start = self.calc_start(layer_index);
-        let end = start + self.map.size.width.as_usize();
-        let range = Range { start, end };
-        &self.map.bytes[range]
-    }
     fn calc_start(&self, layer_index: usize) -> usize {
         layer_index * self.map.size.width.as_usize() * self.map.size.height.as_usize()
     }
