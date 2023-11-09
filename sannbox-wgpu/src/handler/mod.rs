@@ -1,7 +1,9 @@
+mod config;
 mod loaders;
 mod resources;
 
 use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
+use crate::handler::config::{get_config, AsnGameConfig};
 use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;
@@ -24,6 +26,7 @@ const RNG_SEED: u64 = 11;
 // };
 
 pub struct Handler {
+    config: AsnGameConfig,
     // arc_texture: Arc<Mutex<AsnTexture>>,
     // raw_texture: Array2D<u32, u8>,
     // quad: AsnNodeQuad,
@@ -36,6 +39,7 @@ pub struct Handler {
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
+        let config = get_config();
         let w = e.get_winapi();
         // let mut quad = AsnNodeQuad::new(w);
         // let mut quad2 = AsnNodeQuad::new(w);
@@ -66,17 +70,8 @@ impl Handler {
         )
         .unwrap();
 
-        let view_size_in_tiles = Size2D {
-            width: map.get_size().width,
-            height: map.get_size().height,
-        };
-
-        let mut view = AsnNodeView2d::new(
-            w,
-            &tile_texture,
-            &view_size_in_tiles,
-            &tiles.get_tile_size(),
-        );
+        let mut view =
+            AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
 
         for y in 0..map.get_size().height {
             for x in 0..map.get_size().width {
@@ -89,6 +84,7 @@ impl Handler {
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         Handler {
+            config,
             rng,
             // raw_texture,
             // arc_texture: Arc::new(Mutex::new(texture)),
