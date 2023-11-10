@@ -8,7 +8,7 @@ use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;
 use crate::tileset::AsnTileSet;
-use asn_core::events::{AsnEvent, AsnWindowEvent};
+use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
 use asn_core::math::{Array2D, Pos2D, Size2D, UnsignedNum};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
@@ -154,6 +154,25 @@ impl TAsnHandler<Engine> for Handler {
                 _ => {}
             },
             AsnEvent::KeyboardEvent(e) => {
+                println!("KeyboardEvent {:?}", &e);
+                match e {
+                    AsnKeyboardEvent::Released(_) => {}
+                    AsnKeyboardEvent::Pressed(scancode) => match scancode {
+                        124 => {
+                            self.new_player_pos.x += 1;
+                        }
+                        123 => {
+                            self.new_player_pos.x -= 1;
+                        }
+                        125 => {
+                            self.new_player_pos.y += 1;
+                        }
+                        126 => {
+                            self.new_player_pos.y -= 1;
+                        }
+                        _ => {}
+                    },
+                };
                 println!("AsnEvent::KeyboardEvent {:?}", e);
             }
             _ => {}
