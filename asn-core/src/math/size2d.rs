@@ -26,6 +26,11 @@ impl<T: UnsignedNum> Size2D<T> {
         }
         true
     }
+    pub fn look_at_window(&self, pos: &Pos2D<T>, window: Size2D<T>) -> Pos2D<T> {
+        let look_at_pos = *pos;
+        // if
+        look_at_pos
+    }
 }
 
 #[cfg(test)]
