@@ -60,7 +60,7 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
             Some(AsnEvent::WindowEvent(Resized(w_size)))
         }
         WindowEvent::KeyboardInput { input, .. } => {
-            println!("WindowEvent::KeyboardInput: {:?}", input);
+            // println!("WindowEvent::KeyboardInput: {:?}", input);
             match input.state {
                 ElementState::Pressed => Some(AsnEvent::KeyboardEvent(Pressed(input.scancode))),
                 ElementState::Released => Some(AsnEvent::KeyboardEvent(Released(input.scancode))),

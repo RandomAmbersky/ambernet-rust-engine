@@ -153,6 +153,9 @@ impl TAsnHandler<Engine> for Handler {
                 }
                 _ => {}
             },
+            AsnEvent::KeyboardEvent(e) => {
+                println!("AsnEvent::KeyboardEvent {:?}", e);
+            }
             _ => {}
         }
     }
