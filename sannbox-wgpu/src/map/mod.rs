@@ -62,4 +62,8 @@ impl AsnMap {
         let index = self.calc_start(layer_index) + (pos.y * self.map.size.width + pos.x).as_usize();
         self.map.bytes[index]
     }
+    pub fn set_cell(&mut self, layer_index: usize, pos: &Pos2D<MapDimension>, cell: u8) {
+        let index = self.calc_start(layer_index) + (pos.y * self.map.size.width + pos.x).as_usize();
+        self.map.bytes[index] = cell
+    }
 }

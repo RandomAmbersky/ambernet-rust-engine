@@ -24,10 +24,10 @@ where
         Ok(result)
     }
     pub fn is_pos_into(&self, pos: &Pos2D<T>) -> bool {
-        if self.width < pos.x {
+        if self.width <= pos.x {
             return false;
         }
-        if self.height < pos.y {
+        if self.height <= pos.y {
             return false;
         }
         true

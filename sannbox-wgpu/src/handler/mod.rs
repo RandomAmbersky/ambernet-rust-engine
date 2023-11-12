@@ -3,7 +3,7 @@ mod loaders;
 mod resources;
 
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
-use crate::handler::config::get_config;
+use crate::handler::config::{get_config, AsnGameConfig};
 use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;
@@ -20,12 +20,8 @@ use std::sync::{Arc, Mutex};
 
 const RNG_SEED: u64 = 11;
 
-// const TILE_SIZE: Size2D<u32> = Size2D {
-//     width: 16,
-//     height: 16,
-// };
-
 pub struct Handler {
+    config: AsnGameConfig,
     // arc_texture: Arc<Mutex<AsnTexture>>,
     // raw_texture: Array2D<u32, u8>,
     // quad: AsnNodeQuad,
@@ -79,6 +75,7 @@ impl Handler {
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         Handler {
+            config,
             rng,
             player_pos,
             new_player_pos: Pos2D::default(),
@@ -106,6 +103,8 @@ impl Handler {
 
         if self.new_player_pos != self.player_pos {
             self.player_pos = self.new_player_pos;
+            self.map
+                .set_cell(0, &self.player_pos, self.config.player_cell);
             self.look_at = self
                 .map
                 .get_size_2d()
