@@ -10,7 +10,9 @@ pub trait UnsignedNum:
     + Shr<Output = Self>
     + Display
     + Copy
+    + Sized
     + PartialOrd
+    + From<u8>
 {
     fn as_usize(&self) -> usize;
 }
@@ -43,6 +45,9 @@ mod tests {
     {
         pub fn add(&mut self, delta: T) {
             self.s = self.s + delta;
+        }
+        pub fn inc(&mut self) {
+            self.s = self.s + 1_u16.into();
         }
     }
 

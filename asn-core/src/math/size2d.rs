@@ -34,45 +34,45 @@ where
     }
 
     // Посмотреть на позицию pos через окно размером window
-    // pub fn look_at_window(&self, pos: &Pos2D<T>, window: Size2D<T>) -> Pos2D<T> {
-    //     if self.width < window.width {
-    //         panic!("Window {:?} too large for size {:?}", window, self)
-    //     }
-    //
-    //     if self.height < window.height {
-    //         panic!("Window {:?} too large for size {:?}", window, self)
-    //     }
-    //
-    //     let mut look_at_pos = *pos;
-    //
-    //     let half_width: T = window.height.shr(1);
-    //     let half_height: T = window.height >> (1_u8 as T);
-    //
-    //     let map_width_minus_width = self.width - window.width;
-    //     let map_height_minus_height = self.height - window.height;
-    //
-    //     if look_at_pos.x > half_width {
-    //         look_at_pos.x = look_at_pos.x - half_width;
-    //     } else {
-    //         look_at_pos.x = 0 as T;
-    //     }
-    //
-    //     if look_at_pos.y > half_height {
-    //         look_at_pos.y = look_at_pos.y - half_height;
-    //     } else {
-    //         look_at_pos.y = 0 as T;
-    //     }
-    //
-    //     if look_at_pos.y > map_height_minus_height {
-    //         look_at_pos.y = map_height_minus_height;
-    //     }
-    //
-    //     if look_at_pos.x > map_width_minus_width {
-    //         look_at_pos.x = map_width_minus_width;
-    //     }
-    //
-    //     look_at_pos
-    // }
+    pub fn look_at_window(&self, pos: &Pos2D<T>, window: Size2D<T>) -> Pos2D<T> {
+        if self.width < window.width {
+            panic!("Window {:?} too large for size {:?}", window, self)
+        }
+
+        if self.height < window.height {
+            panic!("Window {:?} too large for size {:?}", window, self)
+        }
+
+        let mut look_at_pos = *pos;
+
+        let half_width: T = window.height >> 1.into();
+        let half_height: T = window.height >> 1.into();
+
+        let map_width_minus_width = self.width - window.width;
+        let map_height_minus_height = self.height - window.height;
+
+        if look_at_pos.x > half_width {
+            look_at_pos.x = look_at_pos.x - half_width;
+        } else {
+            look_at_pos.x = 0.into();
+        }
+
+        if look_at_pos.y > half_height {
+            look_at_pos.y = look_at_pos.y - half_height;
+        } else {
+            look_at_pos.y = 0.into();
+        }
+
+        if look_at_pos.y > map_height_minus_height {
+            look_at_pos.y = map_height_minus_height;
+        }
+
+        if look_at_pos.x > map_width_minus_width {
+            look_at_pos.x = map_width_minus_width;
+        }
+
+        look_at_pos
+    }
 }
 
 #[cfg(test)]
