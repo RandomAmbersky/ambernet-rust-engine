@@ -139,6 +139,7 @@ impl Handler {
         // }
 
         self.view.update(e.get_winapi());
+        self.player_view.update(e.get_winapi());
         self.rng = rng;
     }
 }
@@ -165,6 +166,7 @@ impl TAsnHandler<Engine> for Handler {
                 AsnWindowEvent::Resized(size) => {
                     e.get_winapi().window_resize(size);
                     self.view.set_screen_size(size);
+                    self.player_view.set_screen_size(size);
                     self.draw(e);
                 }
                 AsnWindowEvent::CloseRequested => {
