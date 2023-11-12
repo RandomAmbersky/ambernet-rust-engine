@@ -5,7 +5,9 @@ mod resources;
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::config::{get_config, AsnGameConfig};
 use crate::handler::loaders::{load_map, load_tiles};
-use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_TIILES_SOURCE};
+use crate::handler::resources::{
+    MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
+};
 use crate::map::AsnMap;
 use crate::tileset::AsnTileSet;
 use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
@@ -72,9 +74,22 @@ impl Handler {
         )
         .unwrap();
 
+        let raw_tile_aplha_texture = load_texture(TEXTURE_TIILES_ALPHA_SOURCE);
+        let tile_alpha_texture = AsnTexture::from_raw(
+            w,
+            &raw_tile_aplha_texture.bytes,
+            &raw_tile_aplha_texture.size,
+            AsnTextureFormat::Rgba8UnormSrgb,
+        )
+        .unwrap();
+
         let view = AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
-        let player_view =
-            AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
+        let player_view = AsnNodeView2d::new(
+            w,
+            &tile_alpha_texture,
+            &config.view_size,
+            &tiles.get_tile_size(),
+        );
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
@@ -100,8 +115,8 @@ impl Handler {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
         // self.quad.draw(&mut fcx);
         // self.quad2.draw(&mut fcx);
-        self.view.draw(&mut fcx);
         self.player_view.draw(&mut fcx);
+        self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
