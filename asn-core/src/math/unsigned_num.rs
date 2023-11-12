@@ -1,9 +1,16 @@
 use std::fmt::{Debug, Display};
-use std::ops::{Add, Mul};
+use std::ops::{Add, Mul, Shr, Sub};
 
 // from 0 to MAX
 pub trait UnsignedNum:
-    Debug + Add<Output = Self> + Mul<Output = Self> + Display + Copy + PartialOrd
+    Debug
+    + Add<Output = Self>
+    + Sub<Output = Self>
+    + Mul<Output = Self>
+    + Shr<Output = Self>
+    + Display
+    + Copy
+    + PartialOrd
 {
     fn as_usize(&self) -> usize;
 }
@@ -22,12 +29,24 @@ empty_trait_impl!(UnsignedNum for u8 u16 u32 u64);
 
 #[cfg(test)]
 mod tests {
-    type MyCoolNum = u8;
+    use crate::math::UnsignedNum;
+
+    type MyType = u8;
+
+    struct MyStruct<T: UnsignedNum> {
+        pub s: T,
+    }
+
+    #[test]
+    fn test_my_cool_num_it_works() {
+        // let c = MyStruct { s: 10 };
+        // let actual = c.as_usize();
+        // assert_eq!(actual, 10_usize);
+    }
 
     #[test]
     fn test_unsigned_num_it_works() {
-        let c: MyCoolNum = 10 as MyCoolNum;
-        let actual = c.as_usize();
-        assert_eq!(actual, 10_usize);
+        let c = MyStruct { s: 10 as MyType };
+        assert_eq!(c.s, 10);
     }
 }

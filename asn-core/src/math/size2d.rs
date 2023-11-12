@@ -1,12 +1,18 @@
 use super::{Pos2D, UnsignedNum};
 
 #[derive(Default, Debug, Copy, Clone)]
-pub struct Size2D<T: UnsignedNum> {
+pub struct Size2D<T>
+where
+    T: UnsignedNum,
+{
     pub width: T,
     pub height: T,
 }
 
-impl<T: UnsignedNum> Size2D<T> {
+impl<T> Size2D<T>
+where
+    T: UnsignedNum,
+{
     pub fn get_size(&self) -> T {
         self.width * self.height
     }
@@ -26,11 +32,47 @@ impl<T: UnsignedNum> Size2D<T> {
         }
         true
     }
-    pub fn look_at_window(&self, pos: &Pos2D<T>, window: Size2D<T>) -> Pos2D<T> {
-        let look_at_pos = *pos;
-        // if
-        look_at_pos
-    }
+
+    // Посмотреть на позицию pos через окно размером window
+    // pub fn look_at_window(&self, pos: &Pos2D<T>, window: Size2D<T>) -> Pos2D<T> {
+    //     if self.width < window.width {
+    //         panic!("Window {:?} too large for size {:?}", window, self)
+    //     }
+    //
+    //     if self.height < window.height {
+    //         panic!("Window {:?} too large for size {:?}", window, self)
+    //     }
+    //
+    //     let mut look_at_pos = *pos;
+    //
+    //     let half_width: T = window.height.shr(1);
+    //     let half_height: T = window.height >> (1_u8 as T);
+    //
+    //     let map_width_minus_width = self.width - window.width;
+    //     let map_height_minus_height = self.height - window.height;
+    //
+    //     if look_at_pos.x > half_width {
+    //         look_at_pos.x = look_at_pos.x - half_width;
+    //     } else {
+    //         look_at_pos.x = 0 as T;
+    //     }
+    //
+    //     if look_at_pos.y > half_height {
+    //         look_at_pos.y = look_at_pos.y - half_height;
+    //     } else {
+    //         look_at_pos.y = 0 as T;
+    //     }
+    //
+    //     if look_at_pos.y > map_height_minus_height {
+    //         look_at_pos.y = map_height_minus_height;
+    //     }
+    //
+    //     if look_at_pos.x > map_width_minus_width {
+    //         look_at_pos.x = map_width_minus_width;
+    //     }
+    //
+    //     look_at_pos
+    // }
 }
 
 #[cfg(test)]

@@ -1,6 +1,7 @@
 mod array2d;
 mod array3d;
 mod cell_type;
+mod direction;
 mod pos2d;
 mod pos3d;
 mod size2d;
@@ -10,6 +11,7 @@ mod unsigned_num;
 
 pub use array2d::Array2D;
 pub use array3d::Array3D;
+pub use direction::Directions;
 pub use pos2d::Pos2D;
 pub use pos3d::Pos3D;
 pub use size2d::Size2D;
