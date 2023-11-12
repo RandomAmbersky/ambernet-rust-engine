@@ -47,6 +47,19 @@ impl UnsignedNum for u32 {
     }
 }
 
+impl UnsignedNum for u64 {
+    const ZERO: Self = 0;
+    const ONE: Self = 1;
+
+    fn as_usize(&self) -> usize {
+        usize::try_from(*self).expect("convert error")
+    }
+
+    fn from_usize(c: usize) -> Self {
+        usize::try_into(c).expect("convert error")
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::math::UnsignedNum;

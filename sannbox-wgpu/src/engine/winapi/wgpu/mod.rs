@@ -1,6 +1,7 @@
 use std::iter;
 
 use crate::engine::winapi::asn_window::AsnWindow;
+use crate::engine::winapi::defines::SizeDimension;
 use crate::engine::winapi::event_converter::{convert_asn_event, CustomEvent};
 use crate::engine::winapi::utils::ToWgpuFormat;
 use asn_core::errors::AsnError;
@@ -101,6 +102,7 @@ pub struct AsnWgpuFrameContext {
 
 impl TAsnWinapi for AsnWgpuWinApi {
     type FrameContext = AsnWgpuFrameContext;
+    type Size2D = Size2D<u32>;
 
     fn get_config(&self) -> &AsnWinapiConfig {
         &self.config
@@ -111,7 +113,7 @@ impl TAsnWinapi for AsnWgpuWinApi {
         self.event_loop_proxy.send_event(e).ok();
     }
 
-    fn window_resize(&mut self, new_size: &Size2D<u32>) {
+    fn window_resize(&mut self, new_size: &Self::Size2D) {
         println!("{:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
             self.config.size = *new_size;
