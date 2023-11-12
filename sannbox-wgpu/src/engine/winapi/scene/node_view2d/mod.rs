@@ -16,7 +16,7 @@ use asn_core::math::{Pos2D, Size2D, TransformSet};
 use asn_core::winapi::scene::{TNodeBase, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use wgpu::util::DeviceExt;
-use wgpu::{BindGroupLayout, Device, ShaderModule, TextureFormat};
+use wgpu::{BindGroupLayout, Device, ShaderModule, StoreOp, TextureFormat};
 
 struct RenderState {
     render_pipeline: wgpu::RenderPipeline,
@@ -220,10 +220,12 @@ fn draw_render_state(fcx: &mut AsnWgpuFrameContext, r: &RenderState) {
                     b: 0.3,
                     a: 1.0,
                 }),
-                store: true,
+                store: StoreOp::Store,
             },
         })],
         depth_stencil_attachment: None,
+        timestamp_writes: None,
+        occlusion_query_set: None,
     });
     render_pass.set_pipeline(&r.render_pipeline);
     render_pass.set_bind_group(0, &r.bind_group, &[]);

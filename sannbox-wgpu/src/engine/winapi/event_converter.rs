@@ -3,7 +3,7 @@ use asn_core::events::AsnKeyboardEvent::{Pressed, Released};
 use asn_core::events::AsnWindowEvent::{CloseRequested, RedrawRequested, Resized};
 use asn_core::math::Size2D;
 use asn_logger::info;
-use winit::event::{ElementState, Event, KeyboardInput, WindowEvent};
+use winit::event::{ElementState, Event, WindowEvent};
 use winit::window::WindowId;
 
 #[derive(Debug, Clone, Copy)]

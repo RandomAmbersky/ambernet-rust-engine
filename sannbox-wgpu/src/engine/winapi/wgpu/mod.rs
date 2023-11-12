@@ -38,7 +38,9 @@ impl AsnWgpuWinApi {
 
         let instance = wgpu::Instance::new(InstanceDescriptor {
             backends: wgpu::Backends::all(),
+            flags: Default::default(),
             dx12_shader_compiler: Default::default(),
+            gles_minor_version: Default::default(),
         });
 
         let window = AsnWindow::new(event_loop, &instance, &config.size);

@@ -10,7 +10,7 @@ use asn_core::winapi::scene::{TNodeBase, TNodeQuad};
 use asn_core::winapi::{TAsnWinapi, TTexture};
 use std::sync::Arc;
 use wgpu::util::DeviceExt;
-use wgpu::{BindGroup, RenderPipeline, ShaderModule, TextureFormat};
+use wgpu::{BindGroup, RenderPipeline, ShaderModule, StoreOp, TextureFormat};
 
 pub struct AsnWgpuNodeQuad {
     shader: ShaderModule,
@@ -193,10 +193,12 @@ impl TNodeBase for AsnWgpuNodeQuad {
                         b: 0.3,
                         a: 1.0,
                     }),
-                    store: true,
+                    store: StoreOp::Store,
                 },
             })],
             depth_stencil_attachment: None,
+            timestamp_writes: None,
+            occlusion_query_set: None,
         });
         render_pass.set_pipeline(&self.render_pipeline);
         render_pass.set_bind_group(0, &self.diffuse_bind_group, &[]);
