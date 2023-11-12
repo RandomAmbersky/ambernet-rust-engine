@@ -54,14 +54,11 @@ impl<S: UnsignedNum, T: CellType> Array3D<S, T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::math::{Array3D, Pos3D, Size3D, UnsignedNum};
+    use crate::math::{Array3D, Pos3D, Size3D};
 
     type Axe = u32;
 
     type Cell = u8;
-    // impl CellType for Cell {
-    //     const ZERO: Self = 0 as Cell;
-    // }
 
     #[test]
     fn it_working() {

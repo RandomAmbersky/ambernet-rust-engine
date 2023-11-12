@@ -10,7 +10,7 @@ use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::bind_groups::{BindGroupEntryBuilder, BindGroupLayoutBuilder};
 use crate::engine::winapi::wgpu::texture::AsnTexture;
 use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
-use asn_core::cgmath::{Matrix4, One, Rad, Vector3};
+use asn_core::cgmath::{Matrix4, One, Vector3};
 use asn_core::errors::AsnRenderError;
 use asn_core::math::{Pos2D, Size2D, TransformSet};
 use asn_core::winapi::scene::{TNodeBase, TNodeView2d};

@@ -2,8 +2,8 @@ mod config;
 mod loaders;
 mod resources;
 
-use crate::engine::{AsnNodeQuad, AsnNodeView2d, AsnTexture, Engine};
-use crate::handler::config::{get_config, AsnGameConfig};
+use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
+use crate::handler::config::get_config;
 use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;

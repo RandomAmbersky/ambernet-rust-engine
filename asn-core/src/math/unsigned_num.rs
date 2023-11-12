@@ -37,16 +37,20 @@ mod tests {
         pub s: T,
     }
 
-    #[test]
-    fn test_my_cool_num_it_works() {
-        // let c = MyStruct { s: 10 };
-        // let actual = c.as_usize();
-        // assert_eq!(actual, 10_usize);
+    impl<T> MyStruct<T>
+    where
+        T: UnsignedNum,
+    {
+        pub fn add(&mut self, delta: T) {
+            self.s = self.s + delta;
+        }
     }
 
     #[test]
     fn test_unsigned_num_it_works() {
-        let c = MyStruct { s: 10 as MyType };
+        let mut c = MyStruct { s: 10 as MyType };
         assert_eq!(c.s, 10);
+        c.add(5);
+        assert_eq!(c.s, 15);
     }
 }

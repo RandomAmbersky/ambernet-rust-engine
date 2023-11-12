@@ -7,7 +7,7 @@ use asn_core::errors::AsnError;
 use asn_core::events::AsnEvent;
 use asn_core::math::Size2D;
 use asn_core::winapi::{AsnTextureFormat, AsnWinapiConfig, TAsnWinapi};
-use wgpu::{Device, Instance, InstanceDescriptor};
+use wgpu::{Instance, InstanceDescriptor};
 use winit::event_loop::{EventLoop, EventLoopProxy};
 
 pub mod bind_groups;
