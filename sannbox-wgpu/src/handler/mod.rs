@@ -27,6 +27,7 @@ pub struct Handler {
     // quad: AsnNodeQuad,
     // quad2: AsnNodeQuad,
     view: AsnNodeView2d,
+    player_view: AsnNodeView2d,
     map: AsnMap,
     player_pos: Pos2D<u32>,
     new_player_pos: Pos2D<u32>,
@@ -71,6 +72,8 @@ impl Handler {
         .unwrap();
 
         let view = AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
+        let player_view =
+            AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
@@ -86,6 +89,7 @@ impl Handler {
             tiles,
             // quad2,
             view,
+            player_view,
         }
     }
     fn draw(&mut self, e: &mut Engine) {
@@ -95,6 +99,7 @@ impl Handler {
         // self.quad.draw(&mut fcx);
         // self.quad2.draw(&mut fcx);
         self.view.draw(&mut fcx);
+        self.player_view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
@@ -112,6 +117,7 @@ impl Handler {
             println!("player pos: {:?}", self.player_pos);
             println!("look_at pos: {:?}", self.look_at);
             fill_view(&self.map, &self.look_at, &mut self.view);
+            fill_view(&self.map, &self.look_at, &mut self.player_view);
         }
 
         // for _ in 0..10 {
