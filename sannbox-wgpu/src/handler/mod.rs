@@ -73,8 +73,7 @@ impl Handler {
         )
         .unwrap();
 
-        let mut view =
-            AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
+        let view = AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 

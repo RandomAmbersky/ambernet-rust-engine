@@ -1,5 +1,5 @@
 use std::fmt::{Debug, Display};
-use std::ops::{Add, Mul, Shr, Sub};
+use std::ops::{Add, Div, Mul, Shr, Sub};
 
 // from 0 to MAX
 pub trait UnsignedNum:
@@ -7,27 +7,45 @@ pub trait UnsignedNum:
     + Add<Output = Self>
     + Sub<Output = Self>
     + Mul<Output = Self>
+    + Div<Output = Self>
     + Shr<Output = Self>
     + Display
     + Copy
     + Sized
     + PartialOrd
-    + From<u8>
 {
+    const ZERO: Self;
+    const ONE: Self;
     fn as_usize(&self) -> usize;
+    fn from_usize(c: usize) -> Self;
 }
 
-macro_rules! empty_trait_impl {
-    ($name:ident for $($t:ty)*) => ($(
-        impl $name for $t {
-            fn as_usize(&self) -> usize {
-                usize::try_from(*self).expect("convert error")
-            }
-        }
-    )*)
-}
+// macro_rules! empty_trait_impl {
+//     ($name:ident for $($t:ty)*) => ($(
+//         impl $name for $t {
+//             const ZERO: Self = 0;
+//             const ONE: Self = 1;
+//             fn as_usize(&self) -> usize {
+//                 usize::try_from(*self).expect("convert error")
+//             }
+//         }
+//     )*)
+// }
 
-empty_trait_impl!(UnsignedNum for u8 u16 u32 u64);
+// empty_trait_impl!(UnsignedNum for u8 u16 u32 u64);
+
+impl UnsignedNum for u32 {
+    const ZERO: Self = 0;
+    const ONE: Self = 1;
+
+    fn as_usize(&self) -> usize {
+        usize::try_from(*self).expect("convert error")
+    }
+
+    fn from_usize(c: usize) -> Self {
+        usize::try_into(c).expect("convert error")
+    }
+}
 
 #[cfg(test)]
 mod tests {

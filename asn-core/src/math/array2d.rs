@@ -59,9 +59,6 @@ mod tests {
     type Axe = u32;
 
     type Cell = u8;
-    // impl CellType for Cell {
-    //     const ZERO: Self = 0 as Cell;
-    // }
 
     #[test]
     fn it_working() {

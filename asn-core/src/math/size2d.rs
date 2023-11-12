@@ -45,22 +45,22 @@ where
 
         let mut look_at_pos = *pos;
 
-        let half_width: T = window.height >> 1.into();
-        let half_height: T = window.height >> 1.into();
+        let half_width: T = window.height >> T::ONE;
+        let half_height: T = window.height >> T::ONE;
 
         let map_width_minus_width = self.width - window.width;
         let map_height_minus_height = self.height - window.height;
 
         if look_at_pos.x > half_width {
-            look_at_pos.x = look_at_pos.x - half_width;
+            look_at_pos.x = look_at_pos.x - half_width - T::from_usize(10);
         } else {
-            look_at_pos.x = 0.into();
+            look_at_pos.x = T::ZERO;
         }
 
         if look_at_pos.y > half_height {
             look_at_pos.y = look_at_pos.y - half_height;
         } else {
-            look_at_pos.y = 0.into();
+            look_at_pos.y = T::ZERO;
         }
 
         if look_at_pos.y > map_height_minus_height {
