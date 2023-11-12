@@ -9,7 +9,7 @@ use crate::handler::resources::{MAP_TMX, MAP_TSX, TEXTURE_TIILES_SOURCE};
 use crate::map::AsnMap;
 use crate::tileset::AsnTileSet;
 use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
-use asn_core::math::{Array2D, Pos2D, Size2D, UnsignedNum};
+use asn_core::math::{Array2D, Directions, Pos2D, Size2D, UnsignedNum};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
@@ -34,6 +34,7 @@ pub struct Handler {
     map: AsnMap,
     player_pos: Pos2D<u32>,
     new_player_pos: Pos2D<u32>,
+    look_at: Pos2D<u32>,
     tiles: AsnTileSet,
     rng: SmallRng,
 }
@@ -81,6 +82,7 @@ impl Handler {
             rng,
             player_pos,
             new_player_pos: Pos2D::default(),
+            look_at: Pos2D::default(),
             // raw_texture,
             // arc_texture: Arc::new(Mutex::new(texture)),
             map, // quad,
@@ -104,7 +106,13 @@ impl Handler {
 
         if self.new_player_pos != self.player_pos {
             self.player_pos = self.new_player_pos;
-            fill_view(&self.map, &self.player_pos, &mut self.view);
+            self.look_at = self
+                .map
+                .get_size_2d()
+                .look_at_window(&self.player_pos, &self.view.get_size());
+            println!("player pos: {:?}", self.player_pos);
+            println!("look_at pos: {:?}", self.look_at);
+            fill_view(&self.map, &self.look_at, &mut self.view);
         }
 
         // for _ in 0..10 {
@@ -127,6 +135,16 @@ impl Handler {
 
         self.view.update(e.get_winapi());
         self.rng = rng;
+    }
+}
+
+impl Handler {
+    fn handle_move_player(&mut self, dir: Directions) {
+        let result = move_player(&self.new_player_pos, &self.map.get_size_2d(), dir);
+        match result {
+            None => {}
+            Some(t) => self.new_player_pos = t,
+        };
     }
 }
 
@@ -157,18 +175,10 @@ impl TAsnHandler<Engine> for Handler {
                 match e {
                     AsnKeyboardEvent::Released(_) => {}
                     AsnKeyboardEvent::Pressed(scancode) => match scancode {
-                        124 => {
-                            self.new_player_pos.x += 1;
-                        }
-                        123 => {
-                            self.new_player_pos.x -= 1;
-                        }
-                        125 => {
-                            self.new_player_pos.y += 1;
-                        }
-                        126 => {
-                            self.new_player_pos.y -= 1;
-                        }
+                        124 => self.handle_move_player(Directions::Right),
+                        123 => self.handle_move_player(Directions::Left),
+                        125 => self.handle_move_player(Directions::Up),
+                        126 => self.handle_move_player(Directions::Down),
                         _ => {}
                     },
                 };
@@ -240,4 +250,43 @@ fn fill_view(map: &AsnMap, start_pos: &Pos2D<u32>, view: &mut AsnNodeView2d) {
             view.set_cell(&Pos2D { x, y }, cell).unwrap();
         }
     }
+}
+
+fn move_player(
+    start_pos: &Pos2D<u32>,
+    map_size: &Size2D<u32>,
+    dir: Directions,
+) -> Option<Pos2D<u32>> {
+    let mut pos = *start_pos;
+    match dir {
+        Directions::Up => match pos.y.checked_add(1) {
+            None => return None,
+            Some(t) => {
+                pos.y = t;
+            }
+        },
+        Directions::Down => match pos.y.checked_sub(1) {
+            None => return None,
+            Some(t) => {
+                pos.y = t;
+            }
+        },
+        Directions::Left => match pos.x.checked_sub(1) {
+            None => return None,
+            Some(t) => {
+                pos.x = t;
+            }
+        },
+        Directions::Right => match pos.x.checked_add(1) {
+            None => return None,
+            Some(t) => {
+                pos.x = t;
+            }
+        },
+    }
+
+    if map_size.is_pos_into(&pos) {
+        return Some(pos);
+    }
+    None
 }

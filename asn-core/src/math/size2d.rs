@@ -34,7 +34,7 @@ where
     }
 
     // Посмотреть на позицию pos через окно размером window
-    pub fn look_at_window(&self, pos: &Pos2D<T>, window: Size2D<T>) -> Pos2D<T> {
+    pub fn look_at_window(&self, pos: &Pos2D<T>, window: &Size2D<T>) -> Pos2D<T> {
         if self.width < window.width {
             panic!("Window {:?} too large for size {:?}", window, self)
         }
@@ -52,7 +52,7 @@ where
         let map_height_minus_height = self.height - window.height;
 
         if look_at_pos.x > half_width {
-            look_at_pos.x = look_at_pos.x - half_width - T::from_usize(10);
+            look_at_pos.x = look_at_pos.x - half_width;
         } else {
             look_at_pos.x = T::ZERO;
         }

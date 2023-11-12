@@ -52,6 +52,12 @@ impl AsnMap {
     pub fn get_size(&self) -> Size3D<MapDimension> {
         self.map.size
     }
+    pub fn get_size_2d(&self) -> Size2D<MapDimension> {
+        Size2D {
+            width: self.map.size.width,
+            height: self.map.size.height,
+        }
+    }
     pub fn get_cell(&self, layer_index: usize, pos: &Pos2D<MapDimension>) -> CellDimension {
         let index = self.calc_start(layer_index) + (pos.y * self.map.size.width + pos.x).as_usize();
         self.map.bytes[index]
