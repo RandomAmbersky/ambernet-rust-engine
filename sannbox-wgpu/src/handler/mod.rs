@@ -31,6 +31,7 @@ pub struct Handler {
     map: AsnMap,
     player_pos: Pos2D<u32>,
     new_player_pos: Pos2D<u32>,
+    player_ground: u8,
     look_at: Pos2D<u32>,
     tiles: AsnTileSet,
     rng: SmallRng,
@@ -81,6 +82,7 @@ impl Handler {
             config,
             rng,
             player_pos,
+            player_ground: 1,
             new_player_pos: Pos2D::default(),
             look_at: Pos2D::default(),
             // raw_texture,
@@ -107,9 +109,15 @@ impl Handler {
         let mut rng = self.rng.clone();
 
         if self.new_player_pos != self.player_pos {
+            self.map.set_cell(0, &self.player_pos, self.player_ground);
+
             self.player_pos = self.new_player_pos;
+
+            self.player_ground = self.map.get_cell(0, &self.player_pos);
+
             self.map
                 .set_cell(0, &self.player_pos, self.config.player_cell);
+
             self.look_at = self
                 .map
                 .get_size_2d()
