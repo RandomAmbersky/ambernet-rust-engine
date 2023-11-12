@@ -57,6 +57,6 @@ mod tests {
 
         let pos = Pos3D { x: 5, y: 6, z: 7 };
         let actual = my.get_index(&pos).unwrap();
-        assert_eq!(actual, 6 * 10 + 5);
+        assert_eq!(actual, 10 * 20 * 7 + 10 * 6 + 5);
     }
 }

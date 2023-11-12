@@ -54,7 +54,7 @@ impl<S: UnsignedNum, T: CellType> Array3D<S, T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::math::{Array3D, Pos3D, Size3D};
+    use crate::math::{Array3D, Pos3D, Size3D, UnsignedNum};
 
     type Axe = u32;
 
@@ -114,7 +114,8 @@ mod tests {
             depth: axe_value,
         });
 
-        arr.bytes[(10 * 5 + 5) as usize] = 55;
+        let index = axe_value * axe_value * 5 + axe_value * 5 + 5;
+        arr.bytes[index as usize] = 55;
 
         let pos = Pos3D {
             x: 5 as Axe,
