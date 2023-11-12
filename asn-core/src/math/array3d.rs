@@ -54,7 +54,7 @@ impl<S: UnsignedNum, T: CellType> Array3D<S, T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::math::{cell_type::CellType, Array3D, Pos3D, Size3D};
+    use crate::math::{Array3D, Pos3D, Size3D};
 
     type Axe = u32;
 

@@ -1,5 +1,5 @@
 use super::UnsignedNum;
-use crate::math::direction::Directions;
+
 
 #[derive(Default, Debug, Clone, Copy, PartialEq)]
 pub struct Pos2D<T: UnsignedNum> {

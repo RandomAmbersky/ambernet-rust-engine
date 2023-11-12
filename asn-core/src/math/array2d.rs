@@ -54,7 +54,7 @@ impl<S: UnsignedNum, T: CellType> Array2D<S, T> {
 
 #[cfg(test)]
 mod tests {
-    use crate::math::{cell_type::CellType, Array2D, Pos2D};
+    use crate::math::{Array2D, Pos2D};
 
     type Axe = u32;
 
