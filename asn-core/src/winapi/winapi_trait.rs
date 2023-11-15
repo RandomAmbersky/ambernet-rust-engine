@@ -1,6 +1,6 @@
 use crate::errors::AsnError;
 use crate::events::AsnEvent;
-use crate::math::{Size2D, UnsignedNum};
+use crate::math::Size2D;
 use crate::winapi::AsnTextureFormat;
 
 #[derive(Default)]

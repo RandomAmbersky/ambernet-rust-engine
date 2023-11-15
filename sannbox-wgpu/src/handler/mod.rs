@@ -162,7 +162,7 @@ impl Handler {
         // }
 
         self.view.update(e.get_winapi());
-        self.player_view.update(e.get_winapi());
+        // self.player_view.update(e.get_winapi());
         self.rng = rng;
     }
 }
