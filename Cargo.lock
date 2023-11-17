@@ -152,7 +152,6 @@ dependencies = [
  "asn-logger",
  "serde",
  "serde-xml-rs",
- "serde_derive",
  "xmlparser",
 ]
 

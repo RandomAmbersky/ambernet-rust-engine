@@ -1,5 +1,57 @@
-use serde_derive::{Deserialize, Serialize};
+use asn_core::math::Size2D;
+use serde::ser::{SerializeMap, SerializeStruct};
+use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
 use serde_xml_rs::from_str;
+
+// #[serde(rename_all = "snake_case")]
+#[derive(Debug, Serialize, Deserialize)]
+struct TileSet {
+    version: String,
+    tiledversion: String,
+    #[serde(serialize_with = "image_serialize")]
+    #[serde(deserialize_with = "image_deserialize")]
+    image: ImageTmx,
+    tile: Vec<Tile>,
+}
+
+pub fn image_deserialize<'de, D>(deserializer: D) -> Result<ImageTmx, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    ImageTmx::deserialize(deserializer)
+}
+
+pub fn image_serialize<S>(image: &ImageTmx, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let mut my_struct = serializer.serialize_map(None)?;
+    my_struct.serialize_entry("source", &image.source)?;
+    my_struct.serialize_entry("width", &image.width)?;
+    my_struct.serialize_entry("height", &image.height)?;
+    my_struct.end()
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct Tile {
+    id: String,
+    #[serde(rename = "type")]
+    _type: String,
+}
+
+#[derive(Debug)]
+struct Image {
+    source: String,
+    size: Size2D<u32>, // width: u16,
+                       // height: u16,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct ImageTmx {
+    source: String,
+    width: u16,
+    height: u16,
+}
 
 #[allow(dead_code)]
 pub fn load_serde_tsx(buf: &[u8]) {
@@ -7,29 +59,6 @@ pub fn load_serde_tsx(buf: &[u8]) {
         Ok(v) => v,
         Err(err) => panic!("Error: {:?}", err.to_string()),
     };
-
-    // #[serde(rename_all = "snake_case")]
-    #[derive(Debug, Serialize, Deserialize)]
-    struct TileSet {
-        version: String,
-        tiledversion: String,
-        image: Image,
-        tile: Vec<Tile>,
-    }
-
-    #[derive(Debug, Serialize, Deserialize)]
-    struct Tile {
-        id: String,
-        #[serde(rename = "type")]
-        _type: String,
-    }
-
-    #[derive(Debug, Serialize, Deserialize)]
-    struct Image {
-        source: String,
-        width: u16,
-        height: u16,
-    }
 
     let item: TileSet = from_str(map_str).unwrap();
     panic!("TileSet: {:?} ", item);
