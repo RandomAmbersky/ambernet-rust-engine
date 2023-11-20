@@ -1,11 +1,10 @@
 mod loader_tmx;
 mod loader_tsx;
-mod test_serde;
 mod utils;
+mod quick_xml_decoder;
 
 use loader_tmx::DecodedMap;
 use loader_tsx::DecodedTileset;
-pub use test_serde::load_serde_tsx;
 
 pub fn load_tmx(buf: &[u8]) -> Result<DecodedMap, String> {
     let map_str = match std::str::from_utf8(buf) {
