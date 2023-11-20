@@ -1,54 +1,23 @@
 use asn_core::math::Size2D;
 use quick_xml::de::from_str;
 use quick_xml::se::to_string;
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-// impl<'de> Deserialize<'de> for MyStruct {
-//     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-//         where
-//           D: Deserializer<'de>,
-//     {
-//         #[derive(Deserialize)]
-//         struct MyStructInitial {
-//             key1: String,
-//             key2: String,
-//         }
-//
-//         let initial = MyStructInitial::deserialize(deserializer)?;
-//
-//         Ok(MyStruct {
-//             key1: initial.key1,
-//             key2_transformed: transform_key2(&initial.key2),
-//             key2: initial.key2,
-//         })
-//     }
-// }
-
-// #[serde(rename_all = "snake_case")]
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename = "tileset", rename_all = "lowercase")]
 struct TileSet {
     #[serde(rename = "@version")]
     version: String,
     #[serde(rename = "@tiledversion")]
     tiledversion: String,
-    // #[serde(serialize_with = "image_serialize")]
+    #[serde(serialize_with = "image_serialize")]
     #[serde(deserialize_with = "image_deserialize")]
     image: Image,
     tile: Vec<Tile>,
 }
 
-// pub fn size_2d_deserialize<'de, D>(deserializer: D) -> Result<Size2D<u32>, D::Error>
-// where
-//     D: Deserializer<'de>,
-// {
-//     let buf = String::deserialize(deserializer)?;
-//     panic!("deserialize: {:?}", buf);
-//     let result = Size2D::default();
-//     Ok(result)
-// }
-
-#[derive(Debug, Default, Deserialize)]
-pub struct ImageInitial {
+#[derive(Debug, Default, Deserialize, Serialize)]
+struct ImageInitial {
     #[serde(rename = "@source")]
     source: String,
     #[serde(rename = "@width")]
@@ -72,16 +41,24 @@ where
     })
 }
 
-// pub fn image_serialize<S>(image: &ImageTmx, serializer: S) -> Result<S::Ok, S::Error>
-// where
-//     S: Serializer,
-// {
-//     let mut my_struct = serializer.serialize_map(None)?;
-//     my_struct.serialize_entry("source", &image.source)?;
-//     my_struct.serialize_entry("width", &image.width)?;
-//     my_struct.serialize_entry("height", &image.height)?;
-//     my_struct.end()
-// }
+pub fn image_serialize<S>(image: &Image, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let initial: ImageInitial = ImageInitial {
+        source: image.source.clone(),
+        width: image.size.width,
+        height: image.size.height,
+    };
+
+    initial.serialize(serializer)
+
+    // let mut my_struct = serializer.serialize_map(None)?;
+    // my_struct.serialize_entry("source", &image.source)?;
+    // my_struct.serialize_entry("width", &image.size.width)?;
+    // my_struct.serialize_entry("height", &image.size.height)?;
+    // my_struct.end()
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 struct Tile {
@@ -93,20 +70,9 @@ struct Tile {
 
 #[derive(Debug, Default)]
 pub struct Image {
-    source: String,
-    size: Size2D<u32>, // width: u16,
-                       // height: u16,
+    pub source: String,
+    pub size: Size2D<u32>,
 }
-
-// #[derive(Debug, Default, Serialize, Deserialize)]
-// pub struct ImageTmx {
-//     #[serde(rename = "@source")]
-//     source: String,
-//     #[serde(rename = "@width")]
-//     width: u16,
-//     #[serde(rename = "@height")]
-//     height: u16,
-// }
 
 #[allow(dead_code)]
 pub fn load_serde_tsx(buf: &[u8]) {
@@ -116,9 +82,11 @@ pub fn load_serde_tsx(buf: &[u8]) {
     };
 
     let item: TileSet = from_str(map_str).unwrap();
-    // let str = to_string(&item).unwrap();
-    // panic!("TileSet: {:?} string: {:?} ", item, str);
-    panic!("TileSet: {:?}", item);
+    let str = to_string(&item).unwrap();
+
+    let item: TileSet = from_str(map_str).unwrap();
+    panic!("{:?} \n {:?}", map_str, str);
+    // panic!("TileSet: {:?}", item);
 }
 
 #[cfg(test)]
