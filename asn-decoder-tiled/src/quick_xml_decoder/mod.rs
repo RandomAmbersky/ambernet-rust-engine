@@ -7,11 +7,13 @@ mod test_serde;
 mod tile;
 mod tileset;
 
+#[allow(dead_code)]
 pub fn from_xml(s: &str) -> DecodedTileset {
     let initial: DecodedTilesetInitial = from_str(s).unwrap();
     initial.into()
 }
 
+#[allow(dead_code)]
 pub fn to_xml(t: DecodedTileset) -> String {
     let initial: DecodedTilesetInitial = t.into();
     to_string(&initial).unwrap()
