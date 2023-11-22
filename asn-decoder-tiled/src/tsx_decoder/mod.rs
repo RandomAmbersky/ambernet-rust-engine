@@ -1,4 +1,4 @@
-use crate::quick_xml_decoder::tileset::{DecodedTileset, DecodedTilesetInitial};
+use crate::tsx_decoder::tileset::{DecodedTileset, DecodedTilesetInitial};
 use quick_xml::de::from_str;
 use quick_xml::se::to_string;
 

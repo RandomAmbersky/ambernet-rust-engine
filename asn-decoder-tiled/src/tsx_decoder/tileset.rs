@@ -1,8 +1,8 @@
 use asn_core::math::Size2D;
 use serde::{Deserialize, Serialize};
 
-use crate::quick_xml_decoder::image::{image_deserialize, image_serialize, DecodedImageInfo};
-use crate::quick_xml_decoder::tile::DecodedTileInfo;
+use crate::tsx_decoder::image::{image_deserialize, image_serialize, DecodedImageInfo};
+use crate::tsx_decoder::tile::DecodedTileInfo;
 
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename = "tileset", rename_all = "lowercase")]

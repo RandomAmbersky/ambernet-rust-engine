@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use crate::quick_xml_decoder::{from_xml, to_xml};
+    use crate::tsx_decoder::{from_xml, to_xml};
 
     const MAP_TSX: &[u8] = include_bytes!("../tiles.tsx");
 

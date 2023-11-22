@@ -1,7 +1,7 @@
 mod loader_tmx;
 mod loader_tsx;
+mod tsx_decoder;
 mod utils;
-mod quick_xml_decoder;
 
 use loader_tmx::DecodedMap;
 use loader_tsx::DecodedTileset;
