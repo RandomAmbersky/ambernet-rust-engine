@@ -1,4 +1,4 @@
-use crate::quick_xml_decoder::tileset::DecodedTileset;
+use crate::quick_xml_decoder::tileset::{DecodedTileset, DecodedTilesetInitial};
 use quick_xml::de::from_str;
 use quick_xml::se::to_string;
 
@@ -8,9 +8,11 @@ mod tile;
 mod tileset;
 
 pub fn from_xml(s: &str) -> DecodedTileset {
-    from_str(s).unwrap()
+    let initial: DecodedTilesetInitial = from_str(s).unwrap();
+    initial.into()
 }
 
-pub fn to_xml(t: &DecodedTileset) -> String {
-    to_string(&t).unwrap()
+pub fn to_xml(t: DecodedTileset) -> String {
+    let initial: DecodedTilesetInitial = t.into();
+    to_string(&initial).unwrap()
 }

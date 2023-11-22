@@ -2,7 +2,7 @@
 mod tests {
     use crate::quick_xml_decoder::{from_xml, to_xml};
 
-    const MAP_TSX: &[u8] = include_bytes!("../tiles2.tsx");
+    const MAP_TSX: &[u8] = include_bytes!("../tiles.tsx");
 
     #[test]
     fn load_serde_tsx_ok() {
@@ -12,7 +12,7 @@ mod tests {
         };
 
         let item = from_xml(map_str.as_str());
-        let str = to_xml(&item);
+        let str = to_xml(item);
 
         assert_eq!(map_str, str);
     }
