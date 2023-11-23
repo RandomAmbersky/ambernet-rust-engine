@@ -63,6 +63,7 @@ impl Into<DecodedTilesetInitial> for DecodedTileset {
     }
 }
 
+#[derive(Debug)]
 pub struct DecodedTileset {
     version: String,
     tiledversion: String,
