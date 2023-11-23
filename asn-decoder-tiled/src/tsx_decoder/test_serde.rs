@@ -12,7 +12,7 @@ mod tests {
         };
 
         let item = from_xml(map_str.as_str());
-        let str = to_xml(item);
+        let str = to_xml(item).unwrap();
 
         assert_eq!(map_str, str);
     }

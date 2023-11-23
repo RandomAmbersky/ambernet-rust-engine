@@ -1,10 +1,9 @@
 mod loader_tmx;
-mod loader_tsx;
 mod tsx_decoder;
 mod utils;
 
 use loader_tmx::DecodedMap;
-use loader_tsx::DecodedTileset;
+use tsx_decoder::{from_xml, DecodedTileset};
 
 pub fn load_tmx(buf: &[u8]) -> Result<DecodedMap, String> {
     let map_str = match std::str::from_utf8(buf) {
@@ -20,6 +19,6 @@ pub fn load_tsx(buf: &[u8]) -> Result<DecodedTileset, String> {
         Ok(v) => v,
         Err(err) => return Err(err.to_string()),
     };
-    let tileset = loader_tsx::parse(map_str)?;
+    let tileset = from_xml(&map_str);
     Ok(tileset)
 }

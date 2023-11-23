@@ -1,11 +1,14 @@
-use crate::tsx_decoder::tileset::{DecodedTileset, DecodedTilesetInitial};
 use quick_xml::de::from_str;
 use quick_xml::se::to_string;
+use quick_xml::DeError;
 
 mod image;
 mod test_serde;
 mod tile;
 mod tileset;
+
+use crate::tsx_decoder::tileset::DecodedTilesetInitial;
+pub use tileset::DecodedTileset;
 
 #[allow(dead_code)]
 pub fn from_xml(s: &str) -> DecodedTileset {
@@ -14,7 +17,10 @@ pub fn from_xml(s: &str) -> DecodedTileset {
 }
 
 #[allow(dead_code)]
-pub fn to_xml(t: DecodedTileset) -> String {
+pub fn to_xml(t: DecodedTileset) -> Result<String, String> {
     let initial: DecodedTilesetInitial = t.into();
-    to_string(&initial).unwrap()
+    match to_string(&initial) {
+        Ok(t) => Ok(t),
+        Err(e) => Err(e.to_string()),
+    }
 }
