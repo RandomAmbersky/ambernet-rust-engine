@@ -21,6 +21,7 @@ wgpu = "0.18.0"
 winit = "0.28.6"
 pollster = "0.3.0"
 
+
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 wgpu = { version = "0.18.0", features = ["webgl"]}
 wasm-bindgen = "0.2.87"

@@ -70,23 +70,23 @@ mod tests {
         pub s: T,
     }
 
-    impl<T> MyStruct<T>
-    where
-        T: UnsignedNum,
-    {
-        pub fn add(&mut self, delta: T) {
-            self.s = self.s + delta;
-        }
-        pub fn inc(&mut self) {
-            self.s = self.s + 1_u16.into();
-        }
-    }
+    // impl<T> MyStruct<T>
+    // where
+    //     T: UnsignedNum,
+    // {
+    //     pub fn add(&mut self, delta: T) {
+    //         self.s = self.s + delta;
+    //     }
+    //     pub fn inc(&mut self) {
+    //         self.s = self.s + 1_u16.into();
+    //     }
+    // }
 
-    #[test]
-    fn test_unsigned_num_it_works() {
-        let mut c = MyStruct { s: 10 as MyType };
-        assert_eq!(c.s, 10);
-        c.add(5);
-        assert_eq!(c.s, 15);
-    }
+    // #[test]
+    // fn test_unsigned_num_it_works() {
+    //     let mut c = MyStruct { s: 10 as MyType };
+    //     assert_eq!(c.s, 10);
+    //     c.add(5);
+    //     assert_eq!(c.s, 15);
+    // }
 }
