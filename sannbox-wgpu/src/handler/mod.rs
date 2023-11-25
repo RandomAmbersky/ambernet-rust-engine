@@ -10,7 +10,10 @@ use crate::handler::resources::{
 };
 use crate::map::AsnMap;
 use crate::tileset::AsnTileSet;
+use asn_core::cgmath::One;
 use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
+use asn_core::keys::JoystickKeys::{KeyDown, KeyLeft, KeyRight, KeyUp};
+use asn_core::keys::{JoystickKeysSet, KeysSetOperations};
 use asn_core::math::{Array2D, Directions, Pos2D, Size2D, UnsignedNum};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
@@ -24,6 +27,7 @@ const RNG_SEED: u64 = 11;
 
 pub struct Handler {
     config: AsnGameConfig,
+    keys: JoystickKeysSet,
     // arc_texture: Arc<Mutex<AsnTexture>>,
     // raw_texture: Array2D<u32, u8>,
     // quad: AsnNodeQuad,
@@ -107,6 +111,7 @@ impl Handler {
             // quad2,
             view,
             player_view,
+            keys: JoystickKeysSet::default(),
         }
     }
     fn draw(&mut self, e: &mut Engine) {
@@ -120,8 +125,24 @@ impl Handler {
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
+    fn handle_keyset(&mut self) {
+        if self.keys.is_set(KeyUp as u8) {
+            self.handle_move_player(Directions::Up)
+        }
+        if self.keys.is_set(KeyDown as u8) {
+            self.handle_move_player(Directions::Down)
+        }
+        if self.keys.is_set(KeyLeft as u8) {
+            self.handle_move_player(Directions::Left)
+        }
+        if self.keys.is_set(KeyRight as u8) {
+            self.handle_move_player(Directions::Right)
+        }
+    }
     fn update(&mut self, e: &mut Engine) {
         let mut rng = self.rng.clone();
+
+        self.handle_keyset();
 
         if self.new_player_pos != self.player_pos {
             self.map.set_cell(0, &self.player_pos, self.player_ground);
@@ -203,12 +224,42 @@ impl TAsnHandler<Engine> for Handler {
             AsnEvent::KeyboardEvent(e) => {
                 println!("KeyboardEvent {:?}", &e);
                 match e {
-                    AsnKeyboardEvent::Released(_) => {}
+                    AsnKeyboardEvent::Released(scancode) => match scancode {
+                        124 => {
+                            self.keys.reset(KeyRight as u8)
+                            // self.handle_move_player(Directions::Right)
+                        }
+                        123 => {
+                            self.keys.reset(KeyLeft as u8)
+                            //self.handle_move_player(Directions::Left)
+                        }
+                        125 => {
+                            self.keys.reset(KeyUp as u8)
+                            //self.handle_move_player(Directions::Up)
+                        }
+                        126 => {
+                            self.keys.reset(KeyDown as u8)
+                            //self.handle_move_player(Directions::Down)
+                        }
+                        _ => {}
+                    },
                     AsnKeyboardEvent::Pressed(scancode) => match scancode {
-                        124 => self.handle_move_player(Directions::Right),
-                        123 => self.handle_move_player(Directions::Left),
-                        125 => self.handle_move_player(Directions::Up),
-                        126 => self.handle_move_player(Directions::Down),
+                        124 => {
+                            self.keys.set(KeyRight as u8)
+                            // self.handle_move_player(Directions::Right)
+                        }
+                        123 => {
+                            self.keys.set(KeyLeft as u8)
+                            //self.handle_move_player(Directions::Left)
+                        }
+                        125 => {
+                            self.keys.set(KeyUp as u8)
+                            //self.handle_move_player(Directions::Up)
+                        }
+                        126 => {
+                            self.keys.set(KeyDown as u8)
+                            //self.handle_move_player(Directions::Down)
+                        }
                         _ => {}
                     },
                 };
