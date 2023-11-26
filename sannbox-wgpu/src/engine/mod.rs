@@ -1,7 +1,11 @@
 mod winapi;
 
-use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use crate::engine::winapi::{RunnerPreset, WinApi};
+use asn_core::events::AsnEvent;
+use asn_core::events::AsnWindowEvent::Resized;
+use asn_core::math::Size2D;
+use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
+use asn_core::winapi::TAsnWinapi;
 
 pub use crate::engine::winapi::AsnNodeQuad;
 pub use crate::engine::winapi::AsnNodeView2d;
@@ -28,6 +32,17 @@ impl Engine {
     pub fn run<H: 'static + TAsnHandler<Self>>(mut self, h: H) {
         let preset = self.preset.take().unwrap();
         winapi::run(preset, self, h);
+    }
+}
+
+impl Engine {
+    pub fn resize(&mut self) {
+        let size = Size2D {
+            width: 100,
+            height: 100,
+        };
+        let e = AsnEvent::WindowEvent(Resized(size));
+        self.get_winapi().send_event(&e);
     }
 }
 

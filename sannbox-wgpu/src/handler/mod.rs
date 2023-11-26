@@ -13,7 +13,6 @@ use crate::tileset::AsnTileSet;
 use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
 use asn_core::keys::JoystickKeys::{KeyDown, KeyLeft, KeyRight, KeyUp};
 use asn_core::keys::{JoystickKeysSet, KeysSetOperations};
-use asn_core::math::Directions::Down;
 use asn_core::math::{Directions, Fps, Pos2D, Size2D};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
