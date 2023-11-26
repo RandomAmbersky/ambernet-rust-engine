@@ -15,7 +15,7 @@ use asn_core::cgmath::One;
 use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
 use asn_core::keys::JoystickKeys::{KeyDown, KeyLeft, KeyRight, KeyUp};
 use asn_core::keys::{JoystickKeysSet, KeysSetOperations};
-use asn_core::math::{Array2D, Directions, Pos2D, Size2D, Timer, UnsignedNum};
+use asn_core::math::{Array2D, Directions, Fps, Pos2D, Size2D, Timer, UnsignedNum};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
@@ -30,8 +30,8 @@ const RNG_SEED: u64 = 11;
 pub struct Handler {
     config: AsnGameConfig,
     keys: JoystickKeysSet,
-    draw_fps: Timer,
-    update_fps: Timer,
+    draw_fps: Fps,
+    update_fps: Fps,
     // arc_texture: Arc<Mutex<AsnTexture>>,
     // raw_texture: Array2D<u32, u8>,
     // quad: AsnNodeQuad,
@@ -102,8 +102,8 @@ impl Handler {
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         Handler {
-            draw_fps: Timer::default(),
-            update_fps: Timer::default(),
+            draw_fps: Fps::new(1.0 / 30.0),
+            update_fps: Fps::new(1.0 / 30.0),
             config,
             rng,
             player_pos,
@@ -130,7 +130,7 @@ impl Handler {
         self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
-        self.draw_fps.update();
+        self.draw_fps.tick();
     }
     fn handle_keyset(&mut self) {
         if self.keys.is_set(KeyUp as u8) {
@@ -149,7 +149,9 @@ impl Handler {
     fn update(&mut self, e: &mut Engine) {
         let mut rng = self.rng.clone();
 
-        self.handle_keyset();
+        if self.update_fps.tick() {
+            self.handle_keyset();
+        }
 
         if self.new_player_pos != self.player_pos {
             self.map.set_cell(0, &self.player_pos, self.player_ground);
@@ -192,13 +194,12 @@ impl Handler {
         self.view.update(e.get_winapi());
         // self.player_view.update(e.get_winapi());
         self.rng = rng;
-        self.update_fps.update();
 
-        println!(
-            "fps: {:?} {:?}",
-            1.0 / self.draw_fps.duration().as_secs_f32(),
-            1.0 / self.update_fps.duration().as_secs_f32()
-        )
+        // println!(
+        //     "fps: {:?} {:?}",
+        // 1.0 / self.draw_fps.duration().as_secs_f32(),
+        // 1.0 / self.update_fps.duration().as_secs_f32()
+        // )
     }
 }
 
