@@ -1,5 +1,3 @@
-use std::ops::BitOr;
-
 #[repr(u8)]
 pub enum JoystickKeys {
     KeyUp = 0b0000_0001,

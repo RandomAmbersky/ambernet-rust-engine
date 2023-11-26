@@ -1,5 +1,6 @@
 mod config;
 mod loaders;
+mod map_filers;
 mod resources;
 
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
@@ -14,7 +15,7 @@ use asn_core::cgmath::One;
 use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
 use asn_core::keys::JoystickKeys::{KeyDown, KeyLeft, KeyRight, KeyUp};
 use asn_core::keys::{JoystickKeysSet, KeysSetOperations};
-use asn_core::math::{Array2D, Directions, Pos2D, Size2D, UnsignedNum};
+use asn_core::math::{Array2D, Directions, Pos2D, Size2D, Timer, UnsignedNum};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
@@ -22,12 +23,15 @@ use asn_decoder_image::load_texture;
 use rand::prelude::SmallRng;
 use rand::{Rng, SeedableRng};
 use std::sync::{Arc, Mutex};
+use winit::event::VirtualKeyCode::T;
 
 const RNG_SEED: u64 = 11;
 
 pub struct Handler {
     config: AsnGameConfig,
     keys: JoystickKeysSet,
+    draw_fps: Timer,
+    update_fps: Timer,
     // arc_texture: Arc<Mutex<AsnTexture>>,
     // raw_texture: Array2D<u32, u8>,
     // quad: AsnNodeQuad,
@@ -98,6 +102,8 @@ impl Handler {
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         Handler {
+            draw_fps: Timer::default(),
+            update_fps: Timer::default(),
             config,
             rng,
             player_pos,
@@ -124,6 +130,7 @@ impl Handler {
         self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
+        self.draw_fps.update();
     }
     fn handle_keyset(&mut self) {
         if self.keys.is_set(KeyUp as u8) {
@@ -185,6 +192,13 @@ impl Handler {
         self.view.update(e.get_winapi());
         // self.player_view.update(e.get_winapi());
         self.rng = rng;
+        self.update_fps.update();
+
+        println!(
+            "fps: {:?} {:?}",
+            1.0 / self.draw_fps.duration().as_secs_f32(),
+            1.0 / self.update_fps.duration().as_secs_f32()
+        )
     }
 }
 
@@ -269,56 +283,6 @@ impl TAsnHandler<Engine> for Handler {
         }
     }
 }
-
-// fn randomize_view_cell(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
-//     let x: u32 = rng.gen_range(0..MAP_VIEW_SIZE.width);
-//     let y: u32 = rng.gen_range(0..MAP_VIEW_SIZE.height);
-//     let c: u8 = rng.gen_range(0..128);
-//     v.set_cell(&Pos2D { x, y }, c).unwrap();
-//     rng
-// }
-
-// fn fill_by_index(v: &mut AsnNodeView2d) {
-//     let mut index: u8 = 0;
-//     for y in 0..MAP_VIEW_SIZE.height {
-//         for x in 0..MAP_VIEW_SIZE.width {
-//             v.set_cell(&Pos2D { x, y }, index).unwrap();
-//             index = index.wrapping_add(1);
-//         }
-//     }
-// }
-
-// fn randomize_view(mut rng: SmallRng, v: &mut AsnNodeView2d) -> SmallRng {
-//     for x in 0..MAP_VIEW_SIZE.width {
-//         for y in 0..MAP_VIEW_SIZE.height {
-//             let c: u8 = rng.gen_range(0..128);
-//             v.set_cell(&Pos2D { x, y }, c).unwrap();
-//         }
-//     }
-//     rng
-// }
-
-// fn randomize_array(mut rng: SmallRng, a: &mut Array2D<u32, u8>) -> SmallRng {
-//     let x = rng.gen_range(0..a.size.width);
-//     let y = rng.gen_range(0..a.size.height);
-//
-//     let byte = rng.gen_range(0..3);
-//
-//     let index = y * a.size.width * 4 + x * 4 + byte;
-//
-//     let cell: u8 = rng.gen_range(0..255);
-//     a.bytes[index as usize] = cell;
-//     for x in 0..a.size.width {
-//         for y in 0..a.size.height {
-//             let index = ((y * a.size.width + x) * 4) as usize;
-//             a.bytes[index] = rng.gen_range(0..128);
-//             a.bytes[index + 1] = rng.gen_range(0..128);
-//             a.bytes[index + 2] = rng.gen_range(0..128);
-//             a.bytes[index + 3] = rng.gen_range(0..128);
-//         }
-//     }
-//     rng
-// }
 
 fn fill_view(map: &AsnMap, start_pos: &Pos2D<u32>, view: &mut AsnNodeView2d) {
     for y in 0..view.get_size().height {

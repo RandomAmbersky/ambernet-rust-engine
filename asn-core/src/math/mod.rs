@@ -6,6 +6,7 @@ mod pos2d;
 mod pos3d;
 mod size2d;
 mod size3d;
+mod timer;
 mod transform_set;
 mod unsigned_num;
 
@@ -16,5 +17,6 @@ pub use pos2d::Pos2D;
 pub use pos3d::Pos3D;
 pub use size2d::Size2D;
 pub use size3d::Size3D;
+pub use timer::Timer;
 pub use transform_set::TransformSet;
 pub use unsigned_num::UnsignedNum;
