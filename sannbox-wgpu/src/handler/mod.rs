@@ -23,11 +23,11 @@ use rand::prelude::SmallRng;
 use rand::SeedableRng;
 
 const RNG_SEED: u64 = 11;
+const UPDATE_THROTTLE: f32 = 1.0 / 30.0;
 
 pub struct Handler {
     config: AsnGameConfig,
     keys: JoystickKeysSet,
-    draw_fps: Fps,
     update_fps: Fps,
     view: AsnNodeView2d,
     player_view: AsnNodeView2d,
@@ -78,8 +78,7 @@ impl Handler {
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         Handler {
-            draw_fps: Fps::new(1.0 / 30.0),
-            update_fps: Fps::new(1.0 / 30.0),
+            update_fps: Fps::new(UPDATE_THROTTLE),
             config,
             rng,
             player_pos,
@@ -99,33 +98,31 @@ impl Handler {
         self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
-        self.draw_fps.tick();
     }
     fn update(&mut self, e: &mut Engine) {
         let mut rng = self.rng.clone();
 
         if self.update_fps.tick() {
             self.handle_keyset();
-        }
+            if self.new_player_pos != self.player_pos {
+                self.map.set_cell(0, &self.player_pos, self.player_ground);
 
-        if self.new_player_pos != self.player_pos {
-            self.map.set_cell(0, &self.player_pos, self.player_ground);
+                self.player_pos = self.new_player_pos;
 
-            self.player_pos = self.new_player_pos;
+                self.player_ground = self.map.get_cell(0, &self.player_pos);
 
-            self.player_ground = self.map.get_cell(0, &self.player_pos);
+                self.map
+                    .set_cell(0, &self.player_pos, self.config.player_cell);
 
-            self.map
-                .set_cell(0, &self.player_pos, self.config.player_cell);
-
-            self.look_at = self
-                .map
-                .get_size_2d()
-                .look_at_window(&self.player_pos, &self.view.get_size());
-            println!("player pos: {:?}", self.player_pos);
-            println!("look_at pos: {:?}", self.look_at);
-            fill_view(&self.map, &self.look_at, &mut self.view);
-            fill_view(&self.map, &self.look_at, &mut self.player_view);
+                self.look_at = self
+                    .map
+                    .get_size_2d()
+                    .look_at_window(&self.player_pos, &self.view.get_size());
+                println!("player pos: {:?}", self.player_pos);
+                println!("look_at pos: {:?}", self.look_at);
+                fill_view(&self.map, &self.look_at, &mut self.view);
+                fill_view(&self.map, &self.look_at, &mut self.player_view);
+            }
         }
 
         self.view.update(e.get_winapi());
