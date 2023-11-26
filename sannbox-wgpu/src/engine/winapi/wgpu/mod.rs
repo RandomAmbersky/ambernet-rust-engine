@@ -1,7 +1,6 @@
 use std::iter;
 
 use crate::engine::winapi::asn_window::AsnWindow;
-use crate::engine::winapi::defines::SizeDimension;
 use crate::engine::winapi::event_converter::{convert_asn_event, CustomEvent};
 use crate::engine::winapi::utils::ToWgpuFormat;
 use asn_core::errors::AsnError;

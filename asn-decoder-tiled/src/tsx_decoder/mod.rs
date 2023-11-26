@@ -1,6 +1,5 @@
 use quick_xml::de::from_str;
 use quick_xml::se::to_string;
-use quick_xml::DeError;
 
 mod image;
 mod test_serde;
