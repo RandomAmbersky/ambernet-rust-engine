@@ -1,3 +1,4 @@
+use std::time::Duration;
 use web_time::Instant;
 
 pub struct Fps {
@@ -14,6 +15,9 @@ impl Fps {
     }
     pub fn time(&self) -> Instant {
         self.last_time
+    }
+    pub fn get_delta(&self) -> Duration {
+        Instant::now() - self.last_time
     }
     pub fn tick(&mut self) -> bool {
         let now = Instant::now();

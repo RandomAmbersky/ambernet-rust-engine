@@ -1,6 +1,5 @@
 mod config;
 mod loaders;
-mod map_filers;
 mod resources;
 
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
@@ -14,13 +13,15 @@ use crate::tileset::AsnTileSet;
 use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
 use asn_core::keys::JoystickKeys::{KeyDown, KeyLeft, KeyRight, KeyUp};
 use asn_core::keys::{JoystickKeysSet, KeysSetOperations};
+use asn_core::math::Directions::Down;
 use asn_core::math::{Directions, Fps, Pos2D, Size2D};
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad, TNodeView2d};
 use asn_core::winapi::{AsnTextureFormat, TAsnWinapi, TTexture};
 use asn_decoder_image::load_texture;
+use asn_logger::info;
 use rand::prelude::SmallRng;
-use rand::SeedableRng;
+use rand::{Rng, SeedableRng};
 
 const RNG_SEED: u64 = 11;
 const UPDATE_THROTTLE: f32 = 1.0 / 30.0;
@@ -99,8 +100,15 @@ impl Handler {
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
     }
+
     fn update(&mut self, e: &mut Engine) {
         let mut rng = self.rng.clone();
+
+        // info!(
+        //     "delta: {:?} {:?}",
+        //     self.update_fps.get_delta().as_secs_f32(),
+        //     UPDATE_THROTTLE
+        // );
 
         if self.update_fps.tick() {
             self.handle_keyset();
@@ -120,11 +128,12 @@ impl Handler {
                     .look_at_window(&self.player_pos, &self.view.get_size());
                 println!("player pos: {:?}", self.player_pos);
                 println!("look_at pos: {:?}", self.look_at);
+                // fill_view(&self.map, &self.look_at, &mut self.player_view);
                 fill_view(&self.map, &self.look_at, &mut self.view);
-                fill_view(&self.map, &self.look_at, &mut self.player_view);
             }
         }
 
+        // rng = fill_random_view(rng, &mut self.view);
         self.view.update(e.get_winapi());
         self.rng = rng;
     }
@@ -156,7 +165,7 @@ impl Handler {
 
 impl TAsnHandler<Engine> for Handler {
     fn handle(&mut self, evt: &AsnEvent, e: &mut Engine) {
-        // println!("handle {:?} event", &evt);
+        // info!("handle {:?} event", &evt);
         match evt {
             AsnEvent::Empty => {}
             AsnEvent::UpdateEvent => {
@@ -178,20 +187,32 @@ impl TAsnHandler<Engine> for Handler {
                 _ => {}
             },
             AsnEvent::KeyboardEvent(e) => {
+                info!("handle {:?} event", &evt);
                 println!("KeyboardEvent {:?}", &e);
                 match e {
                     AsnKeyboardEvent::Released(scancode) => match scancode {
+                        39 => self.keys.reset(KeyRight as u8),
                         124 => self.keys.reset(KeyRight as u8),
+                        37 => self.keys.reset(KeyLeft as u8),
                         123 => self.keys.reset(KeyLeft as u8),
-                        125 => self.keys.reset(KeyUp as u8),
+                        38 => self.keys.reset(KeyDown as u8),
                         126 => self.keys.reset(KeyDown as u8),
-                        _ => {}
+                        40 => self.keys.reset(KeyUp as u8),
+                        125 => self.keys.reset(KeyUp as u8),
+                        _ => {
+                            info!("handle {:?} event", &evt);
+                        }
                     },
+
                     AsnKeyboardEvent::Pressed(scancode) => match scancode {
+                        39 => self.keys.set(KeyRight as u8),
                         124 => self.keys.set(KeyRight as u8),
+                        37 => self.keys.set(KeyLeft as u8),
                         123 => self.keys.set(KeyLeft as u8),
-                        125 => self.keys.set(KeyUp as u8),
+                        38 => self.keys.set(KeyDown as u8),
                         126 => self.keys.set(KeyDown as u8),
+                        40 => self.keys.set(KeyUp as u8),
+                        125 => self.keys.set(KeyUp as u8),
                         _ => {}
                     },
                 };
@@ -213,6 +234,16 @@ fn fill_view(map: &AsnMap, start_pos: &Pos2D<u32>, view: &mut AsnNodeView2d) {
             view.set_cell(&Pos2D { x, y }, cell).unwrap();
         }
     }
+}
+
+fn fill_random_view(mut rng: SmallRng, view: &mut AsnNodeView2d) -> SmallRng {
+    for y in 0..view.get_size().height {
+        for x in 0..view.get_size().width {
+            let cell = rng.gen_range(0..255);
+            view.set_cell(&Pos2D { x, y }, cell).unwrap();
+        }
+    }
+    rng
 }
 
 fn move_player(
