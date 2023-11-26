@@ -1,4 +1,4 @@
-use std::time::Instant;
+use web_time::Instant;
 
 pub struct Fps {
     last_time: Instant,
