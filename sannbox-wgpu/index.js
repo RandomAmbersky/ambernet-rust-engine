@@ -3,6 +3,22 @@
 // will work here one day as well!
 const rust = import('./pkg');
 
+const canvas = document.getElementById('wasm-example')
+
+canvas.setAttribute('tabindex','0');
+canvas.focus();
+
+addEventListener("resize", (event) => {});
+
+onresize = (event) => {
+  if (window.innerHeight !== canvas.height || window.innerWidth !== canvas.width) {
+    canvas.height = window.innerHeight
+    canvas.width = window.innerWidth
+    console.log(canvas.width, canvas.height)
+    // engine.resize(canvas.width, canvas.height)
+  }
+};
+
 rust
   .then(m => m.start())
   .catch(console.error)
