@@ -19,15 +19,20 @@ pub fn convert_asn_event(e: &AsnEvent) -> CustomEvent {
 }
 
 pub fn convert_event(e: &Event<CustomEvent>) -> Option<AsnEvent> {
-    // println!("{:?}", e);
     match e {
-        Event::RedrawRequested(_window_id) => Some(AsnEvent::WindowEvent(RedrawRequested)),
-        Event::MainEventsCleared => Some(AsnEvent::WindowEvent(RedrawRequested)),
+        Event::DeviceEvent { event, device_id } => {
+            info!("{:?} {:?}", event, device_id);
+            None
+        }
+        // Event::RedrawRequested(_window_id) => Some(AsnEvent::WindowEvent(RedrawRequested)),
+        // Event::MainEventsCleared => Some(AsnEvent::WindowEvent(RedrawRequested)),
         Event::WindowEvent {
             ref event,
             window_id,
         } => process_window_event(window_id, event),
         Event::UserEvent(t) => process_custom_event(t),
+        // Event::RedrawEventsCleared => None,
+        Event::NewEvents(e) => None,
         _ => None,
     }
 }
@@ -49,23 +54,25 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
             };
             Some(AsnEvent::WindowEvent(Resized(w_size)))
         }
-        WindowEvent::ScaleFactorChanged {
-            new_inner_size: size,
-            ..
-        } => {
-            let w_size: Size2D<u32> = Size2D {
-                width: size.width,
-                height: size.height,
-            };
-            Some(AsnEvent::WindowEvent(Resized(w_size)))
-        }
-        WindowEvent::KeyboardInput { input, .. } => {
+        // WindowEvent::ScaleFactorChanged {
+        //     inner_size_writer: size,
+        //     ..
+        // } => {
+        //     info!("{:?}", e);
+        //     let w_size: Size2D<u32> = Size2D {
+        //         width: size.width,
+        //         height: size.height,
+        //     };
+        //     Some(AsnEvent::WindowEvent(Resized(w_size)))
+        // }
+        WindowEvent::KeyboardInput { event, .. } => {
             // println!("WindowEvent::KeyboardInput: {:?}", input);
-            info!("WindowEvent::KeyboardInput: {:?}", input);
-            match input.state {
-                ElementState::Pressed => Some(AsnEvent::KeyboardEvent(Pressed(input.scancode))),
-                ElementState::Released => Some(AsnEvent::KeyboardEvent(Released(input.scancode))),
-            }
+            info!("WindowEvent::KeyboardInput: {:?}", event);
+            // match event.state {
+            //     ElementState::Pressed => Some(AsnEvent::KeyboardEvent(Pressed(event.scancode))),
+            //     ElementState::Released => Some(AsnEvent::KeyboardEvent(Released(event.scancode))),
+            // }
+            None
         }
         _ => None,
     }

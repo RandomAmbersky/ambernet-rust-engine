@@ -1,7 +1,7 @@
 use crate::engine::winapi::event_converter::CustomEvent;
 use asn_core::math::Size2D;
 use wgpu::{Adapter, Device, Instance, Surface, SurfaceConfiguration};
-use winit::dpi::PhysicalSize;
+use winit::dpi::{LogicalSize, PhysicalSize};
 use winit::event_loop::EventLoop;
 use winit::window::{Window, WindowBuilder};
 
@@ -62,12 +62,22 @@ impl AsnWindow {
         {
             // Winit prevents sizing with CSS, so we have to set
             // the size manually when on web.
-            // use winit::dpi::PhysicalSize;
+            // use winit::dpi::{PhysicalSize, LogicalSize};
             window.set_inner_size(PhysicalSize::new(size.width, size.height));
 
             use winit::platform::web::WindowExtWebSys;
+
             web_sys::window()
-                .and_then(|win| win.document())
+                .and_then(|win| {
+                    let width = win.inner_width().unwrap().as_f64().unwrap() as u32;
+                    let height = win.inner_height().unwrap().as_f64().unwrap() as u32;
+                    let factor = window.scale_factor();
+                    let logical = LogicalSize { width, height };
+                    let PhysicalSize { width, height }: PhysicalSize<u32> =
+                        logical.to_physical(factor);
+                    window.set_inner_size(PhysicalSize::new(width, height));
+                    win.document()
+                })
                 .and_then(|doc| {
                     let dst = doc.get_element_by_id("wasm-example")?;
                     let canvas = web_sys::Element::from(window.canvas());
@@ -75,6 +85,16 @@ impl AsnWindow {
                     Some(())
                 })
                 .expect("Couldn't append canvas to document body.");
+
+            // web_sys::window()
+            //     .and_then(|win| win.document())
+            //     .and_then(|doc| {
+            //         let dst = doc.get_element_by_id("wasm-example")?;
+            //         let canvas = web_sys::Element::from(window.canvas());
+            //         dst.append_child(&canvas).ok()?;
+            //         Some(())
+            //     })
+            //     .expect("Couldn't append canvas to document body.");
         }
 
         let surface = unsafe { instance.create_surface(&window).unwrap() };
