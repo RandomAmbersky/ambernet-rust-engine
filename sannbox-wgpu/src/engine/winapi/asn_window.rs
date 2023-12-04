@@ -33,10 +33,10 @@ impl AsnWindow {
             .find(|f| f.is_srgb())
             .unwrap_or(surface_caps.formats[0]);
 
-        println!("get_config: {:?} ", surface_format);
+        // println!("get_config: {:?} ", surface_format);
 
         let caps_info = surface_caps.formats;
-        println!("caps_info formats: {:?} ", caps_info);
+        // println!("caps_info formats: {:?} ", caps_info);
 
         SurfaceConfiguration {
             usage: wgpu::TextureUsages::RENDER_ATTACHMENT,

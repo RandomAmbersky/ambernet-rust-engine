@@ -27,11 +27,11 @@ impl Engine {
         }
     }
     pub fn init(&mut self) {
-        println!("Engine:init")
+        // println!("Engine:init")
     }
     pub fn run<H: 'static + TAsnHandler<Self>>(mut self, h: H) {
         let preset = self.preset.take().unwrap();
-        winapi::run(preset, self, h);
+        winapi::run(preset, self, h).unwrap();
     }
 }
 
