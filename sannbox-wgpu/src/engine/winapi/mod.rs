@@ -1,17 +1,18 @@
 use crate::engine::winapi::event_converter::{convert_event, CustomEvent};
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use crate::engine::TAsnEngine;
-use winit::event_loop::{ControlFlow, EventLoop, EventLoopBuilder};
 use asn_core::traits::TAsnHandler;
+use winit::error::EventLoopError;
+use winit::event_loop::{ControlFlow, EventLoop, EventLoopBuilder};
 
 mod asn_window;
 pub mod defines;
 mod event_converter;
+mod mesh;
 mod resources;
 mod scene;
 mod utils;
 mod wgpu;
-mod mesh;
 
 pub type WinApi = AsnWgpuWinApi;
 
@@ -26,7 +27,9 @@ pub struct RunnerPreset {
 
 pub fn build() -> (RunnerPreset, WinApi) {
     // let event_loop = EventLoop::new();
-    let event_loop = EventLoopBuilder::<CustomEvent>::with_user_event().build();
+    let event_loop = EventLoopBuilder::<CustomEvent>::with_user_event()
+        .build()
+        .unwrap();
 
     let winapi = AsnWgpuWinApi::new(&event_loop);
 
@@ -40,13 +43,13 @@ pub fn run<E: 'static + TAsnEngine, H: 'static + TAsnHandler<E>>(
     mut p: RunnerPreset,
     mut eng: E,
     mut h: H,
-) {
+) -> Result<(), EventLoopError> {
     let event_loop = p.event_loop.take().unwrap();
-    event_loop.run(move |event, _event_loop_window_target, control_flow| {
-        *control_flow = ControlFlow::Poll;
+    event_loop.run(move |event, event_loop_window_target| {
+        event_loop_window_target.set_control_flow(ControlFlow::Poll);
 
         if eng.is_need_exit() {
-            *control_flow = ControlFlow::Exit;
+            event_loop_window_target.exit();
             return;
         }
 
