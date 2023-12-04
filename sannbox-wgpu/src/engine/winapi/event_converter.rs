@@ -59,6 +59,11 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
             Some(AsnEvent::WindowEvent(Resized(w_size)))
         }
         WindowEvent::RedrawRequested => Some(AsnEvent::WindowEvent(RedrawRequested)),
+        // WindowEvent::ScaleFactorChanged { .. } => Some(AsnEvent::WindowEvent(RedrawRequested)),
+        //     let w_size = window.inner_size();
+        //     None
+        //     // state.resize(window.inner_size());
+        // }
         // WindowEvent::ScaleFactorChanged {
         //     scale_factor,
         //     inner_size_writer,

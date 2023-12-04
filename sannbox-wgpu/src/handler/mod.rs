@@ -1,9 +1,11 @@
 mod config;
+mod info_loader;
 mod loaders;
 mod resources;
 
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::config::{get_config, AsnGameConfig};
+use crate::handler::info_loader::load_info;
 use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{
     MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
@@ -42,6 +44,8 @@ pub struct Handler {
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
+        load_info();
+
         let config = get_config();
         let player_pos = Pos2D { x: 1, y: 1 };
 
