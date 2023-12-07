@@ -3,7 +3,7 @@ use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use crate::engine::TAsnEngine;
 use asn_core::traits::TAsnHandler;
 use winit::error::EventLoopError;
-use winit::event_loop::{ControlFlow, EventLoop, EventLoopBuilder};
+use winit::event_loop::{EventLoop, EventLoopBuilder};
 
 mod asn_window;
 pub mod defines;
@@ -46,8 +46,6 @@ pub fn run<E: 'static + TAsnEngine, H: 'static + TAsnHandler<E>>(
 ) -> Result<(), EventLoopError> {
     let event_loop = p.event_loop.take().unwrap();
     event_loop.run(move |event, event_loop_window_target| {
-        event_loop_window_target.set_control_flow(ControlFlow::Poll);
-
         if eng.is_need_exit() {
             event_loop_window_target.exit();
             return;

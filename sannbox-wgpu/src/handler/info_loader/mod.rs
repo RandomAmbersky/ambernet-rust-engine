@@ -34,5 +34,5 @@ pub fn load_info() {
     //     serde_yaml::to_string(&scrape_config).unwrap()
     // );
 
-    println!("scrape_config: {:?}", scrape_config);
+    // println!("scrape_config: {:?}", scrape_config);
 }

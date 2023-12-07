@@ -14,5 +14,5 @@ pub fn init_log(l: AsnLogLevel) {
         }
     }
     log_level::init_log(log_level_filter);
-    log!(target: "app_events", Level::Warn, "App warning");
+    // log!(target: "app_events", Level::Warn, "App warning");
 }

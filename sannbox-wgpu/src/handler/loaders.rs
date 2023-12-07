@@ -4,7 +4,7 @@ use asn_core::math::Size3D;
 
 pub fn load_tiles(tsx_buf: &[u8]) -> AsnTileSet {
     let tiles = asn_decoder_tiled::load_tsx(tsx_buf).unwrap();
-    println!("{:?}", tiles);
+    // println!("{:?}", tiles);
     let asn_tileset = AsnTileSet {
         tile_size: tiles.tile_size,
         tile_count: tiles.tile_count,

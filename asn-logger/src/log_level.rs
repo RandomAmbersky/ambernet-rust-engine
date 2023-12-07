@@ -20,7 +20,7 @@ pub fn init_log(global_log_filter: LevelFilter) {
     }
     builder
         .level(global_log_filter)
-        .level_for(module_path!(), log::LevelFilter::Debug)
+        // .level_for(module_path!(), log::LevelFilter::Info)
         .format(move |out, message, record| {
             out.finish(format_args!(
                 "{}[{}][{}:{}] {}",

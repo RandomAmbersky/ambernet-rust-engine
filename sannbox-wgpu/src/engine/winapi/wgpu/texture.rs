@@ -1,9 +1,9 @@
 use crate::engine::winapi::utils::ToWgpuFormat;
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
-use wgpu::{Sampler, Texture, TextureFormat, TextureView};
 use asn_core::errors::AsnRenderError;
 use asn_core::math::Size2D;
 use asn_core::winapi::{AsnTextureFormat, TTexture};
+use wgpu::{Sampler, Texture, TextureFormat, TextureView};
 
 pub struct AsnTexture {
     pub texture_format: AsnTextureFormat,
@@ -14,7 +14,7 @@ pub struct AsnTexture {
 
 impl Drop for AsnTexture {
     fn drop(&mut self) {
-        println!("Drop AsnTexture");
+        // println!("Drop AsnTexture");
         // self.texture.destroy();
     }
 }

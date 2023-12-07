@@ -7,6 +7,7 @@ use asn_core::errors::AsnError;
 use asn_core::events::AsnEvent;
 use asn_core::math::Size2D;
 use asn_core::winapi::{AsnTextureFormat, AsnWinapiConfig, TAsnWinapi};
+use asn_logger::info;
 use wgpu::{Instance, InstanceDescriptor};
 use winit::event_loop::{EventLoop, EventLoopProxy};
 
@@ -113,7 +114,7 @@ impl TAsnWinapi for AsnWgpuWinApi {
     }
 
     fn window_resize(&mut self, new_size: &Self::Size2D) {
-        println!("{:?}", new_size);
+        info!("window_resize {:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
             self.config.size = *new_size;
             self.window.resize(new_size);
