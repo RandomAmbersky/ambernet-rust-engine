@@ -123,6 +123,7 @@ fn create_node_quad_set(
     (render_pipeline, diffuse_bind_group)
 }
 
+#[allow(dead_code)]
 impl AsnWgpuNodeQuad {
     pub fn new(gfx: &mut AsnWgpuWinApi) -> Self {
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();

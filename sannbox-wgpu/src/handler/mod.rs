@@ -5,10 +5,10 @@ mod resources;
 
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::config::{get_config, AsnGameConfig};
-use crate::handler::info_loader::load_info;
+use crate::handler::info_loader::load_data;
 use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{
-    MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
+    DATA_TXT, MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
 };
 use crate::map::AsnMap;
 use crate::tileset::AsnTileSet;
@@ -27,6 +27,7 @@ use rand::{Rng, SeedableRng};
 const RNG_SEED: u64 = 11;
 const UPDATE_THROTTLE: f32 = 1.0 / 30.0;
 
+#[allow(dead_code)]
 pub struct Handler {
     config: AsnGameConfig,
     keys: JoystickKeysSet,
@@ -44,7 +45,8 @@ pub struct Handler {
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
-        load_info();
+        let data_info = load_data(DATA_TXT);
+        info!("data_info: {:?}", data_info);
 
         let config = get_config();
         let player_pos = Pos2D { x: 1, y: 1 };
@@ -247,6 +249,7 @@ fn fill_view(map: &AsnMap, start_pos: &Pos2D<u32>, view: &mut AsnNodeView2d) {
     }
 }
 
+#[allow(dead_code)]
 fn fill_random_view(mut rng: SmallRng, view: &mut AsnNodeView2d) -> SmallRng {
     for y in 0..view.get_size().height {
         for x in 0..view.get_size().width {

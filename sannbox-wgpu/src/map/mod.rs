@@ -48,6 +48,7 @@ impl AsnMap {
     }
 }
 
+#[allow(dead_code)]
 impl AsnMap {
     pub fn get_size(&self) -> Size3D<MapDimension> {
         self.map.size

@@ -31,6 +31,7 @@ struct ViewState {
     view: BytesArray,
 }
 
+#[allow(dead_code)]
 pub struct AsnWgpuNodeView2d {
     base_uniform: NodeBaseUniform,
     map_setup_uniform: MapSetupUniform,

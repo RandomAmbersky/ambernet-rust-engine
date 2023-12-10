@@ -14,6 +14,7 @@ use winit::event_loop::{EventLoop, EventLoopProxy};
 pub mod bind_groups;
 pub mod texture;
 
+#[allow(dead_code)]
 pub struct AsnWgpuWinApi {
     config: AsnWinapiConfig,
     instance: Instance,

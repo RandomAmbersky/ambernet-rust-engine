@@ -139,6 +139,7 @@ impl AsnWindow {
     }
 }
 
+#[allow(dead_code)]
 impl AsnWindow {
     pub fn configure_surface(&self, adapter: &Adapter, device: &Device) {
         let size = self.window.inner_size();

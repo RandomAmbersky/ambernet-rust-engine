@@ -1,0 +1,11 @@
+entity_list:
+  GreenContainer:
+    weight: 1.0
+    size:   1.0
+    types:
+      - ITEM
+  Wanderer:
+    size:   1.0
+    weight: 0.5
+    types:
+      - NPC

@@ -1,7 +1,0 @@
-entity_list:
-  GreenContainer:
-    name: 'Зеленый контейнер'
-    info: 'Контейнер с биомассой. Судя по цвету - растительного происхождения'
-  Wanderer:
-    name: 'Wanderer'
-    info: 'Wanderer'

@@ -1,12 +1,14 @@
 use asn_core::math::Size2D;
 use asn_core::winapi::AsnTextureFormat;
 
+#[allow(dead_code)]
 pub struct DefaultTextureData {
     pub bytes: [u8; 4],
     pub size: Size2D<u32>,
     pub texture_format: AsnTextureFormat,
 }
 
+#[allow(dead_code)]
 pub const ONE_BLUE_PIXEL: DefaultTextureData = DefaultTextureData {
     bytes: [0, 0, 255, 255],
     size: Size2D {
