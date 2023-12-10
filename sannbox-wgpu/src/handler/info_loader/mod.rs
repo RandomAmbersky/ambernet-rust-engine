@@ -2,7 +2,8 @@ mod data_loader;
 mod lang_loader;
 mod ufo_loader;
 
-pub use data_loader::load_data;
+pub use data_loader::{load_data, DataSet};
+pub use lang_loader::{load_lang, LangSet};
 
 // use crate::handler::resources::INFO_TXT;
 // use serde::{Deserialize, Serialize};

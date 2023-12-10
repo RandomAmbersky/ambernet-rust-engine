@@ -1,14 +1,16 @@
 mod config;
+mod entity_manager;
 mod info_loader;
 mod loaders;
 mod resources;
 
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::config::{get_config, AsnGameConfig};
+use crate::handler::entity_manager::EntityManager;
 use crate::handler::info_loader::load_data;
 use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{
-    DATA_TXT, MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
+    DATA_TXT, LANG_TXT, MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
 };
 use crate::map::AsnMap;
 use crate::tileset::AsnTileSet;
@@ -29,6 +31,7 @@ const UPDATE_THROTTLE: f32 = 1.0 / 30.0;
 
 #[allow(dead_code)]
 pub struct Handler {
+    entyty_manager: EntityManager,
     config: AsnGameConfig,
     keys: JoystickKeysSet,
     update_fps: Fps,
@@ -45,8 +48,10 @@ pub struct Handler {
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
-        let data_info = load_data(DATA_TXT);
-        info!("data_info: {:?}", data_info);
+        let entyty_manager = EntityManager::new(DATA_TXT, LANG_TXT);
+
+        // let data_info = load_data(DATA_TXT);
+        // info!("data_info: {:?}", data_info);
 
         let config = get_config();
         let player_pos = Pos2D { x: 1, y: 1 };
@@ -84,6 +89,7 @@ impl Handler {
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
         let mut h = Handler {
+            entyty_manager,
             update_fps: Fps::new(UPDATE_THROTTLE),
             config,
             rng,

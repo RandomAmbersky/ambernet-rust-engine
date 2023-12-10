@@ -3,12 +3,12 @@ use std::collections::HashMap;
 
 #[derive(Debug, Serialize, Deserialize)]
 struct EntityInfo {
-    types: Vec<String>,
+    pub types: Vec<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DataSet {
-    entity_list: HashMap<String, EntityInfo>,
+    pub entity_list: HashMap<String, EntityInfo>,
 }
 
 pub fn load_data(buf: &[u8]) -> DataSet {
