@@ -1,3 +1,4 @@
+#![allow(unused_imports)]
 use crate::engine::winapi::event_converter::CustomEvent;
 use asn_core::math::Size2D;
 use wgpu::{Adapter, Device, Instance, Surface, SurfaceConfiguration};

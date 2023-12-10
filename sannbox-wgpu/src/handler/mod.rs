@@ -1,9 +1,11 @@
 mod config;
+mod info_loader;
 mod loaders;
 mod resources;
 
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::config::{get_config, AsnGameConfig};
+use crate::handler::info_loader::load_info;
 use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{
     MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
@@ -42,6 +44,8 @@ pub struct Handler {
 
 impl Handler {
     pub fn new(e: &mut Engine) -> Self {
+        load_info();
+
         let config = get_config();
         let player_pos = Pos2D { x: 1, y: 1 };
 
@@ -77,7 +81,7 @@ impl Handler {
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
 
-        Handler {
+        let mut h = Handler {
             update_fps: Fps::new(UPDATE_THROTTLE),
             config,
             rng,
@@ -90,14 +94,40 @@ impl Handler {
             view,
             player_view,
             keys: JoystickKeysSet::default(),
-        }
+        };
+        fill_view(&h.map, &h.look_at, &mut h.view);
+        h.update(e);
+        h
     }
+
     fn draw(&mut self, e: &mut Engine) {
         let mut fcx = e.get_winapi().begin_frame().unwrap();
         self.player_view.draw(&mut fcx);
         self.view.draw(&mut fcx);
         e.get_winapi().end_frame(fcx).unwrap();
         e.get_winapi().send_event(&AsnEvent::UpdateEvent);
+    }
+
+    fn player_pos_sync(&mut self) {
+        if self.new_player_pos != self.player_pos {
+            self.map.set_cell(0, &self.player_pos, self.player_ground);
+
+            self.player_pos = self.new_player_pos;
+
+            self.player_ground = self.map.get_cell(0, &self.player_pos);
+
+            self.map
+                .set_cell(0, &self.player_pos, self.config.player_cell);
+
+            self.look_at = self
+                .map
+                .get_size_2d()
+                .look_at_window(&self.player_pos, &self.view.get_size());
+            // println!("player pos: {:?}", self.player_pos);
+            // println!("look_at pos: {:?}", self.look_at);
+            // fill_view(&self.map, &self.look_at, &mut self.player_view);
+            fill_view(&self.map, &self.look_at, &mut self.view);
+        }
     }
 
     fn update(&mut self, e: &mut Engine) {
@@ -111,25 +141,7 @@ impl Handler {
 
         if self.update_fps.tick() {
             self.handle_keyset();
-            if self.new_player_pos != self.player_pos {
-                self.map.set_cell(0, &self.player_pos, self.player_ground);
-
-                self.player_pos = self.new_player_pos;
-
-                self.player_ground = self.map.get_cell(0, &self.player_pos);
-
-                self.map
-                    .set_cell(0, &self.player_pos, self.config.player_cell);
-
-                self.look_at = self
-                    .map
-                    .get_size_2d()
-                    .look_at_window(&self.player_pos, &self.view.get_size());
-                println!("player pos: {:?}", self.player_pos);
-                println!("look_at pos: {:?}", self.look_at);
-                // fill_view(&self.map, &self.look_at, &mut self.player_view);
-                fill_view(&self.map, &self.look_at, &mut self.view);
-            }
+            self.player_pos_sync();
         }
 
         // rng = fill_random_view(rng, &mut self.view);

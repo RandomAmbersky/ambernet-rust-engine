@@ -308,7 +308,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         let shader = create_shader(gfx.get_device());
 
         let texture_format = gfx.get_config().texture_format.to_wgpu_format();
-        println!("texure format: {:?}", texture_format);
+        // println!("texure format: {:?}", texture_format);
 
         let view = BytesArray {
             size: Size2D {
@@ -354,7 +354,7 @@ impl TNodeView2d for AsnWgpuNodeView2d {
         };
         let view_state = ViewState { view, view_texture };
 
-        println!("{:?}", base_uniform.prs);
+        // println!("{:?}", base_uniform.prs);
 
         Self {
             base_uniform,

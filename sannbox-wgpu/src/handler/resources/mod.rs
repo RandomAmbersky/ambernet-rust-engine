@@ -5,3 +5,5 @@ pub const TEXTURE_TIILES_ALPHA_SOURCE: &[u8] = include_bytes!("tiles_aplha.png")
 
 pub const MAP_TMX: &[u8] = include_bytes!("map.tmx");
 pub const MAP_TSX: &[u8] = include_bytes!("tiles.tsx");
+
+pub const INFO_TXT: &[u8] = include_bytes!("info.yml");
