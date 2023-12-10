@@ -7,7 +7,7 @@ mod resources;
 use crate::engine::{AsnNodeView2d, AsnTexture, Engine};
 use crate::handler::config::{get_config, AsnGameConfig};
 use crate::handler::entity_manager::EntityManager;
-use crate::handler::info_loader::load_data;
+use crate::handler::info_loader::{load_data, load_tileset, TileSet};
 use crate::handler::loaders::{load_map, load_tiles};
 use crate::handler::resources::{
     DATA_TXT, LANG_TXT, MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
@@ -42,7 +42,7 @@ pub struct Handler {
     new_player_pos: Pos2D<u32>,
     player_ground: u8,
     look_at: Pos2D<u32>,
-    tiles: AsnTileSet,
+    tiles: TileSet,
     rng: SmallRng,
 }
 
@@ -57,7 +57,7 @@ impl Handler {
         let player_pos = Pos2D { x: 1, y: 1 };
 
         let w = e.get_winapi();
-        let tiles = load_tiles(MAP_TSX);
+        let tiles = load_tileset(MAP_TSX);
         let map = load_map(MAP_TMX);
 
         let raw_tile_texture = load_texture(TEXTURE_TIILES_SOURCE);
@@ -78,12 +78,23 @@ impl Handler {
         )
         .unwrap();
 
-        let view = AsnNodeView2d::new(w, &tile_texture, &config.view_size, &tiles.get_tile_size());
+        let view = AsnNodeView2d::new(
+            w,
+            &tile_texture,
+            &config.view_size,
+            &Size2D {
+                width: tiles.tile_width,
+                height: tiles.tile_height,
+            },
+        );
         let player_view = AsnNodeView2d::new(
             w,
             &tile_alpha_texture,
             &config.view_size,
-            &tiles.get_tile_size(),
+            &Size2D {
+                width: tiles.tile_width,
+                height: tiles.tile_height,
+            },
         );
 
         let rng = SmallRng::seed_from_u64(RNG_SEED);
