@@ -13,7 +13,6 @@ use crate::handler::resources::{
     DATA_TXT, LANG_TXT, MAP_TMX, MAP_TSX, TEXTURE_TIILES_ALPHA_SOURCE, TEXTURE_TIILES_SOURCE,
 };
 use crate::map::AsnMap;
-use crate::tileset::AsnTileSet;
 use asn_core::events::{AsnEvent, AsnKeyboardEvent, AsnWindowEvent};
 use asn_core::keys::JoystickKeys::{KeyDown, KeyLeft, KeyRight, KeyUp};
 use asn_core::keys::{JoystickKeysSet, KeysSetOperations};
@@ -59,6 +58,9 @@ impl Handler {
         let w = e.get_winapi();
         let tiles = load_tileset(MAP_TSX);
         let map = load_map(MAP_TMX);
+
+        let map_f = info_loader::load_map(MAP_TMX);
+        info!("map_f {:?}", map_f);
 
         let raw_tile_texture = load_texture(TEXTURE_TIILES_SOURCE);
         let tile_texture = AsnTexture::from_raw(
@@ -114,7 +116,7 @@ impl Handler {
             player_view,
             keys: JoystickKeysSet::default(),
         };
-        fill_view(&h.map, &h.look_at, &mut h.view);
+        // fill_view(&h.map, &h.look_at, &mut h.view);
         h.update(e);
         h
     }
@@ -158,12 +160,12 @@ impl Handler {
         //     UPDATE_THROTTLE
         // );
 
-        if self.update_fps.tick() {
-            self.handle_keyset();
-            self.player_pos_sync();
-        }
+        // if self.update_fps.tick() {
+        //     self.handle_keyset();
+        //     self.player_pos_sync();
+        // }
 
-        // rng = fill_random_view(rng, &mut self.view);
+        rng = fill_random_view(rng, &mut self.view);
         self.view.update(e.get_winapi());
         self.rng = rng;
     }
@@ -266,7 +268,6 @@ fn fill_view(map: &AsnMap, start_pos: &Pos2D<u32>, view: &mut AsnNodeView2d) {
     }
 }
 
-#[allow(dead_code)]
 fn fill_random_view(mut rng: SmallRng, view: &mut AsnNodeView2d) -> SmallRng {
     for y in 0..view.get_size().height {
         for x in 0..view.get_size().width {

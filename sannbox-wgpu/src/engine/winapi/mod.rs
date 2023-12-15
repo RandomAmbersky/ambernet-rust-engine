@@ -2,7 +2,9 @@ use crate::engine::winapi::event_converter::{convert_event, CustomEvent};
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use crate::engine::TAsnEngine;
 use asn_core::traits::TAsnHandler;
+use asn_logger::info;
 use winit::error::EventLoopError;
+use winit::event_loop::ControlFlow::{Poll, Wait};
 use winit::event_loop::{EventLoop, EventLoopBuilder};
 
 mod asn_window;
@@ -45,6 +47,8 @@ pub fn run<E: 'static + TAsnEngine, H: 'static + TAsnHandler<E>>(
     mut h: H,
 ) -> Result<(), EventLoopError> {
     let event_loop = p.event_loop.take().unwrap();
+    event_loop.set_control_flow(Poll);
+
     event_loop.run(move |event, event_loop_window_target| {
         if eng.is_need_exit() {
             event_loop_window_target.exit();
@@ -53,6 +57,7 @@ pub fn run<E: 'static + TAsnEngine, H: 'static + TAsnHandler<E>>(
 
         let evt = convert_event(&event);
         if let Some(e) = evt {
+            // info!("{:?}", event);
             h.handle(&e, &mut eng)
         }
     })

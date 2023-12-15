@@ -13,7 +13,10 @@ pub enum CustomEvent {
 
 pub fn convert_asn_event(e: &AsnEvent) -> CustomEvent {
     match e {
-        AsnEvent::UpdateEvent => CustomEvent::UpdateEvent,
+        AsnEvent::UpdateEvent => {
+            info!("{:?}", AsnEvent::UpdateEvent);
+            CustomEvent::UpdateEvent
+        }
         _ => panic!("can't convert event {:?}", e),
     }
 }
@@ -36,7 +39,7 @@ pub fn convert_event(e: &Event<CustomEvent>) -> Option<AsnEvent> {
         Event::AboutToWait => None,
         Event::Resumed => None,
         _ => {
-            info!("{:?}", e);
+            // info!("{:?}", e);
             None
         }
     }
@@ -50,6 +53,7 @@ fn process_custom_event(e: &CustomEvent) -> Option<AsnEvent> {
 }
 
 fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEvent> {
+    // info!("WindowEvent {:?}", e);
     match e {
         WindowEvent::CloseRequested => Some(AsnEvent::WindowEvent(CloseRequested)),
         WindowEvent::Resized(size) => {
@@ -59,7 +63,10 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
             };
             Some(AsnEvent::WindowEvent(Resized(w_size)))
         }
-        WindowEvent::RedrawRequested => Some(AsnEvent::WindowEvent(RedrawRequested)),
+        WindowEvent::RedrawRequested => {
+            info!("{:?}", AsnEvent::WindowEvent(RedrawRequested));
+            Some(AsnEvent::WindowEvent(RedrawRequested))
+        }
         // WindowEvent::ScaleFactorChanged { .. } => Some(AsnEvent::WindowEvent(RedrawRequested)),
         //     let w_size = window.inner_size();
         //     None
@@ -103,7 +110,7 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
         WindowEvent::Focused(_f) => None,
         WindowEvent::Occluded(_f) => None,
         _ => {
-            info!("WindowEvent {:?}", e);
+            // info!("WindowEvent {:?}", e);
             None
         }
     }

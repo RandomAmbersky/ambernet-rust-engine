@@ -115,7 +115,7 @@ impl TAsnWinapi for AsnWgpuWinApi {
     }
 
     fn window_resize(&mut self, new_size: &Self::Size2D) {
-        info!("window_resize {:?}", new_size);
+        // info!("window_resize {:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
             self.config.size = *new_size;
             self.window.resize(new_size);
