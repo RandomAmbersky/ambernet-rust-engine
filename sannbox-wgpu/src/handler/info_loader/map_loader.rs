@@ -2,9 +2,16 @@ use quick_xml::de::from_str;
 use serde::{Deserialize, Serialize};
 // use std::collections::HashMap;
 
-// <tileset firstgid="1" source="tiles.tsx"/>
 #[derive(Debug, Serialize, Deserialize)]
-pub struct LayerMapSet {}
+pub struct DataLayerMapSet {
+    #[serde(rename = "@encoding")]
+    encoding: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct LayerMapSet {
+    data: DataLayerMapSet,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct MapTileSet {

@@ -14,7 +14,7 @@ pub enum CustomEvent {
 pub fn convert_asn_event(e: &AsnEvent) -> CustomEvent {
     match e {
         AsnEvent::UpdateEvent => {
-            info!("{:?}", AsnEvent::UpdateEvent);
+            // info!("{:?}", AsnEvent::UpdateEvent);
             CustomEvent::UpdateEvent
         }
         _ => panic!("can't convert event {:?}", e),
