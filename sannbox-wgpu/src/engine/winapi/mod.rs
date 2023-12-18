@@ -3,9 +3,11 @@ use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use crate::engine::TAsnEngine;
 use asn_core::traits::TAsnHandler;
 use asn_logger::info;
+use std::time::Duration;
 use winit::error::EventLoopError;
+use winit::event::Event;
 use winit::event_loop::ControlFlow::{Poll, Wait};
-use winit::event_loop::{EventLoop, EventLoopBuilder};
+use winit::event_loop::{ControlFlow, EventLoop, EventLoopBuilder};
 
 mod asn_window;
 pub mod defines;

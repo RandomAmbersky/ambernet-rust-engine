@@ -36,7 +36,7 @@ pub fn convert_event(e: &Event<CustomEvent>) -> Option<AsnEvent> {
         Event::UserEvent(t) => process_custom_event(t),
         // Event::RedrawEventsCleared => None,
         Event::NewEvents(_e) => None,
-        Event::AboutToWait => None,
+        Event::AboutToWait => Some(AsnEvent::WindowEvent(RedrawRequested)),
         Event::Resumed => None,
         _ => {
             // info!("{:?}", e);

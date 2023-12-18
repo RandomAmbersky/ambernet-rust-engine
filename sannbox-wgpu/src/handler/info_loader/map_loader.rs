@@ -2,8 +2,36 @@ use quick_xml::de::from_str;
 use serde::{Deserialize, Serialize};
 // use std::collections::HashMap;
 
+// <tileset firstgid="1" source="tiles.tsx"/>
 #[derive(Debug, Serialize, Deserialize)]
-pub struct MapSet {}
+pub struct LayerMapSet {}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MapTileSet {
+    #[serde(rename = "@source")]
+    source: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct MapSet {
+    #[serde(rename = "@version")]
+    version: String,
+    #[serde(rename = "@tiledversion")]
+    tiledversion: String,
+    #[serde(rename = "@orientation")]
+    orientation: String,
+    #[serde(rename = "@width")]
+    width: u32,
+    #[serde(rename = "@height")]
+    height: u32,
+    #[serde(rename = "@tilewidth")]
+    tilewidth: u32,
+    #[serde(rename = "@tileheight")]
+    tileheight: u32,
+    tileset: MapTileSet,
+    #[serde(rename = "layer")]
+    layers: Vec<LayerMapSet>,
+}
 
 #[allow(dead_code)]
 pub fn load_map(buf: &[u8]) -> MapSet {
