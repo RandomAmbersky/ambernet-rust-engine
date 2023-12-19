@@ -1,11 +1,12 @@
 use quick_xml::de::from_str;
-use serde::{Deserialize, Serialize};
-// use std::collections::HashMap;
+use serde::{Deserialize, Deserializer, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DataLayerMapSet {
     #[serde(rename = "@encoding")]
     encoding: String,
+    #[serde(rename = "$value")]
+    cells: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
