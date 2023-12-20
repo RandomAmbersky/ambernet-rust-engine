@@ -1,7 +1,5 @@
-use asn_logger::info;
 use quick_xml::de::from_str;
-use serde::{de, Deserialize, Deserializer, Serialize};
-use std::io::BufRead;
+use serde::{Deserialize, Deserializer, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DataLayerMapSetInternal {
@@ -20,15 +18,15 @@ pub struct DataLayerMapSet {
     cells: Vec<u16>,
 }
 
-impl Into<DataLayerMapSet> for DataLayerMapSetInternal {
-    fn into(self) -> DataLayerMapSet {
-        let cells = self.cells.replace(',', " ");
+impl From<DataLayerMapSetInternal> for DataLayerMapSet {
+    fn from(value: DataLayerMapSetInternal) -> Self {
+        let cells = value.cells.replace(',', " ");
         let cells_vec: Vec<u16> = cells
             .split_whitespace()
             .map(|s| s.parse().expect("parse error"))
             .collect();
         DataLayerMapSet {
-            encoding: self.encoding,
+            encoding: value.encoding,
             cells: cells_vec,
         }
     }
