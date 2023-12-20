@@ -1,8 +1,10 @@
+use asn_logger::info;
 use quick_xml::de::from_str;
-use serde::{Deserialize, Deserializer, Serialize};
+use serde::{de, Deserialize, Deserializer, Serialize};
+use std::io::BufRead;
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct DataLayerMapSet {
+pub struct DataLayerMapSetInternal {
     #[serde(rename = "@encoding")]
     encoding: String,
     #[serde(rename = "$value")]
@@ -10,7 +12,39 @@ pub struct DataLayerMapSet {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct DataLayerMapSet {
+    #[serde(rename = "@encoding")]
+    encoding: String,
+    #[serde(rename = "$value")]
+    // cells: String,
+    cells: Vec<u16>,
+}
+
+impl Into<DataLayerMapSet> for DataLayerMapSetInternal {
+    fn into(self) -> DataLayerMapSet {
+        let cells = self.cells.replace(',', " ");
+        let cells_vec: Vec<u16> = cells
+            .split_whitespace()
+            .map(|s| s.parse().expect("parse error"))
+            .collect();
+        DataLayerMapSet {
+            encoding: self.encoding,
+            cells: cells_vec,
+        }
+    }
+}
+
+pub fn data_layer_deserialize<'de, D>(deserializer: D) -> Result<DataLayerMapSet, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let item: DataLayerMapSetInternal = Deserialize::deserialize(deserializer).unwrap();
+    Ok(item.into())
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct LayerMapSet {
+    #[serde(deserialize_with = "data_layer_deserialize")]
     data: DataLayerMapSet,
 }
 
