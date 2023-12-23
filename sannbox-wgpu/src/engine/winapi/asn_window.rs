@@ -64,7 +64,7 @@ impl AsnWindow {
             // Winit prevents sizing with CSS, so we have to set
             // the size manually when on web.
             // use winit::dpi::{PhysicalSize, LogicalSize};
-            window.set_inner_size(PhysicalSize::new(size.width, size.height));
+            // window.set_inner_size(PhysicalSize::new(size.width, size.height));
 
             use winit::platform::web::WindowExtWebSys;
 
@@ -76,12 +76,12 @@ impl AsnWindow {
                     let logical = LogicalSize { width, height };
                     let PhysicalSize { width, height }: PhysicalSize<u32> =
                         logical.to_physical(factor);
-                    window.set_inner_size(PhysicalSize::new(width, height));
+                    // window.inner_size(PhysicalSize::new(width, height));
                     win.document()
                 })
                 .and_then(|doc| {
                     let dst = doc.get_element_by_id("wasm-example")?;
-                    let canvas = web_sys::Element::from(window.canvas());
+                    let canvas = web_sys::Element::from(window.canvas().unwrap());
                     dst.append_child(&canvas).ok()?;
                     Some(())
                 })
