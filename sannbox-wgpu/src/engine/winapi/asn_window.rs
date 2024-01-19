@@ -70,7 +70,7 @@ impl AsnWindow {
 
             use winit::platform::web::WindowExtWebSys;
 
-            web_sys::window()
+            wgpu::web_sys::window()
                 .and_then(|win| {
                     let width = win.inner_width().unwrap().as_f64().unwrap() as u32;
                     let height = win.inner_height().unwrap().as_f64().unwrap() as u32;
@@ -83,7 +83,7 @@ impl AsnWindow {
                 })
                 .and_then(|doc| {
                     let dst = doc.get_element_by_id("wasm-example")?;
-                    let canvas = web_sys::Element::from(window.canvas().unwrap());
+                    let canvas = wgpu::web_sys::Element::from(window.canvas().unwrap());
                     dst.append_child(&canvas).ok()?;
                     Some(())
                 })

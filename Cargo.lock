@@ -1412,6 +1412,7 @@ dependencies = [
  "asn-decoder-tiled",
  "asn-logger",
  "bytemuck",
+ "cfg-if",
  "pollster",
  "quick-xml 0.31.0",
  "rand",
@@ -1419,7 +1420,6 @@ dependencies = [
  "serde_yaml",
  "wasm-bindgen",
  "wasm-bindgen-futures",
- "web-sys",
  "wgpu",
  "winit",
 ]
