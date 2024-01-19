@@ -8,7 +8,7 @@ use winit::window::{Window, WindowBuilder};
 
 pub struct AsnWindow {
     window: Window,
-    surface: Surface,
+    surface: Surface<'static>,
     size: Size2D<u32>,
 }
 
@@ -22,6 +22,7 @@ impl AsnWindow {
     pub fn get_adapter(&self, instance: &Instance) -> Adapter {
         instance
             .enumerate_adapters(wgpu::Backends::all())
+            .into_iter()
             .find(|adapter| adapter.is_surface_supported(&self.surface))
             .unwrap()
     }
@@ -45,6 +46,7 @@ impl AsnWindow {
             width: size.width,
             height: size.height,
             present_mode: surface_caps.present_modes[0],
+            desired_maximum_frame_latency: 2,
             alpha_mode: surface_caps.alpha_modes[0],
             view_formats: vec![],
         }
@@ -98,7 +100,12 @@ impl AsnWindow {
             //     .expect("Couldn't append canvas to document body.");
         }
 
-        let surface = unsafe { instance.create_surface(&window).unwrap() };
+        // let surface = unsafe { instance.create_surface(&window).unwrap() };
+        let surface: wgpu::Surface<'static> = unsafe {
+            let target = wgpu::SurfaceTargetUnsafe::from_window(&window).unwrap();
+            let s = instance.create_surface_unsafe(target).unwrap();
+            s
+        };
 
         // let surface_caps = surface.get_capabilities(&adapter);
         // Shader code in this tutorial assumes an Srgb surface texture. Using a different

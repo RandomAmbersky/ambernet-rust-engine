@@ -51,15 +51,15 @@ impl AsnWgpuWinApi {
 
         let (device, queue) = pollster::block_on(adapter.request_device(
             &wgpu::DeviceDescriptor {
-                features: wgpu::Features::empty(),
+                label: None,
+                required_features: wgpu::Features::empty(),
                 // WebGL doesn't support all of wgpu's features, so if
                 // we're building for the web we'll have to disable some.
-                limits: if cfg!(target_arch = "wasm32") {
+                required_limits: if cfg!(target_arch = "wasm32") {
                     wgpu::Limits::downlevel_webgl2_defaults()
                 } else {
                     wgpu::Limits::default()
                 },
-                label: None,
             },
             None, // Trace path
         ))
