@@ -1,5 +1,5 @@
-use sannbox_wgpu::start;
+use sannbox_wgpu::EngineRunner;
 
 fn main() {
-    start();
+    EngineRunner::start();
 }

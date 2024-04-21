@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "sannbox-wgpu",
+    "asn-web-release"
 #    "asn-image",
 #    "asn-core"
 ]
