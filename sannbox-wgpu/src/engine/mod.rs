@@ -6,6 +6,7 @@ use asn_core::events::AsnWindowEvent::Resized;
 use asn_core::math::Size2D;
 use asn_core::traits::{TAsnBaseEngine, TAsnEngine, TAsnHandler};
 use asn_core::winapi::TAsnWinapi;
+use asn_logger::trace;
 
 pub use crate::engine::winapi::AsnNodeQuad;
 pub use crate::engine::winapi::AsnNodeView2d;
@@ -19,6 +20,7 @@ pub struct Engine {
 
 impl Engine {
     pub fn new() -> Self {
+        trace!("Engine:new");
         let (preset, winapi) = winapi::build();
         Engine {
             is_need_exit: false,

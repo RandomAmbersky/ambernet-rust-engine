@@ -5,8 +5,8 @@ edition = "2021"
 
 [dependencies]
 cfg-if = "1"
-log = "0.4.20"
-chrono = { version = "0.4.31", features = ["wasmbind"] }
+log = "0.4.21"
+chrono = { version = "0.4.38", features = ["wasmbind"] }
 fern = { version = "0.6.2", features = ["colored"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
