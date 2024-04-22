@@ -18,7 +18,8 @@ asn-decoder-image = { path = "../asn-decoder-image" }
 asn-decoder-tiled = { path = "../asn-decoder-tiled" }
 rand = { version = "0.8.5", default-features = false, features = ["small_rng"] }
 bytemuck = { version = "1.15.0", features = [ "derive" ] }
-winit = { version = "0.29.15", features = ["rwh_05"]}
+winit = { version = "0.29.15"  }
+#winit = { version = "0.29.15", features = ["rwh_05"]}
 pollster = "0.3.0"
 serde = { version = "1.0.198", features = ["derive"] }
 serde_yaml = "0.9.33"

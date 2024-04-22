@@ -1,3 +1,4 @@
+mod engine;
 mod engine_interface;
 
 use crate::engine_interface::EngineInterface;
@@ -10,5 +11,5 @@ use wasm_bindgen::prelude::*;
 pub fn init() -> EngineInterface {
     asn_logger::init_log(AsnLogLevel::Trace);
     info!("Hello world!");
-    EngineInterface {}
+    EngineInterface::default()
 }

@@ -1,6 +1,7 @@
 #![allow(unused_imports)]
 use crate::engine::winapi::event_converter::CustomEvent;
 use asn_core::math::Size2D;
+use asn_logger::{debug, trace};
 use wgpu::{Adapter, Device, Instance, Surface, SurfaceConfiguration};
 use winit::dpi::{LogicalSize, PhysicalSize};
 use winit::event_loop::EventLoop;
@@ -53,6 +54,62 @@ impl AsnWindow {
     }
 }
 
+fn web_routines(window: &Window, size: &Size2D<u32>) {
+    // Winit prevents sizing with CSS, so we have to set
+    // the size manually when on web.
+    use winit::dpi::PhysicalSize;
+    window.set_inner_size(PhysicalSize::new(450, 400));
+
+    use winit::platform::web::WindowExtWebSys;
+    web_sys::window()
+        .and_then(|win| win.document())
+        .and_then(|doc| {
+            let dst = doc.get_element_by_id("wasm-example")?;
+            let canvas = web_sys::Element::from(window.canvas());
+            dst.append_child(&canvas).ok()?;
+            Some(())
+        })
+        .expect("Couldn't append canvas to document body.");
+
+    // use winit::dpi::{LogicalSize, PhysicalSize};
+    // window
+    //     .request_inner_size(PhysicalSize::new(size.width, size.height))
+    //     .unwrap();
+    //
+    // let c = window.canvas().unwrap();
+
+    // web_sys::window()
+    //     .and_then(|win| win.document())
+    //     .and_then(|doc| {
+    //         let dst = doc.get_element_by_id("wasm-example")?;
+    //         dst.append_child(&c).ok()?;
+    //         Some(())
+    //     })
+    //     .expect("Couldn't append canvas to document body.");
+
+    // wgpu::web_sys::window()
+    //     .and_then(move |win| {
+    //         let width = win.inner_width().unwrap().as_f64().unwrap() as u32;
+    //         let height = win.inner_height().unwrap().as_f64().unwrap() as u32;
+    //         let factor = window.scale_factor();
+    //         let logical = LogicalSize { width, height };
+    //         let PhysicalSize { width, height }: PhysicalSize<u32> = logical.to_physical(factor);
+    //         // window
+    //         //     .request_inner_size(PhysicalSize::new(width, height))
+    //         //     .unwrap();
+    //         win.document()
+    //     })
+    //     .and_then(|doc| {
+    //         let dst = doc.get_element_by_id("wasm-example")?;
+    //         let canvas = wgpu::web_sys::Element::from(window.canvas().unwrap());
+    //         dst.append_child(&canvas).ok()?;
+    //         Some(())
+    //     })
+    //     .expect("Couldn't append canvas to document body.");
+    //
+    trace!("web_routines ok");
+}
+
 impl AsnWindow {
     pub fn new(
         event_loop: &EventLoop<CustomEvent>,
@@ -61,33 +118,37 @@ impl AsnWindow {
     ) -> Self {
         let window = WindowBuilder::new().build(event_loop).unwrap();
 
-        #[cfg(target_arch = "wasm32")]
+        // #[cfg(target_arch = "wasm32")]
         {
+            web_routines(&window, size);
+
             // Winit prevents sizing with CSS, so we have to set
             // the size manually when on web.
-            // use winit::dpi::{PhysicalSize, LogicalSize};
-            // window.set_inner_size(PhysicalSize::new(size.width, size.height));
+            // use winit::dpi::{LogicalSize, PhysicalSize};
+            // window
+            //     .request_inner_size(PhysicalSize::new(size.width, size.height))
+            //     .unwrap();
+            //
+            // use winit::platform::web::WindowExtWebSys;
 
-            use winit::platform::web::WindowExtWebSys;
-
-            wgpu::web_sys::window()
-                .and_then(|win| {
-                    let width = win.inner_width().unwrap().as_f64().unwrap() as u32;
-                    let height = win.inner_height().unwrap().as_f64().unwrap() as u32;
-                    let factor = window.scale_factor();
-                    let logical = LogicalSize { width, height };
-                    let PhysicalSize { width, height }: PhysicalSize<u32> =
-                        logical.to_physical(factor);
-                    // window.inner_size(PhysicalSize::new(width, height));
-                    win.document()
-                })
-                .and_then(|doc| {
-                    let dst = doc.get_element_by_id("wasm-example")?;
-                    let canvas = wgpu::web_sys::Element::from(window.canvas().unwrap());
-                    dst.append_child(&canvas).ok()?;
-                    Some(())
-                })
-                .expect("Couldn't append canvas to document body.");
+            // wgpu::web_sys::window()
+            //     .and_then(move |win| {
+            //         let width = win.inner_width().unwrap().as_f64().unwrap() as u32;
+            //         let height = win.inner_height().unwrap().as_f64().unwrap() as u32;
+            //         let factor = window.scale_factor();
+            //         let logical = LogicalSize { width, height };
+            //         let PhysicalSize { width, height }: PhysicalSize<u32> =
+            //             logical.to_physical(factor);
+            //         window.inner_size(PhysicalSize::new(width, height));
+            // win.document()
+            // })
+            // .and_then(|doc| {
+            //     let dst = doc.get_element_by_id("wasm-example")?;
+            //     let canvas = wgpu::web_sys::Element::from(window.canvas().unwrap());
+            //     dst.append_child(&canvas).ok()?;
+            //     Some(())
+            // })
+            // .expect("Couldn't append canvas to document body.");
 
             // web_sys::window()
             //     .and_then(|win| win.document())
@@ -149,8 +210,10 @@ impl AsnWindow {
 #[allow(dead_code)]
 impl AsnWindow {
     pub fn configure_surface(&self, adapter: &Adapter, device: &Device) {
+        trace!("AsnWindow:configure_surface");
         let size = self.window.inner_size();
         let config = self.get_config(adapter, &size);
+        debug!("size: {:?} config: {:?}", size, config);
         self.surface.configure(device, &config);
     }
     pub fn request_redraw(&self) {

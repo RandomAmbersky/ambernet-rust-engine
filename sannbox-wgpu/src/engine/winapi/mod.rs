@@ -2,8 +2,9 @@ use crate::engine::winapi::event_converter::{convert_event, CustomEvent};
 use crate::engine::winapi::wgpu::AsnWgpuWinApi;
 use crate::engine::TAsnEngine;
 use asn_core::traits::TAsnHandler;
-use asn_logger::info;
+use asn_logger::{info, trace};
 use std::time::Duration;
+use wgpu::websys;
 use winit::error::EventLoopError;
 use winit::event::Event;
 use winit::event_loop::ControlFlow::{Poll, Wait};
@@ -30,13 +31,16 @@ pub struct RunnerPreset {
 }
 
 pub fn build() -> (RunnerPreset, WinApi) {
+    trace!("build()");
     // let event_loop = EventLoop::new();
     let event_loop = EventLoopBuilder::<CustomEvent>::with_user_event()
         .build()
         .unwrap();
 
+    trace!("winapi");
     let winapi = AsnWgpuWinApi::new(&event_loop);
 
+    trace!("preset");
     let preset = RunnerPreset {
         event_loop: Some(event_loop),
     };
