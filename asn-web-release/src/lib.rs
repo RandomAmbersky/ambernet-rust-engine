@@ -1,4 +1,5 @@
 mod engine_interface;
+mod handler;
 
 use crate::engine_interface::EngineInterface;
 use asn_logger::{info, AsnLogLevel};

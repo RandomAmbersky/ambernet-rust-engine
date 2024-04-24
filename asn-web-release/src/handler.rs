@@ -1,10 +1,29 @@
 use asn_core::events::{AsnEvent, AsnWindowEvent};
-use asn_core::traits::{TAsnBaseEngine, TAsnHandleEngine};
+use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_logger::trace;
+
+#[derive(Default, Debug)]
+pub struct Handler {}
+
+impl Handler {
+    pub fn new() -> Self {
+        trace!("Handler:new");
+        Self::default()
+    }
+}
+
+impl<E> TAsnHandler<E> for Handler
+where
+    E: TAsnBaseEngine,
+{
+    fn handle(&mut self, evt: &AsnEvent, engine: &mut E) {
+        handle(evt, engine)
+    }
+}
 
 pub fn handle<E>(evt: &AsnEvent, e: &mut E)
 where
-    E: TAsnBaseEngine + TAsnHandleEngine,
+    E: TAsnBaseEngine,
 {
     trace!("handle {:?} event", &evt);
     match evt {

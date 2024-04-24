@@ -7,10 +7,6 @@ pub trait TAsnBaseEngine {
     fn set_need_exit(&mut self);
 }
 
-pub trait TAsnHandleEngine {
-    fn handle(&mut self, e: &AsnEvent) -> Result<(), AsnError>;
-}
-
 pub trait TAsnEngine: TAsnBaseEngine {
     type WinApi: TAsnWinapi;
     fn get_winapi(&mut self) -> &mut Self::WinApi;
