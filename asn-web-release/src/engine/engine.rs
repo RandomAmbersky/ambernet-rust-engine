@@ -1,7 +1,6 @@
 use asn_logger::trace;
 
 use asn_core::traits::TAsnBaseEngine;
-use asn_wgpu_released::run_loop;
 
 pub struct Engine {
     is_need_exit: bool,
@@ -28,6 +27,6 @@ impl Engine {
     }
     pub fn run(&mut self) {
         trace!("Engine:run");
-        run_loop(self);
+        asn_wgpu_released::run_loop(self);
     }
 }

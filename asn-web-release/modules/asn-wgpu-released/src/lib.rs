@@ -26,5 +26,4 @@ where
         return;
     }
     trace!("custom_event_handler: {:?} {:?}", evt, t);
-    // e.set_need_exit();
 }
