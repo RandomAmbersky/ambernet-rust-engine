@@ -1,25 +1,36 @@
 use asn_logger::trace;
+use std::borrow::BorrowMut;
+use std::sync::{Arc, Mutex};
 
 use asn_core::traits::TAsnBaseEngine;
 
-pub struct Engine {
+struct EngineState {
     is_need_exit: bool,
+}
+
+pub struct Engine {
+    state: Arc<Mutex<EngineState>>,
 }
 
 impl TAsnBaseEngine for Engine {
     fn is_need_exit(&self) -> bool {
-        self.is_need_exit
+        let s = self.state.lock().unwrap();
+        s.is_need_exit
     }
     fn set_need_exit(&mut self) {
-        self.is_need_exit = true
+        let mut s = self.state.lock().unwrap();
+        s.is_need_exit = true
     }
 }
 
 impl Engine {
     pub fn new() -> Self {
         trace!("Engine:new");
-        Engine {
+        let state = EngineState {
             is_need_exit: false,
+        };
+        Engine {
+            state: Arc::new(Mutex::new(state)),
         }
     }
     pub fn init(&mut self) {

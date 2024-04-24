@@ -44,5 +44,6 @@ fn custom_event_handler<E>(
             trace!("AsnEvent: {:?}", e)
         }
     }
+    // e.set_need_exit();
     // trace!("custom_event_handler: {:?} {:?}", evt, t);
 }
