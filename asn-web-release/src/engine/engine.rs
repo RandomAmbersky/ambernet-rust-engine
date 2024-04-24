@@ -3,6 +3,7 @@ use asn_core::events::AsnEvent;
 use asn_logger::trace;
 use std::sync::{Arc, Mutex};
 
+use crate::handler::Handler;
 use asn_core::traits::{TAsnBaseEngine, TAsnHandleEngine, TAsnHandler};
 
 struct EngineState {
@@ -11,6 +12,7 @@ struct EngineState {
 
 pub struct Engine {
     state: Arc<Mutex<EngineState>>,
+    handler: Handler,
 }
 
 impl TAsnBaseEngine for Engine {
@@ -32,6 +34,7 @@ impl Engine {
         };
         Engine {
             state: Arc::new(Mutex::new(state)),
+            handler: Handler::new(),
         }
     }
     pub fn init(&mut self) {
