@@ -37,8 +37,8 @@ pub fn init() {
     let mut e = engine::Engine::new();
     e.init();
 
-    // let h = Handler::new(&mut e);
-    // e.run(h);
+    let h = Handler::new(&mut e);
+    e.run(h);
 }
 
 // #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]

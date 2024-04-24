@@ -4,7 +4,6 @@ use crate::engine::TAsnEngine;
 use asn_core::traits::TAsnHandler;
 use asn_logger::{info, trace};
 use std::time::Duration;
-use wgpu::websys;
 use winit::error::EventLoopError;
 use winit::event::Event;
 use winit::event_loop::ControlFlow::{Poll, Wait};

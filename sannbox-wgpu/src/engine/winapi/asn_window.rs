@@ -54,6 +54,7 @@ impl AsnWindow {
     }
 }
 
+#[cfg(target_arch = "wasm32")]
 fn web_routines(window: &Window, size: &Size2D<u32>) {
     // Winit prevents sizing with CSS, so we have to set
     // the size manually when on web.
@@ -118,7 +119,7 @@ impl AsnWindow {
     ) -> Self {
         let window = WindowBuilder::new().build(event_loop).unwrap();
 
-        // #[cfg(target_arch = "wasm32")]
+        #[cfg(target_arch = "wasm32")]
         {
             web_routines(&window, size);
 
