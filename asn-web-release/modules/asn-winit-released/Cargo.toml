@@ -1,5 +1,5 @@
 [package]
-name = "asn-wgpu-released"
+name = "asn-winit-released"
 version = "0.1.0"
 edition = "2021"
 
@@ -13,3 +13,4 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 asn-core = { path = "../../../asn-core" }
 asn-logger = { path = "../../../asn-logger" }
+winit = { version = "0.29.15"}

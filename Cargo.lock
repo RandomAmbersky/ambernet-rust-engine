@@ -167,12 +167,21 @@ dependencies = [
  "asn-core",
  "asn-logger",
  "asn-wgpu-released",
+ "asn-winit-released",
  "cfg-if",
  "wasm-bindgen",
 ]
 
 [[package]]
 name = "asn-wgpu-released"
+version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "asn-logger",
+]
+
+[[package]]
+name = "asn-winit-released"
 version = "0.1.0"
 dependencies = [
  "asn-core",

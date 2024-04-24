@@ -1,7 +1,9 @@
+use asn_core::errors::AsnError;
+use asn_core::events::AsnEvent;
 use asn_logger::trace;
 use std::sync::{Arc, Mutex};
 
-use asn_core::traits::TAsnBaseEngine;
+use asn_core::traits::{TAsnBaseEngine, TAsnHandleEngine, TAsnHandler};
 
 struct EngineState {
     is_need_exit: bool,
@@ -37,6 +39,13 @@ impl Engine {
     }
     pub fn run(&mut self) {
         trace!("Engine:run");
-        asn_wgpu_released::run_loop(self);
+        asn_winit_released::run_loop(self);
+    }
+}
+
+impl TAsnHandleEngine for Engine {
+    fn handle(&mut self, e: &AsnEvent) -> Result<(), AsnError> {
+        trace!("Engine:handle: {:?}", e);
+        Ok(())
     }
 }

@@ -1,8 +1,14 @@
+use crate::errors::AsnError;
+use crate::events::AsnEvent;
 use crate::winapi::TAsnWinapi;
 
 pub trait TAsnBaseEngine {
     fn is_need_exit(&self) -> bool;
     fn set_need_exit(&mut self);
+}
+
+pub trait TAsnHandleEngine {
+    fn handle(&mut self, e: &AsnEvent) -> Result<(), AsnError>;
 }
 
 pub trait TAsnEngine: TAsnBaseEngine {
