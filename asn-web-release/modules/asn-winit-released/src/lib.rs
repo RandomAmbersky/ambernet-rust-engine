@@ -41,7 +41,7 @@ fn event_handler<E>(
     match convert_event(&evt) {
         None => {}
         Some(e) => {
-            trace!("AsnEvent: {:?}", e);
+            // trace!("AsnEvent: {:?}", e);
             engine.handle(&e).unwrap();
         }
     }
