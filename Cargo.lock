@@ -165,26 +165,20 @@ name = "asn-web-release"
 version = "0.1.0"
 dependencies = [
  "asn-core",
- "asn-decoder-image",
- "asn-decoder-tiled",
  "asn-logger",
  "asn-wgpu-released",
- "bytemuck",
  "cfg-if",
- "pollster",
- "quick-xml 0.31.0",
- "rand",
- "serde",
- "serde_yaml",
  "wasm-bindgen",
- "wasm-bindgen-futures",
- "wgpu",
- "winit",
 ]
 
 [[package]]
 name = "asn-wgpu-released"
 version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "asn-logger",
+ "winit",
+]
 
 [[package]]
 name = "atomic-waker"
