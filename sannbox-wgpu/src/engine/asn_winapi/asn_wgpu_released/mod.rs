@@ -118,7 +118,7 @@ impl TAsnWinapi for AsnWgpuWinApi {
     fn window_resize(&mut self, new_size: &Self::Size2D) {
         // info!("window_resize {:?}", new_size);
         if new_size.width > 0 && new_size.height > 0 {
-            self.config.size = *new_size;
+            self.config.size = new_size.clone();
             self.window.resize(new_size);
             self.window.configure_surface(&self.adapter, &self.device);
             let surface_texture_format = self.window.get_current_texture().texture.format();

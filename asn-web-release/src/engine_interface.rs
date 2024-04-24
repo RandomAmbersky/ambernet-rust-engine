@@ -14,3 +14,9 @@ impl Default for EngineInterface {
         }
     }
 }
+
+impl EngineInterface {
+    pub fn run(&mut self) {
+        self.e.run();
+    }
+}
