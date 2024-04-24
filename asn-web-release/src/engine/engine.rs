@@ -22,10 +22,10 @@ impl Engine {
         }
     }
     pub fn init(&mut self) {
-        // println!("Engine:init")
+        trace!("Engine:init")
     }
     pub fn run(&mut self) {
-        trace!("run");
+        trace!("Engine:run");
         let event_loop = EventLoop::new().unwrap();
         let window = WindowBuilder::new().build(&event_loop).unwrap();
 

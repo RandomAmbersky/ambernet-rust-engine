@@ -1,5 +1,6 @@
 use asn_web_release::init;
 
 fn main() {
-    init();
+    let mut e = init();
+    e.run();
 }
