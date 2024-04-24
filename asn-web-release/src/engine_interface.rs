@@ -15,6 +15,7 @@ impl Default for EngineInterface {
     }
 }
 
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 impl EngineInterface {
     pub fn run(&mut self) {
         self.e.run();

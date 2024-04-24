@@ -25,6 +25,7 @@ rust
   .then(p => {
     console.log(p)
     engine = p.init()
+    engine.run()
     // console.log(engine)
     // engine.start()
   })
