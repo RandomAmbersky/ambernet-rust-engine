@@ -1,3 +1,7 @@
+mod event_converter;
+
+use crate::event_converter::convert_event;
+use asn_core::events::AsnEvent;
 use asn_core::traits::TAsnBaseEngine;
 use asn_logger::trace;
 use winit::event::Event;
@@ -25,5 +29,11 @@ where
         t.exit();
         return;
     }
-    trace!("custom_event_handler: {:?} {:?}", evt, t);
+    match convert_event(&evt) {
+        None => {}
+        Some(e) => {
+            trace!("AsnEvent: {:?}", e)
+        }
+    }
+    // trace!("custom_event_handler: {:?} {:?}", evt, t);
 }
