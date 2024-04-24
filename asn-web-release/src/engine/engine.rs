@@ -1,14 +1,8 @@
 use asn_logger::trace;
 
 use winit::event::Event;
-use winit::event::WindowEvent::KeyboardInput;
-
-use winit::event_loop::EventLoopWindowTarget;
-use winit::{
-    event::*,
-    event_loop::{ControlFlow, EventLoop},
-    window::WindowBuilder,
-};
+use winit::event_loop::{EventLoop, EventLoopWindowTarget};
+use winit::window::WindowBuilder;
 
 pub struct Engine {
     is_need_exit: bool,
