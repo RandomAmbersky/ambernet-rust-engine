@@ -168,6 +168,7 @@ dependencies = [
  "asn-decoder-image",
  "asn-decoder-tiled",
  "asn-logger",
+ "asn-wgpu-released",
  "bytemuck",
  "cfg-if",
  "pollster",
@@ -180,6 +181,10 @@ dependencies = [
  "wgpu",
  "winit",
 ]
+
+[[package]]
+name = "asn-wgpu-released"
+version = "0.1.0"
 
 [[package]]
 name = "atomic-waker"
