@@ -1,5 +1,5 @@
-use crate::engine::winapi::event_converter::{convert_event, CustomEvent};
-use crate::engine::winapi::wgpu::AsnWgpuWinApi;
+use crate::engine::asn_winapi::asn_wgpu_released::AsnWgpuWinApi;
+use crate::engine::asn_winapi::event_converter::{convert_event, CustomEvent};
 use crate::engine::TAsnEngine;
 use asn_core::traits::TAsnHandler;
 use asn_logger::{info, trace};
@@ -9,6 +9,7 @@ use winit::event::Event;
 use winit::event_loop::ControlFlow::{Poll, Wait};
 use winit::event_loop::{ControlFlow, EventLoop, EventLoopBuilder};
 
+mod asn_wgpu_released;
 mod asn_window;
 pub mod defines;
 mod event_converter;
@@ -16,14 +17,13 @@ mod mesh;
 mod resources;
 mod scene;
 mod utils;
-mod wgpu;
 
 pub type WinApi = AsnWgpuWinApi;
 
 pub type AsnNodeQuad = scene::AsnWgpuNodeQuad;
 pub type AsnNodeView2d = scene::AsnWgpuNodeView2d;
 
-pub type AsnTexture = wgpu::texture::AsnTexture;
+pub type AsnTexture = asn_wgpu_released::texture::AsnTexture;
 
 pub struct RunnerPreset {
     event_loop: Option<EventLoop<CustomEvent>>,

@@ -1,5 +1,5 @@
-use crate::engine::winapi::utils::ToWgpuFormat;
-use crate::engine::winapi::wgpu::AsnWgpuWinApi;
+use crate::engine::asn_winapi::asn_wgpu_released::AsnWgpuWinApi;
+use crate::engine::asn_winapi::utils::ToWgpuFormat;
 use asn_core::errors::AsnRenderError;
 use asn_core::math::Size2D;
 use asn_core::winapi::{AsnTextureFormat, TTexture};

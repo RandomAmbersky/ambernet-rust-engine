@@ -1,10 +1,12 @@
 mod resource;
 
-use crate::engine::winapi::resources::ONE_BLUE_PIXEL;
-use crate::engine::winapi::scene::node_quad::resource::{Vertex, INDICES, SHADER_SOURCE, VERTICES};
-use crate::engine::winapi::utils::ToWgpuFormat;
-use crate::engine::winapi::wgpu::texture::AsnTexture;
-use crate::engine::winapi::wgpu::{AsnWgpuFrameContext, AsnWgpuWinApi};
+use crate::engine::asn_winapi::asn_wgpu_released::texture::AsnTexture;
+use crate::engine::asn_winapi::asn_wgpu_released::{AsnWgpuFrameContext, AsnWgpuWinApi};
+use crate::engine::asn_winapi::resources::ONE_BLUE_PIXEL;
+use crate::engine::asn_winapi::scene::node_quad::resource::{
+    Vertex, INDICES, SHADER_SOURCE, VERTICES,
+};
+use crate::engine::asn_winapi::utils::ToWgpuFormat;
 use asn_core::errors::AsnRenderError;
 use asn_core::winapi::scene::{TNodeBase, TNodeQuad};
 use asn_core::winapi::{TAsnWinapi, TTexture};
