@@ -1,7 +1,7 @@
 use crate::engine::EngineRealize;
 use asn_core::events::{AsnEvent, AsnWindowEvent};
 use asn_core::traits::TAsnBaseEngine;
-use asn_logger::{info, trace};
+use asn_logger::trace;
 
 pub fn handle(evt: &AsnEvent, e: &mut EngineRealize) {
     trace!("handle {:?} event", &evt);
