@@ -8,7 +8,7 @@ use winit::event_loop::{EventLoop, EventLoopWindowTarget};
 use winit::window::{Window, WindowBuilder};
 
 struct RunnerDataset {
-    window: Window,
+    // window: &'d Window,
 }
 
 pub fn run_loop<E>(e: &mut E)
@@ -17,9 +17,11 @@ where
 {
     trace!("Engine:run");
     let event_loop = EventLoop::new().unwrap();
-    let window = WindowBuilder::new().build(&event_loop).unwrap();
+    // let window = WindowBuilder::new().build(&event_loop).unwrap();
 
-    let mut r = RunnerDataset { window };
+    let mut r = RunnerDataset {
+        // window: &window
+    };
 
     event_loop
         .run(|evt, t| custom_event_handler(e, evt, t, &mut r))
@@ -45,5 +47,5 @@ fn custom_event_handler<E>(
         }
     }
     // e.set_need_exit();
-    // trace!("custom_event_handler: {:?} {:?}", evt, t);
+    trace!("custom_event_handler: {:?} {:?}", evt, t);
 }

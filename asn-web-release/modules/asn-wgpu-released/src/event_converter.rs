@@ -19,7 +19,7 @@ pub fn convert_event(e: &Event<()>) -> Option<AsnEvent> {
         // Event::UserEvent(t) => process_custom_event(t),
         // Event::RedrawEventsCleared => None,
         Event::NewEvents(_e) => None,
-        Event::AboutToWait => Some(AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested)),
+        // Event::AboutToWait => Some(AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested)),
         Event::Resumed => None,
         _ => {
             // info!("{:?}", e);
@@ -47,10 +47,10 @@ fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEve
             Some(AsnEvent::WindowEvent(AsnWindowEvent::Resized(w_size)))
         }
         WindowEvent::RedrawRequested => {
-            info!(
-                "{:?}",
-                AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested)
-            );
+            // info!(
+            //     "{:?}",
+            //     AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested)
+            // );
             Some(AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested))
         }
         // WindowEvent::ScaleFactorChanged { .. } => Some(AsnEvent::WindowEvent(RedrawRequested)),
