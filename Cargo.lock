@@ -149,6 +149,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "asn-engine-released"
+version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "asn-logger",
+ "asn-winit-released",
+]
+
+[[package]]
 name = "asn-logger"
 version = "0.1.0"
 dependencies = [
@@ -165,9 +174,9 @@ name = "asn-web-release"
 version = "0.1.0"
 dependencies = [
  "asn-core",
+ "asn-engine-released",
  "asn-logger",
  "asn-wgpu-released",
- "asn-winit-released",
  "cfg-if",
  "wasm-bindgen",
 ]

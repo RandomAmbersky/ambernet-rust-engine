@@ -3,7 +3,7 @@ use asn_core::events::AsnEvent;
 use asn_logger::trace;
 use std::sync::{Arc, Mutex};
 
-use crate::engine::handler::handle;
+use crate::handler::handle;
 use asn_core::traits::{TAsnBaseEngine, TAsnHandleEngine};
 
 struct EngineState {

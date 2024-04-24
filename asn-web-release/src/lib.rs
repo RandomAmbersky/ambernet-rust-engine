@@ -1,4 +1,3 @@
-mod engine;
 mod engine_interface;
 
 use crate::engine_interface::EngineInterface;

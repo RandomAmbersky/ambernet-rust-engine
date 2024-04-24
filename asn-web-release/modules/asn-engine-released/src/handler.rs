@@ -1,9 +1,11 @@
-use crate::engine::EngineRealize;
 use asn_core::events::{AsnEvent, AsnWindowEvent};
-use asn_core::traits::TAsnBaseEngine;
+use asn_core::traits::{TAsnBaseEngine, TAsnHandleEngine};
 use asn_logger::trace;
 
-pub fn handle(evt: &AsnEvent, e: &mut EngineRealize) {
+pub fn handle<E>(evt: &AsnEvent, e: &mut E)
+where
+    E: TAsnBaseEngine + TAsnHandleEngine,
+{
     trace!("handle {:?} event", &evt);
     match evt {
         AsnEvent::Empty => {}
