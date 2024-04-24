@@ -13,7 +13,7 @@ struct RunnerDataset {
 
 pub fn run_loop<E>(e: &mut E)
 where
-    E: TAsnBaseEngine + TAsnHandleEngine,
+    E: TAsnBaseEngine,
 {
     trace!("Engine:run");
     let event_loop = EventLoop::new().unwrap();
@@ -32,7 +32,7 @@ fn event_handler<E>(
     t: &EventLoopWindowTarget<()>,
     r: &mut RunnerDataset,
 ) where
-    E: TAsnBaseEngine + TAsnHandleEngine,
+    E: TAsnBaseEngine,
 {
     if engine.is_need_exit() {
         t.exit();
@@ -42,7 +42,7 @@ fn event_handler<E>(
         None => {}
         Some(e) => {
             // trace!("AsnEvent: {:?}", e);
-            engine.handle(&e).unwrap();
+            // engine.handle(&e).unwrap();
         }
     }
     // e.set_need_exit();

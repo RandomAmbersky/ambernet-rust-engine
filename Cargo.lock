@@ -177,6 +177,7 @@ dependencies = [
  "asn-engine-released",
  "asn-logger",
  "asn-wgpu-released",
+ "asn-winit-released",
  "cfg-if",
  "wasm-bindgen",
 ]

@@ -6,10 +6,12 @@ use std::sync::{Arc, Mutex};
 use crate::handler::handle;
 use asn_core::traits::{TAsnBaseEngine, TAsnHandleEngine};
 
+#[derive(Default, Debug)]
 struct EngineState {
     is_need_exit: bool,
 }
 
+#[derive(Default, Debug)]
 pub struct Engine {
     state: Arc<Mutex<EngineState>>,
 }
@@ -28,26 +30,9 @@ impl TAsnBaseEngine for Engine {
 impl Engine {
     pub fn new() -> Self {
         trace!("Engine:new");
-        let state = EngineState {
-            is_need_exit: false,
-        };
-        Engine {
-            state: Arc::new(Mutex::new(state)),
-        }
+        Engine::default()
     }
     pub fn init(&mut self) {
         trace!("Engine:init")
-    }
-    pub fn run(&mut self) {
-        trace!("Engine:run");
-        asn_winit_released::run_loop(self);
-    }
-}
-
-impl TAsnHandleEngine for Engine {
-    fn handle(&mut self, e: &AsnEvent) -> Result<(), AsnError> {
-        trace!("Engine:handle: {:?}", e);
-        handle(e, self);
-        Ok(())
     }
 }

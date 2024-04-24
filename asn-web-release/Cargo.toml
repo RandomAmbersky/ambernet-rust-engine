@@ -16,4 +16,5 @@ asn-logger = { path = "../asn-logger" }
 asn-core = { path = "../asn-core" }
 asn-wgpu-released = { path = "./modules/asn-wgpu-released" }
 asn-engine-released = { path = "./modules/asn-engine-released" }
+asn-winit-released = { path = "./modules/asn-winit-released" }
 wasm-bindgen = "0.2.92"
