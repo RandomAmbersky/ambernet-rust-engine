@@ -46,5 +46,5 @@ fn event_handler<E>(
         }
     }
     // e.set_need_exit();
-    trace!("custom_event_handler: {:?} {:?}", evt, t);
+    // trace!("custom_event_handler: {:?} {:?}", evt, t);
 }

@@ -1,4 +1,5 @@
 mod engine;
+mod handler;
 
 use asn_core::events::AsnEvent;
 use asn_core::traits::TAsnBaseEngine;
