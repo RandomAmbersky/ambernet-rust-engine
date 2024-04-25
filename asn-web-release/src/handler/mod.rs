@@ -21,7 +21,7 @@ where
     }
 }
 
-pub fn handle<E>(evt: &AsnEvent, e: &mut E)
+fn handle<E>(evt: &AsnEvent, e: &mut E)
 where
     E: TAsnBaseEngine,
 {
