@@ -1,6 +1,7 @@
 use crate::handler::Handler;
 use std::borrow::{Borrow, BorrowMut};
 
+use asn_core::traits::TAsnBaseEngine;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
