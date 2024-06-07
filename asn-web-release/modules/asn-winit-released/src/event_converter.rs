@@ -1,41 +1,10 @@
 use asn_core::events::{AsnEvent, AsnWindowEvent};
 use asn_core::math::Size2D;
 use asn_logger::info;
-use winit::event::{Event, WindowEvent};
+use winit::event::WindowEvent;
 use winit::window::WindowId;
 
-pub fn convert_event(e: &Event<()>) -> Option<AsnEvent> {
-    // info!("{:?}", e);
-    match e {
-        Event::DeviceEvent { event, device_id } => {
-            // info!("{:?} {:?}", event, device_id);
-            None
-        }
-        // Event::MainEventsCleared => Some(AsnEvent::WindowEvent(RedrawRequested)),
-        Event::WindowEvent {
-            ref event,
-            window_id,
-        } => process_window_event(window_id, event),
-        // Event::UserEvent(t) => process_custom_event(t),
-        // Event::RedrawEventsCleared => None,
-        Event::NewEvents(_e) => None,
-        // Event::AboutToWait => Some(AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested)),
-        Event::Resumed => None,
-        _ => {
-            // info!("{:?}", e);
-            None
-        }
-    }
-}
-
-// fn process_custom_event(e: &CustomEvent) -> Option<AsnEvent> {
-//     match e {
-//         CustomEvent::UpdateEvent => Some(AsnEvent::UpdateEvent),
-//         _ => None,
-//     }
-// }
-
-fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEvent> {
+pub fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEvent> {
     // info!("WindowEvent {:?}", e);
     match e {
         WindowEvent::CloseRequested => Some(AsnEvent::WindowEvent(AsnWindowEvent::CloseRequested)),
