@@ -18,6 +18,7 @@ impl Default for EngineInterface {
 impl EngineInterface {
     pub fn run(&mut self) {
         let mut e = asn_engine_released::get_engine();
-        asn_winit_released::run_loop(&mut e, &mut self.h)
+        let mut d = asn_winit_released::new_runner_dataset(&mut e, &mut self.h);
+        asn_winit_released::run_loop(&mut d)
     }
 }

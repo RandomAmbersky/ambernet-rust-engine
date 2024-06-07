@@ -7,29 +7,30 @@ use winit::event::{DeviceEvent, DeviceId, Event};
 use winit::event_loop::{ActiveEventLoop, EventLoop};
 use winit::window::{Window, WindowId};
 
-struct RunnerDataset<'a, E, H>
+pub struct RunnerDataset<'a, E, H>
 where
     E: TAsnBaseEngine,
     H: TAsnHandler<E>,
 {
     window: Option<Window>,
-    counter: i32,
     e: &'a mut E,
     h: &'a mut H,
 }
 
-pub fn run_loop<E, H>(e: &mut E, h: &mut H)
+pub fn new_runner_dataset<'a, E, H>(e: &'a mut E, h: &'a mut H) -> RunnerDataset<'a, E, H>
+where
+    E: TAsnBaseEngine,
+    H: TAsnHandler<E>,
+{
+    RunnerDataset { window: None, e, h }
+}
+
+pub fn run_loop<E, H>(r: &mut RunnerDataset<E, H>)
 where
     E: TAsnBaseEngine,
     H: TAsnHandler<E>,
 {
     trace!("Engine:run");
     let event_loop = EventLoop::new().unwrap();
-    let mut state = RunnerDataset {
-        window: None,
-        counter: 0,
-        e,
-        h,
-    };
-    let _ = event_loop.run_app(&mut state);
+    let _ = event_loop.run_app(r);
 }
