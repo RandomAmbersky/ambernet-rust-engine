@@ -1,11 +1,10 @@
-mod application_handler;
-mod event_converter;
-
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_logger::trace;
-use winit::event::{DeviceEvent, DeviceId, Event};
-use winit::event_loop::{ActiveEventLoop, EventLoop};
-use winit::window::{Window, WindowId};
+use winit::event_loop::EventLoop;
+use winit::window::Window;
+
+mod application_handler;
+mod event_converter;
 
 pub struct RunnerDataset<'a, E, H>
 where
@@ -32,5 +31,5 @@ where
 {
     trace!("Engine:run");
     let event_loop = EventLoop::new().unwrap();
-    let _ = event_loop.run_app(r);
+    event_loop.run_app(r).unwrap()
 }
