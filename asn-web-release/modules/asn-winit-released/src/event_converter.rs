@@ -50,9 +50,10 @@ pub fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<As
         //     };
         //     Some(AsnEvent::WindowEvent(Resized(w_size)))
         // }
-        WindowEvent::KeyboardInput { event, .. } => {
-            // println!("WindowEvent::KeyboardInput: {:?}", input);
-            // info!("WindowEvent::KeyboardInput: {:?}", event);
+        WindowEvent::KeyboardInput {
+            device_id, event, ..
+        } => {
+            info!("WindowEvent::KeyboardInput: {:?} {:?}", device_id, event);
             // match event.state {
             //     ElementState::Pressed => Some(AsnEvent::KeyboardEvent(Pressed(event.scancode))),
             //     ElementState::Released => Some(AsnEvent::KeyboardEvent(Released(event.scancode))),
@@ -64,9 +65,24 @@ pub fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<As
         WindowEvent::CursorLeft { .. } => None,
         WindowEvent::Focused(_f) => None,
         WindowEvent::Occluded(_f) => None,
-        _ => {
-            // info!("WindowEvent {:?}", e);
-            None
-        }
+        WindowEvent::ActivationTokenDone { .. } => None,
+        WindowEvent::Moved(_) => None,
+        WindowEvent::Destroyed => None,
+        WindowEvent::DroppedFile(_) => None,
+        WindowEvent::HoveredFile(_) => None,
+        WindowEvent::HoveredFileCancelled => None,
+        WindowEvent::ModifiersChanged(_) => None,
+        WindowEvent::Ime(_) => None,
+        WindowEvent::MouseWheel { .. } => None,
+        WindowEvent::MouseInput { .. } => None,
+        WindowEvent::PinchGesture { .. } => None,
+        WindowEvent::PanGesture { .. } => None,
+        WindowEvent::DoubleTapGesture { .. } => None,
+        WindowEvent::RotationGesture { .. } => None,
+        WindowEvent::TouchpadPressure { .. } => None,
+        WindowEvent::AxisMotion { .. } => None,
+        WindowEvent::Touch(_) => None,
+        WindowEvent::ScaleFactorChanged { .. } => None,
+        WindowEvent::ThemeChanged(_) => None,
     }
 }
