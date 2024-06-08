@@ -1,4 +1,7 @@
-use asn_core::events::{AsnEvent, AsnWindowEvent};
+mod handle_function;
+
+use crate::handler::handle_function::handle;
+use asn_core::events::AsnEvent;
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_logger::trace;
 
@@ -18,28 +21,5 @@ where
 {
     fn handle(&mut self, evt: &AsnEvent, engine: &mut E) {
         handle(evt, engine)
-    }
-}
-
-fn handle<E>(evt: &AsnEvent, e: &mut E)
-where
-    E: TAsnBaseEngine,
-{
-    trace!("handle {:?} event", &evt);
-    match evt {
-        AsnEvent::Empty => {}
-        AsnEvent::UpdateEvent => {
-            // self.update(e);
-        }
-        AsnEvent::WindowEvent(w) => match w {
-            AsnWindowEvent::CloseRequested => {
-                e.set_need_exit();
-            }
-            AsnWindowEvent::RedrawRequested => {
-                // self.draw(e);
-            }
-            _ => {}
-        },
-        _ => {}
     }
 }

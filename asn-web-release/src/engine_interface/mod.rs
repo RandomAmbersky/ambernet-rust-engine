@@ -14,6 +14,7 @@ impl Default for EngineInterface {
     }
 }
 
+// интерфейс для вызова и обработки событий с веб-страницы
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 impl EngineInterface {
     pub fn run(&mut self) {
