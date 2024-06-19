@@ -13,5 +13,4 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 asn-core = { path = "../../../asn-core" }
 asn-logger = { path = "../../../asn-logger" }
-winit = "0.30.0"
-
+winit = "0.30.2"
