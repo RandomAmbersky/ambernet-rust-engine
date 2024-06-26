@@ -1,11 +1,10 @@
 use crate::event_converter::decode_asn_event;
-use asn_core::events::AsnEvent;
+use asn_core::events::{AsnEvent, AsnEventEmitter};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_logger::trace;
-use std::borrow::BorrowMut;
-use winit::event::{Event, WindowEvent};
+use winit::event::Event;
 use winit::event_loop::{EventLoop, EventLoopProxy};
-use winit::window::{Window, WindowId};
+use winit::window::Window;
 
 mod application_handler;
 mod event_converter;
@@ -50,15 +49,6 @@ where
     event_loop.run_app(&mut r).unwrap()
 }
 
-pub trait AsnEventLoop<E, H>
-where
-    E: TAsnBaseEngine,
-    H: TAsnHandler<E>,
-{
-    fn emit(&mut self, e: &AsnEvent) -> Result<(), String>;
-    fn run_loop(&mut self, e: &mut E, h: &mut H) -> Result<(), String>;
-}
-
 struct AsnLoop {
     event_loop: Option<EventLoop<Event<()>>>,
     event_loop_proxy: Option<EventLoopProxy<Event<()>>>,
@@ -75,11 +65,7 @@ impl AsnLoop {
     }
 }
 
-impl<E, H> AsnEventLoop<E, H> for AsnLoop
-where
-    E: TAsnBaseEngine,
-    H: TAsnHandler<E>,
-{
+impl AsnEventEmitter for AsnLoop {
     fn emit(&mut self, e: &AsnEvent) -> Result<(), String> {
         let evt = decode_asn_event(e).unwrap();
         self.event_loop_proxy
@@ -89,12 +75,16 @@ where
             .unwrap();
         Ok(())
     }
+}
 
-    fn run_loop(&mut self, e: &mut E, h: &mut H) -> Result<(), String> {
+impl AsnLoop {
+    fn run_loop<E: TAsnBaseEngine, H: TAsnHandler<E>>(
+        &mut self,
+        e: &mut E,
+        h: &mut H,
+    ) -> Result<(), String> {
         trace!("run_loop:run");
-
         let mut r = new_runner_dataset(e, h);
-
         let event_loop = self.event_loop.take().unwrap();
         event_loop.run_app(&mut r).unwrap();
         Ok(())

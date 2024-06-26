@@ -20,3 +20,7 @@ pub enum AsnEvent {
     WindowEvent(AsnWindowEvent),
     KeyboardEvent(AsnKeyboardEvent),
 }
+
+pub trait AsnEventEmitter {
+    fn emit(&mut self, e: &AsnEvent) -> Result<(), String>;
+}
