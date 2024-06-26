@@ -37,8 +37,6 @@ where
     H: TAsnHandler<E>,
 {
     trace!("run_loop:run");
-    // let event_loop = EventLoop::new().unwrap();
-
     let event_loop = EventLoop::<Event<()>>::with_user_event().build().unwrap();
 
     let event_loop_proxy: EventLoopProxy<Event<()>> = event_loop.create_proxy();
