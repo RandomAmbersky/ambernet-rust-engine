@@ -13,6 +13,7 @@ where
     H: TAsnHandler<E>,
 {
     window: Option<Window>,
+    event_loop_proxy: Option<EventLoopProxy<Event<()>>>,
     e: &'a mut E,
     h: &'a mut H,
 }
@@ -22,7 +23,12 @@ where
     E: TAsnBaseEngine,
     H: TAsnHandler<E>,
 {
-    RunnerDataset { window: None, e, h }
+    RunnerDataset {
+        event_loop_proxy: None,
+        window: None,
+        e,
+        h,
+    }
 }
 
 pub fn run_loop<E, H>(r: &mut RunnerDataset<E, H>)
@@ -35,12 +41,9 @@ where
 
     let event_loop = EventLoop::<Event<()>>::with_user_event().build().unwrap();
 
-    // let event_loop_proxy: EventLoopProxy<Event<UserEvent>> = event_loop.create_proxy();
-    // let evt = UserEvent::WakeUp;
-    // let win_event = WindowEvent::CloseRequested;
-    // event_loop_proxy.send_event(Event::WindowEvent{ window_id: WindowId.into(0), event: WindowEvent::CloseRequested }).unwrap();
+    let event_loop_proxy: EventLoopProxy<Event<()>> = event_loop.create_proxy();
 
-    // let evt = WindowEvent::RedrawRequested;
+    r.event_loop_proxy = Some(event_loop_proxy);
     // event_loop_proxy.send_event(evt).expect("TODO: panic message");
     event_loop.run_app(r).unwrap()
 }
