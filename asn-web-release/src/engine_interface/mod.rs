@@ -25,3 +25,7 @@ impl EngineInterface {
     }
     fn resize(&mut self) {}
 }
+
+//   [Engine].run() -> [Loop] -> [Handler].handle() ------
+//                        ^                              !
+//                      emit() <-------------------------
