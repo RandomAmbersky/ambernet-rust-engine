@@ -31,7 +31,7 @@ where
     }
 }
 
-pub fn run_loop<E, H>(r: &mut RunnerDataset<E, H>)
+pub fn run_loop<E, H>(e: &mut E, h: &mut H)
 where
     E: TAsnBaseEngine,
     H: TAsnHandler<E>,
@@ -41,7 +41,8 @@ where
 
     let event_loop_proxy: EventLoopProxy<Event<()>> = event_loop.create_proxy();
 
+    let mut r = new_runner_dataset(e, h);
     r.event_loop_proxy = Some(event_loop_proxy);
     // event_loop_proxy.send_event(evt).expect("TODO: panic message");
-    event_loop.run_app(r).unwrap()
+    event_loop.run_app(&mut r).unwrap()
 }
