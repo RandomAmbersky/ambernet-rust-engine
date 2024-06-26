@@ -1,7 +1,7 @@
 use asn_core::events::{AsnEvent, AsnWindowEvent};
 use asn_core::math::Size2D;
 use asn_logger::info;
-use winit::event::WindowEvent;
+use winit::event::{Event, WindowEvent};
 use winit::window::WindowId;
 
 pub fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<AsnEvent> {
@@ -85,4 +85,8 @@ pub fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<As
         WindowEvent::ScaleFactorChanged { .. } => None,
         WindowEvent::ThemeChanged(_) => None,
     }
+}
+
+pub fn decode_asn_event(evt: &AsnEvent) -> Option<Event<()>> {
+    Some(Event::AboutToWait)
 }
