@@ -1,7 +1,8 @@
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_logger::trace;
-use winit::event_loop::EventLoop;
-use winit::window::Window;
+use winit::event::{Event, WindowEvent};
+use winit::event_loop::{EventLoop, EventLoopProxy};
+use winit::window::{Window, WindowId};
 
 mod application_handler;
 mod event_converter;
@@ -29,7 +30,17 @@ where
     E: TAsnBaseEngine,
     H: TAsnHandler<E>,
 {
-    trace!("Engine:run");
-    let event_loop = EventLoop::new().unwrap();
+    trace!("run_loop:run");
+    // let event_loop = EventLoop::new().unwrap();
+
+    let event_loop = EventLoop::<Event<()>>::with_user_event().build().unwrap();
+
+    // let event_loop_proxy: EventLoopProxy<Event<UserEvent>> = event_loop.create_proxy();
+    // let evt = UserEvent::WakeUp;
+    // let win_event = WindowEvent::CloseRequested;
+    // event_loop_proxy.send_event(Event::WindowEvent{ window_id: WindowId.into(0), event: WindowEvent::CloseRequested }).unwrap();
+
+    // let evt = WindowEvent::RedrawRequested;
+    // event_loop_proxy.send_event(evt).expect("TODO: panic message");
     event_loop.run_app(r).unwrap()
 }

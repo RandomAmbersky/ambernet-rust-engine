@@ -1,5 +1,6 @@
 use crate::handler::Handler;
 
+use asn_logger::trace;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
@@ -20,7 +21,8 @@ impl Default for EngineInterface {
 impl EngineInterface {
     pub fn run(&mut self) {
         let mut e = asn_engine_released::get_engine();
-        // let mut d = asn_winit_released::new_runner_dataset();
-        asn_winit_released::run_loop(&mut e, &mut self.h)
+        let mut r = asn_winit_released::new_runner_dataset(&mut e, &mut self.h);
+        asn_winit_released::run_loop(&mut r);
     }
+    fn resize(&mut self) {}
 }
