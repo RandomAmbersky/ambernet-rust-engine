@@ -35,7 +35,7 @@ where
 
 pub fn run_loop<E, H>(e: &mut E, h: &mut H)
 where
-    E: TAsnBaseEngine,
+    E: TAsnBaseEngine + AsnEventEmitter,
     H: TAsnHandler<E>,
 {
     trace!("run_loop:run");

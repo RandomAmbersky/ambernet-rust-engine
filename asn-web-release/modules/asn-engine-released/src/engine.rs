@@ -26,7 +26,7 @@ impl TAsnBaseEngine for Engine {
 }
 
 impl AsnEventEmitter for Engine {
-    fn emit(&mut self, e: &AsnEvent) -> Result<(), String> {
+    fn emit(&mut self, e: AsnEvent) -> Result<(), String> {
         todo!()
     }
 

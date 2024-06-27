@@ -1,6 +1,6 @@
 use crate::event_converter::process_window_event;
 use crate::RunnerDataset;
-use asn_core::events::{AsnEvent, AsnWindowEvent};
+use asn_core::events::{AsnEvent, AsnEventEmitter, AsnWindowEvent};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use winit::application::ApplicationHandler;
 use winit::event::{DeviceEvent, DeviceId, Event, WindowEvent};
@@ -9,7 +9,7 @@ use winit::window::{Window, WindowId};
 
 impl<'a, E, H> ApplicationHandler<Event<()>> for RunnerDataset<'a, E, H>
 where
-    E: TAsnBaseEngine,
+    E: TAsnBaseEngine + AsnEventEmitter,
     H: TAsnHandler<E>,
 {
     // This is a common indicator that you can create a window.
@@ -50,6 +50,7 @@ where
             let _ = self.window.take();
             event_loop.exit()
         }
+        self.e.emit(AsnEvent::UpdateEvent).unwrap();
         if let Some(window) = self.window.as_ref() {
             let e = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
             self.h.handle(&e, self.e);
