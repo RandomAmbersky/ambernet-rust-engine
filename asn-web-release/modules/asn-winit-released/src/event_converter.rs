@@ -1,6 +1,7 @@
 use asn_core::events::{AsnEvent, AsnWindowEvent};
 use asn_core::math::Size2D;
 use asn_logger::info;
+use winit::dpi::PhysicalSize;
 use winit::event::{Event, WindowEvent};
 use winit::window::WindowId;
 
@@ -88,5 +89,30 @@ pub fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<As
 }
 
 pub fn decode_asn_event(evt: &AsnEvent) -> Option<Event<()>> {
-    Some(Event::LoopExiting)
+    match evt {
+        AsnEvent::Empty => None,
+        AsnEvent::UpdateEvent => None,
+        AsnEvent::WindowEvent(_win_evt) => None,
+        AsnEvent::KeyboardEvent(_) => None,
+    }
+}
+
+pub fn decode_asn_window_event(evt: &AsnWindowEvent, window_id: &WindowId) -> Option<Event<()>> {
+    match evt {
+        AsnWindowEvent::Resized(size) => Some(Event::WindowEvent {
+            window_id: *window_id,
+            event: WindowEvent::Resized(PhysicalSize {
+                width: size.width,
+                height: size.height,
+            }),
+        }),
+        AsnWindowEvent::RedrawRequested => Some(Event::WindowEvent {
+            window_id: *window_id,
+            event: WindowEvent::RedrawRequested,
+        }),
+        AsnWindowEvent::CloseRequested => Some(Event::WindowEvent {
+            window_id: *window_id,
+            event: WindowEvent::CloseRequested,
+        }),
+    }
 }
