@@ -1,7 +1,8 @@
-use crate::event_converter::{decode_asn_event, decode_asn_window_event, process_window_event};
+use crate::event_converter::{decode_asn_window_event, process_window_event};
 use crate::RunnerDataset;
 use asn_core::events::{AsnEvent, AsnEventEmitter, AsnWindowEvent};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
+use asn_logger::info;
 use winit::application::ApplicationHandler;
 use winit::event::{DeviceEvent, DeviceId, Event, WindowEvent};
 use winit::event_loop::ActiveEventLoop;
@@ -59,6 +60,7 @@ where
                     AsnEvent::WindowEvent(win_evt) => {
                         let window_id = self.window.as_ref().unwrap().id();
                         let e = decode_asn_window_event(&win_evt, &window_id);
+                        info!("decode_asn_window_event: {:?}", e);
                         match e {
                             None => {}
                             Some(winit_event) => {
