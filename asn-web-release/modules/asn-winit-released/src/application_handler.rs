@@ -50,7 +50,12 @@ where
             let _ = self.window.take();
             event_loop.exit()
         }
-        self.e.emit(AsnEvent::UpdateEvent).unwrap();
+        loop {
+            match self.e.pull() {
+                None => break,
+                Some(evt) => self.h.handle(&evt, self.e),
+            }
+        }
         if let Some(window) = self.window.as_ref() {
             let e = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
             self.h.handle(&e, self.e);

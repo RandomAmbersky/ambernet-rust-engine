@@ -1,5 +1,6 @@
 use asn_core::events::{AsnEvent, AsnEventEmitter};
 use asn_logger::trace;
+use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
 
 use asn_core::traits::TAsnBaseEngine;
@@ -7,6 +8,7 @@ use asn_core::traits::TAsnBaseEngine;
 #[derive(Default, Debug)]
 struct EngineState {
     is_need_exit: bool,
+    events: VecDeque<AsnEvent>,
 }
 
 #[derive(Default, Debug)]
@@ -27,11 +29,11 @@ impl TAsnBaseEngine for Engine {
 
 impl AsnEventEmitter for Engine {
     fn emit(&mut self, e: AsnEvent) -> Result<(), String> {
-        todo!()
+        self.state.lock().unwrap().events.push_back(e);
+        Ok(())
     }
-
     fn pull(&mut self) -> Option<AsnEvent> {
-        todo!()
+        self.state.lock().unwrap().events.pop_front()
     }
 }
 
