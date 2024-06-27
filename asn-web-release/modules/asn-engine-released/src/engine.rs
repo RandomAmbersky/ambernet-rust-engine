@@ -1,8 +1,8 @@
-use asn_core::events::AsnEvent;
+use asn_core::events::{AsnEvent, AsnEventEmitter};
 use asn_logger::trace;
 use std::sync::{Arc, Mutex};
 
-use asn_core::traits::{TAsnBaseEngine, TAsnEventEngine};
+use asn_core::traits::TAsnBaseEngine;
 
 #[derive(Default, Debug)]
 struct EngineState {
@@ -25,8 +25,12 @@ impl TAsnBaseEngine for Engine {
     }
 }
 
-impl TAsnEventEngine<AsnEvent> for Engine {
+impl AsnEventEmitter for Engine {
     fn emit(&mut self, e: &AsnEvent) -> Result<(), String> {
+        todo!()
+    }
+
+    fn pull(&mut self) -> Option<AsnEvent> {
         todo!()
     }
 }

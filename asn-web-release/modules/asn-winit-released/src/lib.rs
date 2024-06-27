@@ -64,29 +64,3 @@ impl AsnLoop {
         }
     }
 }
-
-impl AsnEventEmitter for AsnLoop {
-    fn emit(&mut self, e: &AsnEvent) -> Result<(), String> {
-        let evt = decode_asn_event(e).unwrap();
-        self.event_loop_proxy
-            .as_mut()
-            .unwrap()
-            .send_event(evt)
-            .unwrap();
-        Ok(())
-    }
-}
-
-impl AsnLoop {
-    fn run_loop<E: TAsnBaseEngine, H: TAsnHandler<E>>(
-        &mut self,
-        e: &mut E,
-        h: &mut H,
-    ) -> Result<(), String> {
-        trace!("run_loop:run");
-        let mut r = new_runner_dataset(e, h);
-        let event_loop = self.event_loop.take().unwrap();
-        event_loop.run_app(&mut r).unwrap();
-        Ok(())
-    }
-}

@@ -23,4 +23,5 @@ pub enum AsnEvent {
 
 pub trait AsnEventEmitter {
     fn emit(&mut self, e: &AsnEvent) -> Result<(), String>;
+    fn pull(&mut self) -> Option<AsnEvent>;
 }
