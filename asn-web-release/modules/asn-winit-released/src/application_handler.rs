@@ -1,4 +1,4 @@
-use crate::event_converter::process_window_event;
+use crate::event_converter::{decode_asn_event, process_window_event};
 use crate::RunnerDataset;
 use asn_core::events::{AsnEvent, AsnEventEmitter, AsnWindowEvent};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
@@ -53,7 +53,19 @@ where
         loop {
             match self.e.pull() {
                 None => break,
-                Some(evt) => self.h.handle(&evt, self.e),
+                Some(evt) => {
+                    match decode_asn_event(&evt) {
+                        None => {}
+                        Some(win_evt) => {
+                            self.event_loop_proxy
+                                .as_ref()
+                                .unwrap()
+                                .send_event(win_evt)
+                                .unwrap();
+                        }
+                    }
+                    self.h.handle(&evt, self.e)
+                }
             }
         }
         if let Some(window) = self.window.as_ref() {

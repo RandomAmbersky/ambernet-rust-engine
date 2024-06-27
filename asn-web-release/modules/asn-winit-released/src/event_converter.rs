@@ -86,3 +86,7 @@ pub fn process_window_event(_window_id: &WindowId, e: &WindowEvent) -> Option<As
         WindowEvent::ThemeChanged(_) => None,
     }
 }
+
+pub fn decode_asn_event(evt: &AsnEvent) -> Option<Event<()>> {
+    Some(Event::LoopExiting)
+}
