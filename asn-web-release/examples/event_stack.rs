@@ -1,26 +1,29 @@
 use asn_core::events::{AsnEvent, AsnEventEmitter};
+use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 
 struct EventList {
-    events: Vec<AsnEvent>,
+    events: VecDeque<AsnEvent>,
 }
 
 fn new_event_list() -> EventList {
-    EventList { events: vec![] }
+    EventList {
+        events: VecDeque::new(),
+    }
 }
 
 impl AsnEventEmitter for EventList {
     fn emit(&mut self, e: AsnEvent) -> Result<(), String> {
         // println!("Emit {:?}", e);
-        self.events.push(e);
+        self.events.push_back(e);
         Ok(())
     }
 
     fn pull(&mut self) -> Option<AsnEvent> {
         // println!("Pull event...");
-        self.events.pop()
+        self.events.pop_front()
     }
 }
 
@@ -40,8 +43,8 @@ fn main() {
     });
 
     for i in 1..10 {
-        thread::sleep(Duration::from_millis(10));
-        let evt = shared_base.lock().unwrap().pull();
+        thread::sleep(Duration::from_millis(2));
+        let evt = shared_base.lock().unwrap().pull().unwrap();
         println!("hi {:?} from the main thread!", evt);
     }
 }
