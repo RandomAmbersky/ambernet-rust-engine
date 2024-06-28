@@ -54,33 +54,16 @@ where
         loop {
             match self.e.pull() {
                 None => break,
-                Some(evt) => match evt {
-                    AsnEvent::Empty => {}
-                    AsnEvent::UpdateEvent => {}
-                    AsnEvent::WindowEvent(win_evt) => {
-                        let window_id = self.window.as_ref().unwrap().id();
-                        let e = decode_asn_window_event(&win_evt, &window_id);
-                        info!("decode_asn_window_event: {:?}", e);
-                        match e {
-                            None => {}
-                            Some(winit_event) => {
-                                self.event_loop_proxy
-                                    .as_mut()
-                                    .unwrap()
-                                    .send_event(winit_event)
-                                    .unwrap();
-                            }
-                        }
-                    }
-                    AsnEvent::KeyboardEvent(_) => {}
-                },
+                Some(e) => {
+                    self.h.handle(&e, self.e);
+                }
             }
         }
         if let Some(window) = self.window.as_ref() {
             let e = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
             self.h.handle(&e, self.e);
-            // window.request_redraw();
-            // self.counter += 1;
+            window.request_redraw();
+            //     self.counter += 1;
         }
     }
 }

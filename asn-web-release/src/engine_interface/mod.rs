@@ -26,12 +26,7 @@ impl Default for EngineInterface {
 impl EngineInterface {
     pub fn run(&mut self) {
         let mut e = asn_engine_released::get_engine();
-        e.emit(AsnEvent::WindowEvent(CloseRequested)).unwrap();
-        // e.emit(AsnEvent::WindowEvent(Resized(Size2D {
-        //     width: 160,
-        //     height: 120,
-        // })))
-        // .unwrap();
+        // e.emit(AsnEvent::WindowEvent(CloseRequested)).unwrap();
         asn_winit_released::run_loop(&mut e, &mut self.h);
     }
     fn resize(&mut self) {}
