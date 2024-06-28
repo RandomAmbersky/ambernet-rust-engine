@@ -9,18 +9,23 @@ where
     trace!("handle {:?} event", &evt);
     match evt {
         AsnEvent::Empty => {}
-        AsnEvent::UpdateEvent => {
-            // self.update(e);
+        AsnEvent::UpdateEvent => {}
+        AsnEvent::WindowEvent(w) => handle_window_event(w, e),
+        _ => {}
+    }
+}
+
+pub fn handle_window_event<E>(w: &AsnWindowEvent, e: &mut E)
+where
+    E: TAsnBaseEngine,
+{
+    match w {
+        AsnWindowEvent::CloseRequested => {
+            e.set_need_exit();
         }
-        AsnEvent::WindowEvent(w) => match w {
-            AsnWindowEvent::CloseRequested => {
-                e.set_need_exit();
-            }
-            AsnWindowEvent::RedrawRequested => {
-                // self.draw(e);
-            }
-            _ => {}
-        },
+        AsnWindowEvent::RedrawRequested => {
+            // self.draw(e);
+        }
         _ => {}
     }
 }
