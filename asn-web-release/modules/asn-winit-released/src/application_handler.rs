@@ -27,16 +27,8 @@ where
         window_id: WindowId,
         event: WindowEvent,
     ) {
-        // `unwrap` is fine, the window will always be available when
-        // receiving a window event.
-        // let window = self.window.as_ref().unwrap();
-        // Handle window event.
-        match process_window_event(&window_id, &event) {
-            None => {}
-            Some(e) => {
-                self.h.handle(&e, self.e);
-            }
-        }
+        // Handle window event
+        info!("window_event: {:?}", event);
     }
     fn device_event(
         &mut self,
@@ -60,9 +52,10 @@ where
             }
         }
         if let Some(window) = self.window.as_ref() {
-            let e = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
-            self.h.handle(&e, self.e);
-            window.request_redraw();
+            let evt = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
+            self.e.emit(evt).unwrap();
+            // self.h.handle(&e, self.e);
+            // window.request_redraw();
             //     self.counter += 1;
         }
     }
