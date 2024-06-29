@@ -1,4 +1,4 @@
-use crate::event_converter::{decode_asn_window_event, process_window_event};
+use crate::event_converter::process_window_event;
 use crate::RunnerDataset;
 use asn_core::events::{AsnEvent, AsnEventEmitter, AsnWindowEvent};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
@@ -8,7 +8,7 @@ use winit::event::{DeviceEvent, DeviceId, Event, WindowEvent};
 use winit::event_loop::ActiveEventLoop;
 use winit::window::{Window, WindowId};
 
-impl<'a, E, H> ApplicationHandler<Event<()>> for RunnerDataset<'a, E, H>
+impl<'a, E, H> ApplicationHandler for RunnerDataset<'a, E, H>
 where
     E: TAsnBaseEngine + AsnEventEmitter,
     H: TAsnHandler<E>,

@@ -11,7 +11,7 @@ struct App {
     proxy_loop: Option<EventLoopProxy<Event<()>>>,
 }
 
-impl ApplicationHandler<Event<()>> for App {
+impl ApplicationHandler for App {
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
         // let window_attributes = Window::default_attributes().with_title("A fantastic window!");
         // self.window = Some(event_loop.create_window(window_attributes).unwrap());

@@ -14,7 +14,6 @@ where
     H: TAsnHandler<E>,
 {
     window: Option<Window>,
-    event_loop_proxy: Option<EventLoopProxy<Event<()>>>,
     e: &'a mut E,
     h: &'a mut H,
 }
@@ -24,12 +23,7 @@ where
     E: TAsnBaseEngine,
     H: TAsnHandler<E>,
 {
-    RunnerDataset {
-        event_loop_proxy: None,
-        window: None,
-        e,
-        h,
-    }
+    RunnerDataset { window: None, e, h }
 }
 
 pub fn run_loop<E, H>(e: &mut E, h: &mut H)
@@ -38,11 +32,8 @@ where
     H: TAsnHandler<E>,
 {
     trace!("run_loop:run");
-    let event_loop = EventLoop::<Event<()>>::with_user_event().build().unwrap();
-
-    let event_loop_proxy: EventLoopProxy<Event<()>> = event_loop.create_proxy();
+    let event_loop = EventLoop::new().unwrap();
 
     let mut r = new_runner_dataset(e, h);
-    r.event_loop_proxy = Some(event_loop_proxy);
     event_loop.run_app(&mut r).unwrap()
 }
