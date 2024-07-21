@@ -20,6 +20,7 @@ where
     E: TAsnBaseEngine,
 {
     fn handle(&mut self, evt: &AsnEvent, engine: &mut E) {
+        trace!("Handler:handle {:?}", evt);
         handle(evt, engine)
     }
 }
