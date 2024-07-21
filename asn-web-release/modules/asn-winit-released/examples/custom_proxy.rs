@@ -1,4 +1,3 @@
-use std::fs::OpenOptions;
 use std::thread;
 use winit::application::ApplicationHandler;
 use winit::event::{Event, WindowEvent};

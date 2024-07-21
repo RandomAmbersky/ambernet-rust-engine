@@ -1,10 +1,9 @@
-use crate::event_converter::process_window_event;
 use crate::RunnerDataset;
 use asn_core::events::{AsnEvent, AsnEventEmitter, AsnWindowEvent};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_logger::info;
 use winit::application::ApplicationHandler;
-use winit::event::{DeviceEvent, DeviceId, Event, WindowEvent};
+use winit::event::{DeviceEvent, DeviceId, WindowEvent};
 use winit::event_loop::ActiveEventLoop;
 use winit::window::{Window, WindowId};
 
@@ -23,35 +22,71 @@ where
     }
     fn window_event(
         &mut self,
-        event_loop: &ActiveEventLoop,
-        window_id: WindowId,
+        _event_loop: &ActiveEventLoop,
+        _window_id: WindowId,
         event: WindowEvent,
     ) {
         // Handle window event
         info!("window_event: {:?}", event);
+        match event {
+            WindowEvent::ActivationTokenDone { .. } => {}
+            WindowEvent::Resized(_) => {}
+            WindowEvent::Moved(_) => {}
+            WindowEvent::CloseRequested => {
+                let ev = AsnEvent::WindowEvent(AsnWindowEvent::CloseRequested);
+                self.e.emit(ev).unwrap();
+            }
+            WindowEvent::Destroyed => {}
+            WindowEvent::DroppedFile(_) => {}
+            WindowEvent::HoveredFile(_) => {}
+            WindowEvent::HoveredFileCancelled => {}
+            WindowEvent::Focused(_) => {}
+            WindowEvent::KeyboardInput { .. } => {}
+            WindowEvent::ModifiersChanged(_) => {}
+            WindowEvent::Ime(_) => {}
+            WindowEvent::CursorMoved { .. } => {}
+            WindowEvent::CursorEntered { .. } => {}
+            WindowEvent::CursorLeft { .. } => {}
+            WindowEvent::MouseWheel { .. } => {}
+            WindowEvent::MouseInput { .. } => {}
+            WindowEvent::PinchGesture { .. } => {}
+            WindowEvent::PanGesture { .. } => {}
+            WindowEvent::DoubleTapGesture { .. } => {}
+            WindowEvent::RotationGesture { .. } => {}
+            WindowEvent::TouchpadPressure { .. } => {}
+            WindowEvent::AxisMotion { .. } => {}
+            WindowEvent::Touch(_) => {}
+            WindowEvent::ScaleFactorChanged { .. } => {}
+            WindowEvent::ThemeChanged(_) => {}
+            WindowEvent::Occluded(_) => {}
+            WindowEvent::RedrawRequested => {}
+        };
     }
     fn device_event(
         &mut self,
-        event_loop: &ActiveEventLoop,
-        device_id: DeviceId,
-        event: DeviceEvent,
+        _event_loop: &ActiveEventLoop,
+        _device_id: DeviceId,
+        _event: DeviceEvent,
     ) {
         // Handle device event.
     }
     fn about_to_wait(&mut self, event_loop: &ActiveEventLoop) {
         if self.e.is_need_exit() {
             let _ = self.window.take();
-            event_loop.exit()
+            event_loop.exit();
+            return;
         }
         loop {
             match self.e.pull() {
                 None => break,
-                Some(e) => {
-                    self.h.handle(&e, self.e);
+                Some(evt) => {
+                    let mut h = &mut self.h;
+                    let e = &mut self.e;
+                    h.handle(&evt, e);
                 }
             }
         }
-        if let Some(window) = self.window.as_ref() {
+        if let Some(_window) = self.window.as_ref() {
             let evt = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
             self.e.emit(evt).unwrap();
             // self.h.handle(&e, self.e);

@@ -4,8 +4,8 @@ use asn_logger::trace;
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
 
-use asn_core::events::AsnEventEmitter;
-use asn_core::events::AsnWindowEvent::Resized;
+use asn_core::events::AsnWindowEvent::{CloseRequested, Resized};
+use asn_core::events::{AsnEvent, AsnEventEmitter};
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub struct EngineInterface {
@@ -32,4 +32,4 @@ impl EngineInterface {
 
 //   [Engine].run() -> [Loop] -> [Handler].handle() ------
 //                        ^                              !
-//                      emit() <-------------------------
+//    emit() <--------------------------------------------

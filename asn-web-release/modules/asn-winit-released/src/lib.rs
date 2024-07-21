@@ -1,12 +1,10 @@
-use asn_core::events::{AsnEvent, AsnEventEmitter};
+use asn_core::events::AsnEventEmitter;
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_logger::trace;
-use winit::event::Event;
-use winit::event_loop::{EventLoop, EventLoopProxy};
+use winit::event_loop::EventLoop;
 use winit::window::Window;
 
 mod application_handler;
-mod event_converter;
 
 pub struct RunnerDataset<'a, E, H>
 where
