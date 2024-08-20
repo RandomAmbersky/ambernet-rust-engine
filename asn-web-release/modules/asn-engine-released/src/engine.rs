@@ -29,6 +29,7 @@ impl TAsnBaseEngine for Engine {
 
 impl AsnEventEmitter for Engine {
     fn emit(&mut self, e: AsnEvent) -> Result<(), String> {
+        trace!("emit -> {:?}", e);
         self.state.lock().unwrap().events.push_back(e);
         Ok(())
     }

@@ -1,7 +1,7 @@
 use crate::RunnerDataset;
 use asn_core::events::{AsnEvent, AsnEventEmitter, AsnWindowEvent};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
-use asn_logger::info;
+use asn_logger::{info, trace};
 use winit::application::ApplicationHandler;
 use winit::event::{DeviceEvent, DeviceId, WindowEvent};
 use winit::event_loop::ActiveEventLoop;
@@ -27,7 +27,7 @@ where
         event: WindowEvent,
     ) {
         // Handle window event
-        info!("window_event: {:?}", event);
+        // info!("window_event: {:?}", event);
         match event {
             WindowEvent::ActivationTokenDone { .. } => {}
             WindowEvent::Resized(_) => {}
@@ -59,7 +59,11 @@ where
             WindowEvent::ScaleFactorChanged { .. } => {}
             WindowEvent::ThemeChanged(_) => {}
             WindowEvent::Occluded(_) => {}
-            WindowEvent::RedrawRequested => {}
+            WindowEvent::RedrawRequested => {
+                let evt = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
+                self.e.emit(evt).unwrap();
+                // self.window.request_redraw();
+            }
         };
     }
     fn device_event(
@@ -76,21 +80,23 @@ where
             event_loop.exit();
             return;
         }
+
         loop {
             match self.e.pull() {
                 None => break,
                 Some(evt) => {
-                    let mut h = &mut self.h;
+                    trace!("e.pull() -> {:?}", evt);
+                    let h = &mut self.h;
                     let e = &mut self.e;
                     h.handle(&evt, e);
                 }
             }
         }
+
         if let Some(_window) = self.window.as_ref() {
             let evt = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
             self.e.emit(evt).unwrap();
-            // self.h.handle(&e, self.e);
-            // window.request_redraw();
+            // _window.request_redraw();
             //     self.counter += 1;
         }
     }

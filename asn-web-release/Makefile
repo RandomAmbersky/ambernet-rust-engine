@@ -16,3 +16,9 @@ rust-build:
 
 rust-run:
 	cargo run --release
+
+show:
+	rustup show
+
+# example delete:
+# rustup toolchain remove 1.68-aarch64-apple-darwin
