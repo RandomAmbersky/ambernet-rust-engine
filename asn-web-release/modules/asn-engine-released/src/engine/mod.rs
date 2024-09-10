@@ -1,5 +1,5 @@
 mod asn_base_engine_impl;
-mod asn_event_emitter;
+mod asn_event_emitter_impl;
 
 use asn_core::events::{AsnEvent, AsnEventEmitter};
 use asn_logger::trace;
