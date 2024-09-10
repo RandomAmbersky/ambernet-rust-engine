@@ -3,6 +3,7 @@ use crate::runner_dataset::RunnerDataset;
 use asn_core::events::{AsnEvent, AsnEventEmitter, AsnWindowEvent};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_logger::{info, trace};
+use std::sync::Arc;
 use winit::application::ApplicationHandler;
 use winit::event::{DeviceEvent, DeviceId, WindowEvent};
 use winit::event_loop::ActiveEventLoop;
@@ -15,11 +16,12 @@ where
 {
     // This is a common indicator that you can create a window.
     fn resumed(&mut self, event_loop: &ActiveEventLoop) {
-        self.window = Some(
-            event_loop
-                .create_window(Window::default_attributes())
-                .unwrap(),
-        );
+        let window = event_loop
+            .create_window(Window::default_attributes())
+            .unwrap();
+        let w = Arc::new(window);
+        self.m.set_window(w.clone());
+        self.window = Some(w);
     }
     fn window_event(
         &mut self,
