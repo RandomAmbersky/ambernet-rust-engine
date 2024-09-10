@@ -24,7 +24,7 @@ where
             e.set_need_exit();
         }
         AsnWindowEvent::RedrawRequested => {
-            info!("handle_window_event redraw ----")
+            // info!("handle_window_event redraw ----")
             // self.draw(e);
         }
         _ => {}

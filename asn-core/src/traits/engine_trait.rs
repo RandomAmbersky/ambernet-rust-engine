@@ -1,4 +1,4 @@
-use crate::winapi::TAsnWinapi;
+// use crate::winapi::TAsnWinapi;
 
 pub trait TAsnBaseEngine {
     fn is_need_exit(&self) -> bool;
@@ -6,6 +6,6 @@ pub trait TAsnBaseEngine {
 }
 
 pub trait TAsnEngine: TAsnBaseEngine {
-    type WinApi: TAsnWinapi;
-    fn get_winapi(&mut self) -> &mut Self::WinApi;
+    // type WinApi: TAsnWinapi;
+    // fn get_winapi(&mut self) -> &mut Self::WinApi;
 }
