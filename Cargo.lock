@@ -135,18 +135,9 @@ dependencies = [
  "asn-core",
  "asn-engine-released",
  "asn-logger",
- "asn-wgpu-released",
  "asn-winit-released",
  "cfg-if",
  "wasm-bindgen",
-]
-
-[[package]]
-name = "asn-wgpu-released"
-version = "0.1.0"
-dependencies = [
- "asn-core",
- "asn-logger",
 ]
 
 [[package]]
@@ -1508,7 +1499,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]

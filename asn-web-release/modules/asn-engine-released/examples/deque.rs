@@ -1,6 +1,6 @@
 use asn_core::events::{AsnEvent, AsnEventEmitter};
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
-use asn_winit_released::run_loop;
+// use asn_winit_released::run_loop;
 use std::collections::VecDeque;
 
 #[derive(Default)]
@@ -44,5 +44,5 @@ impl TAsnHandler<Engine> for Handler {
 fn main() {
     let mut e = Engine::default();
     let mut h = Handler {};
-    run_loop(&mut e, &mut h);
+    // run_loop(&mut e, &mut h);
 }
