@@ -1,12 +1,10 @@
 mod asn_base_engine_impl;
 mod asn_event_emitter_impl;
 
-use asn_core::events::{AsnEvent, AsnEventEmitter};
+use asn_core::events::AsnEvent;
 use asn_logger::trace;
 use std::collections::VecDeque;
 use std::sync::{Arc, Mutex};
-
-use asn_core::traits::TAsnBaseEngine;
 
 #[derive(Default, Debug)]
 struct EngineState {
