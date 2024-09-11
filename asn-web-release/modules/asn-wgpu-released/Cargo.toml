@@ -9,6 +9,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 asn-core = { path = "../../../asn-core" }
 asn-logger = { path = "../../../asn-logger" }
+pollster = "0.3.0"
 winit = "0.30.5"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
