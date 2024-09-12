@@ -1,10 +1,13 @@
 use crate::wgpu_utils::get_surface_config;
+use crate::WinitAdapter;
+use asn_core::cgmath::Rad;
 use asn_core::errors::AsnError;
 use asn_core::math::Size2D;
 use asn_core_winapi::TAsnRenderManager;
 use std::iter;
 use std::sync::Arc;
 use wgpu::{Device, InstanceDescriptor, Queue, Surface};
+use winit::window::Window;
 
 pub struct AsnWgpuFrameContext {
     pub frame: wgpu::SurfaceTexture,
@@ -39,11 +42,8 @@ impl RenderManager {
     }
 }
 
-impl TAsnRenderManager for RenderManager {
-    type FrameContext = AsnWgpuFrameContext;
-    type Window = winit::window::Window;
-
-    fn set_window(&mut self, window: Arc<Self::Window>) {
+impl WinitAdapter for RenderManager {
+    fn init_window(&mut self, window: Arc<Window>) {
         let window_size = window.inner_size();
 
         let surface = unsafe {
@@ -85,6 +85,11 @@ impl TAsnRenderManager for RenderManager {
             queue,
         })
     }
+}
+
+impl TAsnRenderManager for RenderManager {
+    type FrameContext = AsnWgpuFrameContext;
+    type Window = winit::window::Window;
 
     fn window_resize(&mut self, size: Size2D<u32>) {
         todo!()

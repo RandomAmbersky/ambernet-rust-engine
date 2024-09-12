@@ -6,7 +6,6 @@ pub trait TAsnRenderManager {
     type FrameContext;
     type Window;
 
-    fn set_window(&mut self, window: Arc<Self::Window>);
     fn window_resize(&mut self, size: Size2D<u32>);
 
     fn begin_frame(&mut self) -> Result<Self::FrameContext, AsnError>;

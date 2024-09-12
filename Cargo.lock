@@ -180,6 +180,7 @@ name = "asn-winit-released"
 version = "0.1.0"
 dependencies = [
  "asn-core",
+ "asn-core-winapi",
  "asn-logger",
  "asn-wgpu-released",
  "winit",
