@@ -4,7 +4,7 @@ use asn_core::math::Size2D;
 use asn_core_winapi::TAsnRenderManager;
 use std::iter;
 use std::sync::Arc;
-use wgpu::{Device, Queue, Surface};
+use wgpu::{Device, InstanceDescriptor, Queue, Surface};
 
 pub struct AsnWgpuFrameContext {
     pub frame: wgpu::SurfaceTexture,
@@ -21,6 +21,22 @@ struct RenderManagerState<'a> {
 pub struct RenderManager {
     instance: wgpu::Instance,
     state: Option<RenderManagerState<'static>>,
+}
+
+impl RenderManager {
+    pub fn new() -> Self {
+        let instance = wgpu::Instance::new(InstanceDescriptor {
+            backends: wgpu::Backends::all(),
+            flags: Default::default(),
+            dx12_shader_compiler: Default::default(),
+            gles_minor_version: Default::default(),
+        });
+
+        RenderManager {
+            instance: Default::default(),
+            state: None,
+        }
+    }
 }
 
 impl TAsnRenderManager for RenderManager {
