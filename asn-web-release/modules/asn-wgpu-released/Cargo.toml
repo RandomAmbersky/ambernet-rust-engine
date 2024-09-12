@@ -8,6 +8,7 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 asn-core = { path = "../../../asn-core" }
+asn-core-winapi = { path = "../../../asn-core-winapi" }
 asn-logger = { path = "../../../asn-logger" }
 pollster = "0.3.0"
 winit = "0.30.5"
