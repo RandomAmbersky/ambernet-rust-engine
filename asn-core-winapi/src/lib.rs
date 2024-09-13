@@ -3,7 +3,6 @@ use asn_core::math::Size2D;
 
 pub trait TAsnRenderManager {
     type FrameContext;
-    type Window;
 
     fn window_resize(&mut self, size: Size2D<u32>);
 
