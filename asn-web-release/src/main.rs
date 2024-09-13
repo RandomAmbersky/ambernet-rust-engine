@@ -1,9 +1,9 @@
-use crate::engine::{init, run};
+use crate::engine::{init, Engine};
 
 mod engine;
 mod handler;
 
 fn main() {
-    let (mut e, mut r) = init();
-    run(&mut e, &mut r);
+    let mut e = init();
+    e.run()
 }
