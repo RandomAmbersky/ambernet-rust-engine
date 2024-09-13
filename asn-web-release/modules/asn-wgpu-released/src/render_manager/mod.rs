@@ -88,7 +88,6 @@ impl WinitAdapter for RenderManager {
 
 impl TAsnRenderManager for RenderManager {
     type FrameContext = AsnWgpuFrameContext;
-    type Window = winit::window::Window;
 
     fn window_resize(&mut self, _size: Size2D<u32>) {
         todo!()
