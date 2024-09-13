@@ -1,3 +1,4 @@
+use crate::handler::Handler;
 use asn_core::events::AsnEventEmitter;
 use asn_core::traits::TAsnBaseEngine;
 use asn_core_winapi::TAsnRenderManager;
@@ -22,7 +23,8 @@ where
     R: TAsnRenderManager + WinitAdapter,
 {
     fn run(&mut self) {
-        todo!()
+        let mut h = Handler {};
+        asn_winit_released::run_loop(&mut self.e, &mut h, &mut self.r);
     }
 }
 
