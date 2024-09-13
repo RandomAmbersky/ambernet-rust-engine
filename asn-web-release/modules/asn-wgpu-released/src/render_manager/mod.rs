@@ -1,6 +1,5 @@
 use crate::wgpu_utils::get_surface_config;
 use crate::WinitAdapter;
-use asn_core::cgmath::Rad;
 use asn_core::errors::AsnError;
 use asn_core::math::Size2D;
 use asn_core_winapi::TAsnRenderManager;
@@ -36,7 +35,7 @@ impl RenderManager {
         });
 
         RenderManager {
-            instance: Default::default(),
+            instance,
             state: None,
         }
     }
@@ -91,7 +90,7 @@ impl TAsnRenderManager for RenderManager {
     type FrameContext = AsnWgpuFrameContext;
     type Window = winit::window::Window;
 
-    fn window_resize(&mut self, size: Size2D<u32>) {
+    fn window_resize(&mut self, _size: Size2D<u32>) {
         todo!()
     }
 

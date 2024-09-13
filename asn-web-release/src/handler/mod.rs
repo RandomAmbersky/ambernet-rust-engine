@@ -8,13 +8,6 @@ use asn_logger::trace;
 #[derive(Default, Debug)]
 pub struct Handler {}
 
-impl Handler {
-    pub fn new() -> Self {
-        trace!("Handler:new");
-        Self::default()
-    }
-}
-
 impl<E> TAsnHandler<E> for Handler
 where
     E: TAsnBaseEngine + AsnEventEmitter,
