@@ -155,6 +155,7 @@ name = "asn-web-release"
 version = "0.1.0"
 dependencies = [
  "asn-core",
+ "asn-core-winapi",
  "asn-engine-released",
  "asn-logger",
  "asn-wgpu-released",

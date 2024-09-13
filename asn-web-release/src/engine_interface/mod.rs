@@ -6,7 +6,6 @@ use wasm_bindgen::prelude::*;
 
 use asn_core::events::AsnWindowEvent::{CloseRequested, Resized};
 use asn_core::events::{AsnEvent, AsnEventEmitter};
-use asn_winit_released::run_loop;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
 pub struct EngineInterface {
@@ -25,8 +24,8 @@ impl Default for EngineInterface {
 impl EngineInterface {
     pub fn run(&mut self) {
         let mut e = asn_engine_released::get_engine();
-        // e.emit(AsnEvent::WindowEvent(CloseRequested)).unwrap();
-        run_loop(&mut e, &mut self.h);
+        let mut r = asn_wgpu_released::get_render_manager();
+        asn_winit_released::run_loop(&mut e, &mut self.h, &mut r);
     }
     fn resize(&mut self) {}
 }

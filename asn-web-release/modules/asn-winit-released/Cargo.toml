@@ -12,4 +12,3 @@ asn-core-winapi = { path = "../../../asn-core-winapi" }
 asn-logger = { path = "../../../asn-logger" }
 asn-wgpu-released = { path = "../asn-wgpu-released" }
 winit = "0.30.5"
-

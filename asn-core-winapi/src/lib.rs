@@ -1,6 +1,5 @@
 use asn_core::errors::AsnError;
 use asn_core::math::Size2D;
-use std::sync::Arc;
 
 pub trait TAsnRenderManager {
     type FrameContext;

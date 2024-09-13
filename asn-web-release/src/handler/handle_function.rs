@@ -1,10 +1,10 @@
-use asn_core::events::{AsnEvent, AsnWindowEvent};
+use asn_core::events::{AsnEvent, AsnEventEmitter, AsnWindowEvent};
 use asn_core::traits::TAsnBaseEngine;
 use asn_logger::{info, trace};
 
 pub fn handle<E>(evt: &AsnEvent, e: &mut E)
 where
-    E: TAsnBaseEngine,
+    E: TAsnBaseEngine + AsnEventEmitter,
 {
     // trace!("handle {:?} event", &evt);
     match evt {
@@ -17,7 +17,7 @@ where
 
 pub fn handle_window_event<E>(w: &AsnWindowEvent, e: &mut E)
 where
-    E: TAsnBaseEngine,
+    E: TAsnBaseEngine + AsnEventEmitter,
 {
     match w {
         AsnWindowEvent::CloseRequested => {

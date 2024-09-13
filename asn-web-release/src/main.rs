@@ -1,6 +1,9 @@
-use asn_web_release::init;
+use crate::engine::{init, run};
+
+mod engine;
+mod handler;
 
 fn main() {
-    let mut e = init();
-    e.run();
+    let (mut e, mut r) = init();
+    run(&mut e, &mut r);
 }
