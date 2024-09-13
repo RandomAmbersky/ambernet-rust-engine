@@ -18,8 +18,6 @@ where
     trace!("run_loop:run");
     let event_loop = EventLoop::new().unwrap();
 
-    // let mut m = asn_wgpu_released::get_render_manager();
-
     let mut runner = new_runner_dataset(e, h, r);
     event_loop.run_app(&mut runner).unwrap()
 }
