@@ -14,8 +14,8 @@ where
     E: TAsnBaseEngine + AsnEventEmitter,
     R: TAsnRenderManager + TAsnWindowManager<Window = WinitWindow>,
 {
-    e: Arc<E>,
-    r: Arc<R>,
+    e: E,
+    r: R,
 }
 
 impl<E, R> Engine for MyEngine<E, R>
@@ -25,17 +25,12 @@ where
 {
     fn run(&mut self) {
         let mut h = Handler {};
-        // let mut e = Arc::clone(&self.e);
-        // let mut r = Arc::clone(&self.r).as_ref();
-        asn_winit_released::run_loop(&mut self.e, &mut h, &r);
+        asn_winit_released::run_loop(&mut self.e, &mut h, &mut self.r);
     }
 }
 
 pub fn init() -> impl Engine {
     let e = asn_engine_released::get_engine();
     let r = asn_wgpu_released::get_render_manager();
-    MyEngine {
-        e: Arc::new(e),
-        r: Arc::new(r),
-    }
+    MyEngine { e, r }
 }
