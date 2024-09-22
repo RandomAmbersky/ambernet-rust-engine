@@ -1,8 +1,7 @@
 use crate::wgpu_utils::get_surface_config;
-use crate::WinitAdapter;
 use asn_core::errors::AsnError;
 use asn_core::math::Size2D;
-use asn_core_winapi::TAsnRenderManager;
+use asn_core_winapi::{TAsnRenderManager, TAsnWindowManager};
 use std::iter;
 use std::sync::Arc;
 use wgpu::{Device, InstanceDescriptor, Queue, Surface};
@@ -41,8 +40,10 @@ impl RenderManager {
     }
 }
 
-impl WinitAdapter for RenderManager {
-    fn init_window(&mut self, window: Arc<Window>) {
+impl TAsnWindowManager for RenderManager {
+    type Window = winit::window::Window;
+
+    fn init_window(&mut self, window: Arc<Self::Window>) {
         let window_size = window.inner_size();
 
         let surface = unsafe {
@@ -84,14 +85,13 @@ impl WinitAdapter for RenderManager {
             queue,
         })
     }
+    fn window_resize(&mut self, _size: Size2D<u32>) {
+        todo!()
+    }
 }
 
 impl TAsnRenderManager for RenderManager {
     type FrameContext = AsnWgpuFrameContext;
-
-    fn window_resize(&mut self, _size: Size2D<u32>) {
-        todo!()
-    }
 
     fn begin_frame(&mut self) -> Result<Self::FrameContext, AsnError> {
         let state = self.state.as_mut().unwrap();
