@@ -14,7 +14,7 @@ mod runner_dataset;
 
 pub type WinitWindow = winit::window::Window;
 
-pub fn run_loop<E, H, R>(e: &mut E, h: &mut H, r: &R)
+pub fn run_loop<E, H, R>(e: &mut E, h: &mut H, r: &mut R)
 where
     E: TAsnBaseEngine + AsnEventEmitter,
     H: TAsnHandler<E>,
