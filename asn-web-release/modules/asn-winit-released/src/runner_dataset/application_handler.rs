@@ -31,7 +31,7 @@ where
         window_id: WindowId,
         event: WindowEvent,
     ) {
-        // (?)
+        trace!("window_event: {:?}", event);
         if event == WindowEvent::Destroyed {
             event_loop.exit();
             return;
@@ -75,7 +75,7 @@ where
         }
 
         if let Some(window) = self.window.as_ref() {
-            window.request_redraw();
+            // window.request_redraw();
             // let evt = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
             // self.e.emit(evt).unwrap();
             // _window.request_redraw();

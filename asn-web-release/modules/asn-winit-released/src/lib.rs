@@ -5,9 +5,7 @@ use asn_core::events::AsnEventEmitter;
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
 use asn_core_winapi::{TAsnRenderManager, TAsnWindowManager};
 use asn_logger::trace;
-use std::sync::Arc;
 use winit::event_loop::EventLoop;
-use winit::window::Window;
 
 mod event_converter;
 mod runner_dataset;
