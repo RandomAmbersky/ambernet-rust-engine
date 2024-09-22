@@ -25,9 +25,9 @@ where
 {
     fn run(&mut self) {
         let mut h = Handler {};
-        let mut e = Arc::clone(&self.e);
-        let mut r = Arc::clone(&self.r);
-        asn_winit_released::run_loop(&mut e, &mut h, &r);
+        // let mut e = Arc::clone(&self.e);
+        // let mut r = Arc::clone(&self.r).as_ref();
+        asn_winit_released::run_loop(&mut self.e, &mut h, &r);
     }
 }
 
