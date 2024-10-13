@@ -9,7 +9,9 @@ where
     // trace!("handle {:?} event", &evt);
     match evt {
         AsnEvent::Empty => {}
-        AsnEvent::UpdateEvent => {}
+        AsnEvent::UpdateEvent => {
+            trace!("handle {:?} event", &evt);
+        }
         AsnEvent::WindowEvent(w) => handle_window_event(w, e),
         _ => {}
     }
@@ -24,7 +26,7 @@ where
             e.set_need_exit();
         }
         AsnWindowEvent::RedrawRequested => {
-            // info!("handle_window_event redraw ----")
+            info!("handle_window_event redraw ----")
             // self.draw(e);
         }
         _ => {}
