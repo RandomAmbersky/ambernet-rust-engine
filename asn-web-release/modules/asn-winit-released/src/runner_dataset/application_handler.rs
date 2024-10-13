@@ -81,7 +81,7 @@ where
             // window.request_redraw();
             // let evt = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
             // self.e.emit(evt).unwrap();
-            window.request_redraw();
+            // window.request_redraw();
             //     self.counter += 1;
         }
     }
