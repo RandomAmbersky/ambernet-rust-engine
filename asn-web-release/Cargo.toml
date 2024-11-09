@@ -18,4 +18,4 @@ asn-core-winapi = { path = "../asn-core-winapi" }
 asn-wgpu-released = { path = "./modules/asn-wgpu-released" }
 asn-engine-released = { path = "./modules/asn-engine-released" }
 asn-winit-released = { path = "./modules/asn-winit-released" }
-wasm-bindgen = "0.2.93"
+wasm-bindgen = "0.2.95"

@@ -10,14 +10,14 @@ crate-type = ["cdylib", "rlib"]
 asn-core = { path = "../../../asn-core" }
 asn-core-winapi = { path = "../../../asn-core-winapi" }
 asn-logger = { path = "../../../asn-logger" }
-pollster = "0.3.0"
+pollster = "0.4.0"
 winit = "0.30.5"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-wgpu = { version = "22.1.0" }
+wgpu = { version = "23.0.0" }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
-wgpu = { version = "22.1.0", default-features = false, features = [
+wgpu = { version = "23.0.0", default-features = false, features = [
     "wgsl",
     "dx12",
     "metal",

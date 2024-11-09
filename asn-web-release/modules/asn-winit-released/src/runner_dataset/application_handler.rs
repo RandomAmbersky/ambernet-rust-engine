@@ -74,13 +74,14 @@ where
             }
         }
 
+        info!("about_to_wait...");
         let evt = AsnEvent::UpdateEvent;
         self.e.emit(evt).unwrap();
 
         if let Some(window) = self.window.as_ref() {
             // window.request_redraw();
-            // let evt = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
-            // self.e.emit(evt).unwrap();
+            let evt = AsnEvent::WindowEvent(AsnWindowEvent::RedrawRequested);
+            self.e.emit(evt).unwrap();
             // window.request_redraw();
             //     self.counter += 1;
         }
