@@ -13,7 +13,7 @@ where
     E: TAsnBaseEngine + AsnEventEmitter,
 {
     fn handle(&mut self, evt: &AsnEvent, engine: &mut E) {
-        // trace!("Handler:handle {:?}", evt);
+        trace!("Handler:handle {:?}", evt);
         handle(evt, engine)
     }
 }

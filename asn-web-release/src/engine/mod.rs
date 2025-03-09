@@ -1,5 +1,5 @@
 use crate::handler::Handler;
-use asn_core::events::{AsnEventEmitter, AsnWindowEvent};
+use asn_core::events::AsnEventEmitter;
 use asn_core::traits::TAsnBaseEngine;
 use asn_core_winapi::{TAsnRenderManager, TAsnWindowManager};
 use asn_winit_released::WinitWindow;
