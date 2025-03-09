@@ -26,12 +26,12 @@ pub struct RenderManager {
 
 impl RenderManager {
     pub fn new() -> Self {
-        let instance = wgpu::Instance::new(InstanceDescriptor {
+        let inst_desc = InstanceDescriptor {
             backends: wgpu::Backends::all(),
             flags: Default::default(),
-            dx12_shader_compiler: Default::default(),
-            gles_minor_version: Default::default(),
-        });
+            backend_options: Default::default(),
+        };
+        let instance = wgpu::Instance::new(&inst_desc);
 
         RenderManager {
             instance,
