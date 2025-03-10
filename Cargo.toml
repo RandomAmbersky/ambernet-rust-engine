@@ -2,9 +2,10 @@
 resolver = "2"
 members = [
 #    "sannbox-wgpu",
-    "asn-web-release"
+    "asn-web-release",
 #    "asn-image",
-#    "asn-core"
+    "asn-core",
+    "asn-logger"
 ]
 
 #exclude = []
