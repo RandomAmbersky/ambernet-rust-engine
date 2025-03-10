@@ -6,7 +6,7 @@ members = [
 #    "asn-image",
     "asn-core",
     "asn-logger"
-]
+, "examples/asn-released"]
 
 #exclude = []
 #default-members = [
