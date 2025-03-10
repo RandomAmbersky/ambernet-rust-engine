@@ -118,13 +118,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "asn-core-winapi"
-version = "0.1.0"
-dependencies = [
- "asn-core",
-]
-
-[[package]]
 name = "asn-engine-released"
 version = "0.1.0"
 dependencies = [
@@ -153,10 +146,10 @@ name = "asn-web-release"
 version = "0.1.0"
 dependencies = [
  "asn-core",
- "asn-core-winapi",
  "asn-engine-released",
  "asn-logger",
  "asn-wgpu-released",
+ "asn-winapi-traits",
  "asn-winit-released",
  "cfg-if",
  "wasm-bindgen",
@@ -167,11 +160,18 @@ name = "asn-wgpu-released"
 version = "0.1.0"
 dependencies = [
  "asn-core",
- "asn-core-winapi",
  "asn-logger",
+ "asn-winapi-traits",
  "pollster",
  "wgpu",
  "winit",
+]
+
+[[package]]
+name = "asn-winapi-traits"
+version = "0.1.0"
+dependencies = [
+ "asn-core",
 ]
 
 [[package]]
@@ -179,9 +179,9 @@ name = "asn-winit-released"
 version = "0.1.0"
 dependencies = [
  "asn-core",
- "asn-core-winapi",
  "asn-logger",
  "asn-wgpu-released",
+ "asn-winapi-traits",
  "winit",
 ]
 

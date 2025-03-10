@@ -1,5 +1,5 @@
 [package]
-name = "asn-core-winapi"
+name = "asn-winapi-traits"
 version = "0.1.0"
 edition = "2024"
 
