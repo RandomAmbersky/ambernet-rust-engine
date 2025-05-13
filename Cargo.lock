@@ -140,6 +140,10 @@ dependencies = [
 [[package]]
 name = "asn-released"
 version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "asn-logger",
+]
 
 [[package]]
 name = "asn-web-release"
