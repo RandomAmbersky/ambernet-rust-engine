@@ -10,3 +10,8 @@ target/
 web_build/
 /www/pkg/
 /sannbox-wgpu/pkg/
+
+
+# Added by cargo
+
+/target
