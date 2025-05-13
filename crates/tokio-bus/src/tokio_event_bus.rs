@@ -1,4 +1,3 @@
-use asn_core::asn_event::AsnEvent;
 use asn_core_bus::{AsnBus, AsnBusRecvError, AsnTransmitter};
 use asn_core_bus::{AsnBusSendError, AsnReceiver};
 use tokio::sync::broadcast;
