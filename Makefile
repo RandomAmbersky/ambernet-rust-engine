@@ -1,5 +1,7 @@
-AMBERSKYNET_LIB_PATH=./src/amberskynet/
-MANIFEST_PATH=./src/amberskynet/Cargo.toml
+.PHONY = *
 
 run:
-    cargo run
+	cargo run
+
+doc:
+	cargo doc
