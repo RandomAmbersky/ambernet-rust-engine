@@ -29,7 +29,7 @@ where
     }
 }
 
-pub fn new_asn_module_pool<B>(bus: B) -> impl AsnModulePool<B>
+pub fn new_module_pool<B>(bus: B) -> impl AsnModulePool<B>
 where
     B: AsnBus<AsnEvent>,
 {
