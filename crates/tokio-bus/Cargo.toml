@@ -9,4 +9,4 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 asn-core = { path = "../../modules/asn-core" }
 asn-core-bus = { path = "../../modules/asn-core-bus" }
-tokio = { version = "1.45.0", features = ["full"] }
+tokio.workspace = true

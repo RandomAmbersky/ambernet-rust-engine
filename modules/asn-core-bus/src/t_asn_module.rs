@@ -1,11 +1,14 @@
 extern crate asn_core;
 
-use crate::t_asn_bus::AsnBus;
+use crate::t_asn_bus::AsnReceiver;
+use crate::t_asn_bus::AsnTransmitter;
+use asn_core::asn_event::AsnEvent;
 
-pub trait AsnModule<B, E>
-where
-    B: AsnBus<E>,
-{
-    fn init(&self, bus: B) -> Result<(), String>;
-    fn run_module(&self) -> Result<(), String>;
+pub trait AsnModule {
+    fn init(
+        &self,
+        t: impl AsnTransmitter<AsnEvent>,
+        r: impl AsnReceiver<AsnEvent>,
+    ) -> Result<(), String>;
+    fn run(&self) -> Result<(), String>;
 }

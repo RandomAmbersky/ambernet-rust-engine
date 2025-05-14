@@ -23,6 +23,7 @@ version = "0.1.0"
 dependencies = [
  "asn-core",
  "asn-core-bus",
+ "module-pool",
  "tokio-bus",
 ]
 
@@ -122,6 +123,14 @@ dependencies = [
  "libc",
  "wasi",
  "windows-sys",
+]
+
+[[package]]
+name = "module-pool"
+version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "asn-core-bus",
 ]
 
 [[package]]

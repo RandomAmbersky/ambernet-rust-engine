@@ -1,0 +1,8 @@
+[package]
+name = "module-pool"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+asn-core = { path = "../../modules/asn-core" }
+asn-core-bus = { path = "../../modules/asn-core-bus" }
