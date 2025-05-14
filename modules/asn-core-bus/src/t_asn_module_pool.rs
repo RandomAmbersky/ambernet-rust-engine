@@ -1,10 +1,9 @@
 use crate::AsnBus;
 use crate::AsnModule;
-use asn_core::asn_event::AsnEvent;
 
-pub trait AsnModulePool<B>
+pub trait AsnModulePool<B, M>
 where
-    B: AsnBus<AsnEvent>,
+    B: AsnBus<M>,
 {
-    fn add_module(&self, m: impl AsnModule) -> Result<(), String>;
+    fn add_module(&self, m: impl AsnModule<M>) -> Result<(), String>;
 }

@@ -1,27 +1,31 @@
 use asn_core::asn_event::AsnEvent;
 use asn_core_bus::{AsnBus, AsnModule, AsnModulePool};
 
-pub struct Pool<B>
+pub struct Pool<B, M>
 where
-    B: AsnBus<AsnEvent>,
+    B: AsnBus<M>,
 {
     bus: B,
+    _phantom: std::marker::PhantomData<M>,
 }
 
-impl<B> Pool<B>
+impl<B, M> Pool<B, M>
 where
-    B: AsnBus<AsnEvent>,
+    B: AsnBus<M>,
 {
-    fn new(bus: B) -> Pool<B> {
-        Pool { bus }
+    fn new(bus: B) -> Pool<B, M> {
+        Pool {
+            bus,
+            _phantom: Default::default(),
+        }
     }
 }
 
-impl<B> AsnModulePool<B> for Pool<B>
+impl<B, M> AsnModulePool<B, M> for Pool<B, M>
 where
-    B: AsnBus<AsnEvent>,
+    B: AsnBus<M>,
 {
-    fn add_module(&self, m: impl AsnModule) -> Result<(), String> {
+    fn add_module(&self, m: impl AsnModule<M>) -> Result<(), String> {
         let t = self.bus.get_sender();
         let r = self.bus.get_receiver();
         m.init(t, r).unwrap();
@@ -29,7 +33,7 @@ where
     }
 }
 
-pub fn new_module_pool<B>(bus: B) -> impl AsnModulePool<B>
+pub fn new_module_pool<B>(bus: B) -> impl AsnModulePool<B, AsnEvent>
 where
     B: AsnBus<AsnEvent>,
 {

@@ -9,7 +9,7 @@ use tokio_bus::new_tokio_bus;
 
 struct Module1 {}
 
-impl AsnModule for Module1 {
+impl AsnModule<AsnEvent> for Module1 {
     fn init(
         &self,
         _t: impl AsnTransmitter<AsnEvent>,

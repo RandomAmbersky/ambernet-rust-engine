@@ -11,15 +11,15 @@ pub enum AsnBusRecvError {
     Closed,
 }
 
-pub trait AsnTransmitter<T> {
-    fn send_message(&self, m: T) -> Result<(), AsnBusSendError>;
+pub trait AsnTransmitter<M> {
+    fn send_message(&self, m: M) -> Result<(), AsnBusSendError>;
 }
 
-pub trait AsnReceiver<T> {
-    fn get_message(&mut self) -> Result<T, AsnBusRecvError>;
+pub trait AsnReceiver<M> {
+    fn get_message(&mut self) -> Result<M, AsnBusRecvError>;
 }
 
-pub trait AsnBus<E> {
-    fn get_sender(&self) -> impl AsnTransmitter<E>;
-    fn get_receiver(&self) -> impl AsnReceiver<E>;
+pub trait AsnBus<M> {
+    fn get_sender(&self) -> impl AsnTransmitter<M>;
+    fn get_receiver(&self) -> impl AsnReceiver<M>;
 }
