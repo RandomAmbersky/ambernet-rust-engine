@@ -1,4 +1,3 @@
-use asn_core::asn_event::AsnEvent;
 use asn_core_bus::{AsnBus, AsnModule, AsnModulePool};
 
 pub struct Pool<B, M>
@@ -33,9 +32,9 @@ where
     }
 }
 
-pub fn new_module_pool<B>(bus: B) -> impl AsnModulePool<B, AsnEvent>
+pub fn new_module_pool<B, M>(bus: B) -> impl AsnModulePool<B, M>
 where
-    B: AsnBus<AsnEvent>,
+    B: AsnBus<M>,
 {
     Pool::new(bus)
 }
