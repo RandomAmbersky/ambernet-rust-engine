@@ -15,7 +15,7 @@ members = [
 asn-core = { path = "./modules/asn-core" }
 asn-core-bus = { path = "./modules/asn-core-bus" }
 tokio-bus = { path = "./crates/tokio-bus" }
-module-pool = { path = "./crates/module-pool" }
+tokio-worker-pool = { path = "./crates/tokio-worker-pool" }
 
 [workspace.dependencies]
 tokio = { version = "1.45.0", features = ["full"] }

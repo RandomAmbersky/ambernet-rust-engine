@@ -23,8 +23,8 @@ version = "0.1.0"
 dependencies = [
  "asn-core",
  "asn-core-bus",
- "module-pool",
  "tokio-bus",
+ "tokio-worker-pool",
 ]
 
 [[package]]
@@ -123,14 +123,6 @@ dependencies = [
  "libc",
  "wasi",
  "windows-sys",
-]
-
-[[package]]
-name = "module-pool"
-version = "0.1.0"
-dependencies = [
- "asn-core",
- "asn-core-bus",
 ]
 
 [[package]]
@@ -282,6 +274,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "tokio-worker-pool"
+version = "0.1.0"
+dependencies = [
+ "asn-core",
+ "asn-core-bus",
+ "tokio",
 ]
 
 [[package]]
