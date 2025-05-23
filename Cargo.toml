@@ -8,7 +8,7 @@ resolver = "2"
 members = [
     # All of Bevy's official crates are within the `crates` folder!
     "crates/*",
-    "modules/*",
+    "modules/*", "web-project",
 ]
 
 [dependencies]

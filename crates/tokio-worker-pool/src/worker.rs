@@ -31,7 +31,7 @@ impl Worker {
                 match task {
                     Some(job) => {
                         println!("Worker {id} got a job; executing.");
-                        job(id.clone());
+                        job(id);
                         println!("Worker {id} job ending.");
                     }
                     None => {
