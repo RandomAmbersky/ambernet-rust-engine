@@ -24,7 +24,8 @@ onresize = (event) => {
 rust
   .then(p => {
     console.log(p)
-    p.greet()
+    engine = p.get_engine()
+    // p.greet()
     // engine = p.init()
     // engine.run()
     // console.log(engine)
