@@ -2,9 +2,10 @@ extern crate asn_logger;
 
 mod asn_engine_errors;
 mod asn_web_pool;
+mod dto_web_messages;
 
 use asn_logger::AsnLogLevel;
-use asn_web_pool::{AsnWebPool, new_asn_web_pool};
+use asn_web_pool::{new_asn_web_pool, AsnWebPool};
 use wasm_bindgen::prelude::*;
 
 // #[wasm_bindgen]
