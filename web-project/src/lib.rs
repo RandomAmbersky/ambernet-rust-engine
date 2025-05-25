@@ -7,10 +7,10 @@ use asn_logger::AsnLogLevel;
 use asn_web_pool::{AsnWebPool, new_asn_web_pool};
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
+// #[wasm_bindgen]
+// extern "C" {
+//     fn alert(s: &str);
+// }
 
 #[wasm_bindgen]
 pub fn get_engine() -> AsnWebPool {
@@ -19,7 +19,7 @@ pub fn get_engine() -> AsnWebPool {
     new_asn_web_pool()
 }
 
-#[wasm_bindgen]
-pub fn greet() {
-    alert("Hello, {{project-name}}!");
-}
+// #[wasm_bindgen]
+// pub fn greet() {
+//     alert("Hello, {{project-name}}!");
+// }
