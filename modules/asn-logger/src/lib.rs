@@ -4,7 +4,7 @@ mod mapper;
 
 use crate::mapper::convert;
 pub use asn_log_level::AsnLogLevel;
-pub use log::{debug, info, log, trace, warn, Level};
+pub use log::{Level, debug, info, log, trace, warn};
 
 pub fn init_log(l: AsnLogLevel) {
     let log_level_filter = convert(l);

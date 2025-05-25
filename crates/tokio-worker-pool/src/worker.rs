@@ -1,8 +1,8 @@
-use std::sync::Arc;
 use crate::job::Job;
+use std::sync::Arc;
 
 use tokio::{
-    sync::{mpsc, Mutex},
+    sync::{Mutex, mpsc},
     task::JoinHandle,
 };
 

@@ -6,7 +6,7 @@ use crate::worker::Worker;
 use asn_core_bus::AsnWorkerPool;
 use std::sync::Arc;
 use tokio::runtime::Runtime;
-use tokio::sync::{mpsc, Mutex};
+use tokio::sync::{Mutex, mpsc};
 
 pub struct TokioWorkerPool {
     rt: Runtime,
