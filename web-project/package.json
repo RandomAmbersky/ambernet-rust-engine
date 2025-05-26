@@ -1,5 +1,5 @@
 {
-  "name": "wasm-game-of-life",
+  "name": "asn-web-project",
   "scripts": {
     "build": "webpack",
     "serve": "webpack-dev-server"

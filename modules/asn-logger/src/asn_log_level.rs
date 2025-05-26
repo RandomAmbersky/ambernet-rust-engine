@@ -25,7 +25,7 @@ impl Display for AsnLogLevel {
 }
 
 impl AsnLogLevel {
-    fn from_string(s: String) -> Result<AsnLogLevel, String> {
+    pub fn from_string(s: String) -> Result<AsnLogLevel, String> {
         match s.to_lowercase().as_str() {
             "off" => Ok(AsnLogLevel::Off),
             "error" => Ok(AsnLogLevel::Error),

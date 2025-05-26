@@ -1,5 +1,4 @@
 use crate::AsnLogLevel;
-pub use log;
 use log::LevelFilter;
 
 pub fn convert(l: AsnLogLevel) -> LevelFilter {

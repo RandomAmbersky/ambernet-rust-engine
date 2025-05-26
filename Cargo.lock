@@ -352,7 +352,6 @@ name = "project-web"
 version = "0.1.0"
 dependencies = [
  "asn-logger",
- "console_error_panic_hook",
  "wasm-bindgen",
  "wasm-bindgen-test",
 ]

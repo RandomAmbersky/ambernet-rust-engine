@@ -3,6 +3,10 @@ name = "asn-logger"
 version = "0.1.0"
 edition = "2024"
 
+[features]
+default = []
+test_messages = []
+
 [dependencies]
 cfg-if = "1"
 log = "0.4.27"
