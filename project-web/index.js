@@ -17,6 +17,9 @@ onresize = (event) => {
     canvas.height = window.innerHeight
     canvas.width = window.innerWidth
     console.log(canvas.width, canvas.height)
+    if (engine) {
+      engine.log("debug", "debug", "debug")
+    }
 //     engine.resize()
   }
 }
@@ -25,6 +28,7 @@ rust
   .then(p => {
     console.log(p)
     engine = p.get_engine()
+    engine.run()
     // p.greet()
     // engine = p.init()
     // engine.run()
