@@ -23,7 +23,6 @@ version = "0.1.0"
 dependencies = [
  "asn-core",
  "asn-core-bus",
- "asn-logger 0.1.0",
  "tokio-bus",
  "tokio-worker-pool",
 ]
@@ -52,18 +51,6 @@ name = "asn-core-bus"
 version = "0.1.0"
 dependencies = [
  "asn-core",
-]
-
-[[package]]
-name = "asn-logger"
-version = "0.1.0"
-dependencies = [
- "cfg-if",
- "chrono",
- "console_error_panic_hook",
- "console_log",
- "fern",
- "log",
 ]
 
 [[package]]
@@ -372,7 +359,7 @@ dependencies = [
 name = "project-web"
 version = "0.1.0"
 dependencies = [
- "asn-logger 2.1.1",
+ "asn-logger",
  "wasm-bindgen",
  "wasm-bindgen-test",
 ]

@@ -14,7 +14,6 @@ members = [
 [dependencies]
 asn-core = { path = "./modules/asn-core" }
 asn-core-bus = { path = "./modules/asn-core-bus" }
-asn-logger = { path = "./modules/asn-logger" }
 tokio-bus = { path = "./crates/tokio-bus" }
 tokio-worker-pool = { path = "./crates/tokio-worker-pool" }
 
