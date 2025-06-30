@@ -10,7 +10,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 wasm-bindgen = "0.2"
-asn-logger = { git = "https://github.com/amberskynet/asn-logger.git", tag = "1.0.0", features = [] }
+asn-logger = { git = "https://github.com/amberskynet/asn-logger.git", tag = "2.1.1", features = [] }
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.50"

@@ -10,14 +10,16 @@ impl AsnWebPool {
         trace("AsnWebPool", " AsnWebPool run...");
     }
     pub fn log(&self, l: String, t: String, m: String) {
-        let lv = AsnLogLevel::from_string(l.clone()).unwrap_or(AsnLogLevel::Off);
-        if lv == AsnLogLevel::Off {
+        let lv = AsnLogLevel::from_string(l.clone());
+
+        if lv.is_err() {
             warn(
                 "AsnWebPool",
-                &format!("AsnLogLevel::from_string cant convert from '{}'", l),
+                &format!("AsnLogLevel::from_string cant convert from '{l}'"),
             );
         }
-        match lv {
+
+        match lv.unwrap_or(AsnLogLevel::Off) {
             AsnLogLevel::Off => {}
             AsnLogLevel::Error => error(&t, &m),
             AsnLogLevel::Warn => warn(&t, &m),
