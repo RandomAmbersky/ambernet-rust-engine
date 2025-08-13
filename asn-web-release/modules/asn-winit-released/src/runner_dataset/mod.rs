@@ -1,7 +1,7 @@
 mod application_handler;
 
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
-use asn_core_winapi::{TAsnRenderManager, TAsnWindowManager};
+use asn_winapi_traits::{TAsnRenderManager, TAsnWindowManager};
 use std::sync::Arc;
 use winit::window::Window;
 

@@ -1,5 +1,7 @@
+extern crate asn_winapi_traits;
+
 use crate::render_manager::RenderManager;
-use asn_core_winapi::{TAsnRenderManager, TAsnWindowManager};
+use asn_winapi_traits::{TAsnRenderManager, TAsnWindowManager};
 
 mod bind_groups;
 mod render_manager;

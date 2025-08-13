@@ -1,11 +1,10 @@
 use crate::wgpu_utils::get_surface_config;
 use asn_core::errors::AsnError;
 use asn_core::math::Size2D;
-use asn_core_winapi::{TAsnRenderManager, TAsnWindowManager};
+use asn_winapi_traits::{TAsnRenderManager, TAsnWindowManager};
 use std::iter;
 use std::sync::Arc;
 use wgpu::{Device, InstanceDescriptor, Queue, Surface};
-use winit::window::Window;
 
 pub struct AsnWgpuFrameContext {
     pub frame: wgpu::SurfaceTexture,

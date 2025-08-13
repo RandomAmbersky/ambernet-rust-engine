@@ -1,7 +1,7 @@
 use crate::handler::Handler;
 use asn_core::events::AsnEventEmitter;
 use asn_core::traits::TAsnBaseEngine;
-use asn_core_winapi::{TAsnRenderManager, TAsnWindowManager};
+use asn_winapi_traits::{TAsnRenderManager, TAsnWindowManager};
 use asn_winit_released::WinitWindow;
 
 pub trait Engine {

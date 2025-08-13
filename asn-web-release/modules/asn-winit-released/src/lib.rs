@@ -1,10 +1,11 @@
+extern crate asn_winapi_traits;
 extern crate core;
 
 use crate::runner_dataset::new_runner_dataset;
 use asn_core::events::AsnEventEmitter;
 use asn_core::traits::{TAsnBaseEngine, TAsnHandler};
-use asn_core_winapi::{TAsnRenderManager, TAsnWindowManager};
 use asn_logger::trace;
+use asn_winapi_traits::{TAsnRenderManager, TAsnWindowManager};
 use winit::event_loop::EventLoop;
 
 mod event_converter;

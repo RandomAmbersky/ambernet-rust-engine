@@ -1,3 +1,5 @@
+extern crate asn_winapi_traits;
+
 use crate::engine::{init, Engine};
 use asn_logger::AsnLogLevel;
 
